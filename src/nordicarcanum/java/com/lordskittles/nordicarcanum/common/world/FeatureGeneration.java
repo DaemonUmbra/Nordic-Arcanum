@@ -1,10 +1,8 @@
 package com.lordskittles.nordicarcanum.common.world;
 
-import com.lordskittles.arcanumapi.common.world.feature.trees.FeatureTree;
-import com.lordskittles.nordicarcanum.common.block.trees.*;
+import com.lordskittles.nordicarcanum.common.block.world.trees.*;
 import com.lordskittles.nordicarcanum.common.registry.*;
 import com.lordskittles.nordicarcanum.common.registry.Features;
-import com.lordskittles.nordicarcanum.common.world.feature.structure.StructureNordicPillar;
 import com.lordskittles.nordicarcanum.core.NordicConfig;
 import net.minecraft.block.BlockState;
 import net.minecraft.world.biome.Biome;
@@ -14,7 +12,6 @@ import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.placement.*;
 import net.minecraftforge.common.world.BiomeGenerationSettingsBuilder;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
-import org.lwjgl.system.CallbackI;
 
 import javax.annotation.Nonnull;
 

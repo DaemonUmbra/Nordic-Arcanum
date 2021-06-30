@@ -6,7 +6,7 @@ import com.lordskittles.nordicarcanum.common.inventory.ClothResultInventory;
 import com.lordskittles.nordicarcanum.common.registry.Blocks;
 import com.lordskittles.nordicarcanum.common.registry.Containers;
 import com.lordskittles.nordicarcanum.common.inventory.crafting.CraftingClothRecipe;
-import com.lordskittles.nordicarcanum.common.tileentity.TileEntityCraftingCloth;
+import com.lordskittles.nordicarcanum.common.tileentity.crafting.TileEntityCraftingCloth;
 import com.lordskittles.nordicarcanum.common.utility.RecipeUtilities;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;

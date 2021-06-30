@@ -1,6 +1,7 @@
 package com.lordskittles.nordicarcanum.common.registry;
 
-import com.lordskittles.nordicarcanum.common.tileentity.*;
+import com.lordskittles.nordicarcanum.common.tileentity.crafting.*;
+import com.lordskittles.nordicarcanum.common.tileentity.magic.*;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.lordskittles.nordicarcanum.core.NordicNames;
 import net.minecraft.tileentity.TileEntityType;

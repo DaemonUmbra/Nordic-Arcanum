@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class TileEntityInventorySyncable<T extends TileEntityInventorySyncable> extends TileEntityInventory<T> implements ITickableTileEntity
+public class TileEntityInventorySyncable<T extends TileEntityInventorySyncable<T>> extends TileEntityInventory<T> implements ITickableTileEntity
 {
     private int ticksSinceSync;
 

@@ -9,7 +9,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 
-public abstract class TileEntityMagicChest<T extends TileEntityMagicChest> extends TileEntityInventoryArcanum<T>
+public abstract class TileEntityMagicChest<T extends TileEntityMagicChest<T>> extends TileEntityInventoryArcanum<T>
 {
     protected float lidAngle;
     protected float prevLidAngle;

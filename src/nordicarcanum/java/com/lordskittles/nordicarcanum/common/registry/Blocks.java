@@ -2,9 +2,12 @@ package com.lordskittles.nordicarcanum.common.registry;
 
 import com.lordskittles.nordicarcanum.client.itemgroups.NordicItemGroup;
 import com.lordskittles.nordicarcanum.common.block.*;
-import com.lordskittles.nordicarcanum.common.block.trees.*;
+import com.lordskittles.nordicarcanum.common.block.crafting.*;
+import com.lordskittles.nordicarcanum.common.block.decoration.*;
+import com.lordskittles.nordicarcanum.common.block.magic.*;
+import com.lordskittles.nordicarcanum.common.block.world.*;
+import com.lordskittles.nordicarcanum.common.block.world.trees.*;
 
-import com.lordskittles.nordicarcanum.common.block.BlockArcaneInfuser;
 import com.lordskittles.nordicarcanum.common.block.voxelshapes.VoxelsAlfheimLight;
 import com.lordskittles.nordicarcanum.common.block.voxelshapes.VoxelsCrystalLamp;
 import com.lordskittles.nordicarcanum.common.block.voxelshapes.VoxelsCrystalLight;

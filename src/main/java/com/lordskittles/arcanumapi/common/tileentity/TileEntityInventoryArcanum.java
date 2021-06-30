@@ -8,7 +8,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.tileentity.TileEntityType;
 
-public abstract class TileEntityInventoryArcanum<T extends TileEntityInventoryArcanum> extends TileEntityInventorySyncable<T> implements IArcanumUser
+public abstract class TileEntityInventoryArcanum<T extends TileEntityInventoryArcanum<T>> extends TileEntityInventorySyncable<T> implements IArcanumUser
 {
     private final PacketHandlerBase packetHandler;
 

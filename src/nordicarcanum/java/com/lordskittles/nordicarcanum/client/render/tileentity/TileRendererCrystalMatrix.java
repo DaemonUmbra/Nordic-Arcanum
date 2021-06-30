@@ -2,10 +2,9 @@ package com.lordskittles.nordicarcanum.client.render.tileentity;
 
 import com.lordskittles.arcanumapi.client.render.tileentity.TileEntityRendererBase;
 import com.lordskittles.nordicarcanum.client.render.tileentity.model.ModelCrystalMatrix;
-import com.lordskittles.nordicarcanum.common.tileentity.TileEntityCrystalMatrix;
+import com.lordskittles.nordicarcanum.common.tileentity.magic.TileEntityCrystalMatrix;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 

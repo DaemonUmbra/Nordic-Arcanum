@@ -3,7 +3,7 @@ package com.lordskittles.nordicarcanum.common.inventory.containers;
 import com.lordskittles.arcanumapi.common.inventory.containers.ContainerStorageBase;
 import com.lordskittles.nordicarcanum.common.registry.Blocks;
 import com.lordskittles.nordicarcanum.common.registry.Containers;
-import com.lordskittles.nordicarcanum.common.tileentity.TileEntityArcaneChest;
+import com.lordskittles.nordicarcanum.common.tileentity.magic.TileEntityArcaneChest;
 import com.lordskittles.nordicarcanum.core.NordicInventorySlots;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;

@@ -1,6 +1,6 @@
 package com.lordskittles.nordicarcanum.common.inventory.containers;
 
-import com.lordskittles.nordicarcanum.common.tileentity.TileEntityAttunementAltar;
+import com.lordskittles.nordicarcanum.common.tileentity.magic.TileEntityAttunementAltar;
 import com.lordskittles.nordicarcanum.common.registry.Blocks;
 import com.lordskittles.nordicarcanum.common.registry.Containers;
 import net.minecraft.entity.player.PlayerEntity;

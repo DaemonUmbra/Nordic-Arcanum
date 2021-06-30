@@ -1,11 +1,10 @@
 package com.lordskittles.nordicarcanum.common.world.feature.structure;
 
 import com.lordskittles.arcanumapi.common.world.feature.structure.StructurePieceBase;
-import com.lordskittles.nordicarcanum.common.block.BlockStatue;
+import com.lordskittles.nordicarcanum.common.block.world.BlockStatue;
 import com.lordskittles.nordicarcanum.common.registry.Structures;
 import com.lordskittles.nordicarcanum.common.registry.Blocks;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;

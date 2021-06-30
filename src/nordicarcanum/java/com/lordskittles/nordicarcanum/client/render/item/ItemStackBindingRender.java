@@ -8,9 +8,9 @@ import com.lordskittles.nordicarcanum.client.render.item.model.ModelBindingPedes
 import com.lordskittles.nordicarcanum.client.render.item.model.ModelBindingBrazier;
 import com.lordskittles.nordicarcanum.client.render.item.model.ModelBindingCane;
 import com.lordskittles.nordicarcanum.client.render.item.model.ModelBindingCage;
-import com.lordskittles.nordicarcanum.common.item.BindingMaterial;
-import com.lordskittles.nordicarcanum.common.item.BindingShape;
-import com.lordskittles.nordicarcanum.common.item.ItemBinding;
+import com.lordskittles.nordicarcanum.common.item.crafting.BindingMaterial;
+import com.lordskittles.nordicarcanum.common.item.crafting.BindingShape;
+import com.lordskittles.nordicarcanum.common.item.magic.ItemBinding;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.lordskittles.nordicarcanum.core.NordicResourceLocations;
 import com.mojang.blaze3d.matrix.MatrixStack;

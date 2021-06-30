@@ -3,7 +3,7 @@ package com.lordskittles.nordicarcanum.client.render.block.model;
 import com.google.common.collect.Lists;
 import com.lordskittles.arcanumapi.common.utilities.QuadUtilities;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
-import com.lordskittles.nordicarcanum.common.tileentity.TileEntityCraftingCloth;
+import com.lordskittles.nordicarcanum.common.tileentity.crafting.TileEntityCraftingCloth;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;

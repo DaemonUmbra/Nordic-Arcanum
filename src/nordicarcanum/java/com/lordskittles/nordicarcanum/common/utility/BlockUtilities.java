@@ -1,14 +1,12 @@
 package com.lordskittles.nordicarcanum.common.utility;
 
 import com.lordskittles.nordicarcanum.common.registry.Blocks;
-import com.lordskittles.nordicarcanum.common.tileentity.TileEntitySigilPodium;
+import com.lordskittles.nordicarcanum.common.tileentity.magic.TileEntitySigilPodium;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.gen.feature.template.TemplateManager;
-import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

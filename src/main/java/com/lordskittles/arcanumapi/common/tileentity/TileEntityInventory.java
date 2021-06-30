@@ -32,7 +32,7 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public abstract class TileEntityInventory<T extends TileEntityInventory> extends TileEntityUpdateable<T> implements IInventory, INamedContainerProvider, INameable
+public abstract class TileEntityInventory<T extends TileEntityInventory<T>> extends TileEntityUpdateable<T> implements IInventory, INamedContainerProvider, INameable
 {
     protected int numPlayersUsing;
 

@@ -2,7 +2,7 @@ package com.lordskittles.nordicarcanum.client.render.tileentity;
 
 import com.lordskittles.arcanumapi.client.render.tileentity.TileEntityRendererBase;
 import com.lordskittles.nordicarcanum.client.render.tileentity.model.ModelNordicAnvil;
-import com.lordskittles.nordicarcanum.common.tileentity.TileEntityNordicAnvil;
+import com.lordskittles.nordicarcanum.common.tileentity.crafting.TileEntityNordicAnvil;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;

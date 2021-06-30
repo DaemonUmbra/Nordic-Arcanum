@@ -1,7 +1,7 @@
 package com.lordskittles.nordicarcanum.common.inventory;
 
 import com.lordskittles.nordicarcanum.common.inventory.crafting.CraftingClothRecipe;
-import com.lordskittles.nordicarcanum.common.tileentity.TileEntityCraftingCloth;
+import com.lordskittles.nordicarcanum.common.tileentity.crafting.TileEntityCraftingCloth;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.CraftResultInventory;
 

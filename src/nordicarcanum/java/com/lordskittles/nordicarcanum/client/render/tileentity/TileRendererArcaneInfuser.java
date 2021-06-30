@@ -3,7 +3,7 @@ package com.lordskittles.nordicarcanum.client.render.tileentity;
 import com.lordskittles.arcanumapi.client.render.ArcaneRenderer;
 import com.lordskittles.arcanumapi.client.render.tileentity.TileEntityFluidRendererBase;
 import com.lordskittles.nordicarcanum.client.render.tileentity.model.ModelArcaneInfuser;
-import com.lordskittles.nordicarcanum.common.tileentity.TileEntityArcaneInfuser;
+import com.lordskittles.nordicarcanum.common.tileentity.crafting.TileEntityArcaneInfuser;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;

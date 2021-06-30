@@ -1,8 +1,8 @@
 package com.lordskittles.nordicarcanum.common.world.feature.structure;
 
 import com.lordskittles.arcanumapi.common.world.feature.structure.StructurePieceBase;
-import com.lordskittles.nordicarcanum.common.block.BlockInfusablePillar;
-import com.lordskittles.nordicarcanum.common.block.BlockPillar;
+import com.lordskittles.nordicarcanum.common.block.magic.BlockInfusablePillar;
+import com.lordskittles.nordicarcanum.common.block.decoration.BlockPillar;
 import com.lordskittles.nordicarcanum.common.registry.Structures;
 import com.lordskittles.nordicarcanum.core.NordicResourceLocations;
 import com.lordskittles.nordicarcanum.common.registry.Blocks;
