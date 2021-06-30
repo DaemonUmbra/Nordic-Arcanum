@@ -1,0 +1,14 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": 
+	[
+		{
+			"tag": "forge:storage_blocks/bismuth"
+		}
+	],
+	"result":
+	{
+		"item": "nordicarcanum:bismuth_ingot",
+		"count": 9
+	}
+}

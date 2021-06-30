@@ -1,0 +1,9 @@
+{
+	"type": "nordicarcanum:viking_saw",
+	"ingredient":
+	{
+		"item": "nordicarcanum:pine_log"
+	},
+	"result": "nordicarcanum:pine_rod",
+	"required_cuts": 5
+}

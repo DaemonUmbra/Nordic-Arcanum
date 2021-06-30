@@ -1,0 +1,20 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": 
+	[
+		"DDD",
+		"DDD",
+		"DDD"
+	],
+	"key":
+	{
+		"D":
+		{
+			"item": "nordicarcanum:arcane_dust"
+		}
+	},
+	"result":
+	{
+		"item": "nordicarcanum:arcane_dust_compact"
+	}
+}

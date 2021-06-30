@@ -1,0 +1,15 @@
+{
+	"type": "nordicarcanum:arcane_infuser",
+	"ingredient":
+	{
+		"item": "minecraft:glass_bottle"
+	},
+	"fluid_ingredient":
+	{
+		"type": "nordicarcanum:fluid",
+		"fluid": "nordicarcanum:liquid_arcanum",
+		"amount": 500
+	},
+	"time": 20,
+	"result": "nordicarcanum:arcanum_bottle"
+}

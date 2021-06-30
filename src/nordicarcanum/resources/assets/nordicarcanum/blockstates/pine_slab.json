@@ -1,0 +1,17 @@
+{
+	"variants":
+	{
+		"type=bottom":
+		{ 
+			"model": "nordicarcanum:block/pine_slab" 
+		},
+		"type=top":
+		{ 
+			"model": "nordicarcanum:block/pine_slab_top" 
+		},
+		"type=double":
+		{ 
+			"model": "nordicarcanum:block/pine_plank" 
+		}
+	}
+}

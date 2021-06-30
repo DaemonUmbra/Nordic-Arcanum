@@ -1,0 +1,9 @@
+{
+	"type": "nordicarcanum:viking_saw",
+	"ingredient":
+	{
+		"item": "minecraft:dark_oak_log"
+	},
+	"result": "nordicarcanum:dark_oak_rod",
+	"required_cuts": 5
+}

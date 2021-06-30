@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "nordicarcanum:yew_stair",
+    "nordicarcanum:juniper_stair",
+    "nordicarcanum:pine_stair",
+    "nordicarcanum:feldspar_polished_stair",
+    "nordicarcanum:feldspar_brick_stair"
+  ]
+}

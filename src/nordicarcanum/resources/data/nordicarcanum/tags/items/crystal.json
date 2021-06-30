@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "nordicarcanum:thulite_crystal",
+    "nordicarcanum:garnet_crystal",
+    "nordicarcanum:carnelian_crystal",
+    "minecraft:diamond",
+    "minecraft:emerald",
+    "minecraft:lapis_lazuli"
+  ]
+}

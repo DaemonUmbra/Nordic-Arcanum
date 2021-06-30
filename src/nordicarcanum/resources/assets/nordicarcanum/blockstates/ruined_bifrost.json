@@ -1,0 +1,9 @@
+{
+	"variants":
+	{
+		"":
+		{ 
+			"model": "nordicarcanum:block/ruined_bifrost"
+		}
+	}
+}

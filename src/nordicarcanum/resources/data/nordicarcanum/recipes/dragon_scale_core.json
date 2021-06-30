@@ -1,0 +1,25 @@
+{
+	"type": "nordicarcanum:crafting_cloth",
+	"pattern": 
+	[
+		"###",
+		"#$#",
+		"###"
+	],
+	"key":
+	{
+		"#":
+		{
+			"item": "nordicarcanum:dragon_scale"
+		},
+		"$":
+		{
+			"item": "nordicarcanum:base_core"
+		}
+	},
+	"result":
+	{
+		"item": "nordicarcanum:dragon_scale_core"
+	},
+	"arcanum": 5
+}

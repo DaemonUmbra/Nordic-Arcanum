@@ -1,0 +1,25 @@
+{
+	"type": "nordicarcanum:crafting_cloth",
+	"pattern": 
+	[
+		"###",
+		"#$#",
+		"###"
+	],
+	"key":
+	{
+		"#":
+		{
+			"item": "nordicarcanum:fossegrim_hair"
+		},
+		"$":
+		{
+			"item": "nordicarcanum:base_core"
+		}
+	},
+	"result":
+	{
+		"item": "nordicarcanum:fossegrim_hair_core"
+	},
+	"arcanum": 5
+}

@@ -1,0 +1,8 @@
+{
+	"variants":
+	{
+		"axis=y": { "model": "nordicarcanum:block/activated_deepslate_pillar" },
+		"axis=z": { "model": "nordicarcanum:block/activated_deepslate_pillar", "x": 90 },
+		"axis=x": { "model": "nordicarcanum:block/activated_deepslate_pillar", "x": 90, "y": 90 }
+	}
+}

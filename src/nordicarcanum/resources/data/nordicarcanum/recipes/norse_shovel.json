@@ -1,0 +1,24 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": 
+	[
+		"#",
+		"&",
+		"&"
+	],
+	"key":
+	{
+		"#":
+		{
+			"item": "nordicarcanum:norse_ingot"
+		},
+		"&":
+		{
+			"item": "minecraft:stick"
+		}
+	},
+	"result":
+	{
+		"item": "nordicarcanum:norse_shovel"
+	}
+}

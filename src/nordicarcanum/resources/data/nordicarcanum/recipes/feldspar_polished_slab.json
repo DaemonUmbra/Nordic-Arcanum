@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "wooden_slab",
+  "pattern": [
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "nordicarcanum:feldspar_polished"
+    }
+  },
+  "result": {
+    "item": "nordicarcanum:feldspar_polished_slab",
+    "count": 6
+  }
+}

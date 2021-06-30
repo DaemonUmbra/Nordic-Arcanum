@@ -1,0 +1,20 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": 
+	[
+		"## ",
+		"## "
+	],
+	"key":
+	{
+		"#":
+		{
+			"item": "nordicarcanum:feldspar_polished"
+		}
+	},
+	"result":
+	{
+		"item": "nordicarcanum:feldspar_brick_deco",
+		"count": 4
+	}
+}

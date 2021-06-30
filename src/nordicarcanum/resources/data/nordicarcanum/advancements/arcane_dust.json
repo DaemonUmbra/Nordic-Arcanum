@@ -1,0 +1,39 @@
+{
+  "parent": "nordicarcanum:root",
+  "display":
+  {
+    "icon":
+    {
+      "item": "nordicarcanum:arcane_dust"
+    },
+    "title":
+    {
+      "translate": "nordicarcanum.achievement.arcane_dust"
+    },
+    "description":
+    {
+      "translate": "nordicarcanum.achievement.arcane_dust.desc"
+    },
+    "background": "nordicarcanum:textures/gui/advancement_bg.png"
+  },
+  "criteria":
+  {
+    "magic_sigil":
+    {
+      "trigger": "minecraft:inventory_changed",
+      "conditions":
+      {
+        "items":
+        [
+          {
+            "item": "nordicarcanum:arcane_dust"
+          }
+        ]
+      }
+    }
+  },
+  "rewards":
+  {
+    "experience": 10
+  }
+}

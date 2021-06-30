@@ -1,0 +1,37 @@
+{
+	"variants":
+	{
+		"facing=north,smelting=false":
+		{
+			"model": "nordicarcanum:block/nordic_furnace"
+		},
+		"facing=east,smelting=false":
+		{
+			"model": "nordicarcanum:block/nordic_furnace", "y": 90
+		},
+		"facing=south,smelting=false":
+		{
+			"model": "nordicarcanum:block/nordic_furnace", "y": 180
+		},
+		"facing=west,smelting=false":
+		{
+			"model": "nordicarcanum:block/nordic_furnace", "y": 270
+		},
+		"facing=north,smelting=true":
+		{
+			"model": "nordicarcanum:block/nordic_furnace_on"
+		},
+		"facing=east,smelting=true":
+		{
+			"model": "nordicarcanum:block/nordic_furnace_on", "y": 90
+		},
+		"facing=south,smelting=true":
+		{
+			"model": "nordicarcanum:block/nordic_furnace_on", "y": 180
+		},
+		"facing=west,smelting=true":
+		{
+			"model": "nordicarcanum:block/nordic_furnace_on", "y": 270
+		}
+	}
+}

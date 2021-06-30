@@ -1,0 +1,30 @@
+{
+  "sound.item.viking_saw":
+  {
+    "category": "item",
+    "subtitle": "sound.item.viking_saw.sub",
+    "sounds":
+    [
+      {
+        "name": "nordicarcanum:item/viking_saw_1",
+        "stream": true
+      },
+      {
+        "name": "nordicarcanum:item/viking_saw_2",
+        "stream": true
+      }
+    ]
+  },
+  "sound.ambient.infusion":
+  {
+    "category": "ambient",
+    "subtitle": "sound.ambient.infusion.sub",
+    "sounds":
+    [
+      {
+        "name": "nordicarcanum:ambient/infusion",
+        "stream": true
+      }
+    ]
+  }
+}

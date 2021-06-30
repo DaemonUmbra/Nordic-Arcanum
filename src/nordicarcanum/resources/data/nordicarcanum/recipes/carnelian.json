@@ -1,0 +1,14 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": 
+	[
+		{
+			"tag": "forge:storage_blocks/carnelian"
+		}
+	],
+	"result":
+	{
+		"item": "nordicarcanum:carnelian_crystal",
+		"count": 9
+	}
+}

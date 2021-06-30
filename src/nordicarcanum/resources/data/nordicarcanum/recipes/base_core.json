@@ -1,0 +1,25 @@
+{
+	"type": "nordicarcanum:crafting_cloth",
+	"pattern": 
+	[
+		"###",
+		"#$#",
+		"###"
+	],
+	"key":
+	{
+		"#":
+		{
+			"item": "minecraft:iron_ingot"
+		},
+		"$":
+		{
+			"item": "nordicarcanum:arcane_dust"
+		}
+	},
+	"result":
+	{
+		"item": "nordicarcanum:base_core"
+	},
+	"arcanum": 5
+}

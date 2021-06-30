@@ -1,0 +1,245 @@
+
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+
+buildscript {
+    repositories {
+        maven { url = 'https://files.minecraftforge.net/maven' }
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+    }
+}
+
+defaultTasks 'fullBuild'
+
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'maven-publish'
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+        }
+        resources {
+            include '**/**'
+            // copy everything else, but blender files.
+            exclude '**/*.blend'
+            //Add the generated main module resources
+            srcDirs += 'src/datagen/generated/arcanumapi'
+            //But exclude the cache of the generated data from what gets built
+            exclude '.cache'
+        }
+    }
+    nordicarcanum {
+        setupSourceSet(sourceSets.nordicarcanum, 'nordicarcanum')
+    }
+    test {
+        compileClasspath += sourceSets.main.output + sourceSets.nordicarcanum.output
+        runtimeClasspath += sourceSets.main.output + sourceSets.nordicarcanum.output
+    }
+    //Data gen modules for the different modules
+    datagenmain { setupDataGenSourceSet(sourceSets.datagenmain, null, 'main') }
+    datagennordicarcanum { setupDataGenSourceSet(sourceSets.datagennordicarcanum, sourceSets.nordicarcanum, 'nordicarcanum') }
+}
+
+def setupSourceSet(SourceSet sourceSet, String name) {
+    sourceSet.java {
+        srcDir 'src/' + name + '/java'
+    }
+    sourceSet.resources {
+        //Add the generated module resources
+        srcDirs += 'src/datagen/generated/arcanumapi' + name
+        //But exclude the cache of the generated data from what gets built
+        exclude '.cache'
+    }
+    sourceSet.compileClasspath += sourceSets.main.output
+}
+
+//This method sets up a source set in datagen/$name and adds the api, main mekanism module and an optional
+// base module to the dependencies of the data generators source set that we are setting up
+def setupDataGenSourceSet(SourceSet datagenSourceSet, SourceSet baseSourceSet, String name) {
+    datagenSourceSet.java.srcDirs = ['src/datagen/' + name + '/java']
+    datagenSourceSet.resources.srcDirs = ['src/datagen/' + name + '/resources']
+    datagenSourceSet.compileClasspath += project.sourceSets.main.output
+    if (baseSourceSet != null) {
+        //Only case it is null is when we are doing datagenmain so other cases also add access to the stuff
+        // in datagenmain so we can add helper classes
+        datagenSourceSet.compileClasspath += project.sourceSets.datagenmain.output
+        datagenSourceSet.compileClasspath += baseSourceSet.output
+    }
+}
+
+def api_version = "${minecraft_version}-${arcanum_api_version}"
+def na_version = "${minecraft_version}-${nordicarcanum_version}"
+
+version = "${api_version}"
+group = 'nordicarcanum' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = 'NordicArcanumAll'
+
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
+
+minecraft {
+    mappings channel: 'snapshot', version: "${mappings_version}"
+
+    accessTransformers(file('src/arcanumapi/resources/META-INF/accesstransformer.cfg'),
+            file('src/nordicarcanum/resources/META-INF/accesstransformer.cfg'))
+
+    runs {
+        client {
+            workingDirectory project.file('run')
+
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            property 'forge.logging.console.level', 'debug'
+
+            if (project.hasProperty('mc_uuid')) {
+                args '--uuid', project.getProperty('mc_uuid')
+            }
+            if (project.hasProperty('mc_username')) {
+                args '--username', project.getProperty('mc_username')
+            }
+            if (project.hasProperty('mc_accessToken')) {
+                args '--accessToken', project.getProperty('mc_accessToken')
+            }
+
+            mods {
+                arcanumapi {
+                    source(sourceSets.main)
+                }
+                nordicarcanum {
+                    source(sourceSets.nordicarcanum)
+                }
+            }
+        }
+
+        server {
+            workingDirectory project.file('run')
+
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                arcanumapi {
+                    sources(sourceSets.main)
+                }
+                nordicarcanum {
+                    source(sourceSets.nordicarcanum)
+                }
+            }
+        }
+
+        data {
+            workingDirectory project.file('run')
+            environment 'target', 'fmluserdevdata'
+            properties 'fml.earlyprogresswindow': 'false'
+
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            property 'forge.logging.console.level', 'debug'
+
+            args '--all', '--output', file('src/datagen/generated/'),
+                    '--mod', 'arcanumapi',
+                    '--existing', sourceSets.main.resources.srcDirs[0],
+                    '--mod', 'nordicarcanum',
+                    '--existing', sourceSets.nordicarcanum.resources.srcDirs[0]
+
+            mods {
+                arcanumapi {
+                    sources(sourceSets.main, sourceSets.datagenmain)
+                }
+                nordicarcanum {
+                    sources(sourceSets.nordicarcanum, sourceSets.datagennordicarcanum)
+                }
+            }
+        }
+    }
+}
+
+repositories {
+    maven {
+        // location of the maven that hosts JEI files
+        name = "Progwml6 maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
+    //maven {
+    //    // location of a maven mirror for JEI files, as a fallback
+    //    name = "ModMaven"
+    //    url = "https://modmaven.k-4u.nl"
+    //}
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+    compileOnly "org.jetbrains:annotations:${jb_annotations}"
+
+    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}:api")
+    // at runtime, use the full JEI jar
+    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}")
+}
+
+// Example for how to get properties into the manifest for reading by the runtime..
+jar {
+    from sourceSets.main.output
+    from sourceSets.nordicarcanum.output
+}
+
+task apiJar(type: Jar) {
+    archiveName = "arcanumapi-${api_version}.jar"
+    from sourceSets.main.output
+}
+
+task nordicarcanumJar(type: Jar) {
+    archiveName = "nordicarcanum-${na_version}.jar"
+    from sourceSets.nordicarcanum.output
+}
+
+// Example configuration to allow publishing using the maven-publish task
+// This is the preferred method to reobfuscate your jar file
+jar.finalizedBy('reobfJar') 
+// However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
+//publish.dependsOn('reobfJar')
+
+configurations {
+    //Make sure all our sub source set stuff extends the proper base methods so that
+    // they can see all the dependencies we have in dependencies including forge
+    def compileExtenders = [arcanumcoreCompile, nordicarcanumCompile, testCompile, datagenmainCompile, datagenarcanumcoreCompile]
+    def compileOnlyExtenders = [arcanumcoreCompileOnly, nordicarcanumCompileOnly, datagenmainCompileOnly, datagenarcanumcoreCompileOnly]
+    def runtimeOnlyExtenders = [arcanumcoreRuntimeOnly, nordicarcanumRuntimeOnly, datagenmainRuntimeOnly, datagenarcanumcoreRuntimeOnly]
+    for (def compileExtender : compileExtenders) {
+        compileExtender.extendsFrom(compile)
+    }
+    for (def compileOnlyExtender : compileOnlyExtenders) {
+        compileOnlyExtender.extendsFrom(compileOnly)
+    }
+    for (def runtimeOnlyExtender : runtimeOnlyExtenders) {
+        runtimeOnlyExtender.extendsFrom(runtimeOnly)
+    }
+}
+
+reobf {
+    apiJar { classpath = sourceSets.main.compileClasspath }
+    nordicarcanumJar { classpath = sourceSets.nordicarcanum.compileClasspath }
+}
+
+task fullBuild(type: Delete) {
+    delete jar
+    dependsOn "build"
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact jar
+        }
+    }
+    repositories {
+        maven {
+            url "file:///${project.projectDir}/mcmodsrepo"
+        }
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "parent": "block/inner_stairs",
+    "textures": {
+        "bottom": "nordicarcanum:blocks/pine_plank",
+        "top": "nordicarcanum:blocks/pine_plank",
+        "side": "nordicarcanum:blocks/pine_plank"
+    }
+}

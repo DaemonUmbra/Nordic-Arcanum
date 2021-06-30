@@ -1,0 +1,14 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": 
+	[
+		{
+			"item": "nordicarcanum:arcane_dust_compact"
+		}
+	],
+	"result":
+	{
+		"item": "nordicarcanum:arcane_dust",
+		"count": 9
+	}
+}

@@ -1,0 +1,21 @@
+{
+	"variants":
+	{
+		"facing=north":
+		{
+			"model": "nordicarcanum:block/thor_shrine"
+		},
+		"facing=east":
+		{
+			"model": "nordicarcanum:block/thor_shrine", "y": 90
+		},
+		"facing=south":
+		{
+			"model": "nordicarcanum:block/thor_shrine", "y": 180
+		},
+		"facing=west":
+		{
+			"model": "nordicarcanum:block/thor_shrine", "y": 270
+		}
+	}
+}

@@ -1,0 +1,17 @@
+{
+	"variants":
+	{
+		"type=bottom":
+		{ 
+			"model": "nordicarcanum:block/juniper_slab" 
+		},
+		"type=top":
+		{ 
+			"model": "nordicarcanum:block/juniper_slab_top" 
+		},
+		"type=double":
+		{ 
+			"model": "nordicarcanum:block/juniper_plank" 
+		}
+	}
+}

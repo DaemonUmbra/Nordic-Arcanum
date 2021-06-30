@@ -1,0 +1,15 @@
+{
+	"type": "nordicarcanum:arcane_infuser",
+	"ingredient":
+	{
+		"item": "nordicarcanum:arcane_dust"
+	},
+	"fluid_ingredient":
+	{
+		"type": "nordicarcanum:fluid",
+		"fluid": "nordicarcanum:liquid_arcanum",
+		"amount": 250
+	},
+	"time": 20,
+	"result": "nordicarcanum:infused_arcane_powder"
+}

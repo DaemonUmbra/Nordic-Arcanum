@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients":
+  [
+    {
+      "item": "minecraft:charcoal"
+    }
+  ],
+  "result":
+  {
+    "item": "arcanumapi:tiny_charcoal",
+    "count": 8
+  }
+}

@@ -1,0 +1,59 @@
+{
+	"parent": "item/generated",
+	"textures":
+	{
+		"layer0": "nordicarcanum:items/magic_sigil"
+	},
+	"overrides":
+	[
+		{
+			"predicate":
+			{
+				"nordicarcanum:school": 0.0
+			},
+			"model": "nordicarcanum:item/magic_sigil"
+		},
+		{
+			"predicate":
+			{
+				"nordicarcanum:school": 0.1
+			},
+			"model": "nordicarcanum:item/sigils/ur"
+		},
+		{
+			"predicate":
+			{
+				"nordicarcanum:school": 0.2
+			},
+			"model": "nordicarcanum:item/sigils/kaun"
+		},
+		{
+			"predicate":
+			{
+				"nordicarcanum:school": 0.3
+			},
+			"model": "nordicarcanum:item/sigils/ar"
+		},
+		{
+			"predicate":
+			{
+				"nordicarcanum:school": 0.4
+			},
+			"model": "nordicarcanum:item/sigils/hagal"
+		},
+		{
+			"predicate":
+			{
+				"nordicarcanum:school": 0.5
+			},
+			"model": "nordicarcanum:item/sigils/yr"
+		},
+		{
+			"predicate":
+			{
+				"nordicarcanum:school": 1.0
+			},
+			"model": "nordicarcanum:item/sigils/fe"
+		}
+	]
+}

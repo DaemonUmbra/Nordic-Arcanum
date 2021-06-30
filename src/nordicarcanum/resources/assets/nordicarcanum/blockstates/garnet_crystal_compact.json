@@ -1,0 +1,9 @@
+{
+	"variants":
+	{
+		"":
+		{ 
+			"model": "nordicarcanum:block/garnet_crystal_compact" 
+		}
+	}
+}

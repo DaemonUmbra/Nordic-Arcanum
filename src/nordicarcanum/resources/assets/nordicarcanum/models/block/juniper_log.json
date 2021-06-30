@@ -1,0 +1,8 @@
+{
+    "parent": "block/cube_column",
+    "textures": 
+    {
+        "end": "nordicarcanum:blocks/juniper_log_top",
+        "side": "nordicarcanum:blocks/juniper_log"
+    }
+}

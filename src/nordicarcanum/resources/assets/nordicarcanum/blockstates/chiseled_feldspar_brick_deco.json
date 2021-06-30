@@ -1,0 +1,9 @@
+{
+	"variants":
+	{
+		"":
+		{ 
+			"model": "nordicarcanum:block/chiseled_feldspar_brick_deco" 
+		}
+	}
+}

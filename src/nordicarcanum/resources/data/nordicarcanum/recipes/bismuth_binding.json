@@ -1,0 +1,10 @@
+{
+	"type": "nordicarcanum:nordic_anvil",
+	"ingredient":
+	{
+		"tag": "forge:ingots/bismuth"
+	},
+	"result": "nordicarcanum:bismuth_binding",
+	"required_count": 5,
+	"required_hits": 5
+}

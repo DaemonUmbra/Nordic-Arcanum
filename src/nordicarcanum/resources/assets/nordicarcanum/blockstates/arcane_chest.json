@@ -1,0 +1,21 @@
+{
+	"variants":
+	{
+		"facing=east":
+		{
+			"model": "nordicarcanum:block/entities/arcane_chest"
+		},
+		"facing=south":
+		{
+			"model": "nordicarcanum:block/entities/arcane_chest", "y": 90
+		},
+		"facing=west":
+		{
+			"model": "nordicarcanum:block/entities/arcane_chest", "y": 180
+		},
+		"facing=north":
+		{
+			"model": "nordicarcanum:block/entities/arcane_chest", "y": 270
+		}
+	}
+}

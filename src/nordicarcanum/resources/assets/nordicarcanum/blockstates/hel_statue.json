@@ -1,0 +1,21 @@
+{
+	"variants":
+	{
+		"facing=north":
+		{
+			"model": "nordicarcanum:block/hel_shrine"
+		},
+		"facing=east":
+		{
+			"model": "nordicarcanum:block/hel_shrine", "y": 90
+		},
+		"facing=south":
+		{
+			"model": "nordicarcanum:block/hel_shrine", "y": 180
+		},
+		"facing=west":
+		{
+			"model": "nordicarcanum:block/hel_shrine", "y": 270
+		}
+	}
+}

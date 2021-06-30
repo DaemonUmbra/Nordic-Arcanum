@@ -1,0 +1,25 @@
+{
+	"type": "nordicarcanum:crafting_cloth",
+	"pattern": 
+	[
+		"###",
+		"#$#",
+		"###"
+	],
+	"key":
+	{
+		"#":
+		{
+			"item": "nordicarcanum:bat_wing"
+		},
+		"$":
+		{
+			"item": "nordicarcanum:base_core"
+		}
+	},
+	"result":
+	{
+		"item": "nordicarcanum:bat_wing_core"
+	},
+	"arcanum": 5
+}

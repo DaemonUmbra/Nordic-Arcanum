@@ -1,0 +1,9 @@
+{
+	"type": "nordicarcanum:viking_saw",
+	"ingredient":
+	{
+		"item": "minecraft:spruce_log"
+	},
+	"result": "nordicarcanum:spruce_rod",
+	"required_cuts": 5
+}

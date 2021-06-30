@@ -1,0 +1,96 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "nordicarcanum:pedestal_cast"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "nordicarcanum:brazier_cast"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "nordicarcanum:cane_cast"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "nordicarcanum:cage_cast"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "nordicarcanum:straight_blueprint"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "nordicarcanum:twist_blueprint"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "nordicarcanum:bend_blueprint"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "nordicarcanum:pillar_blueprint"
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 5.0,
+        "max": 8.0,
+        "type": "minecraft:uniform"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 4.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minecraft:iron_ingot"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 20,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 4.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minecraft:rotten_flesh"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 20,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 2.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minecraft:bone"
+        }
+      ]
+    }
+  ]
+}

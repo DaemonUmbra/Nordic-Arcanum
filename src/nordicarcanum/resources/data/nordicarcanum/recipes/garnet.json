@@ -1,0 +1,14 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": 
+	[
+		{
+			"tag": "forge:storage_blocks/garnet"
+		}
+	],
+	"result":
+	{
+		"item": "nordicarcanum:garnet_crystal",
+		"count": 9
+	}
+}

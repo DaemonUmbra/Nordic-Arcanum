@@ -1,0 +1,7 @@
+{
+    "parent": "block/door_bottom",
+    "textures": {
+        "bottom": "nordicarcanum:blocks/yew_door_bottom",
+        "top": "nordicarcanum:blocks/yew_door_top"
+    }
+}

@@ -1,0 +1,14 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": 
+	[
+		{
+			"item": "nordicarcanum:norse_compact"
+		}
+	],
+	"result":
+	{
+		"item": "nordicarcanum:norse_ingot",
+		"count": 9
+	}
+}

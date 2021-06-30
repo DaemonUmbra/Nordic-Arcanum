@@ -1,0 +1,9 @@
+{
+    "parent": "block/slab",
+    "textures": 
+    {
+        "bottom": "nordicarcanum:blocks/yew_plank",
+        "top": "nordicarcanum:blocks/yew_plank",
+        "side": "nordicarcanum:blocks/yew_plank"
+    }
+}

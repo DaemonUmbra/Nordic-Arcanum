@@ -1,0 +1,25 @@
+{
+	"type": "nordicarcanum:crafting_cloth",
+	"pattern": 
+	[
+		"###",
+		"#$#",
+		"###"
+	],
+	"key":
+	{
+		"#":
+		{
+			"item": "nordicarcanum:wolf_fang"
+		},
+		"$":
+		{
+			"item": "nordicarcanum:base_core"
+		}
+	},
+	"result":
+	{
+		"item": "nordicarcanum:wolf_fang_core"
+	},
+	"arcanum": 5
+}

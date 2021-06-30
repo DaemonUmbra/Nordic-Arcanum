@@ -1,0 +1,8 @@
+{
+  "parent": "item/generated",
+  "textures":
+  {
+    "layer0": "nordicarcanum:items/magic_sigil",
+    "layer1": "nordicarcanum:school_sigils/yr"
+  }
+}

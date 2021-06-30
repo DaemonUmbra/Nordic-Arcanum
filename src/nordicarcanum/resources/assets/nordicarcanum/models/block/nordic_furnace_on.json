@@ -1,0 +1,8 @@
+{
+    "parent": "block/orientable",
+    "textures": {
+        "top": "nordicarcanum:blocks/nordic_furnace_top",
+        "front": "nordicarcanum:blocks/nordic_furnace_front_on",
+        "side": "nordicarcanum:blocks/nordic_furnace_side"
+    }
+}

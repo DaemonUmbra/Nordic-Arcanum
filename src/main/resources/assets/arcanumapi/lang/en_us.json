@@ -1,0 +1,15 @@
+{
+  "item.arcanumapi.tiny_charcoal": "Tiny Charcoal",
+  "item.arcanumapi.tiny_coal": "Tiny Coal",
+
+  "arcanumapi.ur.info": "School of Ur (Water)",
+  "arcanumapi.kaun.info": "School of Kaun (Flame)",
+  "arcanumapi.ar.info": "School of Ar (Earth)",
+  "arcanumapi.hagal.info": "School of Hagal (Storm)",
+  "arcanumapi.yr.info": "School of Yr (Protection)",
+  "arcanumapi.fe.info": "School of Fe (Summoning)",
+  "arcanumapi.misc.noinfo": "Undiscovered School",
+  "arcanumapi.school.discovered.chat": "You have just discovered the ",
+
+  "arcanumapi.command.reset_schools": "Reset discovered schools"
+}

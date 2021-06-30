@@ -1,0 +1,13 @@
+{
+	"variants":
+	{
+		"is_core=true":
+		{ 
+			"model": "nordicarcanum:block/sigil_podium" 
+		},
+		"is_core=false":
+		{
+			"model": "nordicarcanum:block/sigil_podium"
+		}
+	}
+}

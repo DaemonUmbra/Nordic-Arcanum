@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "nordicarcanum:yew_rod",
+    "nordicarcanum:juniper_rod",
+    "nordicarcanum:pine_rod",
+    "nordicarcanum:oak_rod",
+    "nordicarcanum:spruce_rod",
+    "nordicarcanum:birch_rod",
+    "nordicarcanum:jungle_rod",
+    "nordicarcanum:dark_oak_rod",
+    "nordicarcanum:acacia_rod"
+  ]
+}

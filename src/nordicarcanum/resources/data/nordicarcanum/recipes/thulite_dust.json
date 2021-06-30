@@ -1,0 +1,16 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients":
+	[
+		{
+			"tag": "forge:gems/thulite"
+		},
+		{
+			"item": "nordicarcanum:mortar_pestle"
+		}
+	],
+	"result":
+	{
+		"item": "nordicarcanum:thulite_dust"
+	}
+}

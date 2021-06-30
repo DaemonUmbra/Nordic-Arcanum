@@ -1,0 +1,15 @@
+{
+	"type": "nordicarcanum:nordic_furnace",
+	"ingredients":
+	[
+		{
+			"tag": "forge:ingots/steel"
+		},
+		{
+			"tag": "forge:storage_blocks/coal"
+		}
+	],
+	"result": "nordicarcanum:norse_ingot",
+	"experience": 0.1,
+  	"cookingtime": 200
+}

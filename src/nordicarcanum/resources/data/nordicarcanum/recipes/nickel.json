@@ -1,0 +1,14 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": 
+	[
+		{
+			"tag": "forge:storage_blocks/nickel"
+		}
+	],
+	"result":
+	{
+		"item": "nordicarcanum:nickle_ingot",
+		"count": 9
+	}
+}

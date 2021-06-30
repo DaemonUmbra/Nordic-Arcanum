@@ -1,0 +1,9 @@
+{
+	"type": "nordicarcanum:viking_saw",
+	"ingredient":
+	{
+		"item": "nordicarcanum:yew_log"
+	},
+	"result": "nordicarcanum:yew_rod",
+	"required_cuts": 5
+}

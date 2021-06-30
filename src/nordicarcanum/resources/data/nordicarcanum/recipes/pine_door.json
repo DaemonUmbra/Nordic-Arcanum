@@ -1,0 +1,21 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": 
+	[
+		"##",
+		"##",
+		"##"
+	],
+	"key":
+	{
+		"#":
+		{
+			"item": "nordicarcanum:pine_plank",
+			"count": 3
+		}
+	},
+	"result":
+	{
+		"item": "nordicarcanum:pine_door"
+	}
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "wooden_stairs",
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "nordicarcanum:feldspar_polished"
+    }
+  },
+  "result": {
+    "item": "nordicarcanum:feldspar_polished_stair",
+    "count": 4
+  }
+}

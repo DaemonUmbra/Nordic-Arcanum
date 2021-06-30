@@ -1,0 +1,17 @@
+{
+	"variants":
+	{
+		"type=bottom":
+		{ 
+			"model": "nordicarcanum:block/feldspar_brick_slab" 
+		},
+		"type=top":
+		{ 
+			"model": "nordicarcanum:block/feldspar_brick_slab_top" 
+		},
+		"type=double":
+		{ 
+			"model": "nordicarcanum:block/feldspar_brick_deco" 
+		}
+	}
+}

@@ -1,0 +1,7 @@
+{
+    "parent": "block/cube_all",
+    "textures": 
+    {
+        "all": "nordicarcanum:blocks/thulite_crystal_compact"
+    }
+}

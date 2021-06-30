@@ -1,0 +1,25 @@
+{
+	"type": "nordicarcanum:crafting_cloth",
+	"pattern": 
+	[
+		"###",
+		"#$#",
+		"###"
+	],
+	"key":
+	{
+		"#":
+		{
+			"item": "minecraft:polished_blackstone_bricks"
+		},
+		"$":
+		{
+			"item": "nordicarcanum:arcane_dust_compact"
+		}
+	},
+	"result":
+	{
+		"item": "nordicarcanum:nordic_furnace"
+	},
+	"arcanum": 0
+}

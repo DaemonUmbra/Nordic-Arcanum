@@ -1,0 +1,25 @@
+{
+	"type": "nordicarcanum:crafting_cloth",
+	"pattern": 
+	[
+		"###",
+		"#$#",
+		"###"
+	],
+	"key":
+	{
+		"#":
+		{
+			"item": "nordicarcanum:raven_feather"
+		},
+		"$":
+		{
+			"item": "nordicarcanum:base_core"
+		}
+	},
+	"result":
+	{
+		"item": "nordicarcanum:raven_feather_core"
+	},
+	"arcanum": 5
+}

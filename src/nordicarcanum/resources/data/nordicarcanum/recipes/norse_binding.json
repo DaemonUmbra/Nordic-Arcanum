@@ -1,0 +1,10 @@
+{
+	"type": "nordicarcanum:nordic_anvil",
+	"ingredient":
+	{
+		"item": "nordicarcanum:norse_ingot"
+	},
+	"result": "nordicarcanum:norse_binding",
+	"required_count": 5,
+	"required_hits": 5
+}

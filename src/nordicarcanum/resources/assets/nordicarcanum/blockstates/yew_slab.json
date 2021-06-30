@@ -1,0 +1,17 @@
+{
+	"variants":
+	{
+		"type=bottom":
+		{ 
+			"model": "nordicarcanum:block/yew_slab" 
+		},
+		"type=top":
+		{ 
+			"model": "nordicarcanum:block/yew_slab_top" 
+		},
+		"type=double":
+		{ 
+			"model": "nordicarcanum:block/yew_plank" 
+		}
+	}
+}

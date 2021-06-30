@@ -1,0 +1,9 @@
+{
+    "parent": "block/slab",
+    "textures": 
+    {
+        "bottom": "nordicarcanum:blocks/norse_compact",
+        "top": "nordicarcanum:blocks/norse_compact",
+        "side": "nordicarcanum:blocks/norse_compact"
+    }
+}

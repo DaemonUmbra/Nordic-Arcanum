@@ -1,0 +1,9 @@
+{
+	"type": "nordicarcanum:viking_saw",
+	"ingredient":
+	{
+		"item": "nordicarcanum:juniper_log"
+	},
+	"result": "nordicarcanum:juniper_rod",
+	"required_cuts": 5
+}

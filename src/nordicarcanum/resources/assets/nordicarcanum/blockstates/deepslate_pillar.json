@@ -1,0 +1,11 @@
+{
+	"variants":
+	{
+		"axis=y,activated=false": { "model": "nordicarcanum:block/deepslate_pillar" },
+		"axis=z,activated=false": { "model": "nordicarcanum:block/deepslate_pillar", "x": 90 },
+		"axis=x,activated=false": { "model": "nordicarcanum:block/deepslate_pillar", "x": 90, "y": 90 },
+		"axis=y,activated=true": { "model": "nordicarcanum:block/activated_deepslate_pillar" },
+		"axis=z,activated=true": { "model": "nordicarcanum:block/activated_deepslate_pillar", "x": 90 },
+		"axis=x,activated=true": { "model": "nordicarcanum:block/activated_deepslate_pillar", "x": 90, "y": 90 }
+	}
+}

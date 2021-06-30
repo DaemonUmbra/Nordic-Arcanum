@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "nordicarcanum:iron_binding",
+    "nordicarcanum:gold_binding",
+    "nordicarcanum:bismuth_binding",
+    "nordicarcanum:nickle_binding",
+    "nordicarcanum:silver_binding",
+    "nordicarcanum:steel_binding",
+    "nordicarcanum:norse_binding"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": 
+	[
+		{
+			"item": "nordicarcanum:pine_log"
+		}
+	],
+	"result":
+	{
+		"item": "nordicarcanum:pine_plank",
+		"count": 4
+	}
+}

@@ -1,0 +1,13 @@
+{
+	"parent": "block/cube",
+	"textures":
+	{
+		"particle": "nordicarcanum:blocks/crafting_cloth_top",
+		"down": "block/purple_wool",
+		"up": "nordicarcanum:blocks/crafting_cloth_top",
+		"north": "nordicarcanum:blocks/crafting_cloth_side",
+		"east": "nordicarcanum:blocks/crafting_cloth_side",
+		"south": "nordicarcanum:blocks/crafting_cloth_side",
+		"west": "nordicarcanum:blocks/crafting_cloth_side"
+	}
+}

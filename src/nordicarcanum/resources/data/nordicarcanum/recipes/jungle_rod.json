@@ -1,0 +1,9 @@
+{
+	"type": "nordicarcanum:viking_saw",
+	"ingredient":
+	{
+		"item": "minecraft:jungle_log"
+	},
+	"result": "nordicarcanum:jungle_rod",
+	"required_cuts": 5
+}

@@ -1,0 +1,38 @@
+{
+  "display":
+  {
+    "icon":
+    {
+      "item": "nordicarcanum:magic_sigil"
+    },
+    "title":
+    {
+      "translate": "nordicarcanum.achievement.sigil_found"
+    },
+    "description":
+    {
+      "translate": "nordicarcanum.achievement.sigil_found.desc"
+    },
+    "background": "nordicarcanum:textures/gui/advancement_bg.png"
+  },
+  "criteria":
+  {
+    "magic_sigil":
+    {
+      "trigger": "minecraft:inventory_changed",
+      "conditions":
+      {
+        "items":
+        [
+          {
+            "item": "nordicarcanum:magic_sigil"
+          }
+        ]
+      }
+    }
+  },
+  "rewards":
+  {
+    "experience": 10
+  }
+}

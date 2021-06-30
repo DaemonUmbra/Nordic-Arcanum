@@ -1,0 +1,69 @@
+{
+    "variants": 
+    {
+    	"facing=east,piece=bot_left":
+        { 
+        	"model": "nordicarcanum:block/entities/staff_workbench_bot_left"
+        },
+        "facing=south,piece=bot_left":
+        { 
+        	"model": "nordicarcanum:block/entities/staff_workbench_bot_left", "y": 90
+        },
+        "facing=west,piece=bot_left":
+        { 
+        	"model": "nordicarcanum:block/entities/staff_workbench_bot_left", "y": 180
+        },
+        "facing=north,piece=bot_left":
+        { 
+        	"model": "nordicarcanum:block/entities/staff_workbench_bot_left", "y": 270
+        },
+        "facing=east,piece=bot_right":
+        {
+            "model": "nordicarcanum:block/entities/staff_workbench_bot_right"
+        },
+        "facing=south,piece=bot_right":
+        {
+            "model": "nordicarcanum:block/entities/staff_workbench_bot_right", "y": 90
+        },
+        "facing=west,piece=bot_right":
+        {
+            "model": "nordicarcanum:block/entities/staff_workbench_bot_right", "y": 180
+        },
+        "facing=north,piece=bot_right":
+        {
+            "model": "nordicarcanum:block/entities/staff_workbench_bot_right", "y": 270
+        },
+        "facing=east,piece=top_left":
+        {
+            "model": "nordicarcanum:block/entities/staff_workbench_top_left"
+        },
+        "facing=south,piece=top_left":
+        {
+            "model": "nordicarcanum:block/entities/staff_workbench_top_left", "y": 90
+        },
+        "facing=west,piece=top_left":
+        {
+            "model": "nordicarcanum:block/entities/staff_workbench_top_left", "y": 180
+        },
+        "facing=north,piece=top_left":
+        {
+            "model": "nordicarcanum:block/entities/staff_workbench_top_left", "y": 270
+        },
+        "facing=east,piece=top_right":
+        {
+            "model": "nordicarcanum:block/entities/staff_workbench_top_right"
+        },
+        "facing=south,piece=top_right":
+        {
+            "model": "nordicarcanum:block/entities/staff_workbench_top_right", "y": 90
+        },
+        "facing=west,piece=top_right":
+        {
+            "model": "nordicarcanum:block/entities/staff_workbench_top_right", "y": 180
+        },
+        "facing=north,piece=top_right":
+        {
+            "model": "nordicarcanum:block/entities/staff_workbench_top_right", "y": 270
+        }
+    }
+}

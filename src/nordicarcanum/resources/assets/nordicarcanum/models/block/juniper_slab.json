@@ -1,0 +1,9 @@
+{
+    "parent": "block/slab",
+    "textures": 
+    {
+        "bottom": "nordicarcanum:blocks/juniper_plank",
+        "top": "nordicarcanum:blocks/juniper_plank",
+        "side": "nordicarcanum:blocks/juniper_plank"
+    }
+}

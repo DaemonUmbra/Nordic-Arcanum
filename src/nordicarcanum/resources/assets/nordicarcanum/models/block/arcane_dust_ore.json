@@ -1,0 +1,7 @@
+{
+    "parent": "block/cube_all",
+    "textures": 
+    {
+        "all": "nordicarcanum:blocks/arcane_dust_ore"
+    }
+}

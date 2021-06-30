@@ -1,0 +1,20 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": 
+	[
+		"###",
+		"###",
+		"###"
+	],
+	"key":
+	{
+		"#":
+		{
+			"item": "nordicarcanum:norse_ingot"
+		}
+	},
+	"result":
+	{
+		"item": "nordicarcanum:norse_compact"
+	}
+}

@@ -1,0 +1,7 @@
+{
+    "parent": "block/door_top_rh",
+    "textures": {
+        "bottom": "nordicarcanum:blocks/juniper_door_bottom",
+        "top": "nordicarcanum:blocks/juniper_door_top"
+    }
+}

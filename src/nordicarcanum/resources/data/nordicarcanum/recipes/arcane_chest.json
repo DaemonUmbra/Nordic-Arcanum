@@ -1,0 +1,29 @@
+{
+	"type": "nordicarcanum:crafting_cloth",
+	"pattern": 
+	[
+		"#*#",
+		"*%*",
+		"#*#"
+	],
+	"key":
+	{
+		"%":
+		{
+			"item": "minecraft:chest"
+		},
+		"#":
+		{
+			"tag": "forge:ingots/steel"
+		},
+		"*":
+		{
+			"item": "nordicarcanum:arcane_dust"
+		}
+	},
+	"result":
+	{
+		"item": "nordicarcanum:arcane_chest"
+	},
+	"arcanum": 50
+}

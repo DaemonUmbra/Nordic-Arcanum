@@ -1,0 +1,14 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": 
+	[
+		{
+			"tag": "forge:storage_blocks/thulite"
+		}
+	],
+	"result":
+	{
+		"item": "nordicarcanum:thulite_crystal",
+		"count": 9
+	}
+}

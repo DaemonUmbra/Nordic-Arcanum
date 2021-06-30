@@ -1,0 +1,25 @@
+{
+	"type": "nordicarcanum:crafting_cloth",
+	"pattern": 
+	[
+		"%%%",
+		"%#%",
+		"%%%"
+	],
+	"key":
+	{
+		"#":
+		{
+			"item": "nordicarcanum:arcane_glass"
+		},
+		"%":
+		{
+			"tag": "forge:ingots/nickel"
+		}
+	},
+	"result":
+	{
+		"item": "nordicarcanum:crystal_matrix"
+	},
+	"arcanum": 50
+}

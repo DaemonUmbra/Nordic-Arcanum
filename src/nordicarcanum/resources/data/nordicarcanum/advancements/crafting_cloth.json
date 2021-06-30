@@ -1,0 +1,39 @@
+{
+  "parent": "nordicarcanum:arcane_dust",
+  "display":
+  {
+    "icon":
+    {
+      "item": "nordicarcanum:crafting_cloth_item"
+    },
+    "title":
+    {
+      "translate": "nordicarcanum.achievement.crafting_cloth"
+    },
+    "description":
+    {
+      "translate": "nordicarcanum.achievement.crafting_cloth.desc"
+    },
+    "background": "nordicarcanum:textures/gui/advancement_bg.png"
+  },
+  "criteria":
+  {
+    "magic_sigil":
+    {
+      "trigger": "minecraft:inventory_changed",
+      "conditions":
+      {
+        "items":
+        [
+          {
+            "item": "nordicarcanum:crafting_cloth"
+          }
+        ]
+      }
+    }
+  },
+  "rewards":
+  {
+    "experience": 10
+  }
+}

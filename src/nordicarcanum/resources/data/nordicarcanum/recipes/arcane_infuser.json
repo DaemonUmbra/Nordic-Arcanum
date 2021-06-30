@@ -1,0 +1,33 @@
+{
+	"type": "nordicarcanum:crafting_cloth",
+	"pattern": 
+	[
+		"%@%",
+		"%$%",
+		"###"
+	],
+	"key":
+	{
+		"#":
+		{
+			"item": "minecraft:polished_blackstone_bricks"
+		},
+		"%":
+		{
+			"tag": "forge:ingots/silver"
+		},
+		"$":
+		{
+			"item": "nordicarcanum:norse_compact"
+		},
+		"@":
+		{
+			"item": "nordicarcanum:arcane_dust_compact"
+		}
+	},
+	"result":
+	{
+		"item": "nordicarcanum:arcane_infuser"
+	},
+	"arcanum": 25
+}

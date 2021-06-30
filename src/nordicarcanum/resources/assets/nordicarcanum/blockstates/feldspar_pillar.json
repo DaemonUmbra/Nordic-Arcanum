@@ -1,0 +1,8 @@
+{
+	"variants":
+	{
+		"axis=y": { "model": "nordicarcanum:block/feldspar_pillar" },
+		"axis=z": { "model": "nordicarcanum:block/feldspar_pillar", "x": 90 },
+		"axis=x": { "model": "nordicarcanum:block/feldspar_pillar", "x": 90, "y": 90 }
+	}
+}

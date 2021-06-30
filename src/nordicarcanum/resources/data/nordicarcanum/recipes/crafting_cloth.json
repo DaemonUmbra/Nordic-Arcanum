@@ -1,0 +1,32 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": 
+	[
+		"@%@",
+		"%#%",
+		"#$#"
+	],
+	"key":
+	{
+		"@":
+		{
+			"item": "nordicarcanum:arcane_dust"
+		},
+		"#":
+		{
+			"item": "minecraft:glowstone_dust"
+		},
+		"%":
+		{
+			"item": "minecraft:purple_carpet"
+		},
+		"$":
+		{
+			"item": "minecraft:crafting_table"
+		}
+	},
+	"result":
+	{
+		"item": "nordicarcanum:crafting_cloth_item"
+	}
+}
