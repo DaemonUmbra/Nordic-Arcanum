@@ -15,7 +15,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class BlockArcaneGlass extends BlockMod
 {
-    public BlockArcaneGlass()
+    public BlockArcaneGlass() 
     {
         super(Block.Properties.create(Material.GLASS)
                 .notSolid()
