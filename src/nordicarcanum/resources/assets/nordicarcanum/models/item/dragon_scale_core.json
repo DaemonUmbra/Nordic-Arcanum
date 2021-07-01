@@ -2,6 +2,6 @@
 	"parent": "item/generated",
 	"textures": 
 	{
-		"layer0": "nordicarcanum:items/dragon_scale_core"
+		"layer0": "nordicarcanum:items/cores/dragon_scale_core"
 	}
 }

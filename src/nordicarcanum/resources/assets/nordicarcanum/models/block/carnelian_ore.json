@@ -2,6 +2,6 @@
     "parent": "block/cube_all",
     "textures": 
     {
-        "all": "nordicarcanum:blocks/carnelian_ore"
+        "all": "nordicarcanum:blocks/ores/carnelian_ore"
     }
 }

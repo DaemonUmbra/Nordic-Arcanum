@@ -3,7 +3,7 @@
 	"texture_size": [96, 96],
 	"textures": {
 		"0": "nordicarcanum:blocks/entities/staff_workbench",
-		"particle": "nordicarcanum:blocks/feldspar_brick"
+		"particle": "nordicarcanum:blocks/earth_blocks/feldspar_brick"
 	},
 	"elements": [
 		{

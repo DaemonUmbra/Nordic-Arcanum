@@ -2,7 +2,7 @@
     "parent": "block/cube_column",
     "textures": 
     {
-        "end": "nordicarcanum:blocks/feldspar_pillar_top",
-        "side": "nordicarcanum:blocks/feldspar_pillar"
+        "end": "nordicarcanum:blocks/earth_blocks/feldspar_pillar_top",
+        "side": "nordicarcanum:blocks/earth_blocks/feldspar_pillar"
     }
 }

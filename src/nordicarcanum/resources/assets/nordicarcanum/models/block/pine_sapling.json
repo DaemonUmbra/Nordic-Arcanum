@@ -2,6 +2,6 @@
     "parent": "block/cross",
     "textures": 
     {
-        "cross": "nordicarcanum:blocks/pine_sapling"
+        "cross": "nordicarcanum:blocks/plants/pine_sapling"
     }
 }

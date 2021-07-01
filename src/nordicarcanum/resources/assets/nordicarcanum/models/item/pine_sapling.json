@@ -2,6 +2,6 @@
     "parent": "item/generated",
     "textures": 
     {
-    	"layer0": "nordicarcanum:blocks/pine_sapling"
+    	"layer0": "nordicarcanum:blocks/plants/pine_sapling"
 	}
 }

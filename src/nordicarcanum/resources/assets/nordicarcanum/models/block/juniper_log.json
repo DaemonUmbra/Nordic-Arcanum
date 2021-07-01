@@ -2,7 +2,7 @@
     "parent": "block/cube_column",
     "textures": 
     {
-        "end": "nordicarcanum:blocks/juniper_log_top",
-        "side": "nordicarcanum:blocks/juniper_log"
+        "end": "nordicarcanum:blocks/wood/juniper_log_top",
+        "side": "nordicarcanum:blocks/wood/juniper_log"
     }
 }

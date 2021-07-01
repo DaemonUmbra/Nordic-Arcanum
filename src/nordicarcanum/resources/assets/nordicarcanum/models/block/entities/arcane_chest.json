@@ -1,6 +1,6 @@
 {
     "textures":
     {
-        "particle": "nordicarcanum:blocks/steel_metal_compact"
+        "particle": "nordicarcanum:blocks/compact_blocks/steel_metal_compact"
     }
 }

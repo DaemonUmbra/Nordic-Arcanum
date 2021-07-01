@@ -2,6 +2,6 @@
     "parent": "block/cube_all",
     "textures": 
     {
-        "all": "nordicarcanum:blocks/arcane_dust_compact"
+        "all": "nordicarcanum:blocks/compact_blocks/arcane_dust_compact"
     }
 }

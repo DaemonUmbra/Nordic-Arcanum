@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/fence_side",
   "textures": {
-    "texture": "nordicarcanum:blocks/juniper_plank"
+    "texture": "nordicarcanum:blocks/wood/juniper_plank"
   }
 }

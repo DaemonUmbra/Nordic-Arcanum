@@ -2,6 +2,6 @@
 	"parent": "item/generated",
 	"textures": 
 	{
-		"layer0": "nordicarcanum:items/pedestal_cast"
+		"layer0": "nordicarcanum:items/casts/pedestal_cast"
 	}
 }

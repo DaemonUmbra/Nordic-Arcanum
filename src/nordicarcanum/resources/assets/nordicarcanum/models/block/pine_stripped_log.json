@@ -2,7 +2,7 @@
     "parent": "block/cube_column",
     "textures": 
     {
-        "end": "nordicarcanum:blocks/stripped_pine_log_top",
-        "side": "nordicarcanum:blocks/stripped_pine_log"
+        "end": "nordicarcanum:blocks/wood/stripped_pine_log_top",
+        "side": "nordicarcanum:blocks/wood/stripped_pine_log"
     }
 }

@@ -2,6 +2,6 @@
 	"parent": "item/handheld",
 	"textures": 
 	{
-		"layer0": "nordicarcanum:items/garnet_pickaxe"
+		"layer0": "nordicarcanum:items/tools/garnet_pickaxe"
 	}
 }

@@ -2,6 +2,6 @@
     "parent": "block/leaves",
     "textures": 
     {
-        "all": "nordicarcanum:blocks/juniper_leaves"
+        "all": "nordicarcanum:blocks/plants/juniper_leaves"
     }
 }

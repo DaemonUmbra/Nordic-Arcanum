@@ -2,7 +2,7 @@
     "parent": "block/cube_column",
     "textures": 
     {
-        "end": "nordicarcanum:blocks/deepslate_pillar_top",
-        "side": "nordicarcanum:blocks/deepslate_pillar"
+        "end": "nordicarcanum:blocks/earth_blocks/deepslate_pillar_top",
+        "side": "nordicarcanum:blocks/earth_blocks/deepslate_pillar"
     }
 }

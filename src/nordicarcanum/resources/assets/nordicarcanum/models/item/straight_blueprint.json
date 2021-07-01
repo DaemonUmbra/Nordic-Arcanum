@@ -2,6 +2,6 @@
 	"parent": "item/generated",
 	"textures": 
 	{
-		"layer0": "nordicarcanum:items/straight_blueprint"
+		"layer0": "nordicarcanum:items/blueprints/straight_blueprint"
 	}
 }

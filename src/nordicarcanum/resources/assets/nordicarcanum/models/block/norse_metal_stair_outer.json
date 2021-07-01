@@ -1,8 +1,8 @@
 {
     "parent": "block/outer_stairs",
     "textures": {
-        "bottom": "nordicarcanum:blocks/norse_compact",
-        "top": "nordicarcanum:blocks/norse_compact",
-        "side": "nordicarcanum:blocks/norse_compact"
+        "bottom": "nordicarcanum:blocks/compact_blocks/norse_compact",
+        "top": "nordicarcanum:blocks/compact_blocks/norse_compact",
+        "side": "nordicarcanum:blocks/compact_blocks/norse_compact"
     }
 }

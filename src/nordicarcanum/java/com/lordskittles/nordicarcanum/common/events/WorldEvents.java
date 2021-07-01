@@ -1,13 +1,10 @@
 package com.lordskittles.nordicarcanum.common.events;
 
 import com.lordskittles.nordicarcanum.common.registry.Structures;
-import com.lordskittles.nordicarcanum.common.tileentity.TileEntityAttunementAltar;
 import com.lordskittles.nordicarcanum.common.world.FeatureGeneration;
 import com.lordskittles.nordicarcanum.common.world.OreGeneration;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
-import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 

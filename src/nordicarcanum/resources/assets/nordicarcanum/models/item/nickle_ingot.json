@@ -2,6 +2,6 @@
 	"parent": "item/generated",
 	"textures": 
 	{
-		"layer0": "nordicarcanum:items/nickle_ingot"
+		"layer0": "nordicarcanum:items/metals/nickle_ingot"
 	}
 }

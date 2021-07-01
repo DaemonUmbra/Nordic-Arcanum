@@ -2,6 +2,6 @@
 	"parent": "item/generated",
 	"textures": 
 	{
-		"layer0": "nordicarcanum:items/arcane_dust"
+		"layer0": "nordicarcanum:items/dust/arcane_dust"
 	}
 }

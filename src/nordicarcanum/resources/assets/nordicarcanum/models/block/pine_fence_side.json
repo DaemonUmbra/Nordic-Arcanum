@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/fence_side",
   "textures": {
-    "texture": "nordicarcanum:blocks/pine_plank"
+    "texture": "nordicarcanum:blocks/wood/pine_plank"
   }
 }

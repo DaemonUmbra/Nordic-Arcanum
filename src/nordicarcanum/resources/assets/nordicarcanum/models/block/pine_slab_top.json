@@ -2,8 +2,8 @@
     "parent": "block/slab_top",
     "textures": 
     {
-        "bottom": "nordicarcanum:blocks/pine_plank",
-        "top": "nordicarcanum:blocks/pine_plank",
-        "side": "nordicarcanum:blocks/pine_plank"
+        "bottom": "nordicarcanum:blocks/wood/pine_plank",
+        "top": "nordicarcanum:blocks/wood/pine_plank",
+        "side": "nordicarcanum:blocks/wood/pine_plank"
     }
 }

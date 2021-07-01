@@ -2,6 +2,6 @@
 	"parent": "item/generated",
 	"textures": 
 	{
-		"layer0": "nordicarcanum:items/undiscovered_sigil"
+		"layer0": "nordicarcanum:items/magic_sigil"
 	}
 }

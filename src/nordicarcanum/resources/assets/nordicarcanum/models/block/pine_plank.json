@@ -2,6 +2,6 @@
     "parent": "block/cube_all",
     "textures": 
     {
-        "all": "nordicarcanum:blocks/pine_plank"
+        "all": "nordicarcanum:blocks/wood/pine_plank"
     }
 }

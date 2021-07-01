@@ -2,6 +2,6 @@
 	"parent": "item/generated",
 	"textures": 
 	{
-		"layer0": "nordicarcanum:items/raw_bismuth"
+		"layer0": "nordicarcanum:items/metals/raw_bismuth"
 	}
 }

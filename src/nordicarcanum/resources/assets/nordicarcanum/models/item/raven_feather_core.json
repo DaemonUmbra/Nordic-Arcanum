@@ -2,6 +2,6 @@
 	"parent": "item/generated",
 	"textures": 
 	{
-		"layer0": "nordicarcanum:items/raven_feather_core"
+		"layer0": "nordicarcanum:items/cores/raven_feather_core"
 	}
 }

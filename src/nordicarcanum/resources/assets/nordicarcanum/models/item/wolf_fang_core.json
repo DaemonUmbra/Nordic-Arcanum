@@ -2,6 +2,6 @@
 	"parent": "item/generated",
 	"textures": 
 	{
-		"layer0": "nordicarcanum:items/wolf_fang_core"
+		"layer0": "nordicarcanum:items/cores/wolf_fang_core"
 	}
 }

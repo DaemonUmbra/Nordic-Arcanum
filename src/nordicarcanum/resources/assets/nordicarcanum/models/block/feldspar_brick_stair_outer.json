@@ -1,8 +1,8 @@
 {
     "parent": "block/outer_stairs",
     "textures": {
-        "bottom": "nordicarcanum:blocks/feldspar_brick",
-        "top": "nordicarcanum:blocks/feldspar_brick",
-        "side": "nordicarcanum:blocks/feldspar_brick"
+        "bottom": "nordicarcanum:blocks/earth_blocks/feldspar_brick",
+        "top": "nordicarcanum:blocks/earth_blocks/feldspar_brick",
+        "side": "nordicarcanum:blocks/earth_blocks/feldspar_brick"
     }
 }

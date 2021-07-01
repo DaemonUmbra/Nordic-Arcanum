@@ -2,8 +2,8 @@
     "parent": "block/slab",
     "textures": 
     {
-        "bottom": "nordicarcanum:blocks/feldspar_polished",
-        "top": "nordicarcanum:blocks/feldspar_polished",
-        "side": "nordicarcanum:blocks/feldspar_polished"
+        "bottom": "nordicarcanum:blocks/earth_blocks/feldspar_polished",
+        "top": "nordicarcanum:blocks/earth_blocks/feldspar_polished",
+        "side": "nordicarcanum:blocks/earth_blocks/feldspar_polished"
     }
 }

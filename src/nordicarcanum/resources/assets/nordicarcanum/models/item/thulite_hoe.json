@@ -2,6 +2,6 @@
 	"parent": "item/handheld",
 	"textures": 
 	{
-		"layer0": "nordicarcanum:items/thulite_hoe"
+		"layer0": "nordicarcanum:items/tools/thulite_hoe"
 	}
 }

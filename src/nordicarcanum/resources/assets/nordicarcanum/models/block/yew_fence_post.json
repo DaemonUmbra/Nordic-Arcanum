@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/fence_post",
   "textures": {
-    "texture": "nordicarcanum:blocks/yew_plank"
+    "texture": "nordicarcanum:blocks/wood/yew_plank"
   }
 }

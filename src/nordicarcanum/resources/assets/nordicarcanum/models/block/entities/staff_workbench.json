@@ -2,6 +2,6 @@
 	"parent": "block/cube_all",
 	"textures":
 	{
-		"all": "nordicarcanum:blocks/thulite_ore"
+		"all": "nordicarcanum:blocks/ores/thulite_ore"
 	}
 }

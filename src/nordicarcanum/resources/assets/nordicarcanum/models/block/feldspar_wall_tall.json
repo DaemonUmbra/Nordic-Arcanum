@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/template_wall_tall",
   "textures": {
-    "wall": "nordicarcanum:blocks/feldspar_brick"
+    "wall": "nordicarcanum:blocks/earth_blocks/feldspar_brick"
   }
 }

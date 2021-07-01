@@ -2,6 +2,6 @@
     "parent": "block/cube_all",
     "textures": 
     {
-        "all": "nordicarcanum:blocks/nickle_metal_compact"
+        "all": "nordicarcanum:blocks/compact_blocks/nickle_metal_compact"
     }
 }

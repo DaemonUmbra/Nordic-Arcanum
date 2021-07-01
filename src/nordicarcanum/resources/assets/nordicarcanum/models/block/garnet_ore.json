@@ -2,6 +2,6 @@
     "parent": "block/cube_all",
     "textures": 
     {
-        "all": "nordicarcanum:blocks/garnet_ore"
+        "all": "nordicarcanum:blocks/ores/garnet_ore"
     }
 }

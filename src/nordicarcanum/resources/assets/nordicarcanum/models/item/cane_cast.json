@@ -2,6 +2,6 @@
 	"parent": "item/generated",
 	"textures": 
 	{
-		"layer0": "nordicarcanum:items/cane_cast"
+		"layer0": "nordicarcanum:items/casts/cane_cast"
 	}
 }

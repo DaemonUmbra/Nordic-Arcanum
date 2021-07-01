@@ -25,12 +25,6 @@ public class ItemArcanumBottle extends ItemMod
     }
 
     @Override
-    public boolean hasEffect(ItemStack stack)
-    {
-        return true;
-    }
-
-    @Override
     public ItemStack onItemUseFinish(ItemStack stack, World world, LivingEntity entity)
     {
         PlayerEntity player = entity instanceof PlayerEntity ? (PlayerEntity)entity : null;

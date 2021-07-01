@@ -2,6 +2,6 @@
 	"parent": "item/generated",
 	"textures": 
 	{
-		"layer0": "nordicarcanum:items/carnelian_crystal"
+		"layer0": "nordicarcanum:items/crystals/carnelian_crystal"
 	}
 }

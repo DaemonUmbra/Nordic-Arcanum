@@ -2,6 +2,6 @@
     "parent": "block/cube_all",
     "textures": 
     {
-        "all": "nordicarcanum:blocks/chiseled_feldspar_brick"
+        "all": "nordicarcanum:blocks/earth_blocks/chiseled_feldspar_brick"
     }
 }

@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/fence_inventory",
   "textures": {
-    "texture": "nordicarcanum:blocks/pine_plank"
+    "texture": "nordicarcanum:blocks/wood/pine_plank"
   }
 }

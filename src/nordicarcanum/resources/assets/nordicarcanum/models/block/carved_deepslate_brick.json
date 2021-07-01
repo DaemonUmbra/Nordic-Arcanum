@@ -2,7 +2,7 @@
     "parent": "block/cube_column",
     "textures": 
     {
-        "end": "nordicarcanum:blocks/carved_deepslate_top",
-        "side": "nordicarcanum:blocks/carved_deepslate"
+        "end": "nordicarcanum:blocks/earth_blocks/carved_deepslate_top",
+        "side": "nordicarcanum:blocks/earth_blocks/carved_deepslate"
     }
 }
