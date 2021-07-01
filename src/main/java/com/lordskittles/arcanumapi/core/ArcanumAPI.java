@@ -10,7 +10,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
@@ -20,13 +19,13 @@ import java.util.Collection;
 
 @Mod(ArcanumAPI.MODID)
 @Mod.EventBusSubscriber(modid = ArcanumAPI.MODID, bus = Bus.MOD)
-public class ArcanumAPI
-{
+public class ArcanumAPI {
+
     public static final Logger LOG = LogManager.getLogger();
     public static final String MODID = "arcanumapi";
 
-    public ArcanumAPI()
-    {
+    public ArcanumAPI() {
+
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(this::setup);
 
@@ -37,22 +36,21 @@ public class ArcanumAPI
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    public void setup(FMLCommonSetupEvent event)
-    {
+    public void setup(FMLCommonSetupEvent event) {
+
         Collection<MagicSchool> schools = MagicSchools.getIdSchools();
-        for (MagicSchool school : schools)
-        {
+        for(MagicSchool school : schools) {
             school.loadSpells();
         }
     }
 
-    public static ResourceLocation RL(String modId, String location)
-    {
+    public static ResourceLocation RL(String modId, String location) {
+
         return new ResourceLocation(modId, location);
     }
 
-    public static ResourceLocation RL(String location)
-    {
+    public static ResourceLocation RL(String location) {
+
         return RL(MODID, location);
     }
 }

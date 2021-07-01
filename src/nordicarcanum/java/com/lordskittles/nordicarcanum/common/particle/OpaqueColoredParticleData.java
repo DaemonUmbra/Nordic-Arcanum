@@ -1,6 +1,5 @@
 package com.lordskittles.nordicarcanum.common.particle;
 
-import com.lordskittles.nordicarcanum.common.registry.Particles;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.network.PacketBuffer;
@@ -13,8 +12,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Locale;
 
-public class OpaqueColoredParticleData implements IParticleData
-{
+public class OpaqueColoredParticleData implements IParticleData {
+
     public static final IParticleData.IDeserializer<OpaqueColoredParticleData> DESERIALIZER = createSerializer();
 
     private final float red;
@@ -22,8 +21,8 @@ public class OpaqueColoredParticleData implements IParticleData
     private final float blue;
     private final float alpha;
 
-    public OpaqueColoredParticleData(float red, float green, float blue, float alpha)
-    {
+    public OpaqueColoredParticleData(float red, float green, float blue, float alpha) {
+
         this.red = red;
         this.green = green;
         this.blue = blue;
@@ -31,38 +30,38 @@ public class OpaqueColoredParticleData implements IParticleData
     }
 
     @OnlyIn(Dist.CLIENT)
-    public final float getRed()
-    {
+    public final float getRed() {
+
         return this.red;
     }
 
     @OnlyIn(Dist.CLIENT)
-    public final float getGreen()
-    {
+    public final float getGreen() {
+
         return this.green;
     }
 
     @OnlyIn(Dist.CLIENT)
-    public final float getBlue()
-    {
+    public final float getBlue() {
+
         return this.blue;
     }
 
     @OnlyIn(Dist.CLIENT)
-    public final float getAlpha()
-    {
+    public final float getAlpha() {
+
         return this.alpha;
     }
 
     @Override
-    public ParticleType<?> getType()
-    {
+    public ParticleType<?> getType() {
+
         return /*Particles.opaque_colored_particle.get()*/null;
     }
 
     @Override
-    public void write(PacketBuffer buffer)
-    {
+    public void write(PacketBuffer buffer) {
+
         buffer.writeFloat(this.red);
         buffer.writeFloat(this.green);
         buffer.writeFloat(this.blue);
@@ -70,30 +69,30 @@ public class OpaqueColoredParticleData implements IParticleData
     }
 
     @Override
-    public String getParameters()
-    {
+    public String getParameters() {
+
         return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f", Registry.PARTICLE_TYPE.getKey(this.getType()), this.red, this.green, this.blue, this.alpha);
     }
 
-    private static final IParticleData.IDeserializer<OpaqueColoredParticleData> createSerializer()
-    {
-        return new IDeserializer<OpaqueColoredParticleData>()
-        {
+    private static final IParticleData.IDeserializer<OpaqueColoredParticleData> createSerializer() {
+
+        return new IDeserializer<OpaqueColoredParticleData>() {
+
             @Override
-            public OpaqueColoredParticleData deserialize(ParticleType<OpaqueColoredParticleData> type, StringReader reader) throws CommandSyntaxException
-            {
+            public OpaqueColoredParticleData deserialize(ParticleType<OpaqueColoredParticleData> type, StringReader reader) throws CommandSyntaxException {
+
                 reader.expect(' ');
-                float red = (float)reader.readDouble();
-                float green = (float)reader.readDouble();
-                float blue = (float)reader.readDouble();
-                float alpha = (float)reader.readDouble();
+                float red = (float) reader.readDouble();
+                float green = (float) reader.readDouble();
+                float blue = (float) reader.readDouble();
+                float alpha = (float) reader.readDouble();
 
                 return new OpaqueColoredParticleData(red, green, blue, alpha);
             }
 
             @Override
-            public OpaqueColoredParticleData read(ParticleType<OpaqueColoredParticleData> type, PacketBuffer buffer)
-            {
+            public OpaqueColoredParticleData read(ParticleType<OpaqueColoredParticleData> type, PacketBuffer buffer) {
+
                 return new OpaqueColoredParticleData(buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat());
             }
         };

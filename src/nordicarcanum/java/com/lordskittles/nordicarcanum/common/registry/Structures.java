@@ -8,11 +8,13 @@ import com.lordskittles.nordicarcanum.common.world.feature.structure.StructureNo
 import com.lordskittles.nordicarcanum.common.world.feature.structure.StructureShrine;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.lordskittles.nordicarcanum.core.NordicNames;
-import com.lordskittles.nordicarcanum.core.NordicResourceLocations;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.WorldGenRegistries;
 import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.*;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.gen.feature.StructureFeature;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraftforge.event.RegistryEvent;
@@ -26,8 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = NordicArcanum.MODID)
-public class Structures
-{
+public class Structures {
+
     public static final List<StructureBase> STRUCTURE_LIST = new ArrayList<>();
 
     public static final DeferredRegister<Structure<?>> STRUCTURES = DeferredRegister.create(ForgeRegistries.STRUCTURE_FEATURES, NordicArcanum.MODID);
@@ -47,21 +49,21 @@ public class Structures
     public static StructureFeature<NoFeatureConfig, ? extends Structure<NoFeatureConfig>> shrine_baldur_feature;
 
     @SubscribeEvent
-    public static void registerStructurePieces(RegistryEvent.Register<Feature<?>> event)
-    {
+    public static void registerStructurePieces(RegistryEvent.Register<Feature<?>> event) {
+
         Registry.register(Registry.STRUCTURE_PIECE, NordicArcanum.RL(NordicNames.ANCIENT_NORSE + NordicNames.STRUCTURE_PIECE_SUFFIX), pillar_piece);
         Registry.register(Registry.STRUCTURE_PIECE, NordicArcanum.RL(NordicNames.SHRINE + NordicNames.STRUCTURE_PIECE_SUFFIX), shrine_piece);
     }
 
-    public static void registerFeatures()
-    {
+    public static void registerFeatures() {
+
         norse_pillar_feature = register(NordicNames.ANCIENT_NORSE + NordicNames.STRUCTURE_SUFFIX + "_feature", norse_pillar.get().withConfiguration(NoFeatureConfig.INSTANCE));
 
         shrine_baldur_feature = register(NordicNames.SHRINE + NordicNames.STRUCTURE_SUFFIX + "_feature", shrine_baldur.get().withConfiguration(NoFeatureConfig.INSTANCE));
     }
 
-    private static <T extends StructureBase<?>> RegistryObject<T> registerStructure(String name, T structure)
-    {
+    private static <T extends StructureBase<?>> RegistryObject<T> registerStructure(String name, T structure) {
+
         Structure.NAME_STRUCTURE_BIMAP.put(NordicArcanum.MODID + ":" + name, structure);
         Structure.STRUCTURE_DECORATION_STAGE_MAP.put(structure, GenerationStage.Decoration.SURFACE_STRUCTURES);
 
@@ -72,8 +74,8 @@ public class Structures
         return STRUCTURES.register(name, () -> structure);
     }
 
-    private static <FC extends IFeatureConfig, F extends Structure<FC>> StructureFeature<FC, F> register(String name, StructureFeature<FC, F> feature)
-    {
+    private static <FC extends IFeatureConfig, F extends Structure<FC>> StructureFeature<FC, F> register(String name, StructureFeature<FC, F> feature) {
+
         return WorldGenRegistries.register(WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE, name, feature);
     }
 }

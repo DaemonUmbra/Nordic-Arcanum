@@ -15,27 +15,25 @@ import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.glfw.GLFW;
 
 @Mod.EventBusSubscriber(modid = NordicArcanum.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
-public class Keys
-{
+public class Keys {
+
     public static KeyBinding change_school;
 
-    public static void registerKeys()
-    {
-        change_school = new KeyBinding(NordicNames.CHANGE_SCHOOL_KEY, GLFW.GLFW_KEY_F, NordicNames.KEY_CATEGORY);
+    public static void registerKeys() {
+
+        change_school = new KeyBinding(NordicNames.CHANGE_SCHOOL_KEY, GLFW.GLFW_KEY_G, NordicNames.KEY_CATEGORY);
 
         ClientRegistry.registerKeyBinding(change_school);
     }
 
     @SubscribeEvent
-    public static void onKeyInput(InputEvent.KeyInputEvent event)
-    {
+    public static void onKeyInput(InputEvent.KeyInputEvent event) {
+
         Minecraft minecraft = Minecraft.getInstance();
         PlayerEntity player = minecraft.player;
 
-        if (Minecraft.getInstance().world != null)
-        {
-            if (change_school.isKeyDown())
-            {
+        if(Minecraft.getInstance().world != null) {
+            if(change_school.isKeyDown()) {
                 GUIHandler.open(GUIType.ChangeSpell, player);
             }
         }

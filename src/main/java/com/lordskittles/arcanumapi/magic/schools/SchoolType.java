@@ -6,8 +6,7 @@ import net.minecraft.util.text.TextFormatting;
 
 import javax.annotation.Nullable;
 
-public enum SchoolType
-{
+public enum SchoolType {
     Undiscovered(ArcanumNames.UNDISCOVERED, 0, TextFormatting.WHITE),
     Ur(ArcanumNames.UR, 1, TextFormatting.AQUA),
     Kaun(ArcanumNames.KAUN, 2, TextFormatting.RED),
@@ -20,17 +19,17 @@ public enum SchoolType
     public int id;
     public TextFormatting color;
 
-    SchoolType(String name, int id, TextFormatting color)
-    {
+    SchoolType(String name, int id, TextFormatting color) {
+
         this.name = name;
         this.id = id;
         this.color = color;
     }
 
     @Nullable
-    public static MagicSchool getSchoolFromId(int id)
-    {
-        if (MagicSchools.getSchoolFor(id) == MagicSchools.undiscovered)
+    public static MagicSchool getSchoolFromId(int id) {
+
+        if(MagicSchools.getSchoolFor(id) == MagicSchools.undiscovered)
             return null;
 
         return MagicSchools.getSchoolFor(id);

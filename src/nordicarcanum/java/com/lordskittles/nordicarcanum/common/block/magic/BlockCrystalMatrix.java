@@ -1,9 +1,9 @@
 package com.lordskittles.nordicarcanum.common.block.magic;
 
-import com.lordskittles.nordicarcanum.client.itemgroups.NordicItemGroup;
 import com.lordskittles.arcanumapi.common.block.BlockMod;
 import com.lordskittles.arcanumapi.common.block.IItemBlockOverride;
 import com.lordskittles.arcanumapi.common.item.block.ItemBlockBase;
+import com.lordskittles.nordicarcanum.client.itemgroups.NordicItemGroup;
 import com.lordskittles.nordicarcanum.client.render.item.ItemStackCrystalMatrixRender;
 import com.lordskittles.nordicarcanum.common.registry.TileEntities;
 import net.minecraft.block.Block;
@@ -20,37 +20,37 @@ import net.minecraft.world.IBlockReader;
 
 import javax.annotation.Nullable;
 
-public class BlockCrystalMatrix extends BlockMod implements IItemBlockOverride
-{
-    public BlockCrystalMatrix()
-    {
+public class BlockCrystalMatrix extends BlockMod implements IItemBlockOverride {
+
+    public BlockCrystalMatrix() {
+
         super(Block.Properties.create(Material.GLASS).notSolid().hardnessAndResistance(1.0f).sound(SoundType.GLASS));
 
         this.group = NordicItemGroup.INSTANCE;
     }
 
     @Override
-    public boolean hasTileEntity(BlockState state)
-    {
+    public boolean hasTileEntity(BlockState state) {
+
         return true;
     }
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world)
-    {
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+
         return TileEntities.crystal_matrix.get().create();
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context)
-    {
+    public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
+
         return Block.makeCuboidShape(5, 5, 5, 11, 11, 11);
     }
 
     @Override
-    public BlockItem getOverride()
-    {
+    public BlockItem getOverride() {
+
         return new ItemBlockBase(this, new Item.Properties().group(group()).setISTER(() -> ItemStackCrystalMatrixRender::new));
     }
 }

@@ -1,7 +1,7 @@
 package com.lordskittles.arcanumapi.core;
 
-public class ArcanumNames
-{
+public class ArcanumNames {
+
     public static final String ARCANUM = "arcanum";
     public static final String MAGIC_SCHOOLS = "magic_schools";
     public static final String SPELLS = "spells";

@@ -6,10 +6,10 @@ import com.lordskittles.nordicarcanum.core.NordicNames;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
 
-public class ContainerScreenAlchemyTable extends ContainerScreenBase<com.lordskittles.nordicarcanum.common.inventory.containers.ContainerAlchemyTable>
-{
-    public ContainerScreenAlchemyTable(com.lordskittles.nordicarcanum.common.inventory.containers.ContainerAlchemyTable container, PlayerInventory inventory, ITextComponent title)
-    {
+public class ContainerScreenAlchemyTable extends ContainerScreenBase<com.lordskittles.nordicarcanum.common.inventory.containers.ContainerAlchemyTable> {
+
+    public ContainerScreenAlchemyTable(com.lordskittles.nordicarcanum.common.inventory.containers.ContainerAlchemyTable container, PlayerInventory inventory, ITextComponent title) {
+
         super(NordicArcanum.MODID, NordicNames.ALCHEMY_TABLE, container, inventory, title);
 
         setTextureRect(0, 0, 176, 166);

@@ -7,38 +7,36 @@ import net.minecraft.tileentity.TileEntityType;
 
 import javax.annotation.Nonnull;
 
-public abstract class TileEntityUpdateable<T extends TileEntityUpdateable>  extends TileEntity implements ITickableTileEntity
-{
-    public TileEntityUpdateable(TileEntityType<?> tileEntityTypeIn)
-    {
+public abstract class TileEntityUpdateable<T extends TileEntityUpdateable> extends TileEntity implements ITickableTileEntity {
+
+    public TileEntityUpdateable(TileEntityType<?> tileEntityTypeIn) {
+
         super(tileEntityTypeIn);
     }
 
     protected int ticksExisted = 0;
 
     @Nonnull
-    public CompoundNBT getReducedUpdateTag()
-    {
+    public CompoundNBT getReducedUpdateTag() {
+
         return super.getUpdateTag();
     }
 
     @Override
-    public void tick()
-    {
+    public void tick() {
+
         ticksExisted++;
 
-        if (this.world.isRemote)
-        {
+        if(this.world.isRemote) {
             onClientUpdate();
         }
-        else
-        {
+        else {
             onServerUpdate();
         }
     }
 
-    public int getTicksExisted()
-    {
+    public int getTicksExisted() {
+
         return this.ticksExisted;
     }
 

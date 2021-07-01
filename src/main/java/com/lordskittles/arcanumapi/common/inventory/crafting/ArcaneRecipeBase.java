@@ -7,83 +7,80 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.world.World;
 
-public abstract class ArcaneRecipeBase implements IRecipe<ArcaneRecipeBase.DummyIInventory>
-{
+public abstract class ArcaneRecipeBase implements IRecipe<ArcaneRecipeBase.DummyIInventory> {
+
     public final String group;
     protected final IRecipeType<?> type;
 
-    public ArcaneRecipeBase(IRecipeType<?> type, String group)
-    {
+    public ArcaneRecipeBase(IRecipeType<?> type, String group) {
+
         this.type = type;
         this.group = group;
     }
 
     @Override
-    public boolean matches(DummyIInventory inv, World worldIn)
-    {
+    public boolean matches(DummyIInventory inv, World worldIn) {
+
         return true;
     }
 
-    public static class DummyIInventory implements IInventory
-    {
+    public static class DummyIInventory implements IInventory {
+
         private static final DummyIInventory INSTANCE = new DummyIInventory();
 
-        public static DummyIInventory getInstance()
-        {
+        public static DummyIInventory getInstance() {
+
             return INSTANCE;
         }
 
         @Override
-        public int getSizeInventory()
-        {
+        public int getSizeInventory() {
+
             return 0;
         }
 
         @Override
-        public boolean isEmpty()
-        {
+        public boolean isEmpty() {
+
             return true;
         }
 
         @Override
-        public ItemStack getStackInSlot(int index)
-        {
+        public ItemStack getStackInSlot(int index) {
+
             return ItemStack.EMPTY;
         }
 
         @Override
-        public ItemStack decrStackSize(int index, int count)
-        {
+        public ItemStack decrStackSize(int index, int count) {
+
             return ItemStack.EMPTY;
         }
 
         @Override
-        public ItemStack removeStackFromSlot(int index)
-        {
+        public ItemStack removeStackFromSlot(int index) {
+
             return ItemStack.EMPTY;
         }
 
         @Override
-        public void setInventorySlotContents(int index, ItemStack stack)
-        {
+        public void setInventorySlotContents(int index, ItemStack stack) {
 
         }
 
         @Override
-        public void markDirty()
-        {
+        public void markDirty() {
 
         }
 
         @Override
-        public boolean isUsableByPlayer(PlayerEntity player)
-        {
+        public boolean isUsableByPlayer(PlayerEntity player) {
+
             return false;
         }
 
         @Override
-        public void clear()
-        {
+        public void clear() {
 
         }
     }

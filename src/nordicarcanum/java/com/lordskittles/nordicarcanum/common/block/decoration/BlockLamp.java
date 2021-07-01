@@ -16,13 +16,13 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 
-public class BlockLamp extends BlockMod
-{
+public class BlockLamp extends BlockMod {
+
     private final SidePlacement placement;
     private final VoxelShape shape;
 
-    public BlockLamp(SidePlacement placement, VoxelShape shape)
-    {
+    public BlockLamp(SidePlacement placement, VoxelShape shape) {
+
         super(AbstractBlock.Properties.create(Material.GLASS)
                 .hardnessAndResistance(0.3F)
                 .sound(SoundType.GLASS), 15);
@@ -33,8 +33,8 @@ public class BlockLamp extends BlockMod
     }
 
     @Override
-    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos)
-    {
+    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+
         BlockState superState = super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
         BlockState air = Blocks.AIR.getDefaultState();
 
@@ -42,10 +42,9 @@ public class BlockLamp extends BlockMod
     }
 
     @Override
-    public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos)
-    {
-        switch (this.placement)
-        {
+    public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
+
+        switch(this.placement) {
             case NORMAL:
                 return true;
             case BOTTOM_ONLY:
@@ -58,10 +57,9 @@ public class BlockLamp extends BlockMod
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
-    {
-        if(this.shape == null)
-        {
+    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+
+        if(this.shape == null) {
             return super.getShape(state, worldIn, pos, context);
         }
         return this.shape;

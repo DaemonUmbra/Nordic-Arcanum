@@ -9,21 +9,17 @@ import net.minecraft.world.gen.feature.FeatureSpread;
 
 import java.util.Set;
 
-public class PineFoliage extends FoliagePlacerBase
-{
-    public static final Codec<PineFoliage> codec = RecordCodecBuilder.create((instance) ->
-    {
-        return func_236740_a_(instance).apply(instance, PineFoliage::new);
-    });
+public class PineFoliage extends FoliagePlacerBase {
 
-    public PineFoliage(FeatureSpread spreadA, FeatureSpread spreadB, int height)
-    {
+    public static final Codec<PineFoliage> codec = RecordCodecBuilder.create((instance) -> func_236740_a_(instance).apply(instance, PineFoliage::new));
+
+    public PineFoliage(FeatureSpread spreadA, FeatureSpread spreadB, int height) {
+
         super(spreadA, spreadB, height, FoliageType.pine_foliage);
     }
 
     @Override
-    protected void placeLeaves(BlockPos position, Set<BlockPos> changedLeaves)
-    {
+    protected void placeLeaves(BlockPos position, Set<BlockPos> changedLeaves) {
         // Main Leaf Part
         BlockPos pos = new BlockPos(position.getX() - 1, position.getY(), position.getZ() - 1);
         placeLeafBox(pos, new BlockPos(3, 4, 3), changedLeaves);

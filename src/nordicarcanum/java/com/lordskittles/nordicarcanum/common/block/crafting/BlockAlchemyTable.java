@@ -24,7 +24,9 @@ import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
@@ -38,13 +40,13 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
-public class BlockAlchemyTable extends BlockMod
-{
+public class BlockAlchemyTable extends BlockMod {
+
     public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
     public static final EnumProperty<MultiBlockPiece> PIECE = EnumProperty.create("piece", MultiBlockPiece.class);
 
-    public BlockAlchemyTable()
-    {
+    public BlockAlchemyTable() {
+
         super(Block.Properties.create(Material.ROCK, MaterialColor.GRAY)
                 .hardnessAndResistance(3.0F, 3.0F)
                 .sound(SoundType.STONE)
@@ -55,13 +57,12 @@ public class BlockAlchemyTable extends BlockMod
     }
 
     @Override
-    public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player)
-    {
+    public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
+
         MultiBlockPiece piece = state.get(PIECE);
         Block block = null;
 
-        switch (piece)
-        {
+        switch(piece) {
             case BOTTOM_LEFT:
 //                block = Blocks.ancient_norse_brick.get();
                 break;
@@ -80,31 +81,31 @@ public class BlockAlchemyTable extends BlockMod
     }
 
     @Override
-    public boolean hasTileEntity(BlockState state)
-    {
+    public boolean hasTileEntity(BlockState state) {
+
         return true;
     }
 
     @Override
-    public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos)
-    {
+    public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos) {
+
         BlockPos right = BlockUtilities.getRightPos(state.get(FACING), pos);
-        if (!world.isAirBlock(right))
+        if(! world.isAirBlock(right))
             return false;
 
-        if (!world.isAirBlock(right.up()))
+        if(! world.isAirBlock(right.up()))
             return false;
 
-        if (!world.isAirBlock(pos.up()))
+        if(! world.isAirBlock(pos.up()))
             return false;
 
         return true;
     }
 
     @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack)
-    {
-        if (!(entity instanceof PlayerEntity))
+    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
+
+        if(! (entity instanceof PlayerEntity))
             return;
 
         Direction direction = state.get(FACING);
@@ -116,38 +117,34 @@ public class BlockAlchemyTable extends BlockMod
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context)
-    {
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+
         return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().rotateY().getOpposite());
     }
 
     @Override
-    public void onBlockHarvested(World world, BlockPos pos, BlockState state, PlayerEntity player)
-    {
+    public void onBlockHarvested(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+
         Direction direction = state.get(FACING);
 
         BlockPos horizontalPos = BlockUtilities.getRightPos(direction, pos);
         MultiBlockPiece piece = state.get(PIECE);
-        if (piece == MultiBlockPiece.BOTTOM_RIGHT || piece == MultiBlockPiece.TOP_RIGHT)
-        {
+        if(piece == MultiBlockPiece.BOTTOM_RIGHT || piece == MultiBlockPiece.TOP_RIGHT) {
             horizontalPos = BlockUtilities.getLeftPos(direction, pos);
         }
 
         world.setBlockState(horizontalPos, net.minecraft.block.Blocks.AIR.getDefaultState());
 
-        if (piece == MultiBlockPiece.BOTTOM_RIGHT || piece == MultiBlockPiece.BOTTOM_LEFT)
-        {
+        if(piece == MultiBlockPiece.BOTTOM_RIGHT || piece == MultiBlockPiece.BOTTOM_LEFT) {
             world.setBlockState(pos.up(), net.minecraft.block.Blocks.AIR.getDefaultState());
             world.setBlockState(horizontalPos.up(), net.minecraft.block.Blocks.AIR.getDefaultState());
         }
-        else
-        {
+        else {
             world.setBlockState(pos.down(), net.minecraft.block.Blocks.AIR.getDefaultState());
             world.setBlockState(horizontalPos.down(), net.minecraft.block.Blocks.AIR.getDefaultState());
         }
 
-        if (!player.isCreative())
-        {
+        if(! player.isCreative()) {
             world.addEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(Blocks.yew_stairs.get(), 1)));
             world.addEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(Blocks.feldspar_brick_deco.get(), 1)));
             world.addEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(net.minecraft.block.Blocks.CAULDRON, 1)));
@@ -158,13 +155,12 @@ public class BlockAlchemyTable extends BlockMod
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
-    {
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+
         BlockPos actPos = pos;
         BlockPos leftPos = BlockUtilities.getLeftPos(state.get(FACING), pos);
 
-        switch (state.get(PIECE))
-        {
+        switch(state.get(PIECE)) {
             case TOP_LEFT:
                 actPos = pos.down();
                 break;
@@ -179,34 +175,32 @@ public class BlockAlchemyTable extends BlockMod
                 break;
         }
 
-        if (!world.isRemote)
-        {
+        if(! world.isRemote) {
             TileEntity tile = world.getTileEntity(actPos);
 
-            if (tile instanceof TileEntityAlchemyTable)
-            {
-                NetworkHooks.openGui((ServerPlayerEntity)player, (TileEntityAlchemyTable)tile, actPos);
+            if(tile instanceof TileEntityAlchemyTable) {
+                NetworkHooks.openGui((ServerPlayerEntity) player, (TileEntityAlchemyTable) tile, actPos);
             }
         }
         return ActionResultType.SUCCESS;
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context)
-    {
+    public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
+
         return VoxelsAlchemyTable.getShape(state.get(FACING), state.get(PIECE));
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
-    {
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+
         builder.add(FACING).add(PIECE);
     }
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world)
-    {
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+
         return TileEntities.alchemy_table.get().create();
     }
 }

@@ -11,21 +11,21 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.tileentity.TileEntityType;
 
-public class TileEntityArcaneChest extends TileEntityMagicChest<TileEntityArcaneChest>
-{
-    public TileEntityArcaneChest(TileEntityType<?> tileEntityTypeIn)
-    {
+public class TileEntityArcaneChest extends TileEntityMagicChest<TileEntityArcaneChest> {
+
+    public TileEntityArcaneChest(TileEntityType<?> tileEntityTypeIn) {
+
         super(tileEntityTypeIn, NordicInventorySlots.ARCANE_CHEST, NordicNames.ARCANE_CHEST, 10f, NordicArcanum.MODID, NordicArcanum.PACKET_HANDLER);
     }
 
-    public TileEntityArcaneChest()
-    {
+    public TileEntityArcaneChest() {
+
         this(TileEntities.arcane_chest.get());
     }
 
     @Override
-    public Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity player)
-    {
+    public Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity player) {
+
         return new ContainerArcaneChest(id, playerInventory, this);
     }
 }

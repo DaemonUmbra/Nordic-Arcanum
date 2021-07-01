@@ -14,8 +14,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
 
-public class ProgressionIOThread extends TimerTask implements IServerLifecycleListener
-{
+public class ProgressionIOThread extends TimerTask implements IServerLifecycleListener {
+
     private static ProgressionIOThread saveTask;
     private static Timer ioThread;
 
@@ -23,31 +23,28 @@ public class ProgressionIOThread extends TimerTask implements IServerLifecycleLi
     private Map<UUID, PlayerProgress> playerSaveQueue = Maps.newHashMap();
     private Map<UUID, PlayerProgress> awaitingSaveQueue = Maps.newHashMap();
 
-    public static ProgressionIOThread startup()
-    {
-        if (saveTask == null)
-        {
+    public static ProgressionIOThread startup() {
+
+        if(saveTask == null) {
             saveTask = new ProgressionIOThread();
         }
 
         return getTask();
     }
 
-    public static ProgressionIOThread getTask()
-    {
+    public static ProgressionIOThread getTask() {
+
         return saveTask;
     }
 
     @Override
-    public void onServerStart()
-    {
-        if (ioThread != null)
-        {
+    public void onServerStart() {
+
+        if(ioThread != null) {
             return;
         }
 
-        if (saveTask == null)
-        {
+        if(saveTask == null) {
             saveTask = new ProgressionIOThread();
         }
 
@@ -56,8 +53,8 @@ public class ProgressionIOThread extends TimerTask implements IServerLifecycleLi
     }
 
     @Override
-    public void onServerStop()
-    {
+    public void onServerStop() {
+
         this.flushAndSaveAll();
 
         saveTask.cancel();
@@ -67,14 +64,13 @@ public class ProgressionIOThread extends TimerTask implements IServerLifecycleLi
     }
 
     @Override
-    public void run()
-    {
-        if (skipTick)
+    public void run() {
+
+        if(skipTick)
             return;
 
         inSave = true;
-        for (Map.Entry<UUID, PlayerProgress> entry : playerSaveQueue.entrySet())
-        {
+        for(Map.Entry<UUID, PlayerProgress> entry : playerSaveQueue.entrySet()) {
             saveNow(entry.getKey(), entry.getValue());
         }
         playerSaveQueue.clear();
@@ -84,12 +80,11 @@ public class ProgressionIOThread extends TimerTask implements IServerLifecycleLi
         awaitingSaveQueue.clear();
     }
 
-    private void flushAndSaveAll()
-    {
+    private void flushAndSaveAll() {
+
         skipTick = true;
         playerSaveQueue.putAll(awaitingSaveQueue);
-        for (Map.Entry<UUID, PlayerProgress> entry : playerSaveQueue.entrySet())
-        {
+        for(Map.Entry<UUID, PlayerProgress> entry : playerSaveQueue.entrySet()) {
             saveNow(entry.getKey(), entry.getValue());
         }
         playerSaveQueue.clear();
@@ -98,59 +93,52 @@ public class ProgressionIOThread extends TimerTask implements IServerLifecycleLi
         inSave = false;
     }
 
-    private void scheduleSave(UUID uuid, PlayerProgress progress)
-    {
-        if (inSave)
-        {
+    private void scheduleSave(UUID uuid, PlayerProgress progress) {
+
+        if(inSave) {
             awaitingSaveQueue.put(uuid, progress);
         }
-        else
-        {
+        else {
             playerSaveQueue.put(uuid, progress);
         }
     }
 
-    private void cancelScheduledSave(UUID playerUUID)
-    {
+    private void cancelScheduledSave(UUID playerUUID) {
+
         awaitingSaveQueue.remove(playerUUID);
         playerSaveQueue.remove(playerUUID);
     }
 
-    public static void saveProgress(UUID uuid, PlayerProgress progress)
-    {
-        if (saveTask != null)
-        {
+    public static void saveProgress(UUID uuid, PlayerProgress progress) {
+
+        if(saveTask != null) {
             saveTask.scheduleSave(uuid, progress);
         }
     }
 
-    public static void cancelSave(UUID playerUUID)
-    {
-        if (saveTask != null)
-        {
+    public static void cancelSave(UUID playerUUID) {
+
+        if(saveTask != null) {
             saveTask.cancelScheduledSave(playerUUID);
         }
     }
 
-    static void saveNow(UUID uuid, PlayerProgress progress)
-    {
+    static void saveNow(UUID uuid, PlayerProgress progress) {
+
         File playerFile = ProgressionHelper.getPlayerFile(uuid);
-        try
-        {
+        try {
             Files.copy(playerFile, ProgressionHelper.getPlayerBackupFile(uuid));
         }
-        catch (IOException exception)
-        {
+        catch(IOException exception) {
             ArcanumAPI.LOG.warn("Failed copying progress file contents to backup file!");
             exception.printStackTrace();
         }
 
-        try
-        {
+        try {
             CompoundNBT nbt = new CompoundNBT();
             progress.store(nbt);
             CompressedStreamTools.write(nbt, playerFile);
         }
-        catch (IOException ignored) {}
+        catch(IOException ignored) {}
     }
 }

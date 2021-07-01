@@ -9,21 +9,17 @@ import net.minecraft.world.gen.feature.FeatureSpread;
 
 import java.util.Set;
 
-public class YewFoliage extends FoliagePlacerBase
-{
-    public static final Codec<YewFoliage> codec = RecordCodecBuilder.create((instance) ->
-    {
-        return func_236740_a_(instance).apply(instance, YewFoliage::new);
-    });
+public class YewFoliage extends FoliagePlacerBase {
 
-    public YewFoliage(FeatureSpread spreadA, FeatureSpread spreadB, int height)
-    {
+    public static final Codec<YewFoliage> codec = RecordCodecBuilder.create((instance) -> func_236740_a_(instance).apply(instance, YewFoliage::new));
+
+    public YewFoliage(FeatureSpread spreadA, FeatureSpread spreadB, int height) {
+
         super(spreadA, spreadB, height, FoliageType.yew_foliage);
     }
 
     @Override
-    protected void placeLeaves(BlockPos position, Set<BlockPos> changedLeaves)
-    {
+    protected void placeLeaves(BlockPos position, Set<BlockPos> changedLeaves) {
         // Main Leaf Box
         BlockPos pos = new BlockPos(position.getX() - 2, position.getY(), position.getZ() - 2);
         placeLeafBox(pos, new BlockPos(5, 2, 5), changedLeaves);

@@ -4,22 +4,22 @@ import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemGroup;
 
-public class BlockMod extends Block implements IItemGroupHolder
-{
-	protected ItemGroup group;
+public class BlockMod extends Block implements IItemGroupHolder {
 
-	public BlockMod(AbstractBlock.Properties properties, int lightLevel)
-	{
-		super(properties.setLightLevel((state) -> lightLevel));
-	}
+    protected ItemGroup group;
 
-	public BlockMod(Properties properties)
-	{
-		super(properties);
-	}
-	
-	public ItemGroup group()
-	{
-		return group;
-	}
+    public BlockMod(AbstractBlock.Properties properties, int lightLevel) {
+
+        super(properties.setLightLevel((state) -> lightLevel));
+    }
+
+    public BlockMod(Properties properties) {
+
+        super(properties);
+    }
+
+    public ItemGroup group() {
+
+        return group;
+    }
 }

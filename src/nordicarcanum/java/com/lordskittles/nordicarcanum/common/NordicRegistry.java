@@ -3,14 +3,13 @@ package com.lordskittles.nordicarcanum.common;
 import com.lordskittles.nordicarcanum.core.NordicTags;
 import net.minecraft.item.Item;
 
-public class NordicRegistry
-{
-    public static boolean isItemValid(Item item, RegistryType type)
-    {
+public class NordicRegistry {
+
+    public static boolean isItemValid(Item item, RegistryType type) {
+
         boolean valid = false;
 
-        switch (type)
-        {
+        switch(type) {
             case CORE:
                 valid = NordicTags.IsItemInTag(item, NordicTags.STAFF_CORE);
                 break;

@@ -1,7 +1,7 @@
 package com.lordskittles.arcanumapi.core;
 
-public class NBTConstants
-{
+public class NBTConstants {
+
     public static final String DISCOVERED_SCHOOLS = "discovered_schools";
 
     public static final String STORED = "stored";

@@ -15,20 +15,19 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nonnull;
 
 @OnlyIn(Dist.CLIENT)
-public class ItemStackArcaneChestRender extends ItemStackTERenderBase
-{
+public class ItemStackArcaneChestRender extends ItemStackTERenderBase {
+
     private static final ModelArcaneChest chest = new ModelArcaneChest(NordicResourceLocations.ARCANE_CHEST);
     public static ItemModelWrapper model;
 
     @Override
-    protected void renderItemSpecific(ItemStack stack, MatrixStack matrix, IRenderTypeBuffer buffer, int light, int overlay, ItemCameraTransforms.TransformType transform)
-    {
+    protected void renderItemSpecific(ItemStack stack, MatrixStack matrix, IRenderTypeBuffer buffer, int light, int overlay, ItemCameraTransforms.TransformType transform) {
 
     }
 
     @Override
-    protected void renderBlockSpecific(ItemStack stack, MatrixStack matrix, IRenderTypeBuffer buffer, int light, int overlay, ItemCameraTransforms.TransformType transform)
-    {
+    protected void renderBlockSpecific(ItemStack stack, MatrixStack matrix, IRenderTypeBuffer buffer, int light, int overlay, ItemCameraTransforms.TransformType transform) {
+
         float scale = 1.25f;
 
         matrix.translate(0, 1.2D, 0);
@@ -40,8 +39,8 @@ public class ItemStackArcaneChestRender extends ItemStackTERenderBase
 
     @Nonnull
     @Override
-    protected ItemCameraTransforms.TransformType getTransform(ItemStack stack)
-    {
+    protected ItemCameraTransforms.TransformType getTransform(ItemStack stack) {
+
         return model.getTransform();
     }
 }

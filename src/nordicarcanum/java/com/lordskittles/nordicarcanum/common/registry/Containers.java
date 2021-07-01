@@ -9,8 +9,8 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public class Containers
-{
+public class Containers {
+
     public static final DeferredRegister<ContainerType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, NordicArcanum.MODID);
 
     public static final RegistryObject<ContainerType<ContainerStaffWorkbench>> staff_workbench = CONTAINERS.register(NordicNames.STAFF_WORKBENCH, () -> IForgeContainerType.create(ContainerStaffWorkbench::new));

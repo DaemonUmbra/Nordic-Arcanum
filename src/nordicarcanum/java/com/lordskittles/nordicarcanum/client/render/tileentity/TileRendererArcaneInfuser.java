@@ -7,54 +7,53 @@ import com.lordskittles.nordicarcanum.common.tileentity.crafting.TileEntityArcan
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.vector.Vector3f;
 
-public class TileRendererArcaneInfuser extends TileEntityFluidRendererBase<TileEntityArcaneInfuser>
-{
-	private final ModelArcaneInfuser InfuserModel = new ModelArcaneInfuser();
+public class TileRendererArcaneInfuser extends TileEntityFluidRendererBase<TileEntityArcaneInfuser> {
 
-	public TileRendererArcaneInfuser(TileEntityRendererDispatcher rendererDispatcherIn)
-	{
-		super(rendererDispatcherIn);
-	}
+    private final ModelArcaneInfuser InfuserModel = new ModelArcaneInfuser();
 
-	@Override
-	public void render(TileEntityArcaneInfuser tileEntity, float ticks, MatrixStack stack, IRenderTypeBuffer buffer, int light, int overlay)
-	{
-		stack.push();
-		stack.translate(0.5D, 1.5D, 0.5D);
-		stack.rotate(Vector3f.XN.rotationDegrees(180));
-		InfuserModel.render(stack, buffer, light, overlay);
-		stack.pop();
+    public TileRendererArcaneInfuser(TileEntityRendererDispatcher rendererDispatcherIn) {
 
-		ItemStack heldItem = tileEntity.getHeldItem();
-		if (!heldItem.isEmpty())
-		{
-			stack.push();
-			stack.translate(0.5, 1, 0.5D);
-			stack.rotate(Vector3f.XN.rotationDegrees(90));
-			stack.scale(0.375f, 0.375f, 0.375f);
+        super(rendererDispatcherIn);
+    }
 
-			Minecraft.getInstance().getItemRenderer().renderItem(heldItem, ItemCameraTransforms.TransformType.FIXED, light, overlay, stack, buffer);
+    @Override
+    public void render(TileEntityArcaneInfuser tileEntity, float ticks, MatrixStack stack, IRenderTypeBuffer buffer, int light, int overlay) {
 
-			stack.pop();
-		}
+        stack.push();
+        stack.translate(0.5D, 1.5D, 0.5D);
+        stack.rotate(Vector3f.XN.rotationDegrees(180));
+        InfuserModel.render(stack, buffer, light, overlay);
+        stack.pop();
 
-		renderFluid(tileEntity, stack, buffer, light);
-	}
+        ItemStack heldItem = tileEntity.getHeldItem();
+        if(! heldItem.isEmpty()) {
+            stack.push();
+            stack.translate(0.5, 1, 0.5D);
+            stack.rotate(Vector3f.XN.rotationDegrees(90));
+            stack.scale(0.375f, 0.375f, 0.375f);
 
-	@Override
-	protected ArcaneRenderer.DVector3 getMin(int stage)
-	{
-		return new ArcaneRenderer.DVector3(.25 + .01, .7 + .01, .25 + .01);
-	}
+            Minecraft.getInstance().getItemRenderer().renderItem(heldItem, ItemCameraTransforms.TransformType.FIXED, light, overlay, stack, buffer);
 
-	@Override
-	protected ArcaneRenderer.DVector3 getMax(int stage)
-	{
-		return new ArcaneRenderer.DVector3(.75 - .01, .85 + ((float) stage / (float) stages) * .1 - .01, .75 - .01);
-	}
+            stack.pop();
+        }
+
+        renderFluid(tileEntity, stack, buffer, light);
+    }
+
+    @Override
+    protected ArcaneRenderer.DVector3 getMin(int stage) {
+
+        return new ArcaneRenderer.DVector3(.25 + .01, .7 + .01, .25 + .01);
+    }
+
+    @Override
+    protected ArcaneRenderer.DVector3 getMax(int stage) {
+
+        return new ArcaneRenderer.DVector3(.75 - .01, .85 + ((float) stage / (float) stages) * .1 - .01, .75 - .01);
+    }
 }

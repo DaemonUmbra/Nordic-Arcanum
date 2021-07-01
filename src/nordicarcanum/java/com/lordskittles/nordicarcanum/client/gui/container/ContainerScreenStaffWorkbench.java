@@ -10,10 +10,10 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class ContainerScreenStaffWorkbench extends ContainerScreenBase<ContainerStaffWorkbench>
-{
-    public ContainerScreenStaffWorkbench(ContainerStaffWorkbench container, PlayerInventory inventory, ITextComponent title)
-    {
+public class ContainerScreenStaffWorkbench extends ContainerScreenBase<ContainerStaffWorkbench> {
+
+    public ContainerScreenStaffWorkbench(ContainerStaffWorkbench container, PlayerInventory inventory, ITextComponent title) {
+
         super(NordicArcanum.MODID, NordicNames.STAFF_WORKBENCH, container, inventory, title);
 
         setTextureRect(0, 0, 176, 166);

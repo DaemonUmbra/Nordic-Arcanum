@@ -15,14 +15,14 @@ import static com.lordskittles.nordicarcanum.core.NordicArcanum.RL;
 
 @JeiPlugin
 @SuppressWarnings("unused")
-public class NordicArcanumJeiPlugin implements IModPlugin
-{
+public class NordicArcanumJeiPlugin implements IModPlugin {
+
     @Nullable
     public static IJeiHelpers jeiHelpers;
 
     @Override
-    public void registerCategories(IRecipeCategoryRegistration registry)
-    {
+    public void registerCategories(IRecipeCategoryRegistration registry) {
+
         jeiHelpers = registry.getJeiHelpers();
 
         registry.addRecipeCategories(new JeiCraftingClothCategory());
@@ -30,20 +30,20 @@ public class NordicArcanumJeiPlugin implements IModPlugin
     }
 
     @Override
-    public void registerRecipes(IRecipeRegistration registration)
-    {
+    public void registerRecipes(IRecipeRegistration registration) {
+
         addRecipeType(registration, RecipeType.crafting_cloth, NordicCategoryID.CRAFTING_CLOTH);
         addRecipeType(registration, RecipeType.nordic_furnace, NordicCategoryID.NORDIC_FURNACE);
     }
 
-    private void addRecipeType(IRecipeRegistration registration, RecipeType<?> type, ResourceLocation id)
-    {
+    private void addRecipeType(IRecipeRegistration registration, RecipeType<?> type, ResourceLocation id) {
+
         registration.addRecipes(type.getRecipes(Minecraft.getInstance().world).values(), id);
     }
 
     @Override
-    public ResourceLocation getPluginUid()
-    {
+    public ResourceLocation getPluginUid() {
+
         return RL("default");
     }
 }

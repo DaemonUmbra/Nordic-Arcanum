@@ -1,7 +1,6 @@
 package com.lordskittles.nordicarcanum.client.gui.utilities;
 
-public enum GUIType
-{
+public enum GUIType {
     ChangeSpell,
     SpellDisplay,
     ArcanumBar

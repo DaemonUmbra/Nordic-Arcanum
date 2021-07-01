@@ -9,11 +9,11 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = NordicArcanum.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class WorldEvents
-{
+public class WorldEvents {
+
     @SubscribeEvent
-    public static void biomeLoadEvent(final BiomeLoadingEvent event)
-    {
+    public static void biomeLoadEvent(final BiomeLoadingEvent event) {
+
         Structures.registerFeatures();
 
         OreGeneration.generateOre(event);

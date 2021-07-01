@@ -35,87 +35,81 @@ import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nullable;
 
-public class BlockSigilPodium extends BlockMod implements IItemBlockOverride
-{
-	public static final BooleanProperty ISCORE = BooleanProperty.create("is_core");
+public class BlockSigilPodium extends BlockMod implements IItemBlockOverride {
 
-	public BlockSigilPodium()
-	{
-		super(Block.Properties.create(Material.ROCK, MaterialColor.GRAY)
-				.hardnessAndResistance(1.5f, 6.0f)
-				.sound(SoundType.STONE)
-				.harvestLevel(ItemTier.STONE.getHarvestLevel())
-				.harvestTool(ToolType.PICKAXE), 4);
+    public static final BooleanProperty ISCORE = BooleanProperty.create("is_core");
 
-		this.setDefaultState(this.stateContainer.getBaseState().with(ISCORE, false));
-		this.group = NordicItemGroup.INSTANCE;
-	}
+    public BlockSigilPodium() {
 
-	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
-	{
-		builder.add(ISCORE);
-	}
+        super(Block.Properties.create(Material.ROCK, MaterialColor.GRAY)
+                .hardnessAndResistance(1.5f, 6.0f)
+                .sound(SoundType.STONE)
+                .harvestLevel(ItemTier.STONE.getHarvestLevel())
+                .harvestTool(ToolType.PICKAXE), 4);
 
-	@Nullable
-	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world)
-	{
-		return TileEntities.sigil_podium.get().create();
-	}
+        this.setDefaultState(this.stateContainer.getBaseState().with(ISCORE, false));
+        this.group = NordicItemGroup.INSTANCE;
+    }
 
-	@Override
-	public boolean hasTileEntity(BlockState state)
-	{
-		return true;
-	}
+    @Override
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
 
-	@Override
-	public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context)
-	{
-		return VoxelsSigilPodium.SHAPE.get();
-	}
+        builder.add(ISCORE);
+    }
 
-	@Override
-	public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
-	{
-		TileEntity tile = world.getTileEntity(pos);
-		ItemStack stack = player.getItemStackFromSlot(EquipmentSlotType.MAINHAND);
-		if (tile instanceof TileEntitySigilPodium)
-		{
-			boolean updateSlot = false;
-			TileEntitySigilPodium podium = (TileEntitySigilPodium)tile;
-			ItemStack heldStack = ItemStack.EMPTY;
+    @Nullable
+    @Override
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
 
-			if (stack != ItemStack.EMPTY)
-			{
-				if (stack.getItem() instanceof ItemSigil)
-				{
-					heldStack = podium.setHeldSigil(stack);
-					updateSlot = true;
-				}
-			}
-			else
-			{
-				if (player.isSneaking())
-				{
-					heldStack = podium.removeSigil();
-					updateSlot = true;
-				}
-			}
+        return TileEntities.sigil_podium.get().create();
+    }
 
-			if (updateSlot)
-			{
-				player.setItemStackToSlot(EquipmentSlotType.MAINHAND, heldStack);
-			}
-		}
+    @Override
+    public boolean hasTileEntity(BlockState state) {
 
-		return ActionResultType.SUCCESS;
-	}
+        return true;
+    }
 
-	@Override
-	public BlockItem getOverride()
-	{
-		return new ItemBlockBase(this, new Item.Properties().group(group()).setISTER(() -> ItemStackSigilPodiumRender::new));
-	}
+    @Override
+    public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
+
+        return VoxelsSigilPodium.SHAPE.get();
+    }
+
+    @Override
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+
+        TileEntity tile = world.getTileEntity(pos);
+        ItemStack stack = player.getItemStackFromSlot(EquipmentSlotType.MAINHAND);
+        if(tile instanceof TileEntitySigilPodium) {
+            boolean updateSlot = false;
+            TileEntitySigilPodium podium = (TileEntitySigilPodium) tile;
+            ItemStack heldStack = ItemStack.EMPTY;
+
+            if(stack != ItemStack.EMPTY) {
+                if(stack.getItem() instanceof ItemSigil) {
+                    heldStack = podium.setHeldSigil(stack);
+                    updateSlot = true;
+                }
+            }
+            else {
+                if(player.isSneaking()) {
+                    heldStack = podium.removeSigil();
+                    updateSlot = true;
+                }
+            }
+
+            if(updateSlot) {
+                player.setItemStackToSlot(EquipmentSlotType.MAINHAND, heldStack);
+            }
+        }
+
+        return ActionResultType.SUCCESS;
+    }
+
+    @Override
+    public BlockItem getOverride() {
+
+        return new ItemBlockBase(this, new Item.Properties().group(group()).setISTER(() -> ItemStackSigilPodiumRender::new));
+    }
 }

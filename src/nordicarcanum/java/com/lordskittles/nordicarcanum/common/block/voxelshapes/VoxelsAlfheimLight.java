@@ -8,8 +8,8 @@ import net.minecraft.util.math.shapes.VoxelShapes;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class VoxelsAlfheimLight
-{
+public class VoxelsAlfheimLight {
+
     public static Optional<VoxelShape> SHAPE = Stream.of(
             Block.makeCuboidShape(5, 5, 5, 11, 11, 11),
             Block.makeCuboidShape(6, 3, 6, 10, 5, 10),
@@ -24,5 +24,5 @@ public class VoxelsAlfheimLight
             Block.makeCuboidShape(7, 13, 7, 9, 15, 9),
             Block.makeCuboidShape(7, 7, 1, 9, 9, 3),
             Block.makeCuboidShape(1, 7, 7, 3, 9, 9)
-    ).reduce((v1, v2) -> {return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);});
+    ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR));
 }

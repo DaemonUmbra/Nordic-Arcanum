@@ -1,5 +1,4 @@
 package com.lordskittles.arcanumapi.common.network;
 
-public class PacketBase
-{
+public class PacketBase {
 }

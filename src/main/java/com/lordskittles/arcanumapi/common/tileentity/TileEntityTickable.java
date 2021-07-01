@@ -4,20 +4,20 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.world.World;
 
-public abstract class TileEntityTickable<T extends TileEntityTickable> extends TileEntityUpdateable implements ITickableTileEntity
-{
+public abstract class TileEntityTickable<T extends TileEntityTickable> extends TileEntityUpdateable implements ITickableTileEntity {
+
     protected final T tile;
 
-    public TileEntityTickable(TileEntityType<?> tileEntityTypeIn, T tile)
-    {
+    public TileEntityTickable(TileEntityType<?> tileEntityTypeIn, T tile) {
+
         super(tileEntityTypeIn);
 
         this.tile = tile;
     }
 
     @Override
-    public void tick()
-    {
+    public void tick() {
+
         tick(this.world, this.tile);
     }
 

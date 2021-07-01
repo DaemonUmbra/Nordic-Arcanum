@@ -13,14 +13,13 @@ import net.minecraft.item.crafting.ShapedRecipe;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 
-public class NordicAnvilRecipe extends ArcaneRecipeBase
-{
+public class NordicAnvilRecipe extends ArcaneRecipeBase {
+
     public final Ingredient ingredient;
     public final ItemStack result;
     public final int requiredAmount;
@@ -28,8 +27,8 @@ public class NordicAnvilRecipe extends ArcaneRecipeBase
 
     protected final ResourceLocation id;
 
-    public NordicAnvilRecipe(ResourceLocation id, String group, Ingredient ingredient, ItemStack result, int requiredAmount, int hits)
-    {
+    public NordicAnvilRecipe(ResourceLocation id, String group, Ingredient ingredient, ItemStack result, int requiredAmount, int hits) {
+
         super(RecipeType.nordic_anvil, group);
 
         this.ingredient = ingredient;
@@ -40,68 +39,65 @@ public class NordicAnvilRecipe extends ArcaneRecipeBase
         this.id = id;
     }
 
-    public boolean matches(ItemStack input)
-    {
+    public boolean matches(ItemStack input) {
+
         return this.ingredient.test(input);
     }
 
     @Override
-    public ItemStack getCraftingResult(DummyIInventory inv)
-    {
+    public ItemStack getCraftingResult(DummyIInventory inv) {
+
         return this.result;
     }
 
     @Override
-    public boolean canFit(int width, int height)
-    {
+    public boolean canFit(int width, int height) {
+
         return true;
     }
 
     @Override
-    public ItemStack getRecipeOutput()
-    {
+    public ItemStack getRecipeOutput() {
+
         return this.result;
     }
 
     @Override
-    public ResourceLocation getId()
-    {
+    public ResourceLocation getId() {
+
         return this.id;
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer()
-    {
+    public IRecipeSerializer<?> getSerializer() {
+
         return RecipeSerializers.nordic_anvil.get();
     }
 
     @Override
-    public IRecipeType<?> getType()
-    {
+    public IRecipeType<?> getType() {
+
         return this.type;
     }
 
-    public static class Serializer<T extends NordicAnvilRecipe> extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<NordicAnvilRecipe>
-    {
+    public static class Serializer<T extends NordicAnvilRecipe> extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<NordicAnvilRecipe> {
+
         @Override
-        public NordicAnvilRecipe read(ResourceLocation recipeId, JsonObject json)
-        {
+        public NordicAnvilRecipe read(ResourceLocation recipeId, JsonObject json) {
+
             String group = JSONUtils.getString(json, "group", "");
-            JsonElement ingElement = (JsonElement)(JSONUtils.isJsonArray(json, "ingredient") ? JSONUtils.getJsonArray(json, "ingredient") : JSONUtils.getJsonObject(json, "ingredient"));
+            JsonElement ingElement = (JsonElement) (JSONUtils.isJsonArray(json, "ingredient") ? JSONUtils.getJsonArray(json, "ingredient") : JSONUtils.getJsonObject(json, "ingredient"));
             Ingredient ingredient = Ingredient.deserialize(ingElement);
 
-            if (!json.has("result"))
-            {
+            if(! json.has("result")) {
                 throw new com.google.gson.JsonSyntaxException("Missing result, expected to find a string or object");
             }
 
             ItemStack outputStack = ItemStack.EMPTY;
-            if (json.get("result").isJsonObject())
-            {
+            if(json.get("result").isJsonObject()) {
                 outputStack = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "result"));
             }
-            else
-            {
+            else {
                 String result = JSONUtils.getString(json, "result");
                 ResourceLocation resultLocation = new ResourceLocation(result);
                 outputStack = new ItemStack(ForgeRegistries.ITEMS.getValue(resultLocation));
@@ -114,8 +110,8 @@ public class NordicAnvilRecipe extends ArcaneRecipeBase
 
         @Nullable
         @Override
-        public NordicAnvilRecipe read(ResourceLocation recipeId, PacketBuffer buffer)
-        {
+        public NordicAnvilRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+
             String group = buffer.readString(32767);
             Ingredient ingredient = Ingredient.read(buffer);
             ItemStack result = buffer.readItemStack();
@@ -125,8 +121,8 @@ public class NordicAnvilRecipe extends ArcaneRecipeBase
         }
 
         @Override
-        public void write(PacketBuffer buffer, NordicAnvilRecipe recipe)
-        {
+        public void write(PacketBuffer buffer, NordicAnvilRecipe recipe) {
+
             buffer.writeString(recipe.getGroup());
             recipe.ingredient.write(buffer);
             buffer.writeItemStack(recipe.result);

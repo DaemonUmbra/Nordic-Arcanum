@@ -2,8 +2,7 @@ package com.lordskittles.nordicarcanum.common.item.crafting;
 
 import com.lordskittles.nordicarcanum.core.NordicNames;
 
-public enum RodMaterial
-{
+public enum RodMaterial {
     Yew(NordicNames.YEW),
     Juniper(NordicNames.JUNIPER),
     Pine(NordicNames.PINE),
@@ -17,8 +16,8 @@ public enum RodMaterial
 
     public String name;
 
-    RodMaterial(String name)
-    {
+    RodMaterial(String name) {
+
         this.name = name;
     }
 }

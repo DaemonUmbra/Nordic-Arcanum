@@ -9,54 +9,50 @@ import net.minecraft.util.ResourceLocation;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayerProgress
-{
+public class PlayerProgress {
+
     private List<ResourceLocation> knownSchools = new ArrayList<>();
 
-    public void load(CompoundNBT nbt)
-    {
+    public void load(CompoundNBT nbt) {
+
         this.knownSchools.clear();
-        if (nbt.contains(NBTConstants.DISCOVERED_SCHOOLS))
-        {
+        if(nbt.contains(NBTConstants.DISCOVERED_SCHOOLS)) {
             ListNBT list = nbt.getList(NBTConstants.DISCOVERED_SCHOOLS, 8);
-            for (int i = 0; i < list.size(); i++)
-            {
+            for(int i = 0; i < list.size(); i++) {
                 ResourceLocation s = new ResourceLocation(list.getString(i));
                 this.knownSchools.add(s);
             }
         }
     }
 
-    public void store(CompoundNBT nbt)
-    {
+    public void store(CompoundNBT nbt) {
+
         ListNBT list = new ListNBT();
-        for (ResourceLocation location : knownSchools)
-        {
+        for(ResourceLocation location : knownSchools) {
             list.add(StringNBT.valueOf(location.toString()));
         }
 
         nbt.put(NBTConstants.DISCOVERED_SCHOOLS, list);
     }
 
-    public boolean isValid()
-    {
+    public boolean isValid() {
+
         return true;
     }
 
-    public List<ResourceLocation> getKnownSchools()
-    {
+    public List<ResourceLocation> getKnownSchools() {
+
         return this.knownSchools;
     }
 
-    public void resetSchools()
-    {
+    public void resetSchools() {
+
         this.knownSchools.clear();
     }
 
-    public void learnSchool(ResourceLocation school)
-    {
-        if (!this.knownSchools.contains(school))
-        {
+    public void learnSchool(ResourceLocation school) {
+
+        if(! this.knownSchools.contains(school)) {
             this.knownSchools.add(school);
         }
     }

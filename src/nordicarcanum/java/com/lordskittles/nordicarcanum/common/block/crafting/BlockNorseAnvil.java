@@ -32,10 +32,10 @@ import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nullable;
 
-public class BlockNorseAnvil extends BlockMod implements IItemBlockOverride
-{
-    public BlockNorseAnvil()
-    {
+public class BlockNorseAnvil extends BlockMod implements IItemBlockOverride {
+
+    public BlockNorseAnvil() {
+
         super(Block.Properties.create(Material.ANVIL, MaterialColor.IRON)
                 .hardnessAndResistance(5.0F, 1200.0F)
                 .sound(SoundType.ANVIL)
@@ -46,53 +46,48 @@ public class BlockNorseAnvil extends BlockMod implements IItemBlockOverride
     }
 
     @Override
-    public boolean hasTileEntity(BlockState state)
-    {
+    public boolean hasTileEntity(BlockState state) {
+
         return true;
     }
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world)
-    {
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+
         return TileEntities.norse_anvil.get().create();
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
-    {
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+
         ItemStack handStack = player.getItemStackFromSlot(EquipmentSlotType.MAINHAND);
 
         TileEntity tile = world.getTileEntity(pos);
-        if (tile instanceof TileEntityNordicAnvil)
-        {
-            TileEntityNordicAnvil anvil = (TileEntityNordicAnvil)tile;
+        if(tile instanceof TileEntityNordicAnvil) {
+            TileEntityNordicAnvil anvil = (TileEntityNordicAnvil) tile;
             boolean playSound = false;
 
-            if (!(handStack.getItem() instanceof AirItem))
-            {
+            if(! (handStack.getItem() instanceof AirItem)) {
                 ItemStack heldStack = ItemStack.EMPTY;
 
-                if (handStack.getItem() instanceof ItemBindingCast)
-                {
+                if(handStack.getItem() instanceof ItemBindingCast) {
                     handStack = anvil.setCast(handStack);
                 }
-                else
-                {
+                else {
                     heldStack = anvil.setHeldItem(handStack);
                 }
 
                 player.setItemStackToSlot(EquipmentSlotType.MAINHAND, heldStack);
                 playSound = true;
             }
-            else if (handStack.getItem() instanceof AirItem && player.isSneaking())
-            {
-                player.setItemStackToSlot(EquipmentSlotType.MAINHAND, anvil.removeItems());
-                playSound = true;
-            }
+            else
+                if(handStack.getItem() instanceof AirItem && player.isSneaking()) {
+                    player.setItemStackToSlot(EquipmentSlotType.MAINHAND, anvil.removeItems());
+                    playSound = true;
+                }
 
-            if (playSound)
-            {
+            if(playSound) {
                 Sounds.play(SoundEvents.BLOCK_ANVIL_HIT, world, pos, 0.5F);
             }
         }
@@ -101,14 +96,14 @@ public class BlockNorseAnvil extends BlockMod implements IItemBlockOverride
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context)
-    {
+    public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
+
         return VoxelsNorseAnvil.NORTH_SOUTH.get();
     }
 
     @Override
-    public BlockItem getOverride()
-    {
+    public BlockItem getOverride() {
+
         return new ItemBlockBase(this, new Item.Properties().group(group()).setISTER(() -> ItemStackNordicAnvilRender::new));
     }
 }

@@ -10,8 +10,8 @@ import net.minecraft.util.ResourceLocation;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TabGroup
-{
+public class TabGroup {
+
     protected List<Tab> tabs = new ArrayList<>();
 
     private int activeIndex;
@@ -26,8 +26,8 @@ public class TabGroup
     private final Minecraft minecraft;
     private final MultiFunction<MatrixStack, Integer, Integer, Integer, Integer, Integer, Integer> blit;
 
-    public TabGroup(Vector2Int startPos, UVInt inactiveUV, UVInt activeUV, Vector2Int activeSize, Vector2Int inactiveSize, ResourceLocation texture, Minecraft minecraft, MultiFunction<MatrixStack, Integer, Integer, Integer, Integer, Integer, Integer> blit)
-    {
+    public TabGroup(Vector2Int startPos, UVInt inactiveUV, UVInt activeUV, Vector2Int activeSize, Vector2Int inactiveSize, ResourceLocation texture, Minecraft minecraft, MultiFunction<MatrixStack, Integer, Integer, Integer, Integer, Integer, Integer> blit) {
+
         this.startPos = startPos;
         this.inactiveUV = inactiveUV;
         this.activeUV = activeUV;
@@ -39,13 +39,12 @@ public class TabGroup
         this.blit = blit;
     }
 
-    public void setup(int tabCount, int startActive, GUISide side, Class<? extends Tab> clazz)
-    {
+    public void setup(int tabCount, int startActive, GUISide side, Class<? extends Tab> clazz) {
+
         this.tabs.clear();
         Vector2Int offset = new Vector2Int(0, 0);
 
-        for (int i = 0; i < tabCount; i++)
-        {
+        for(int i = 0; i < tabCount; i++) {
             Vector2Int pos = new Vector2Int(this.startPos);
             pos.update(offset);
 
@@ -64,8 +63,7 @@ public class TabGroup
                     (location, minecraft) -> minecraft.getTextureManager().bindTexture(this.texture)
             )));
 
-            switch (side)
-            {
+            switch(side) {
                 case Left:
                 case Right:
                     offset.update(new Vector2Int(0, this.inactiveSize.y));
@@ -77,41 +75,35 @@ public class TabGroup
             }
         }
 
-        if (this.tabs.size() > 0)
-        {
+        if(this.tabs.size() > 0) {
             this.tabs.get(startActive).flagActive();
         }
 
         this.activeIndex = startActive;
     }
 
-    public void draw(MatrixStack matrixStack)
-    {
-        for (Tab tab : this.tabs)
-        {
+    public void draw(MatrixStack matrixStack) {
+
+        for(Tab tab : this.tabs) {
             tab.draw(matrixStack);
         }
     }
 
-    public boolean handleClick(double x, double y, double startX, double startY)
-    {
+    public boolean handleClick(double x, double y, double startX, double startY) {
+
         int activeIndex = getActiveIndex();
         boolean tabUpdated = false;
 
-        for (Tab tab : this.tabs)
-        {
-            if (tab.handleClick(x, y, startX, startY))
-            {
+        for(Tab tab : this.tabs) {
+            if(tab.handleClick(x, y, startX, startY)) {
                 tabUpdated = true;
                 this.activeIndex = tab.index;
                 break;
             }
         }
 
-        if (tabUpdated)
-        {
-            if (this.tabs.size() > 0)
-            {
+        if(tabUpdated) {
+            if(this.tabs.size() > 0) {
                 this.tabs.get(activeIndex).flagActive();
             }
             return true;
@@ -120,8 +112,8 @@ public class TabGroup
         return false;
     }
 
-    public int getActiveIndex()
-    {
+    public int getActiveIndex() {
+
         return this.activeIndex;
     }
 }

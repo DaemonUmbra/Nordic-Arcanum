@@ -8,8 +8,8 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public class RecipeSerializers
-{
+public class RecipeSerializers {
+
     public static final DeferredRegister<IRecipeSerializer<?>> RECIPE_SERIALIZER = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, NordicArcanum.MODID);
 
     public static final RegistryObject<IRecipeSerializer<NordicFurnaceRecipe>> nordic_furnace = RECIPE_SERIALIZER.register(NordicNames.NORDIC_FURNACE, NordicFurnaceRecipe.Serializer::new);

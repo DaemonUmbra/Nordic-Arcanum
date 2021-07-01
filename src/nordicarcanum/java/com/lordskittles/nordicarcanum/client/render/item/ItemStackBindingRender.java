@@ -4,10 +4,10 @@ import com.lordskittles.arcanumapi.client.render.item.ItemModelWrapper;
 import com.lordskittles.arcanumapi.client.render.item.ItemStackTERenderBase;
 import com.lordskittles.arcanumapi.common.utilities.NBTUtilities;
 import com.lordskittles.arcanumapi.core.NBTConstants;
-import com.lordskittles.nordicarcanum.client.render.item.model.ModelBindingPedestal;
 import com.lordskittles.nordicarcanum.client.render.item.model.ModelBindingBrazier;
-import com.lordskittles.nordicarcanum.client.render.item.model.ModelBindingCane;
 import com.lordskittles.nordicarcanum.client.render.item.model.ModelBindingCage;
+import com.lordskittles.nordicarcanum.client.render.item.model.ModelBindingCane;
+import com.lordskittles.nordicarcanum.client.render.item.model.ModelBindingPedestal;
 import com.lordskittles.nordicarcanum.common.item.crafting.BindingMaterial;
 import com.lordskittles.nordicarcanum.common.item.crafting.BindingShape;
 import com.lordskittles.nordicarcanum.common.item.magic.ItemBinding;
@@ -15,20 +15,20 @@ import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.lordskittles.nordicarcanum.core.NordicResourceLocations;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.model.Model;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 
 @OnlyIn(Dist.CLIENT)
-public class ItemStackBindingRender extends ItemStackTERenderBase
-{
+public class ItemStackBindingRender extends ItemStackTERenderBase {
+
     private final ModelBindingPedestal pedestal = new ModelBindingPedestal();
     private final ModelBindingBrazier brazier = new ModelBindingBrazier();
     private final ModelBindingCane cane = new ModelBindingCane();
@@ -37,16 +37,15 @@ public class ItemStackBindingRender extends ItemStackTERenderBase
     public static ItemModelWrapper model;
 
     @Override
-    protected void renderItemSpecific(ItemStack stack, MatrixStack matrix, IRenderTypeBuffer buffer, int light, int overlay, ItemCameraTransforms.TransformType transform)
-    {
+    protected void renderItemSpecific(ItemStack stack, MatrixStack matrix, IRenderTypeBuffer buffer, int light, int overlay, ItemCameraTransforms.TransformType transform) {
+
         Model model = null;
 
-        ItemBinding binding = (ItemBinding)stack.getItem();
+        ItemBinding binding = (ItemBinding) stack.getItem();
 
         CompoundNBT nbt = stack.getTag();
 
-        if (nbt == null)
-        {
+        if(nbt == null) {
             nbt = new CompoundNBT();
         }
 
@@ -56,8 +55,7 @@ public class ItemStackBindingRender extends ItemStackTERenderBase
         BindingMaterial material = binding.getMaterial();
         ResourceLocation textureLoc = NordicResourceLocations.getBindingTexture(material, shape.getValue() + 1);
 
-        switch (shape)
-        {
+        switch(shape) {
             case None:
                 textureLoc = NordicResourceLocations.getBindingTexture(material, 1);
             case Pedestal:
@@ -76,7 +74,7 @@ public class ItemStackBindingRender extends ItemStackTERenderBase
 
         float scale = 2f;
 
-        matrix.translate(-0.15, 2.6D, 0);
+        matrix.translate(- 0.15, 2.6D, 0);
         matrix.rotate(Vector3f.ZP.rotationDegrees(180));
 
         matrix.scale(scale, scale, scale);
@@ -84,15 +82,14 @@ public class ItemStackBindingRender extends ItemStackTERenderBase
     }
 
     @Override
-    protected void renderBlockSpecific(ItemStack stack, MatrixStack matrix, IRenderTypeBuffer buffer, int light, int overlay, ItemCameraTransforms.TransformType transform)
-    {
+    protected void renderBlockSpecific(ItemStack stack, MatrixStack matrix, IRenderTypeBuffer buffer, int light, int overlay, ItemCameraTransforms.TransformType transform) {
 
     }
 
     @Nonnull
     @Override
-    protected ItemCameraTransforms.TransformType getTransform(ItemStack stack)
-    {
+    protected ItemCameraTransforms.TransformType getTransform(ItemStack stack) {
+
         return model.getTransform();
     }
 }

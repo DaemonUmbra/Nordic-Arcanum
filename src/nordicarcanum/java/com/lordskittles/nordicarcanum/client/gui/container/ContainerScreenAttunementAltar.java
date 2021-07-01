@@ -29,8 +29,8 @@ import net.minecraft.util.text.TranslationTextComponent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContainerScreenAttunementAltar extends ContainerScreenBase<ContainerAttunementAltar> implements INestedGuiEventHandler
-{
+public class ContainerScreenAttunementAltar extends ContainerScreenBase<ContainerAttunementAltar> implements INestedGuiEventHandler {
+
     public TileEntityAttunementAltar Tile;
 
     private boolean multiblockValid = false;
@@ -45,8 +45,8 @@ public class ContainerScreenAttunementAltar extends ContainerScreenBase<Containe
 
     private TabGroup group;
 
-    public ContainerScreenAttunementAltar(ContainerAttunementAltar container, PlayerInventory inventory, ITextComponent title)
-    {
+    public ContainerScreenAttunementAltar(ContainerAttunementAltar container, PlayerInventory inventory, ITextComponent title) {
+
         super(NordicArcanum.MODID, NordicNames.ATTUNEMENT_ALTAR, container, inventory, title);
 
         setTextureRect(0, 0, 212, 225);
@@ -56,8 +56,8 @@ public class ContainerScreenAttunementAltar extends ContainerScreenBase<Containe
     }
 
     @Override
-    public boolean mouseScrolled(double p_mouseScrolled_1_, double p_mouseScrolled_3_, double p_mouseScrolled_5_)
-    {
+    public boolean mouseScrolled(double p_mouseScrolled_1_, double p_mouseScrolled_3_, double p_mouseScrolled_5_) {
+
         this.scale += p_mouseScrolled_5_ * 0.25f;
         this.scale = MathHelper.clamp(this.scale, 0.25f, 1.5f);
 
@@ -65,8 +65,8 @@ public class ContainerScreenAttunementAltar extends ContainerScreenBase<Containe
     }
 
     @Override
-    protected void init()
-    {
+    protected void init() {
+
         super.init();
 
         this.buttons.clear();
@@ -88,23 +88,21 @@ public class ContainerScreenAttunementAltar extends ContainerScreenBase<Containe
         rebuildButtonList();
     }
 
-    private void rebuildButtonList()
-    {
+    private void rebuildButtonList() {
+
         int index = this.group.getActiveIndex();
-        if (index < this.schools.size())
-        {
+        if(index < this.schools.size()) {
             this.buttons.clear();
             this.buttons.addAll(buildSpellButtons(this.schools.get(index).getSpells()));
         }
     }
 
-    private List<Button> buildSpellButtons(List<Spell> spells)
-    {
+    private List<Button> buildSpellButtons(List<Spell> spells) {
+
         List<Button> buttons = new ArrayList<>();
         int offset = 0;
 
-        for(Spell spell : spells)
-        {
+        for(Spell spell : spells) {
             Button button = new Button(
                     new Vector2Int(offset, 0),
                     new UVInt(0, 20),
@@ -123,17 +121,14 @@ public class ContainerScreenAttunementAltar extends ContainerScreenBase<Containe
         return buttons;
     }
 
-    private List<MagicSchool> getSchools()
-    {
+    private List<MagicSchool> getSchools() {
+
         List<MagicSchool> schools = new ArrayList<>();
         List<TileEntitySigilPodium> podiums = this.Tile.getPodiums();
 
-        for (TileEntitySigilPodium podium : podiums)
-        {
-            if (podium != null)
-            {
-                if (podium.getSchool() != null)
-                {
+        for(TileEntitySigilPodium podium : podiums) {
+            if(podium != null) {
+                if(podium.getSchool() != null) {
                     schools.add((MagicSchool) podium.getSchool());
                 }
             }
@@ -143,8 +138,8 @@ public class ContainerScreenAttunementAltar extends ContainerScreenBase<Containe
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY)
-    {
+    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+
         RenderSystem.color4f(this.red, this.green, this.blue, this.alpha);
 
         int left = this.guiLeft;
@@ -152,8 +147,7 @@ public class ContainerScreenAttunementAltar extends ContainerScreenBase<Containe
 
         drawInnerGui(matrixStack);
 
-        if(!this.Tile.isMultiblockFormed)
-        {
+        if(! this.Tile.isMultiblockFormed) {
             this.minecraft.getTextureManager().bindTexture(this.texture);
             this.blit(matrixStack, left + (this.xSize / 2) - 48, top + this.ySize / 2 - 10, 1, 235, 102, 20);
             TranslationTextComponent text = new TranslationTextComponent("attunement_altar.invalid");
@@ -164,8 +158,8 @@ public class ContainerScreenAttunementAltar extends ContainerScreenBase<Containe
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY)
-    {
+    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY) {
+
         RenderSystem.color4f(this.red, this.green, this.blue, this.alpha);
         this.minecraft.getTextureManager().bindTexture(this.texture);
 
@@ -176,10 +170,9 @@ public class ContainerScreenAttunementAltar extends ContainerScreenBase<Containe
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int mouseButton, double deltaX, double deltaY)
-    {
-        if (this.multiblockValid)
-        {
+    public boolean mouseDragged(double mouseX, double mouseY, int mouseButton, double deltaX, double deltaY) {
+
+        if(this.multiblockValid) {
             this.position.update(new Vector2Int(deltaX, deltaY));
 //            for (Button button : buttons)
 //            {
@@ -191,26 +184,23 @@ public class ContainerScreenAttunementAltar extends ContainerScreenBase<Containe
     }
 
     @Override
-    public boolean mouseClicked(double posX, double posY, int mouseButton)
-    {
-        if (this.group.handleClick(posX, posY, this.guiLeft, this.guiTop))
-        {
+    public boolean mouseClicked(double posX, double posY, int mouseButton) {
+
+        if(this.group.handleClick(posX, posY, this.guiLeft, this.guiTop)) {
             rebuildButtonList();
         }
 
         return super.mouseClicked(posX, posY, mouseButton);
     }
 
-    protected void drawInnerGui(MatrixStack matrixStack)
-    {
-        int boxStartX = (this.width  - this.xSize) / 2;
+    protected void drawInnerGui(MatrixStack matrixStack) {
+
+        int boxStartX = (this.width - this.xSize) / 2;
         int boxStartY = (this.height - this.ySize) / 2;
         preRenderInner(matrixStack, boxStartX, boxStartY);
 
-        if(this.Tile.isMultiblockFormed)
-        {
-            for (Button button : buttons)
-            {
+        if(this.Tile.isMultiblockFormed) {
+            for(Button button : buttons) {
                 button.draw(matrixStack);
             }
         }
@@ -218,20 +208,20 @@ public class ContainerScreenAttunementAltar extends ContainerScreenBase<Containe
         postRenderInner(matrixStack);
     }
 
-    private void preRenderInner(MatrixStack matrixStack, int boxStartX, int boxStartY)
-    {
+    private void preRenderInner(MatrixStack matrixStack, int boxStartX, int boxStartY) {
+
         RenderSystem.pushMatrix();
-        RenderSystem.translatef((float)(boxStartX + bgRect.getX()), (float)(boxStartY + bgRect.getY()), 0.0F);
+        RenderSystem.translatef((float) (boxStartX + bgRect.getX()), (float) (boxStartY + bgRect.getY()), 0.0F);
 
         RenderSystem.pushMatrix();
         RenderSystem.enableDepthTest();
         RenderSystem.translatef(0.0F, 0.0F, 950.0F);
         RenderSystem.colorMask(false, false, false, false);
-        fill(matrixStack, 4680, 2260, -4680, -2260, -16777216);
+        fill(matrixStack, 4680, 2260, - 4680, - 2260, - 16777216);
         RenderSystem.colorMask(true, true, true, true);
-        RenderSystem.translatef(0.0F, 0.0F, -950.0F);
+        RenderSystem.translatef(0.0F, 0.0F, - 950.0F);
         RenderSystem.depthFunc(518);
-        fill(matrixStack, bgRect.getWidth(), bgRect.getHeight(), 0, 0, -16777216);
+        fill(matrixStack, bgRect.getWidth(), bgRect.getHeight(), 0, 0, - 16777216);
         RenderSystem.depthFunc(515);
 
         RenderSystem.scalef(1.2f, 1.2f, 0);
@@ -247,14 +237,14 @@ public class ContainerScreenAttunementAltar extends ContainerScreenBase<Containe
         RenderSystem.scalef(scale, scale, 0F);
     }
 
-    private void postRenderInner(MatrixStack matrixStack)
-    {
-        RenderSystem.scalef(-scale, -scale, 0F);
-        RenderSystem.translatef(-108, -108, 0);
+    private void postRenderInner(MatrixStack matrixStack) {
+
+        RenderSystem.scalef(- scale, - scale, 0F);
+        RenderSystem.translatef(- 108, - 108, 0);
         RenderSystem.depthFunc(518);
-        RenderSystem.translatef(0.0F, 0.0F, -950.0F);
+        RenderSystem.translatef(0.0F, 0.0F, - 950.0F);
         RenderSystem.colorMask(false, false, false, false);
-        fill(matrixStack, 4680, 2260, -4680, -2260, -16777216);
+        fill(matrixStack, 4680, 2260, - 4680, - 2260, - 16777216);
         RenderSystem.colorMask(true, true, true, true);
         RenderSystem.translatef(0.0F, 0.0F, 950.0F);
         RenderSystem.depthFunc(515);

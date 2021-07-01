@@ -3,15 +3,14 @@ package com.lordskittles.arcanumapi.client.gui.utilities;
 import com.google.common.collect.Lists;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 //4605510
-public enum  CustomTextFormatting
-{
+public enum CustomTextFormatting {
     GOLD("GOLD", '6', 6, 16755200),
     GRAY("GRAY", '7', 7, 4605510),
     GREEN("GREEN", 'a', 10, 5635925),
@@ -19,7 +18,7 @@ public enum  CustomTextFormatting
     RED("RED", 'c', 12, 16733525),
     LIGHT_PURPLE("LIGHT_PURPLE", 'd', 13, 16733695),
     WHITE("WHITE", 'f', 15, 16777215),
-    RESET("RESET", 'r', -1, (Integer)null);
+    RESET("RESET", 'r', - 1, (Integer) null);
 
     private static final Map<String, CustomTextFormatting> NAME_MAPPING = Arrays.stream(values()).collect(Collectors.toMap((p_199746_0_) -> {
         return lowercaseAlpha(p_199746_0_.name);
@@ -27,29 +26,37 @@ public enum  CustomTextFormatting
         return p_199747_0_;
     }));
     private static final Pattern FORMATTING_CODE_PATTERN = Pattern.compile("(?i)\u00a7[0-9A-FK-OR]");
-    /** The name of this color/formatting */
+    /**
+     * The name of this color/formatting
+     */
     private final String name;
     private final char formattingCode;
     private final boolean fancyStyling;
     private final String controlString;
-    /** The numerical index that represents this color */
+    /**
+     * The numerical index that represents this color
+     */
     private final int colorIndex;
     @Nullable
     private final Integer color;
 
     private static String lowercaseAlpha(String string) {
+
         return string.toLowerCase(Locale.ROOT).replaceAll("[^a-z]", "");
     }
 
     private CustomTextFormatting(String formattingName, char formattingCodeIn, int index, @Nullable Integer colorCode) {
+
         this(formattingName, formattingCodeIn, false, index, colorCode);
     }
 
     private CustomTextFormatting(String formattingName, char formattingCodeIn, boolean fancyStylingIn) {
-        this(formattingName, formattingCodeIn, fancyStylingIn, -1, (Integer)null);
+
+        this(formattingName, formattingCodeIn, fancyStylingIn, - 1, (Integer) null);
     }
 
     private CustomTextFormatting(String formattingName, char formattingCodeIn, boolean fancyStylingIn, int index, @Nullable Integer colorCode) {
+
         this.name = formattingName;
         this.formattingCode = formattingCodeIn;
         this.fancyStyling = fancyStylingIn;
@@ -60,20 +67,21 @@ public enum  CustomTextFormatting
 
     @OnlyIn(Dist.CLIENT)
     public static String getFormatString(String stringIn) {
+
         StringBuilder stringbuilder = new StringBuilder();
-        int i = -1;
+        int i = - 1;
         int j = stringIn.length();
 
-        while((i = stringIn.indexOf(167, i + 1)) != -1) {
-            if (i < j - 1) {
+        while((i = stringIn.indexOf(167, i + 1)) != - 1) {
+            if(i < j - 1) {
                 CustomTextFormatting textformatting = fromFormattingCode(stringIn.charAt(i + 1));
-                if (textformatting != null) {
-                    if (textformatting.isNormalStyle()) {
+                if(textformatting != null) {
+                    if(textformatting.isNormalStyle()) {
                         stringbuilder.setLength(0);
                     }
 
-                    if (textformatting != RESET) {
-                        stringbuilder.append((Object)textformatting);
+                    if(textformatting != RESET) {
+                        stringbuilder.append((Object) textformatting);
                     }
                 }
             }
@@ -86,6 +94,7 @@ public enum  CustomTextFormatting
      * Returns the numerical color index that represents this formatting
      */
     public int getColorIndex() {
+
         return this.colorIndex;
     }
 
@@ -93,6 +102,7 @@ public enum  CustomTextFormatting
      * False if this is just changing the color or resetting; true otherwise.
      */
     public boolean isFancyStyling() {
+
         return this.fancyStyling;
     }
 
@@ -100,28 +110,33 @@ public enum  CustomTextFormatting
      * Checks if this is a color code.
      */
     public boolean isColor() {
-        return !this.fancyStyling && this != RESET;
+
+        return ! this.fancyStyling && this != RESET;
     }
 
     @Nullable
     @OnlyIn(Dist.CLIENT)
     public Integer getColor() {
+
         return this.color;
     }
 
     @OnlyIn(Dist.CLIENT)
     public boolean isNormalStyle() {
-        return !this.fancyStyling;
+
+        return ! this.fancyStyling;
     }
 
     /**
      * Gets the friendly name of this value.
      */
     public String getFriendlyName() {
+
         return this.name().toLowerCase(Locale.ROOT);
     }
 
     public String toString() {
+
         return this.controlString;
     }
 
@@ -130,6 +145,7 @@ public enum  CustomTextFormatting
      */
     @Nullable
     public static String getTextWithoutFormattingCodes(@Nullable String text) {
+
         return text == null ? null : FORMATTING_CODE_PATTERN.matcher(text).replaceAll("");
     }
 
@@ -138,6 +154,7 @@ public enum  CustomTextFormatting
      */
     @Nullable
     public static CustomTextFormatting getValueByName(@Nullable String friendlyName) {
+
         return friendlyName == null ? null : NAME_MAPPING.get(lowercaseAlpha(friendlyName));
     }
 
@@ -146,11 +163,13 @@ public enum  CustomTextFormatting
      */
     @Nullable
     public static CustomTextFormatting fromColorIndex(int index) {
-        if (index < 0) {
+
+        if(index < 0) {
             return RESET;
-        } else {
+        }
+        else {
             for(CustomTextFormatting textformatting : values()) {
-                if (textformatting.getColorIndex() == index) {
+                if(textformatting.getColorIndex() == index) {
                     return textformatting;
                 }
             }
@@ -162,10 +181,11 @@ public enum  CustomTextFormatting
     @Nullable
     @OnlyIn(Dist.CLIENT)
     public static CustomTextFormatting fromFormattingCode(char formattingCodeIn) {
+
         char c0 = Character.toString(formattingCodeIn).toLowerCase(Locale.ROOT).charAt(0);
 
         for(CustomTextFormatting textformatting : values()) {
-            if (textformatting.formattingCode == c0) {
+            if(textformatting.formattingCode == c0) {
                 return textformatting;
             }
         }
@@ -177,10 +197,11 @@ public enum  CustomTextFormatting
      * Gets all the valid values.
      */
     public static Collection<String> getValidValues(boolean getColor, boolean getFancyStyling) {
+
         List<String> list = Lists.newArrayList();
 
         for(CustomTextFormatting textformatting : values()) {
-            if ((!textformatting.isColor() || getColor) && (!textformatting.isFancyStyling() || getFancyStyling)) {
+            if((! textformatting.isColor() || getColor) && (! textformatting.isFancyStyling() || getFancyStyling)) {
                 list.add(textformatting.getFriendlyName());
             }
         }

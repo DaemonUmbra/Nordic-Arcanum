@@ -2,8 +2,8 @@ package com.lordskittles.nordicarcanum.core;
 
 import com.lordskittles.arcanumapi.core.ArcanumNames;
 
-public class NordicNames
-{
+public class NordicNames {
+
     public static final String TIER_1 = "Midgard";
     public static final String TIER_2 = "Muspelheim";
     public static final String TIER_3 = "Asgardian";

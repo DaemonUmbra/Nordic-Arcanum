@@ -3,6 +3,7 @@ package com.lordskittles.nordicarcanum.plugins.jei;
 import com.google.common.collect.ImmutableList;
 import com.lordskittles.arcanumapi.common.utilities.MagicUtilities;
 import com.lordskittles.nordicarcanum.common.inventory.crafting.CraftingClothRecipe;
+import com.lordskittles.nordicarcanum.common.registry.Blocks;
 import com.lordskittles.nordicarcanum.common.registry.Items;
 import com.lordskittles.nordicarcanum.core.NordicTextures;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -17,13 +18,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import com.lordskittles.nordicarcanum.common.registry.Blocks;
 
 import java.util.List;
 
 
-public class JeiCraftingClothCategory implements IRecipeCategory<CraftingClothRecipe>
-{
+public class JeiCraftingClothCategory implements IRecipeCategory<CraftingClothRecipe> {
+
     private final String localizedName;
     private final IDrawable background;
     private final IDrawable icon;
@@ -32,8 +32,8 @@ public class JeiCraftingClothCategory implements IRecipeCategory<CraftingClothRe
 
     private final float maxArcanum;
 
-    JeiCraftingClothCategory()
-    {
+    JeiCraftingClothCategory() {
+
         localizedName = I18n.format(Blocks.crafting_cloth.get().getTranslationKey());
         background = NordicArcanumJeiPlugin.jeiHelpers.getGuiHelper().createDrawable(NordicTextures.JEI_CRAFTING_CLOTH, 0, 0, 176, 97);
         icon = NordicArcanumJeiPlugin.jeiHelpers.getGuiHelper().createDrawableIngredient(new ItemStack(Items.crafting_cloth_item.get()));
@@ -43,45 +43,45 @@ public class JeiCraftingClothCategory implements IRecipeCategory<CraftingClothRe
     }
 
     @Override
-    public ResourceLocation getUid()
-    {
+    public ResourceLocation getUid() {
+
         return NordicCategoryID.CRAFTING_CLOTH;
     }
 
     @Override
-    public Class<? extends CraftingClothRecipe> getRecipeClass()
-    {
+    public Class<? extends CraftingClothRecipe> getRecipeClass() {
+
         return CraftingClothRecipe.class;
     }
 
     @Override
-    public String getTitle()
-    {
+    public String getTitle() {
+
         return localizedName;
     }
 
     @Override
-    public IDrawable getBackground()
-    {
+    public IDrawable getBackground() {
+
         return background;
     }
 
     @Override
-    public IDrawable getIcon()
-    {
+    public IDrawable getIcon() {
+
         return icon;
     }
 
     @Override
-    public void setIngredients(CraftingClothRecipe recipe, IIngredients ingredients)
-    {
+    public void setIngredients(CraftingClothRecipe recipe, IIngredients ingredients) {
+
         ingredients.setInputIngredients(recipe.getIngredients());
         ingredients.setOutputs(VanillaTypes.ITEM, ImmutableList.of(recipe.getRecipeOutput()));
     }
 
     @Override
-    public void setRecipe(IRecipeLayout recipeLayout, CraftingClothRecipe recipe, IIngredients ingredients)
-    {
+    public void setRecipe(IRecipeLayout recipeLayout, CraftingClothRecipe recipe, IIngredients ingredients) {
+
         IGuiItemStackGroup guiStacks = recipeLayout.getItemStacks();
         List<List<ItemStack>> inputs = ingredients.getInputs(VanillaTypes.ITEM);
         List<List<ItemStack>> outputs = ingredients.getOutputs(VanillaTypes.ITEM);
@@ -89,10 +89,8 @@ public class JeiCraftingClothCategory implements IRecipeCategory<CraftingClothRe
         guiStacks.init(0, false, 128, 50);
         guiStacks.set(0, outputs.get(0));
 
-        for (int x = 0; x < recipe.getWidth(); ++x)
-        {
-            for (int y = 0; y < recipe.getHeight(); ++y)
-            {
+        for(int x = 0; x < recipe.getWidth(); ++ x) {
+            for(int y = 0; y < recipe.getHeight(); ++ y) {
                 int xPos = 19 + x * 20;
                 int yPos = 19 + y * 20;
 
@@ -106,9 +104,9 @@ public class JeiCraftingClothCategory implements IRecipeCategory<CraftingClothRe
     }
 
     @Override
-    public void draw(CraftingClothRecipe recipe, MatrixStack stack, double mouseX, double mouseY)
-    {
-        arcanumBar = NordicArcanumJeiPlugin.jeiHelpers.getGuiHelper().createDrawable(NordicTextures.JEI_CRAFTING_CLOTH, 63, 97, (int)(61 * (recipe.getArcanum() / maxArcanum)), 12);
+    public void draw(CraftingClothRecipe recipe, MatrixStack stack, double mouseX, double mouseY) {
+
+        arcanumBar = NordicArcanumJeiPlugin.jeiHelpers.getGuiHelper().createDrawable(NordicTextures.JEI_CRAFTING_CLOTH, 63, 97, (int) (61 * (recipe.getArcanum() / maxArcanum)), 12);
 
         arcanumBar.draw(stack, 105, 13);
         arcanumBarForeground.draw(stack, 104, 12);

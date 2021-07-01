@@ -8,8 +8,8 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 
-public class Tab
-{
+public class Tab {
+
     protected boolean active;
     protected final int index;
 
@@ -28,8 +28,8 @@ public class Tab
 
     private final GUISide side;
 
-    public Tab(boolean active, GUISide side, int index, Vector2Int pos, UVInt inactiveUV, UVInt activeUV, Vector2Int inactiveSize, Vector2Int activeSize, ResourceLocation textureLoc, Minecraft minecraft, MultiFunction<MatrixStack, Integer, Integer, Integer, Integer, Integer, Integer> blit, VoidFunction<ResourceLocation, Minecraft> applyTexture)
-    {
+    public Tab(boolean active, GUISide side, int index, Vector2Int pos, UVInt inactiveUV, UVInt activeUV, Vector2Int inactiveSize, Vector2Int activeSize, ResourceLocation textureLoc, Minecraft minecraft, MultiFunction<MatrixStack, Integer, Integer, Integer, Integer, Integer, Integer> blit, VoidFunction<ResourceLocation, Minecraft> applyTexture) {
+
         this.active = active;
         this.side = side;
         this.index = index;
@@ -48,15 +48,14 @@ public class Tab
         this.applyTexture = applyTexture;
     }
 
-    public void draw(MatrixStack matrixStack)
-    {
+    public void draw(MatrixStack matrixStack) {
+
         this.applyTexture.apply(this.texture, this.minecraft);
 
         UVInt uv = this.active ? this.activeUV : this.inactiveUV;
         Vector2Int size = this.active ? this.activeSize : this.inactiveSize;
 
-        switch (this.side)
-        {
+        switch(this.side) {
             case Left:
                 this.blit.apply(matrixStack, this.pos.x - size.x, this.pos.y, uv.u, uv.v, size.x, size.y);
                 break;
@@ -72,13 +71,12 @@ public class Tab
         }
     }
 
-    public boolean handleClick(double x, double y, double startX, double startY)
-    {
+    public boolean handleClick(double x, double y, double startX, double startY) {
+
         Vector2Int position = new Vector2Int(0, 0);
         Vector2Int size = this.active ? this.activeSize : this.inactiveSize;
 
-        switch (this.side)
-        {
+        switch(this.side) {
             case Left:
                 position = new Vector2Int(this.pos.x - size.x, this.pos.y);
                 break;
@@ -98,13 +96,11 @@ public class Tab
         Vector2Int end = new Vector2Int(position);
         end.update(getEnd());
 
-        if (this.active)
-        {
+        if(this.active) {
             return false;
         }
 
-        if (x > position.x && x < end.x && y > position.y && y < end.y)
-        {
+        if(x > position.x && x < end.x && y > position.y && y < end.y) {
             flagActive();
             return true;
         }
@@ -112,28 +108,28 @@ public class Tab
         return false;
     }
 
-    public boolean isActive()
-    {
+    public boolean isActive() {
+
         return active;
     }
 
-    public void flagActive()
-    {
+    public void flagActive() {
+
         this.active = true;
     }
 
-    public void flagInactive()
-    {
+    public void flagInactive() {
+
         this.active = false;
     }
 
-    public Vector2Int getPos()
-    {
+    public Vector2Int getPos() {
+
         return this.pos;
     }
 
-    public Vector2Int getEnd()
-    {
+    public Vector2Int getEnd() {
+
         return this.active ? this.activeSize : this.inactiveSize;
     }
 }

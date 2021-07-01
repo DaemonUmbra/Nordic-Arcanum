@@ -14,10 +14,10 @@ import net.minecraft.tileentity.TileEntity;
 
 import java.util.Objects;
 
-public class ContainerArcaneChest extends ContainerStorageBase<TileEntityArcaneChest>
-{
-    public ContainerArcaneChest(final int windowId, final PlayerInventory playerInventory, final TileEntityArcaneChest tile)
-    {
+public class ContainerArcaneChest extends ContainerStorageBase<TileEntityArcaneChest> {
+
+    public ContainerArcaneChest(final int windowId, final PlayerInventory playerInventory, final TileEntityArcaneChest tile) {
+
         super(Containers.arcane_chest.get(), NordicInventorySlots.ARCANE_CHEST, windowId, playerInventory, tile);
 
         tile.openInventory(playerInventory.player);
@@ -30,58 +30,52 @@ public class ContainerArcaneChest extends ContainerStorageBase<TileEntityArcaneC
         generatePlayerInventoryHotbar(playerInventory, 8, 183);
     }
 
-    public ContainerArcaneChest(final int windowId, final PlayerInventory playerInventory, final PacketBuffer packetBuffer)
-    {
+    public ContainerArcaneChest(final int windowId, final PlayerInventory playerInventory, final PacketBuffer packetBuffer) {
+
         this(windowId, playerInventory, getTileEntity(playerInventory, packetBuffer));
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity player)
-    {
+    public boolean canInteractWith(PlayerEntity player) {
+
         return isWithinUsableDistance(canInteract, player, Blocks.arcane_chest.get());
     }
 
-    private static TileEntityArcaneChest getTileEntity(final PlayerInventory playerInventory, final PacketBuffer packetBuffer)
-    {
+    private static TileEntityArcaneChest getTileEntity(final PlayerInventory playerInventory, final PacketBuffer packetBuffer) {
+
         Objects.requireNonNull(playerInventory, "PlayerInventory cannot be null");
         Objects.requireNonNull(packetBuffer, "Data cannot be null");
 
         final TileEntity tileAtPos = playerInventory.player.world.getTileEntity(packetBuffer.readBlockPos());
-        if (tileAtPos instanceof TileEntityArcaneChest)
-        {
-            return (TileEntityArcaneChest)tileAtPos;
+        if(tileAtPos instanceof TileEntityArcaneChest) {
+            return (TileEntityArcaneChest) tileAtPos;
         }
 
         throw new IllegalStateException("Tile Entity is not correct! " + tileAtPos);
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity player, int index)
-    {
+    public ItemStack transferStackInSlot(PlayerEntity player, int index) {
+
         ItemStack stack = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(index);
-        if (slot != null && slot.getHasStack())
-        {
+        if(slot != null && slot.getHasStack()) {
             ItemStack itemStack = slot.getStack();
             stack = itemStack.copy();
-            if (index < nonPlayerSlotCount)
-            {
-                if (!this.mergeItemStack(itemStack, this.nonPlayerSlotCount, this.inventorySlots.size(), true))
-                {
+            if(index < nonPlayerSlotCount) {
+                if(! this.mergeItemStack(itemStack, this.nonPlayerSlotCount, this.inventorySlots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             }
-            else if (!this.mergeItemStack(itemStack, 0, this.nonPlayerSlotCount, false))
-            {
-                return ItemStack.EMPTY;
-            }
+            else
+                if(! this.mergeItemStack(itemStack, 0, this.nonPlayerSlotCount, false)) {
+                    return ItemStack.EMPTY;
+                }
 
-            if (itemStack.isEmpty())
-            {
+            if(itemStack.isEmpty()) {
                 slot.putStack(ItemStack.EMPTY);
             }
-            else
-            {
+            else {
                 slot.onSlotChanged();
             }
         }

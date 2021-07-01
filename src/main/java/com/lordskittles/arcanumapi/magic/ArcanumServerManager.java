@@ -7,11 +7,11 @@ import com.lordskittles.arcanumapi.common.utilities.MagicUtilities;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.tileentity.TileEntity;
 
-public class ArcanumServerManager
-{
-    public static void useArcanum(ServerPlayerEntity player, float arcanum, TileEntity tile, PacketHandlerBase packetHandler) throws Exception
-    {
-        if (player.world.isRemote)
+public class ArcanumServerManager {
+
+    public static void useArcanum(ServerPlayerEntity player, float arcanum, TileEntity tile, PacketHandlerBase packetHandler) throws Exception {
+
+        if(player.world.isRemote)
             throw new Exception("Cannot use arcanum on the client...");
 
         MagicUtilities.useArcanum(player, arcanum);
@@ -21,9 +21,9 @@ public class ArcanumServerManager
         packetHandler.sendToAllTracking(new PacketTileArcanumUpdate(tile.getPos(), current, maximum), tile);
     }
 
-    public static void useArcanum(ServerPlayerEntity player, float arcanum, PacketHandlerBase packetHandler) throws Exception
-    {
-        if (player.world.isRemote)
+    public static void useArcanum(ServerPlayerEntity player, float arcanum, PacketHandlerBase packetHandler) throws Exception {
+
+        if(player.world.isRemote)
             throw new Exception("Cannot use arcanum on the client...");
 
         MagicUtilities.useArcanum(player, arcanum);
@@ -33,9 +33,9 @@ public class ArcanumServerManager
         packetHandler.sendToAllTracking(new PacketPlayerArcanumUpdate(current, maximum), player);
     }
 
-    public static void updateArcanum(ServerPlayerEntity player, TileEntity tile, PacketHandlerBase packetHandler) throws Exception
-    {
-        if (player.world.isRemote)
+    public static void updateArcanum(ServerPlayerEntity player, TileEntity tile, PacketHandlerBase packetHandler) throws Exception {
+
+        if(player.world.isRemote)
             throw new Exception("Cannot update arcanum on the client...");
 
         float current = MagicUtilities.getCurrentArcanum(player);
@@ -44,9 +44,9 @@ public class ArcanumServerManager
         packetHandler.sendToAllTracking(new PacketTileArcanumUpdate(tile.getPos(), current, maximum), tile);
     }
 
-    public static void replenishArcanum(ServerPlayerEntity player, float arcanum, PacketHandlerBase packetHandler) throws Exception
-    {
-        if (player.world.isRemote)
+    public static void replenishArcanum(ServerPlayerEntity player, float arcanum, PacketHandlerBase packetHandler) throws Exception {
+
+        if(player.world.isRemote)
             throw new Exception("Cannot replenish arcanum on the client...");
 
         MagicUtilities.replenishArcanum(player, arcanum);

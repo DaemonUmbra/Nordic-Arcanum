@@ -12,22 +12,21 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class ItemShapingHammer extends ItemMod
-{
-    public ItemShapingHammer()
-    {
+public class ItemShapingHammer extends ItemMod {
+
+    public ItemShapingHammer() {
+
         super(NordicItemGroup.INSTANCE);
     }
 
     @Override
-    public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context)
-    {
+    public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
+
         World world = context.getWorld();
         BlockPos pos = context.getPos();
         TileEntity tile = world.getTileEntity(pos);
 
-        if (tile instanceof TileEntityNordicAnvil)
-        {
+        if(tile instanceof TileEntityNordicAnvil) {
             TileEntityNordicAnvil anvil = (TileEntityNordicAnvil) tile;
 
             Sounds.play(SoundEvents.BLOCK_ANVIL_PLACE, world, pos, 0.5F);

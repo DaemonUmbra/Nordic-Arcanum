@@ -9,13 +9,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public class JsonUtilities
-{
-    public static FluidStack fluidStackFromJson(JsonObject json)
-    {
+public class JsonUtilities {
+
+    public static FluidStack fluidStackFromJson(JsonObject json) {
+
         String fluidName = JSONUtils.getString(json, "fluid");
         Fluid fluid = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(fluidName));
-        if (fluid == null || fluid == Fluids.EMPTY)
+        if(fluid == null || fluid == Fluids.EMPTY)
             throw new JsonSyntaxException("Unknown fluid: " + fluidName);
 
         int amount = JSONUtils.getInt(json, "amount", 1000);

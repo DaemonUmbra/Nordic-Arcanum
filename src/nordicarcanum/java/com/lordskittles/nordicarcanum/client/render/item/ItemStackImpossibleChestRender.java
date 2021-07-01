@@ -6,29 +6,28 @@ import com.lordskittles.nordicarcanum.client.render.tileentity.model.ModelArcane
 import com.lordskittles.nordicarcanum.core.NordicResourceLocations;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 
 @OnlyIn(Dist.CLIENT)
-public class ItemStackImpossibleChestRender extends ItemStackTERenderBase
-{
+public class ItemStackImpossibleChestRender extends ItemStackTERenderBase {
+
     private static final ModelArcaneChest impossible_chest = new ModelArcaneChest(NordicResourceLocations.IMPOSSIBLE_CHEST);
     public static ItemModelWrapper model;
 
     @Override
-    protected void renderItemSpecific(ItemStack stack, MatrixStack matrix, IRenderTypeBuffer buffer, int light, int overlay, ItemCameraTransforms.TransformType transform)
-    {
+    protected void renderItemSpecific(ItemStack stack, MatrixStack matrix, IRenderTypeBuffer buffer, int light, int overlay, ItemCameraTransforms.TransformType transform) {
 
     }
 
     @Override
-    protected void renderBlockSpecific(ItemStack stack, MatrixStack matrix, IRenderTypeBuffer buffer, int light, int overlay, ItemCameraTransforms.TransformType transform)
-    {
+    protected void renderBlockSpecific(ItemStack stack, MatrixStack matrix, IRenderTypeBuffer buffer, int light, int overlay, ItemCameraTransforms.TransformType transform) {
+
         float scale = 1.25f;
 
         matrix.translate(0, 1.2D, 0);
@@ -40,8 +39,8 @@ public class ItemStackImpossibleChestRender extends ItemStackTERenderBase
 
     @Nonnull
     @Override
-    protected ItemCameraTransforms.TransformType getTransform(ItemStack stack)
-    {
+    protected ItemCameraTransforms.TransformType getTransform(ItemStack stack) {
+
         return model.getTransform();
     }
 }

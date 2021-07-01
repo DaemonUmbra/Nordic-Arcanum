@@ -9,12 +9,12 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
 
-public class ContainerScreenCraftingCloth extends ContainerScreenBase<ContainerCraftingCloth>
-{
+public class ContainerScreenCraftingCloth extends ContainerScreenBase<ContainerCraftingCloth> {
+
     private final PlayerEntity player;
 
-    public ContainerScreenCraftingCloth(ContainerCraftingCloth container, PlayerInventory inventory, ITextComponent title)
-    {
+    public ContainerScreenCraftingCloth(ContainerCraftingCloth container, PlayerInventory inventory, ITextComponent title) {
+
         super(NordicArcanum.MODID, NordicNames.CRAFTING_CLOTH, container, inventory, title);
 
         this.player = inventory.player;
@@ -23,15 +23,15 @@ public class ContainerScreenCraftingCloth extends ContainerScreenBase<ContainerC
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack stack, float partialTicks, int mouseX, int mouseY)
-    {
+    protected void drawGuiContainerBackgroundLayer(MatrixStack stack, float partialTicks, int mouseX, int mouseY) {
+
         super.drawGuiContainerBackgroundLayer(stack, partialTicks, mouseX, mouseY);
         int left = this.guiLeft;
         int top = this.guiTop;
 
         // Bar positioned at: 153, 11
         float arcanumPercent = this.container.getCurrentArcanum() / this.container.getMaximumArcanum();
-        int offset = (int)(61 * arcanumPercent);
+        int offset = (int) (61 * arcanumPercent);
         this.blit(stack, left + 105, top + 13, 63, 190, offset, 12);
 
         //border

@@ -10,15 +10,13 @@ import net.minecraft.util.math.shapes.VoxelShapes;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class VoxelsAlchemyTable
-{
-    public static VoxelShape getShape(Direction direction, MultiBlockPiece piece)
-    {
-        switch (direction)
-        {
+public class VoxelsAlchemyTable {
+
+    public static VoxelShape getShape(Direction direction, MultiBlockPiece piece) {
+
+        switch(direction) {
             case NORTH:
-                switch (piece)
-                {
+                switch(piece) {
                     case BOTTOM_RIGHT:
                         return VoxelsAlchemyTable.BottomRight.NORTH.get();
                     case BOTTOM_LEFT:
@@ -29,8 +27,7 @@ public class VoxelsAlchemyTable
                         return VoxelsAlchemyTable.TopLeft.NORTH.get();
                 }
             case WEST:
-                switch (piece)
-                {
+                switch(piece) {
                     case BOTTOM_RIGHT:
                         return VoxelsAlchemyTable.BottomRight.EAST.get();
                     case BOTTOM_LEFT:
@@ -41,8 +38,7 @@ public class VoxelsAlchemyTable
                         return VoxelsAlchemyTable.TopLeft.EAST.get();
                 }
             case SOUTH:
-                switch (piece)
-                {
+                switch(piece) {
                     case BOTTOM_RIGHT:
                         return VoxelsAlchemyTable.BottomRight.SOUTH.get();
                     case BOTTOM_LEFT:
@@ -53,8 +49,7 @@ public class VoxelsAlchemyTable
                         return VoxelsAlchemyTable.TopLeft.SOUTH.get();
                 }
             case EAST:
-                switch (piece)
-                {
+                switch(piece) {
                     case BOTTOM_RIGHT:
                         return VoxelsAlchemyTable.BottomRight.WEST.get();
                     case BOTTOM_LEFT:
@@ -66,11 +61,11 @@ public class VoxelsAlchemyTable
                 }
         }
 
-        return Block.makeCuboidShape(0,0,0,16,16,16);
+        return Block.makeCuboidShape(0, 0, 0, 16, 16, 16);
     }
 
-    private static class BottomLeft
-    {
+    private static class BottomLeft {
+
         public static Optional<VoxelShape> WEST = Stream.of(
                 Block.makeCuboidShape(0, 3, 3, 10, 12, 13),
                 Block.makeCuboidShape(0, 0, 1, 12, 1, 15),
@@ -79,7 +74,7 @@ public class VoxelsAlchemyTable
                 Block.makeCuboidShape(0, 12, 2, 11, 14, 14),
                 Block.makeCuboidShape(0, 10, 2.5000000000000004, 0.5, 11, 3.0000000000000004),
                 Block.makeCuboidShape(0, 10, 13, 0.5, 11, 13.5)
-        ).reduce((v1, v2) -> {return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);});
+        ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR));
 
         public static Optional<VoxelShape> NORTH = Stream.of(
                 Block.makeCuboidShape(3, 3, 6, 13, 12, 16),
@@ -89,7 +84,7 @@ public class VoxelsAlchemyTable
                 Block.makeCuboidShape(2, 12, 5, 14, 14, 16),
                 Block.makeCuboidShape(2.5, 10, 15.5, 3, 11, 16),
                 Block.makeCuboidShape(13, 10, 15.5, 13.5, 11, 16)
-        ).reduce((v1, v2) -> {return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);});
+        ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR));
 
         public static Optional<VoxelShape> EAST = Stream.of(
                 Block.makeCuboidShape(6, 3, 3, 16, 12, 13),
@@ -99,7 +94,7 @@ public class VoxelsAlchemyTable
                 Block.makeCuboidShape(5, 12, 2, 16, 14, 14),
                 Block.makeCuboidShape(15.5, 10, 13, 16, 11, 13.5),
                 Block.makeCuboidShape(15.5, 10, 2.5, 16, 11, 3)
-        ).reduce((v1, v2) -> {return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);});
+        ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR));
 
         public static Optional<VoxelShape> SOUTH = Stream.of(
                 Block.makeCuboidShape(3, 3, 0, 13, 12, 10),
@@ -109,11 +104,11 @@ public class VoxelsAlchemyTable
                 Block.makeCuboidShape(2, 12, 0, 14, 14, 11),
                 Block.makeCuboidShape(13, 10, 0, 13.5, 11, 0.5),
                 Block.makeCuboidShape(2.5, 10, 0, 3, 11, 0.5)
-        ).reduce((v1, v2) -> {return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);});
+        ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR));
     }
 
-    private static class BottomRight
-    {
+    private static class BottomRight {
+
         public static Optional<VoxelShape> WEST = Stream.of(
                 Block.makeCuboidShape(15, 12, 2, 16, 14, 14),
                 Block.makeCuboidShape(15, 1, 2, 16, 3, 14),
@@ -139,7 +134,7 @@ public class VoxelsAlchemyTable
                 Block.makeCuboidShape(0.5, 11, 2.5, 3.5, 16.25, 5.5),
                 Block.makeCuboidShape(0.57662, 11.08198, 3.5, 2.57662, 12.08198, 4.5),
                 Block.makeCuboidShape(4.78198, 10.92338, 3.5, 5.78198, 14.32338, 4.5)
-        ).reduce((v1, v2) -> {return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);});
+        ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR));
 
         public static Optional<VoxelShape> NORTH = Stream.of(
                 Block.makeCuboidShape(2.0000000000000036, 12, 0, 14, 14, 1),
@@ -166,7 +161,7 @@ public class VoxelsAlchemyTable
                 Block.makeCuboidShape(2.5000000000000036, 11, 12.5, 5.5000000000000036, 16.25, 15.5),
                 Block.makeCuboidShape(3.5000000000000036, 11.08198, 13.423380000000002, 4.5000000000000036, 12.08198, 15.423380000000002),
                 Block.makeCuboidShape(3.5000000000000036, 10.92338, 10.21802, 4.5000000000000036, 14.32338, 11.21802)
-        ).reduce((v1, v2) -> {return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);});
+        ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR));
 
         public static Optional<VoxelShape> EAST = Stream.of(
                 Block.makeCuboidShape(0, 12, 2, 1, 14, 13.999999999999996),
@@ -193,7 +188,7 @@ public class VoxelsAlchemyTable
                 Block.makeCuboidShape(12.5, 11, 10.499999999999996, 15.5, 16.25, 13.499999999999996),
                 Block.makeCuboidShape(13.423380000000002, 11.08198, 11.499999999999996, 15.423380000000002, 12.08198, 12.499999999999996),
                 Block.makeCuboidShape(10.21802, 10.92338, 11.499999999999996, 11.21802, 14.32338, 12.499999999999996)
-        ).reduce((v1, v2) -> {return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);});
+        ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR));
 
         public static Optional<VoxelShape> SOUTH = Stream.of(
                 Block.makeCuboidShape(2, 12, 15, 13.999999999999996, 14, 16),
@@ -220,11 +215,11 @@ public class VoxelsAlchemyTable
                 Block.makeCuboidShape(10.499999999999996, 11, 0.5, 13.499999999999996, 16.25, 3.5),
                 Block.makeCuboidShape(11.499999999999996, 11.08198, 0.5766199999999984, 12.499999999999996, 12.08198, 2.5766199999999984),
                 Block.makeCuboidShape(11.499999999999996, 10.92338, 4.781980000000001, 12.499999999999996, 14.32338, 5.781980000000001)
-        ).reduce((v1, v2) -> {return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);});
+        ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR));
     }
 
-    private static class TopLeft
-    {
+    private static class TopLeft {
+
         public static Optional<VoxelShape> WEST = Stream.of(
                 Block.makeCuboidShape(0, 7, 13.299999999999999, 15, 8.5, 14.399999999999999),
                 Block.makeCuboidShape(15, 7.699999999999999, 13.299999999999999, 16, 8.5, 14.399999999999999),
@@ -239,7 +234,7 @@ public class VoxelsAlchemyTable
                 Block.makeCuboidShape(9, 0, 12.899999999999999, 11, 7.5, 14.7),
                 Block.makeCuboidShape(8.5, 0, 12.499999999999998, 11.5, 0.8999999999999986, 14.999999999999998),
                 Block.makeCuboidShape(0, 0, 12.499999999999998, 1.5, 0.8999999999999986, 14.999999999999998)
-        ).reduce((v1, v2) -> {return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);});
+        ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR));
 
         public static Optional<VoxelShape> NORTH = Stream.of(
                 Block.makeCuboidShape(13.299999999999999, 7, 1, 14.399999999999999, 8.5, 16),
@@ -255,7 +250,7 @@ public class VoxelsAlchemyTable
                 Block.makeCuboidShape(12.899999999999999, 0, 5, 14.7, 7.5, 7),
                 Block.makeCuboidShape(12.499999999999998, 0, 4.5, 14.999999999999998, 0.8999999999999986, 7.5),
                 Block.makeCuboidShape(12.499999999999998, 0, 14.5, 14.999999999999998, 0.8999999999999986, 16)
-        ).reduce((v1, v2) -> {return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);});
+        ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR));
 
         public static Optional<VoxelShape> EAST = Stream.of(
                 Block.makeCuboidShape(1, 7, 1.6000000000000014, 16, 8.5, 2.700000000000001),
@@ -271,7 +266,7 @@ public class VoxelsAlchemyTable
                 Block.makeCuboidShape(5, 0, 1.3000000000000007, 7, 7.5, 3.1000000000000014),
                 Block.makeCuboidShape(4.5, 0, 1.0000000000000018, 7.5, 0.8999999999999986, 3.5000000000000018),
                 Block.makeCuboidShape(14.5, 0, 1.0000000000000018, 16, 0.8999999999999986, 3.5000000000000018)
-        ).reduce((v1, v2) -> {return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);});
+        ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR));
 
         public static Optional<VoxelShape> SOUTH = Stream.of(
                 Block.makeCuboidShape(1.6000000000000014, 7, 0, 2.700000000000001, 8.5, 15),
@@ -287,11 +282,11 @@ public class VoxelsAlchemyTable
                 Block.makeCuboidShape(1.3000000000000007, 0, 9, 3.1000000000000014, 7.5, 11),
                 Block.makeCuboidShape(1.0000000000000018, 0, 8.5, 3.5000000000000018, 0.8999999999999986, 11.5),
                 Block.makeCuboidShape(1.0000000000000018, 0, 0, 3.5000000000000018, 0.8999999999999986, 1.5)
-        ).reduce((v1, v2) -> {return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);});
+        ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR));
     }
 
-    private static class TopRight
-    {
+    private static class TopRight {
+
         public static Optional<VoxelShape> WEST = Stream.of(
                 Block.makeCuboidShape(4.00342, 0.1, 6.73035, 11.40342, 1.2, 7.73035),
                 Block.makeCuboidShape(4.00342, 0.1, 7.73035, 5.00342, 1.2, 13.13035),
@@ -308,7 +303,7 @@ public class VoxelsAlchemyTable
                 Block.makeCuboidShape(15, 0, 1, 16, 1.4, 3),
                 Block.makeCuboidShape(15, 0, 12.9, 16, 7.5, 14.7),
                 Block.makeCuboidShape(14.5, 0, 12.5, 16, 1, 15)
-        ).reduce((v1, v2) -> {return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);});
+        ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR));
 
         public static Optional<VoxelShape> NORTH = Stream.of(
                 Block.makeCuboidShape(6.73035, 0.10000000000000009, 4.596579999999999, 7.73035, 1.2, 11.99658),
@@ -326,7 +321,7 @@ public class VoxelsAlchemyTable
                 Block.makeCuboidShape(1, 0, 0, 3, 1.4, 1),
                 Block.makeCuboidShape(12.9, 0, 0, 14.7, 7.5, 1),
                 Block.makeCuboidShape(12.5, 0, 0, 15, 1, 1.5)
-        ).reduce((v1, v2) -> {return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);});
+        ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR));
 
         public static Optional<VoxelShape> EAST = Stream.of(
                 Block.makeCuboidShape(4.596579999999999, 0.10000000000000009, 8.26965, 11.99658, 1.2, 9.26965),
@@ -344,7 +339,7 @@ public class VoxelsAlchemyTable
                 Block.makeCuboidShape(0, 0, 13, 1, 1.4, 15),
                 Block.makeCuboidShape(0, 0, 1.3000000000000007, 1, 7.5, 3.0999999999999996),
                 Block.makeCuboidShape(0, 0, 1, 1.5, 1, 3.5)
-        ).reduce((v1, v2) -> {return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);});
+        ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR));
 
         public static Optional<VoxelShape> SOUTH = Stream.of(
                 Block.makeCuboidShape(8.26965, 0.10000000000000009, 4.00342, 9.26965, 1.2, 11.40342),
@@ -362,6 +357,6 @@ public class VoxelsAlchemyTable
                 Block.makeCuboidShape(13, 0, 15, 15, 1.4, 16),
                 Block.makeCuboidShape(1.3000000000000007, 0, 15, 3.0999999999999996, 7.5, 16),
                 Block.makeCuboidShape(1, 0, 14.5, 3.5, 1, 16)
-        ).reduce((v1, v2) -> {return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);});
+        ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR));
     }
 }

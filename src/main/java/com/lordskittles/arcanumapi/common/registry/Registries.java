@@ -13,23 +13,23 @@ import net.minecraftforge.registries.ObjectHolder;
 import net.minecraftforge.registries.RegistryBuilder;
 
 @ObjectHolder(ArcanumAPI.MODID)
-public class Registries
-{
+public class Registries {
+
     public static IForgeRegistry<MagicSchool> MAGIC_SCHOOLS = null;
     public static IForgeRegistry<Spell> SPELLS = null;
 
     @Mod.EventBusSubscriber(modid = ArcanumAPI.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-    public static class Registration
-    {
+    public static class Registration {
+
         @SubscribeEvent
-        public static void register(RegistryEvent.NewRegistry event)
-        {
+        public static void register(RegistryEvent.NewRegistry event) {
+
             MAGIC_SCHOOLS = makeRegistry(ArcanumNames.MAGIC_SCHOOLS, MagicSchool.class).create();
             SPELLS = makeRegistry(ArcanumNames.SPELLS, Spell.class).create();
         }
 
-        private static <T extends IForgeRegistryEntry<T>>RegistryBuilder makeRegistry(String name, Class<T> type)
-        {
+        private static <T extends IForgeRegistryEntry<T>> RegistryBuilder makeRegistry(String name, Class<T> type) {
+
             return new RegistryBuilder<T>().setName(ArcanumAPI.RL(name)).setType(type).setMaxID(Integer.MAX_VALUE - 1).disableSaving();
         }
     }

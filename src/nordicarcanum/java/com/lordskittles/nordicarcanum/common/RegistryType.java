@@ -1,7 +1,6 @@
 package com.lordskittles.nordicarcanum.common;
 
-public enum RegistryType
-{
+public enum RegistryType {
     CORE,
     BINDING,
     CRYSTAL,

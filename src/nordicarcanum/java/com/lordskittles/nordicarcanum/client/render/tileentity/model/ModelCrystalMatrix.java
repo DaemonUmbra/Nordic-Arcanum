@@ -12,84 +12,84 @@ import net.minecraft.util.math.vector.Vector3f;
 
 import javax.annotation.Nonnull;
 
-public class ModelCrystalMatrix extends Model
-{
-	private final ModelRenderer crystal;
-	private final ModelRenderer ring;
+public class ModelCrystalMatrix extends Model {
 
-	private final RenderType RENDER_TYPE = getRenderType(NordicResourceLocations.ATTUNEMENT_ALTAR);
-	private final float multiplier = 0.0125f;
+    private final ModelRenderer crystal;
+    private final ModelRenderer ring;
 
-	private int currentRot;
+    private final RenderType RENDER_TYPE = getRenderType(NordicResourceLocations.ATTUNEMENT_ALTAR);
+    private final float multiplier = 0.0125f;
 
-	private int partialTicks;
-	private int entityTicks;
+    private int currentRot;
 
-	public ModelCrystalMatrix()
-	{
-		super(RenderType::getEntityTranslucent);
+    private int partialTicks;
+    private int entityTicks;
 
-		currentRot = 0;
+    public ModelCrystalMatrix() {
 
-		textureWidth = 80;
-		textureHeight = 80;
+        super(RenderType::getEntityTranslucent);
 
-		crystal = new ModelRenderer(this);
-		crystal.setRotationPoint(0.0F, 16.0F, 0.0F);
-		setRotationAngle(crystal, 0.0F, 0.7854F, -0.7854F);
-		crystal.setTextureOffset(42, 19).addBox(-3.0F, -3.0F, -3.0F, 6.0F, 6.0F, 6.0F, 0.0F, false);
+        currentRot = 0;
 
-		ring = new ModelRenderer(this);
-		ring.setRotationPoint(0.0F, 15.8F, 0.0F);
-		ring.setTextureOffset(42, 31).addBox(-3.0F, -0.5F, 5.95F, 6.0F, 1.0F, 1.0F, 0.0F, false);
-		ring.setTextureOffset(36, 39).addBox(-3.0F, -0.5F, -6.95F, 6.0F, 1.0F, 1.0F, 0.0F, false);
-		ring.setTextureOffset(0, 26).addBox(-6.95F, -0.5F, -3.0F, 1.0F, 1.0F, 6.0F, 0.0F, false);
-		ring.setTextureOffset(0, 19).addBox(5.95F, -0.5F, -3.0F, 1.0F, 1.0F, 6.0F, 0.0F, false);
-	}
+        textureWidth = 80;
+        textureHeight = 80;
 
-	public void render(@Nonnull MatrixStack matrix, @Nonnull IRenderTypeBuffer renderer, int light, int overlayLight)
-	{
-		render(matrix, renderer.getBuffer(RENDER_TYPE), light, overlayLight, 1, 1, 1, 1);
-	}
+        crystal = new ModelRenderer(this);
+        crystal.setRotationPoint(0.0F, 16.0F, 0.0F);
+        setRotationAngle(crystal, 0.0F, 0.7854F, - 0.7854F);
+        crystal.setTextureOffset(42, 19).addBox(- 3.0F, - 3.0F, - 3.0F, 6.0F, 6.0F, 6.0F, 0.0F, false);
 
-	public void render(MatrixStack stack, IVertexBuilder buffer, int light, int overlay)
-	{
-		float bob = (MathHelper.sin((this.entityTicks + this.partialTicks) / 10.0f) * 0.1f + 0.1f) * this.multiplier;
-		stack.translate(0, bob, 0);
+        ring = new ModelRenderer(this);
+        ring.setRotationPoint(0.0F, 15.8F, 0.0F);
+        ring.setTextureOffset(42, 31).addBox(- 3.0F, - 0.5F, 5.95F, 6.0F, 1.0F, 1.0F, 0.0F, false);
+        ring.setTextureOffset(36, 39).addBox(- 3.0F, - 0.5F, - 6.95F, 6.0F, 1.0F, 1.0F, 0.0F, false);
+        ring.setTextureOffset(0, 26).addBox(- 6.95F, - 0.5F, - 3.0F, 1.0F, 1.0F, 6.0F, 0.0F, false);
+        ring.setTextureOffset(0, 19).addBox(5.95F, - 0.5F, - 3.0F, 1.0F, 1.0F, 6.0F, 0.0F, false);
+    }
 
-		float rot = (MathHelper.sin((this.entityTicks + this.partialTicks) / 10.0f) * 0.1f + 0.1f) * this.multiplier;
-		stack.rotate(Vector3f.YP.rotationDegrees(rot));
-		crystal.render(stack, buffer, light, overlay);
-		stack.rotate(Vector3f.YP.rotationDegrees(-rot * 4));
+    public void render(@Nonnull MatrixStack matrix, @Nonnull IRenderTypeBuffer renderer, int light, int overlayLight) {
 
-		renderRing(stack, buffer, light, overlay, 0, 0, 0, -rot * 0.1f);
-	}
+        render(matrix, renderer.getBuffer(RENDER_TYPE), light, overlayLight, 1, 1, 1, 1);
+    }
 
-	@Override
-	public void render(MatrixStack stack, IVertexBuilder buffer, int light, int overlay, float red, float green, float blue, float alpha)
-	{
-		render(stack, buffer, light, overlay);
-	}
+    public void render(MatrixStack stack, IVertexBuilder buffer, int light, int overlay) {
 
-	private void renderRing(MatrixStack stack, IVertexBuilder buffer, int light, int overlay, int offset, double offsetPositionX, double offsetPositionY, float rot)
-	{
-		stack.translate(offsetPositionX, offsetPositionY, 0);
-		stack.rotate(Vector3f.ZP.rotationDegrees(offset));
+        float bob = (MathHelper.sin((this.entityTicks + this.partialTicks) / 10.0f) * 0.1f + 0.1f) * this.multiplier;
+        stack.translate(0, bob, 0);
 
-		stack.rotate(Vector3f.YP.rotationDegrees(rot));
-		ring.render(stack, buffer, light, overlay);
-		stack.rotate(Vector3f.YP.rotationDegrees(45));
-		ring.render(stack, buffer, light, overlay);
-		stack.rotate(Vector3f.YP.rotationDegrees(-45));
+        float rot = (MathHelper.sin((this.entityTicks + this.partialTicks) / 10.0f) * 0.1f + 0.1f) * this.multiplier;
+        stack.rotate(Vector3f.YP.rotationDegrees(rot));
+        crystal.render(stack, buffer, light, overlay);
+        stack.rotate(Vector3f.YP.rotationDegrees(- rot * 4));
 
-		stack.rotate(Vector3f.ZP.rotationDegrees(-offset));
-		stack.translate(-offsetPositionX, -offsetPositionY, 0);
-	}
+        renderRing(stack, buffer, light, overlay, 0, 0, 0, - rot * 0.1f);
+    }
 
-	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z)
-	{
-		modelRenderer.rotateAngleX = x;
-		modelRenderer.rotateAngleY = y;
-		modelRenderer.rotateAngleZ = z;
-	}
+    @Override
+    public void render(MatrixStack stack, IVertexBuilder buffer, int light, int overlay, float red, float green, float blue, float alpha) {
+
+        render(stack, buffer, light, overlay);
+    }
+
+    private void renderRing(MatrixStack stack, IVertexBuilder buffer, int light, int overlay, int offset, double offsetPositionX, double offsetPositionY, float rot) {
+
+        stack.translate(offsetPositionX, offsetPositionY, 0);
+        stack.rotate(Vector3f.ZP.rotationDegrees(offset));
+
+        stack.rotate(Vector3f.YP.rotationDegrees(rot));
+        ring.render(stack, buffer, light, overlay);
+        stack.rotate(Vector3f.YP.rotationDegrees(45));
+        ring.render(stack, buffer, light, overlay);
+        stack.rotate(Vector3f.YP.rotationDegrees(- 45));
+
+        stack.rotate(Vector3f.ZP.rotationDegrees(- offset));
+        stack.translate(- offsetPositionX, - offsetPositionY, 0);
+    }
+
+    public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
+
+        modelRenderer.rotateAngleX = x;
+        modelRenderer.rotateAngleY = y;
+        modelRenderer.rotateAngleZ = z;
+    }
 }

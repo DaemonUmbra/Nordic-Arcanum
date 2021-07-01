@@ -43,16 +43,16 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public abstract class BlockMagicChest<T extends TileEntityMagicChest> extends BlockMod
-{
+public abstract class BlockMagicChest<T extends TileEntityMagicChest> extends BlockMod {
+
     public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
     private final int slotCount;
 
     private final Class<T> tileClass;
     private final String modid;
 
-    public BlockMagicChest(Class<T> tileClass, ItemGroup group, String modid, int slotCount)
-    {
+    public BlockMagicChest(Class<T> tileClass, ItemGroup group, String modid, int slotCount) {
+
         super(Block.Properties.create(Material.WOOD, MaterialColor.BLACK)
                 .hardnessAndResistance(2.5f, 2.5f)
                 .sound(SoundType.WOOD)
@@ -66,18 +66,16 @@ public abstract class BlockMagicChest<T extends TileEntityMagicChest> extends Bl
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag)
-    {
+    public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag) {
+
         CompoundNBT nbt = NBTUtilities.getPersistentData(modid, stack);
         NonNullList list = NonNullList.withSize(slotCount, ItemStack.EMPTY);
         ItemStackHelper.loadAllItems(nbt, list);
 
-        for (int i = 0; i < list.size(); i++)
-        {
-            ItemStack item = (ItemStack)list.get(i);
+        for(int i = 0; i < list.size(); i++) {
+            ItemStack item = (ItemStack) list.get(i);
 
-            if (!item.isEmpty())
-            {
+            if(! item.isEmpty()) {
                 IFormattableTextComponent component = new StringTextComponent(TextFormatting.GREEN + "");
                 component.appendSibling(item.getItem().getName());
                 component.appendSibling(new StringTextComponent(TextFormatting.AQUA + " " + ((Integer) item.getCount()).toString()));
@@ -90,10 +88,9 @@ public abstract class BlockMagicChest<T extends TileEntityMagicChest> extends Bl
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
-    {
-        switch (state.get(FACING))
-        {
+    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+
+        switch(state.get(FACING)) {
             case NORTH:
                 return VoxelsMagicChest.NORTH.get();
             case EAST:
@@ -109,20 +106,18 @@ public abstract class BlockMagicChest<T extends TileEntityMagicChest> extends Bl
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context)
-    {
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+
         return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().rotateY().getOpposite());
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
-    {
-        if (!world.isRemote)
-        {
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+
+        if(! world.isRemote) {
             TileEntity tile = world.getTileEntity(pos);
-            if (tileClass.isInstance(tile))
-            {
-                NetworkHooks.openGui((ServerPlayerEntity)player, tileClass.cast(tile), pos);
+            if(tileClass.isInstance(tile)) {
+                NetworkHooks.openGui((ServerPlayerEntity) player, tileClass.cast(tile), pos);
             }
         }
 
@@ -130,11 +125,10 @@ public abstract class BlockMagicChest<T extends TileEntityMagicChest> extends Bl
     }
 
     @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
-    {
+    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+
         TileEntity tile = world.getTileEntity(pos);
-        if (tileClass.isInstance(tile))
-        {
+        if(tileClass.isInstance(tile)) {
             T chest = tileClass.cast(tile);
             CompoundNBT nbt = NBTUtilities.getPersistentData(modid, stack);
 
@@ -150,17 +144,14 @@ public abstract class BlockMagicChest<T extends TileEntityMagicChest> extends Bl
     protected abstract PacketHandlerBase getPacketHandler();
 
     @Override
-    public void onReplaced(BlockState oldState, World world, BlockPos pos, BlockState newState, boolean isMoving)
-    {
-        if (oldState != newState)
-        {
+    public void onReplaced(BlockState oldState, World world, BlockPos pos, BlockState newState, boolean isMoving) {
+
+        if(oldState != newState) {
             TileEntityMagicChest chest = ClientUtilities.getTileEntity(tileClass, pos);
-            if (chest != null)
-            {
+            if(chest != null) {
                 ItemStack stack = oldState.getBlock().getItem(world, pos, oldState);
                 PlayerEntity player = world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 15D, null);
-                if (chest.canRetainInventory(player))
-                {
+                if(chest.canRetainInventory(player)) {
                     CompoundNBT nbt = NBTUtilities.getPersistentData(modid, stack);
 
                     ItemStackHelper.saveAllItems(nbt, chest.getItems());
@@ -168,22 +159,17 @@ public abstract class BlockMagicChest<T extends TileEntityMagicChest> extends Bl
 
                     InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack);
 
-                    if (player instanceof ServerPlayerEntity)
-                    {
-                        try
-                        {
+                    if(player instanceof ServerPlayerEntity) {
+                        try {
                             ArcanumServerManager.useArcanum((ServerPlayerEntity) player, chest.getRetainCost(), getPacketHandler());
                         }
-                        catch (Exception e)
-                        {
+                        catch(Exception e) {
                             e.printStackTrace();
                         }
                     }
                 }
-                else
-                {
-                    if (!player.isCreative())
-                    {
+                else {
+                    if(! player.isCreative()) {
                         InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack);
                     }
                     InventoryHelper.dropItems(world, pos, tileClass.cast(chest).getItems());
@@ -193,26 +179,26 @@ public abstract class BlockMagicChest<T extends TileEntityMagicChest> extends Bl
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
-    {
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+
         builder.add(FACING);
     }
 
     @Override
-    public BlockState rotate(BlockState state, Rotation rotation)
-    {
+    public BlockState rotate(BlockState state, Rotation rotation) {
+
         return state.with(FACING, rotation.rotate(state.get(FACING)));
     }
 
     @Override
-    public BlockState mirror(BlockState state, Mirror mirror)
-    {
+    public BlockState mirror(BlockState state, Mirror mirror) {
+
         return state.rotate(mirror.toRotation(state.get(FACING)));
     }
 
     @Override
-    public boolean hasTileEntity(BlockState state)
-    {
+    public boolean hasTileEntity(BlockState state) {
+
         return true;
     }
 

@@ -1,17 +1,18 @@
 package com.lordskittles.nordicarcanum.client.gui.utilities;
 
-import com.lordskittles.nordicarcanum.client.gui.screen.*;
+import com.lordskittles.nordicarcanum.client.gui.screen.ScreenArcanumBar;
+import com.lordskittles.nordicarcanum.client.gui.screen.ScreenChangeSchool;
+import com.lordskittles.nordicarcanum.client.gui.screen.ScreenSpellDisplay;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 
-public class GUIHandler
-{
-    public static void open(GUIType id, PlayerEntity player)
-    {
+public class GUIHandler {
+
+    public static void open(GUIType id, PlayerEntity player) {
+
         Minecraft minecraft = Minecraft.getInstance();
 
-        switch (id)
-        {
+        switch(id) {
             case ChangeSpell:
                 minecraft.displayGuiScreen(new ScreenChangeSchool(player));
                 break;

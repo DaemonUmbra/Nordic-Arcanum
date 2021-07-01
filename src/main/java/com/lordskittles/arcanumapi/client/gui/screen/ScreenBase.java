@@ -5,13 +5,13 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.text.StringTextComponent;
 
-public class ScreenBase extends Screen
-{
+public class ScreenBase extends Screen {
+
     protected final Minecraft minecraft;
     protected final PlayerEntity player;
 
-    public ScreenBase(String name, PlayerEntity player)
-    {
+    public ScreenBase(String name, PlayerEntity player) {
+
         super(new StringTextComponent(name));
 
         this.player = player;
@@ -19,8 +19,8 @@ public class ScreenBase extends Screen
     }
 
     @Override
-    public boolean isPauseScreen()
-    {
+    public boolean isPauseScreen() {
+
         return false;
     }
 }

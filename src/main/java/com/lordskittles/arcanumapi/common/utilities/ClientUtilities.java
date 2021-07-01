@@ -10,30 +10,27 @@ import net.minecraftforge.fml.network.NetworkEvent;
 import javax.annotation.Nonnull;
 import java.util.function.Supplier;
 
-public class ClientUtilities
-{
-    public static <T extends TileEntity> T getTileEntity(@Nonnull Class<T> clazz, @Nonnull BlockPos pos)
-    {
+public class ClientUtilities {
+
+    public static <T extends TileEntity> T getTileEntity(@Nonnull Class<T> clazz, @Nonnull BlockPos pos) {
+
         World world = Minecraft.getInstance().world;
         TileEntity tile = world.getTileEntity(pos);
-        if (tile == null)
-        {
+        if(tile == null) {
             return null;
         }
 
-        if (clazz.isInstance(tile))
-        {
+        if(clazz.isInstance(tile)) {
             return clazz.cast(tile);
         }
 
         return null;
     }
 
-    public static PlayerEntity getPlayer(Supplier<NetworkEvent.Context> context)
-    {
+    public static PlayerEntity getPlayer(Supplier<NetworkEvent.Context> context) {
+
         PlayerEntity player = context.get().getSender();
-        if (player == null)
-        {
+        if(player == null) {
             player = Minecraft.getInstance().player;
         }
 

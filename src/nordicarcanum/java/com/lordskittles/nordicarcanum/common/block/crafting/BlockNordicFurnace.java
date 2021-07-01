@@ -26,44 +26,42 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
-public class BlockNordicFurnace extends BlockMod
-{
+public class BlockNordicFurnace extends BlockMod {
+
     public static final BooleanProperty SMELTING = BooleanProperty.create("smelting");
     public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
 
-    public BlockNordicFurnace()
-    {
+    public BlockNordicFurnace() {
+
         super(Block.Properties.create(Material.ROCK)
                 .setRequiresTool()
                 .hardnessAndResistance(3.5F)
-                .setLightLevel((state)-> state.get(SMELTING) ? 13 : 0));
+                .setLightLevel((state) -> state.get(SMELTING) ? 13 : 0));
         this.setDefaultState(this.getStateContainer().getBaseState().with(SMELTING, false).with(FACING, Direction.NORTH));
 
         this.group = NordicItemGroup.INSTANCE;
     }
 
     @Override
-    public boolean hasTileEntity(BlockState state)
-    {
+    public boolean hasTileEntity(BlockState state) {
+
         return true;
     }
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world)
-    {
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+
         return TileEntities.nordic_furnace.get().create();
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
-    {
-        if (!world.isRemote)
-        {
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+
+        if(! world.isRemote) {
             TileEntity tile = world.getTileEntity(pos);
-            if (tile instanceof TileEntityNordicFurnace)
-            {
-                NetworkHooks.openGui((ServerPlayerEntity)player, (TileEntityNordicFurnace)tile, pos);
+            if(tile instanceof TileEntityNordicFurnace) {
+                NetworkHooks.openGui((ServerPlayerEntity) player, (TileEntityNordicFurnace) tile, pos);
             }
         }
 
@@ -71,14 +69,14 @@ public class BlockNordicFurnace extends BlockMod
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context)
-    {
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+
         return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
-    {
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+
         builder.add(SMELTING).add(FACING);
     }
 }

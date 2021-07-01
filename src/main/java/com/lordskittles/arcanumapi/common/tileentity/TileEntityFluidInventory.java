@@ -1,9 +1,9 @@
 package com.lordskittles.arcanumapi.common.tileentity;
 
+import com.lordskittles.arcanumapi.common.inventory.NordicItemStackHandler;
 import com.lordskittles.arcanumapi.common.network.PacketBase;
 import com.lordskittles.arcanumapi.common.network.PacketFluidUpdate;
 import com.lordskittles.arcanumapi.common.utilities.MathUtilities;
-import com.lordskittles.arcanumapi.common.inventory.NordicItemStackHandler;
 import com.lordskittles.arcanumapi.core.ArcanumAPI;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -25,8 +25,8 @@ import net.minecraftforge.items.IItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public abstract class TileEntityFluidInventory<T extends TileEntityFluidInventory> extends TileEntityUpdateable<T>
-{
+public abstract class TileEntityFluidInventory<T extends TileEntityFluidInventory> extends TileEntityUpdateable<T> {
+
     public float prevScale;
     protected final SmartSyncTank tank = new SmartSyncTank(this, getCapacity());
 
@@ -36,47 +36,48 @@ public abstract class TileEntityFluidInventory<T extends TileEntityFluidInventor
 
     private boolean needsPacket = false;
 
-    public TileEntityFluidInventory(TileEntityType<?> tileEntityTypeIn)
-    {
+    public TileEntityFluidInventory(TileEntityType<?> tileEntityTypeIn) {
+
         super(tileEntityTypeIn);
     }
 
-    public FluidStack getFluid()
-    {
+    public FluidStack getFluid() {
+
         return this.tank.getFluid();
     }
 
-    public boolean doesRetainFluid()
-    {
+    public boolean doesRetainFluid() {
+
         return true;
     }
 
-    public float getRetainCost()
-    {
+    public float getRetainCost() {
+
         return 0;
     }
 
-    public boolean canRetainInventory(PlayerEntity player)
-    {
+    public boolean canRetainInventory(PlayerEntity player) {
+
         return false;
     }
 
     @Nonnull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
-    {
-        if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+
+        if(cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.orEmpty(cap, itemCap);
         }
-        else if (cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-            return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.orEmpty(cap, fluidCap);
-        }
+        else
+            if(cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+                return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.orEmpty(cap, fluidCap);
+            }
 
         return super.getCapability(cap, side);
     }
 
-    private void shrinkHand(PlayerEntity player)
-    {
+    private void shrinkHand(PlayerEntity player) {
+
         ItemStack heldItem = player.inventory.mainInventory.get(player.inventory.currentItem);
         heldItem.shrink(1);
 
@@ -86,26 +87,24 @@ public abstract class TileEntityFluidInventory<T extends TileEntityFluidInventor
     public abstract int getCapacity();
 
     @Override
-    public void tick()
-    {
+    public void tick() {
+
         super.tick();
         this.tank.tick();
     }
 
     @Override
-    protected void onServerUpdate()
-    {
+    protected void onServerUpdate() {
+
         super.onServerUpdate();
 
         float scale = MathUtilities.getScale(this.prevScale, this.tank);
-        if (scale != this.prevScale)
-        {
+        if(scale != this.prevScale) {
             this.prevScale = scale;
             this.needsPacket = true;
         }
 
-        if (this.needsPacket)
-        {
+        if(this.needsPacket) {
             sendUpdatePacket();
             this.needsPacket = false;
         }
@@ -113,24 +112,24 @@ public abstract class TileEntityFluidInventory<T extends TileEntityFluidInventor
 
     @Nullable
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket()
-    {
+    public SUpdateTileEntityPacket getUpdatePacket() {
+
         CompoundNBT nbt = new CompoundNBT();
         write(nbt);
         return new SUpdateTileEntityPacket(getPos(), 1, nbt);
     }
 
     @Override
-    public CompoundNBT getUpdateTag()
-    {
+    public CompoundNBT getUpdateTag() {
+
         CompoundNBT nbt = super.getUpdateTag();
         write(nbt);
         return nbt;
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound)
-    {
+    public CompoundNBT write(CompoundNBT compound) {
+
         super.write(compound);
 
         this.tank.writeToNBT(compound);
@@ -139,38 +138,36 @@ public abstract class TileEntityFluidInventory<T extends TileEntityFluidInventor
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT compound)
-    {
+    public void read(BlockState state, CompoundNBT compound) {
+
         super.read(state, compound);
 
         this.tank.readFromNBT(compound);
     }
 
-    public void handleScaleUpdate(CompoundNBT nbt, float scale)
-    {
+    public void handleScaleUpdate(CompoundNBT nbt, float scale) {
+
         this.prevScale = scale;
         handleUpdateTag(getBlockState(), nbt);
     }
 
-    public void sendUpdatePacket()
-    {
+    public void sendUpdatePacket() {
+
         sendUpdatePacket(this);
     }
 
-    public void sendUpdatePacket(TileEntity tracking)
-    {
-        if (this.world.isRemote)
-        {
+    public void sendUpdatePacket(TileEntity tracking) {
+
+        if(this.world.isRemote) {
             ArcanumAPI.LOG.warn("Update packet call requested from client side", new Exception());
         }
-        else if (isRemoved())
-        {
-            ArcanumAPI.LOG.warn("Update packet call requested for removed tile", new Exception());
-        }
         else
-        {
-            sendPacket(new PacketFluidUpdate(this), tracking);
-        }
+            if(isRemoved()) {
+                ArcanumAPI.LOG.warn("Update packet call requested for removed tile", new Exception());
+            }
+            else {
+                sendPacket(new PacketFluidUpdate(this), tracking);
+            }
     }
 
     protected abstract void sendPacket(PacketBase packet, TileEntity tracking);

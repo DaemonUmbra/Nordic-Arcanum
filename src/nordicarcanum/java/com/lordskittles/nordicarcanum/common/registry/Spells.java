@@ -8,21 +8,21 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ObjectHolder;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @ObjectHolder(NordicArcanum.MODID)
 @Mod.EventBusSubscriber(modid = NordicArcanum.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class Spells
-{
+public class Spells {
+
     private static Map<SchoolType, List<Spell>> spells = new HashMap<>();
 
     @SubscribeEvent
-    public static void registerSpells(RegistryEvent.Register<Spell> event)
-    {
-        for (List<Spell> schoolSpells : spells.values())
-        {
-            for (Spell spell : schoolSpells)
-            {
+    public static void registerSpells(RegistryEvent.Register<Spell> event) {
+
+        for(List<Spell> schoolSpells : spells.values()) {
+            for(Spell spell : schoolSpells) {
                 event.getRegistry().register(spell);
             }
         }

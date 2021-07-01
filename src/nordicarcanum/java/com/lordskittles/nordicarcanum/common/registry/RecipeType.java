@@ -12,12 +12,15 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.IForgeRegistry;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-public class RecipeType<T extends ArcaneRecipeBase> implements IRecipeType<T>
-{
+public class RecipeType<T extends ArcaneRecipeBase> implements IRecipeType<T> {
+
     private static final List<RecipeType<? extends ArcaneRecipeBase>> TYPES = new ArrayList<>();
 
     public static final RecipeType<NordicFurnaceRecipe> nordic_furnace = registerType(NordicNames.NORDIC_FURNACE);
@@ -29,38 +32,37 @@ public class RecipeType<T extends ArcaneRecipeBase> implements IRecipeType<T>
     private final Map<ResourceLocation, T> cachedRecipes = new HashMap<>();
     private final ResourceLocation registryName;
 
-    private static <T extends ArcaneRecipeBase> RecipeType<T> registerType(String name)
-    {
+    private static <T extends ArcaneRecipeBase> RecipeType<T> registerType(String name) {
+
         RecipeType<T> type = new RecipeType<>(name);
         TYPES.add(type);
         return type;
     }
 
-    public static void registerRecipeTypes(IForgeRegistry<IRecipeSerializer<?>> registry)
-    {
+    public static void registerRecipeTypes(IForgeRegistry<IRecipeSerializer<?>> registry) {
+
         TYPES.forEach(type -> Registry.register(Registry.RECIPE_TYPE, type.registryName, type));
     }
 
-    private RecipeType(String name)
-    {
+    private RecipeType(String name) {
+
         this.registryName = NordicArcanum.RL(name);
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
+
         return registryName.toString();
     }
 
-    public static void clearCachedRecipes()
-    {
+    public static void clearCachedRecipes() {
+
         TYPES.forEach(type -> type.cachedRecipes.clear());
     }
 
-    public Map<ResourceLocation, T> getRecipes(World world)
-    {
-        if (cachedRecipes.isEmpty())
-        {
+    public Map<ResourceLocation, T> getRecipes(World world) {
+
+        if(cachedRecipes.isEmpty()) {
             RecipeManager recipeManager = world.getRecipeManager();
             List<T> recipes = recipeManager.getRecipes(this, ArcaneRecipeBase.DummyIInventory.getInstance(), world);
             recipes.forEach(recipe -> cachedRecipes.put(recipe.getId(), recipe));
@@ -69,18 +71,18 @@ public class RecipeType<T extends ArcaneRecipeBase> implements IRecipeType<T>
         return cachedRecipes;
     }
 
-    public Stream<T> stream(World world)
-    {
+    public Stream<T> stream(World world) {
+
         return getRecipes(world).values().stream();
     }
 
-    public T findFirst(World world, Predicate<T> predicate)
-    {
+    public T findFirst(World world, Predicate<T> predicate) {
+
         return stream(world).filter(predicate).findFirst().orElse(null);
     }
 
-    public T getRecipe(World world, ResourceLocation recipeId)
-    {
+    public T getRecipe(World world, ResourceLocation recipeId) {
+
         return getRecipes(world).get(recipeId);
     }
 }

@@ -1,7 +1,7 @@
 package com.lordskittles.nordicarcanum.core;
 
-public class NordicNBTConstants
-{
+public class NordicNBTConstants {
+
     public static final String FACADE_NBT_KEY = "crafting_cloth_facade";
 
     public static final String ANVIL_HELD_ITEM = "anvil_held_item";

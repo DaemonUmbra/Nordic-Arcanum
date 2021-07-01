@@ -15,10 +15,16 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.item.*;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTier;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.IFormattableTextComponent;
@@ -35,14 +41,14 @@ import net.minecraftforge.fluids.FluidStack;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public abstract class BlockTank<T extends TileEntityFluidInventory> extends BlockMod implements IItemBlockOverride
-{
+public abstract class BlockTank<T extends TileEntityFluidInventory> extends BlockMod implements IItemBlockOverride {
+
     private final Class<T> tileClass;
     private final String modid;
     private final PacketHandlerBase packetHandler;
 
-    public BlockTank(SoundType sound, ItemGroup group, Class<T> tileClass, String modid, PacketHandlerBase packetHandler)
-    {
+    public BlockTank(SoundType sound, ItemGroup group, Class<T> tileClass, String modid, PacketHandlerBase packetHandler) {
+
         super(Block.Properties.create(Material.ROCK, MaterialColor.STONE)
                 .hardnessAndResistance(3.0F, 3.0F)
                 .sound(sound)
@@ -58,13 +64,12 @@ public abstract class BlockTank<T extends TileEntityFluidInventory> extends Bloc
     public abstract TileEntity createTileEntity(BlockState state, IBlockReader world);
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag)
-    {
+    public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag) {
+
         CompoundNBT nbt = NBTUtilities.getPersistentData(modid, stack);
         FluidStack fluid = FluidStack.loadFluidStackFromNBT(nbt);
 
-        if (!fluid.isEmpty())
-        {
+        if(! fluid.isEmpty()) {
             IFormattableTextComponent component = new StringTextComponent(TextFormatting.GREEN + "");
             component.appendSibling(fluid.getDisplayName());
             component.appendSibling(new StringTextComponent(TextFormatting.AQUA + " " + ((Integer) fluid.getAmount()).toString()));
@@ -76,39 +81,31 @@ public abstract class BlockTank<T extends TileEntityFluidInventory> extends Bloc
     }
 
     @Override
-    public void onReplaced(BlockState oldState, World world, BlockPos pos, BlockState newState, boolean isMoving)
-    {
-        if (oldState != newState)
-        {
+    public void onReplaced(BlockState oldState, World world, BlockPos pos, BlockState newState, boolean isMoving) {
+
+        if(oldState != newState) {
             TileEntityFluidInventory tank = ClientUtilities.getTileEntity(tileClass, pos);
-            if (tank != null)
-            {
+            if(tank != null) {
                 PlayerEntity player = world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 15D, null);
                 ItemStack stack = oldState.getBlock().getItem(world, pos, oldState);
-                if (tank.canRetainInventory(player))
-                {
+                if(tank.canRetainInventory(player)) {
                     CompoundNBT nbt = NBTUtilities.getPersistentData(modid, stack);
 
                     FluidUtilities.saveFluid(nbt, stack, tank.getFluid());
 
                     InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack);
 
-                    if (player instanceof ServerPlayerEntity)
-                    {
-                        try
-                        {
+                    if(player instanceof ServerPlayerEntity) {
+                        try {
                             ArcanumServerManager.useArcanum((ServerPlayerEntity) player, tank.getRetainCost(), packetHandler);
                         }
-                        catch (Exception e)
-                        {
+                        catch(Exception e) {
                             e.printStackTrace();
                         }
                     }
                 }
-                else
-                {
-                    if (!player.isCreative())
-                    {
+                else {
+                    if(! player.isCreative()) {
                         InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack);
                     }
                 }
@@ -117,34 +114,30 @@ public abstract class BlockTank<T extends TileEntityFluidInventory> extends Bloc
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
-    {
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+
         TileEntity tile = world.getTileEntity(pos);
 
-        if (!world.isRemote)
-        {
-            if (tile instanceof TileEntityFluidInventory)
-            {
-                onTileActivated(world, player, (TileEntityFluidInventory)tile, pos, hand);
+        if(! world.isRemote) {
+            if(tile instanceof TileEntityFluidInventory) {
+                onTileActivated(world, player, (TileEntityFluidInventory) tile, pos, hand);
 
-                if (FluidUtilities.tryFluidInsert(tile, null, player, hand))
-                {
+                if(FluidUtilities.tryFluidInsert(tile, null, player, hand)) {
                     world.playSound(null, pos, SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.BLOCKS, 1.0f, 1.0f);
                     return ActionResultType.SUCCESS;
                 }
-                else if (FluidUtilities.tryFluidExtract(tile, null, player, hand))
-                {
-                    world.playSound(null, pos, SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.BLOCKS, 1.0f, 1.0f);
-                    return ActionResultType.SUCCESS;
-                }
+                else
+                    if(FluidUtilities.tryFluidExtract(tile, null, player, hand)) {
+                        world.playSound(null, pos, SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.BLOCKS, 1.0f, 1.0f);
+                        return ActionResultType.SUCCESS;
+                    }
             }
         }
 
         return ActionResultType.SUCCESS;
     }
 
-    protected void onTileActivated(World world, PlayerEntity player, TileEntityFluidInventory tile, BlockPos pos, Hand hand)
-    {
+    protected void onTileActivated(World world, PlayerEntity player, TileEntityFluidInventory tile, BlockPos pos, Hand hand) {
 
     }
 
@@ -155,24 +148,22 @@ public abstract class BlockTank<T extends TileEntityFluidInventory> extends Bloc
 //    }
 
     @Override
-    public boolean hasTileEntity(BlockState state)
-    {
+    public boolean hasTileEntity(BlockState state) {
+
         return true;
     }
 
     @Override
-    public int getLightValue(BlockState state, IBlockReader world, BlockPos pos)
-    {
+    public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) {
+
         int ambientLight = 0;
         TileEntityFluidInventory tile = (TileEntityFluidInventory) world.getTileEntity(pos);
-        if (tile != null)
-        {
+        if(tile != null) {
             FluidStack fluid = tile.getFluid();
-            if (!fluid.isEmpty())
-            {
+            if(! fluid.isEmpty()) {
                 FluidAttributes fluidAttributes = fluid.getFluid().getAttributes();
                 ambientLight = Math.max(ambientLight, world instanceof IBlockDisplayReader ? fluidAttributes.getLuminosity((IBlockDisplayReader) world, pos)
-                        : fluidAttributes.getLuminosity(fluid));
+                                                                                           : fluidAttributes.getLuminosity(fluid));
             }
         }
         return ambientLight;

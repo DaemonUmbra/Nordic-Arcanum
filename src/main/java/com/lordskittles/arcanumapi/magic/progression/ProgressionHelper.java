@@ -19,46 +19,41 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class ProgressionHelper
-{
+public class ProgressionHelper {
+
     private static PlayerProgress clientProgress = new InvalidPlayerProgress();
     private static Map<UUID, PlayerProgress> playerProgressServer = new HashMap<>();
 
     @Nonnull
-    public static PlayerProgress getProgress(@Nullable PlayerEntity player, LogicalSide side)
-    {
-        if (side.isClient())
-        {
+    public static PlayerProgress getProgress(@Nullable PlayerEntity player, LogicalSide side) {
+
+        if(side.isClient()) {
             return clientProgress;
         }
-        else if (player instanceof ServerPlayerEntity)
-        {
-            return getProgressServer((ServerPlayerEntity)player);
+        else if(player instanceof ServerPlayerEntity) {
+            return getProgressServer((ServerPlayerEntity) player);
         }
-        else
-        {
+        else {
             return new PlayerProgress();
         }
     }
 
     @Nonnull
-    private static PlayerProgress getProgressServer(ServerPlayerEntity player)
-    {
+    private static PlayerProgress getProgressServer(ServerPlayerEntity player) {
+
         return getProgress(player.getUniqueID());
     }
 
     @Nonnull
-    private static PlayerProgress getProgress(UUID uuid)
-    {
+    private static PlayerProgress getProgress(UUID uuid) {
+
         PlayerProgress progress = playerProgressServer.get(uuid);
-        if (progress == null)
-        {
+        if(progress == null) {
             loadPlayerProgress(uuid);
             progress = playerProgressServer.get(uuid);
         }
 
-        if (progress == null)
-        {
+        if(progress == null) {
             // THIS SHOULD NEVER HAPPEN WTF
             progress = new PlayerProgress();
         }
@@ -66,42 +61,36 @@ public class ProgressionHelper
         return progress;
     }
 
-    private static void loadPlayerProgress(UUID uuid)
-    {
+    private static void loadPlayerProgress(UUID uuid) {
+
         File playerFile = getPlayerFile(uuid);
-        try
-        {
+        try {
             loadUnsafe(uuid, playerFile);
         }
-        catch (Exception e)
-        {
+        catch(Exception e) {
             ArcanumAPI.LOG.warn("Unable to load progress from default progress file. Attempting loading backup.");
             ArcanumAPI.LOG.warn("Erroneous file: " + playerFile.getName());
             e.printStackTrace();
 
             playerFile = getPlayerBackupFile(uuid);
-            try
-            {
+            try {
                 loadUnsafe(uuid, playerFile);
                 Files.copy(playerFile, getPlayerFile(uuid));
             }
-            catch (Exception e1)
-            {
+            catch(Exception e1) {
                 ArcanumAPI.LOG.warn("Unable to load progress from backup progress file. Copying relevant files to error files.");
                 ArcanumAPI.LOG.warn("Erroneous file: " + playerFile.getName());
                 e1.printStackTrace();
 
                 File plOriginal = getPlayerFile(uuid);
                 File plBackup = getPlayerBackupFile(uuid);
-                try
-                {
+                try {
                     Files.copy(plOriginal, new File(plOriginal.getParent(), plOriginal.getName() + ".lerror"));
-                    Files.copy(plBackup,   new File(plBackup.getParent(),     plBackup.getName() + ".lerror"));
+                    Files.copy(plBackup, new File(plBackup.getParent(), plBackup.getName() + ".lerror"));
                     ArcanumAPI.LOG.warn("Copied progression files to error files. In case you would like to try me (HellFirePvP) to maybe see what i can do about maybe recovering the files,");
                     ArcanumAPI.LOG.warn("send them over to me at the issue tracker https://github.com/HellFirePvP/AstralSorcery/issues - 90% that i won't be able to do anything, but reporting it would still be great.");
                 }
-                catch (IOException e2)
-                {
+                catch(IOException e2) {
                     ArcanumAPI.LOG.warn("Unable to copy files to error-files.");
                     ArcanumAPI.LOG.warn("I've had enough. I can't even access or open the files apparently. I'm giving up.");
                     e2.printStackTrace();
@@ -114,85 +103,76 @@ public class ProgressionHelper
         }
     }
 
-    private static void loadUnsafe(UUID uuid, File playerFile) throws Exception
-    {
+    private static void loadUnsafe(UUID uuid, File playerFile) throws Exception {
+
         CompoundNBT nbt = CompressedStreamTools.read(playerFile);
         loadUnsafeFromNBT(uuid, nbt);
     }
 
-    private static void loadUnsafeFromNBT(UUID uuid, @Nullable CompoundNBT nbt)
-    {
+    private static void loadUnsafeFromNBT(UUID uuid, @Nullable CompoundNBT nbt) {
+
         PlayerProgress progress = new PlayerProgress();
-        if (nbt != null && !nbt.isEmpty())
-        {
+        if(nbt != null && ! nbt.isEmpty()) {
             progress.load(nbt);
         }
 
         playerProgressServer.put(uuid, progress);
     }
 
-    public static void savePlayerProgress(PlayerEntity player)
-    {
-        if (player instanceof ServerPlayerEntity)
-        {
+    public static void savePlayerProgress(PlayerEntity player) {
+
+        if(player instanceof ServerPlayerEntity) {
             savePlayerProgress(player.getUniqueID(), false);
         }
     }
 
-    private static void savePlayerProgress(UUID uuid, boolean force)
-    {
-        if (playerProgressServer.get(uuid) == null)
+    private static void savePlayerProgress(UUID uuid, boolean force) {
+
+        if(playerProgressServer.get(uuid) == null)
             return;
 
         PlayerProgress progress = playerProgressServer.get(uuid);
-        if (force)
-        {
+        if(force) {
             ProgressionIOThread.saveNow(uuid, progress);
         }
-        else
-        {
+        else {
             ProgressionIOThread.saveProgress(uuid, progress);
         }
     }
 
-    public static File getPlayerFile(UUID uuid)
-    {
+    public static File getPlayerFile(UUID uuid) {
+
         File file = new File(getPlayerDirectory(), uuid.toString() + ".arcanum");
-        if (!file.exists())
-        {
-            try
-            {
+        if(! file.exists()) {
+            try {
                 CompressedStreamTools.write(new CompoundNBT(), file);
             }
-            catch (IOException ignored) {}
+            catch(IOException ignored) {}
         }
 
         return file;
     }
 
-    public static File getPlayerBackupFile(UUID uuid)
-    {
+    public static File getPlayerBackupFile(UUID uuid) {
+
         File file = new File(getPlayerDirectory(), uuid.toString() + ".arcanumbackup");
-        if (!file.exists())
-        {
-            try
-            {
+        if(! file.exists()) {
+            try {
                 CompressedStreamTools.write(new CompoundNBT(), file);
             }
-            catch (IOException ignored) {} //Will be created later anyway... just as fail-safe.
+            catch(IOException ignored) {} //Will be created later anyway... just as fail-safe.
         }
         return file;
     }
 
-    private static File getPlayerDirectory()
-    {
+    private static File getPlayerDirectory() {
+
         MinecraftServer server = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
-        if (server == null)
+        if(server == null)
             return null;
 
         File dir = new File(server.func_240776_a_(new FolderName(ArcanumAPI.MODID)).toUri());
-        if (!dir.exists())
-        {
+        if(! dir.exists()) {
             dir.mkdirs();
         }
 

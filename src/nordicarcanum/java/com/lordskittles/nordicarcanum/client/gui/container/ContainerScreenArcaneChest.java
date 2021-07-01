@@ -10,10 +10,10 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class ContainerScreenArcaneChest extends ContainerScreenBase<ContainerArcaneChest>
-{
-    public ContainerScreenArcaneChest(ContainerArcaneChest container, PlayerInventory inventory, ITextComponent title)
-    {
+public class ContainerScreenArcaneChest extends ContainerScreenBase<ContainerArcaneChest> {
+
+    public ContainerScreenArcaneChest(ContainerArcaneChest container, PlayerInventory inventory, ITextComponent title) {
+
         super(NordicArcanum.MODID, NordicNames.ARCANE_CHEST, container, inventory, title);
 
         setTextureRect(0, 0, 176, 222);

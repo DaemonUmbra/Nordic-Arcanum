@@ -12,21 +12,20 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public interface INordicFluidTank extends IFluidTank, INBTSerializable<CompoundNBT>
-{
+public interface INordicFluidTank extends IFluidTank, INBTSerializable<CompoundNBT> {
+
     void setStack(FluidStack stack);
 
     @Override
-    default int fill(FluidStack stack, FluidAction action)
-    {
+    default int fill(FluidStack stack, FluidAction action) {
+
         return stack.getAmount() - insert(stack).getAmount();
     }
 
     @Override
-    default FluidStack drain(FluidStack stack, FluidAction action)
-    {
-        if (!isEmpty() && getFluid().isFluidEqual(stack))
-        {
+    default FluidStack drain(FluidStack stack, FluidAction action) {
+
+        if(! isEmpty() && getFluid().isFluidEqual(stack)) {
             return extract(stack.getAmount());
         }
 
@@ -34,32 +33,28 @@ public interface INordicFluidTank extends IFluidTank, INBTSerializable<CompoundN
     }
 
     @Override
-    default FluidStack drain(int amount, FluidAction action)
-    {
+    default FluidStack drain(int amount, FluidAction action) {
+
         return extract(amount);
     }
 
-    default FluidStack insert(FluidStack stack)
-    {
-        if (stack.isEmpty() || !isFluidValid(stack))
+    default FluidStack insert(FluidStack stack) {
+
+        if(stack.isEmpty() || ! isFluidValid(stack))
             return stack;
 
         int needed = getNeeded();
-        if (needed <= 0)
-        {
+        if(needed <= 0) {
             return stack;
         }
 
         boolean sameType = false;
-        if (isEmpty() || (sameType = stack.isFluidEqual(getFluid())))
-        {
+        if(isEmpty() || (sameType = stack.isFluidEqual(getFluid()))) {
             int toAdd = Math.min(stack.getAmount(), needed);
-            if (sameType)
-            {
+            if(sameType) {
                 growStack(toAdd);
             }
-            else
-            {
+            else {
                 setStack(new FluidStack(stack, toAdd));
             }
 
@@ -69,74 +64,68 @@ public interface INordicFluidTank extends IFluidTank, INBTSerializable<CompoundN
         return stack;
     }
 
-    default FluidStack extract(int amount)
-    {
-        if (isEmpty() || amount < 1)
-        {
+    default FluidStack extract(int amount) {
+
+        if(isEmpty() || amount < 1) {
             return FluidStack.EMPTY;
         }
 
         FluidStack ret = new FluidStack(getFluid(), Math.min(getFluidAmount(), amount));
-        if (!ret.isEmpty())
-        {
+        if(! ret.isEmpty()) {
             shrinkStack(ret.getAmount());
         }
 
         return ret;
     }
 
-    default int growStack(int amount)
-    {
+    default int growStack(int amount) {
+
         int current = getFluidAmount();
-        if (amount > 0)
-        {
+        if(amount > 0) {
             amount = Math.min(amount, getNeeded());
         }
 
         int newSize = setStackSize(current + amount);
-        return  newSize - current;
+        return newSize - current;
     }
 
-    default int shrinkStack(int amount)
-    {
-        return -growStack(amount);
+    default int shrinkStack(int amount) {
+
+        return - growStack(amount);
     }
 
-    default boolean isEmpty()
-    {
+    default boolean isEmpty() {
+
         return getFluid().isEmpty();
     }
 
-    default void setEmpty()
-    {
+    default void setEmpty() {
+
         setStack(FluidStack.EMPTY);
     }
 
-    default boolean isFluidEqual(FluidStack other)
-    {
+    default boolean isFluidEqual(FluidStack other) {
+
         return getFluid().isFluidEqual(other);
     }
 
-    default int setStackSize(int amount)
-    {
-        if (isEmpty())
-        {
+    default int setStackSize(int amount) {
+
+        if(isEmpty()) {
             return 0;
         }
-        else if (amount <= 0)
-        {
-            setEmpty();
-            return 0;
-        }
+        else
+            if(amount <= 0) {
+                setEmpty();
+                return 0;
+            }
 
         int maxStackSize = getCapacity();
-        if (amount > maxStackSize)
-        {
+        if(amount > maxStackSize) {
             amount = maxStackSize;
         }
 
-        if (getFluidAmount() == amount)
-        {
+        if(getFluidAmount() == amount) {
             return amount;
         }
 
@@ -144,17 +133,16 @@ public interface INordicFluidTank extends IFluidTank, INBTSerializable<CompoundN
         return amount;
     }
 
-    default int getNeeded()
-    {
+    default int getNeeded() {
+
         return Math.max(0, getCapacity() - getFluidAmount());
     }
 
     @Override
-    default CompoundNBT serializeNBT()
-    {
+    default CompoundNBT serializeNBT() {
+
         CompoundNBT nbt = new CompoundNBT();
-        if (!isEmpty())
-        {
+        if(! isEmpty()) {
             nbt.put(NBTConstants.STORED, getFluid().writeToNBT(new CompoundNBT()));
         }
 

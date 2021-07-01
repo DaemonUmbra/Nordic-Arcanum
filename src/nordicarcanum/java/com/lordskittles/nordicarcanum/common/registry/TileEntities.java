@@ -9,8 +9,8 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public class TileEntities
-{
+public class TileEntities {
+
     public static final DeferredRegister<TileEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, NordicArcanum.MODID);
 
     public static final RegistryObject<TileEntityType<TileEntityStaffWorkbench>> staff_workbench = TILE_ENTITIES.register(NordicNames.STAFF_WORKBENCH, () -> TileEntityType.Builder.create(TileEntityStaffWorkbench::new, Blocks.staff_workbench.get()).build(null));

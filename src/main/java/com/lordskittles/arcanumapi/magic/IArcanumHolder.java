@@ -1,7 +1,8 @@
 package com.lordskittles.arcanumapi.magic;
 
-public interface IArcanumHolder extends IArcanumUser
-{
-    public float getCapacity();
-    public float getCurrentArcanum();
+public interface IArcanumHolder extends IArcanumUser {
+
+    float getCapacity();
+
+    float getCurrentArcanum();
 }

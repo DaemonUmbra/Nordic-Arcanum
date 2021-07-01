@@ -4,8 +4,8 @@ import com.lordskittles.nordicarcanum.common.item.crafting.BindingMaterial;
 import com.lordskittles.nordicarcanum.common.item.crafting.RodMaterial;
 import net.minecraft.util.ResourceLocation;
 
-public class NordicResourceLocations
-{
+public class NordicResourceLocations {
+
     public static final String TILE_ENTITY_TEXTURE_LOC = "textures/blocks/entities/";
     public static final String ITEM_LOC = "textures/items/";
     public static final String GUI_LOC = "textures/gui/";
@@ -29,10 +29,12 @@ public class NordicResourceLocations
 
     // Staff Textures
     public static ResourceLocation getBindingTexture(BindingMaterial material, int value) {
+
         return NordicArcanum.RL(BINDING_LOC + material.name + "_" + value + ".png");
     }
 
     public static ResourceLocation getRodTexture(RodMaterial material, int value) {
+
         return NordicArcanum.RL(ROD_LOC + material.name + "_" + value + ".png");
     }
 

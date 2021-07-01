@@ -5,54 +5,54 @@ import com.electronwill.nightconfig.core.io.WritingMode;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.loading.FMLPaths;
 
-public class NordicConfig
-{
+public class NordicConfig {
+
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
     public static ForgeConfigSpec SPEC;
 
-    static
-    {
+    static {
         initializeConfig();
     }
 
-    private static void initializeConfig()
-    {
+    private static void initializeConfig() {
+
         initGeneral();
         initWorldGen();
 
         SPEC = BUILDER.build();
     }
 
-    public static void load()
-    {
+    public static void load() {
+
         final CommentedFileConfig configData = CommentedFileConfig.builder(FMLPaths.CONFIGDIR.get().resolve(NordicArcanum.MODID + "-common.toml"))
                 .sync().autosave().writingMode(WritingMode.REPLACE).build();
 
         configData.load();
     }
 
-    private static void startGroup(String groupName)
-    {
+    private static void startGroup(String groupName) {
+
         BUILDER.comment(groupName).push(groupName.toLowerCase().replace(' ', '_'));
     }
 
-    private static void endGroup()
-    {
+    private static void endGroup() {
+
         BUILDER.pop();
     }
 
     // region General
     public static ForgeConfigSpec.BooleanValue logPackets;
 
-    private static void initGeneral()
-    {
+    private static void initGeneral() {
+
         startGroup("General");
         {
             logPackets = BUILDER.comment("Should packets be logged to the console?").define("logPackets", true);
         }
         endGroup();
     }
+
     // endregion
     // region World
     public static ForgeConfigSpec.BooleanValue genArcaneDust;
@@ -82,8 +82,8 @@ public class NordicConfig
     public static ForgeConfigSpec.BooleanValue genArcanumLakes;
     public static ForgeConfigSpec.IntValue arcanumLakeChance;
 
-    private static void initWorldGen()
-    {
+    private static void initWorldGen() {
+
         startGroup("World Generation");
         {
             startGroup("Core");

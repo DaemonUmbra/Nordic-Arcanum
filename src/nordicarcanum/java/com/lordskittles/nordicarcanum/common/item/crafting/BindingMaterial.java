@@ -2,8 +2,7 @@ package com.lordskittles.nordicarcanum.common.item.crafting;
 
 import com.lordskittles.nordicarcanum.core.NordicNames;
 
-public enum BindingMaterial
-{
+public enum BindingMaterial {
     Iron(NordicNames.IRON),
     Gold(NordicNames.GOLD),
     Bismuth(NordicNames.BISMUTH),
@@ -15,8 +14,8 @@ public enum BindingMaterial
 
     public String name;
 
-    BindingMaterial(String name)
-    {
+    BindingMaterial(String name) {
+
         this.name = name;
     }
 }

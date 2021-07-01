@@ -1,14 +1,14 @@
 package com.lordskittles.nordicarcanum.common.fluid;
 
+import com.lordskittles.nordicarcanum.common.registry.Blocks;
 import com.lordskittles.nordicarcanum.common.registry.Fluids;
 import com.lordskittles.nordicarcanum.common.registry.Items;
-import com.lordskittles.nordicarcanum.common.registry.Blocks;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 
-public abstract class FluidArcanum
-{
+public abstract class FluidArcanum {
+
     private static final FluidAttributes.Builder ATTR = FluidAttributes.builder(
             NordicArcanum.RL("blocks/liquid_arcanum_still"),
             NordicArcanum.RL("blocks/liquid_arcanum_flowing")
@@ -20,18 +20,18 @@ public abstract class FluidArcanum
             ATTR
     ).block(Blocks.liquid_arcanum).bucket(Items.liquid_arcanum_bucket);
 
-    public static class Flowing extends ForgeFlowingFluid.Flowing
-    {
-        public Flowing()
-        {
+    public static class Flowing extends ForgeFlowingFluid.Flowing {
+
+        public Flowing() {
+
             super(PROPERTIES);
         }
     }
 
-    public static class Source extends ForgeFlowingFluid.Source
-    {
-        public Source()
-        {
+    public static class Source extends ForgeFlowingFluid.Source {
+
+        public Source() {
+
             super(PROPERTIES);
         }
     }

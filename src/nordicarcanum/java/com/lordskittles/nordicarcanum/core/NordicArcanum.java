@@ -4,21 +4,20 @@ import com.lordskittles.nordicarcanum.common.advancements.Advancements;
 import com.lordskittles.nordicarcanum.common.network.PacketHandler;
 import com.lordskittles.nordicarcanum.common.registry.*;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-
 @Mod(NordicArcanum.MODID)
 @Mod.EventBusSubscriber(modid = NordicArcanum.MODID, bus = Bus.MOD)
-public class NordicArcanum
-{
+public class NordicArcanum {
+
     public static final Logger LOG = LogManager.getLogger();
     public static final String MODID = "nordicarcanum";
     public static NordicArcanum INSTANCE;
@@ -26,13 +25,13 @@ public class NordicArcanum
 
     public final Version version;
 
-    public NordicArcanum() 
-    {
-    	INSTANCE = this;
+    public NordicArcanum() {
 
-    	version = new Version(ModLoadingContext.get().getActiveContainer().getModInfo().getVersion());
+        INSTANCE = this;
 
-    	final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        version = new Version(ModLoadingContext.get().getActiveContainer().getModInfo().getVersion());
+
+        final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, NordicConfig.SPEC);
         NordicConfig.load();
@@ -60,8 +59,8 @@ public class NordicArcanum
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    public static ResourceLocation RL(String location)
-    {
+    public static ResourceLocation RL(String location) {
+
         return new ResourceLocation(MODID, location);
     }
 }

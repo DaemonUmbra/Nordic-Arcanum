@@ -23,51 +23,49 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemBinding extends ItemMod
-{
+public class ItemBinding extends ItemMod {
+
     private BindingShape shape = BindingShape.None;
     private final BindingMaterial material;
 
-    public ItemBinding(BindingMaterial material)
-    {
+    public ItemBinding(BindingMaterial material) {
+
         super(new Item.Properties().group(NordicItemGroup.INSTANCE).setISTER(() -> ItemStackBindingRender::new));
 
         this.material = material;
     }
 
-    public BindingShape getShape()
-    {
+    public BindingShape getShape() {
+
         return this.shape;
     }
 
-    public void setShape(BindingShape shape)
-    {
+    public void setShape(BindingShape shape) {
+
         this.shape = shape;
     }
 
-    public BindingMaterial getMaterial()
-    {
+    public BindingMaterial getMaterial() {
+
         return this.material;
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag)
-    {
+    public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
+
         BindingShape shape = getShapeFromNBT(stack);
 
         tooltip.add(new StringTextComponent(TextFormatting.BLUE + I18n.format(NordicArcanum.MODID + ".cast." + shape.title)));
     }
 
     @Override
-    public boolean updateItemStackNBT(CompoundNBT nbt)
-    {
+    public boolean updateItemStackNBT(CompoundNBT nbt) {
+
         CompoundNBT base = NBTUtilities.getPersistentData(NordicArcanum.MODID, nbt);
-        if (this.shape == BindingShape.None)
-        {
+        if(this.shape == BindingShape.None) {
             BindingShape shape = BindingShape.get(base.getInt(NBTConstants.BINDING_SHAPE_KEY));
-            if (shape != BindingShape.None)
-            {
+            if(shape != BindingShape.None) {
                 setShape(shape);
                 return true;
             }
@@ -76,12 +74,11 @@ public class ItemBinding extends ItemMod
         return false;
     }
 
-    private BindingShape getShapeFromNBT(ItemStack stack)
-    {
+    private BindingShape getShapeFromNBT(ItemStack stack) {
+
         CompoundNBT nbt = stack.getTag();
 
-        if (nbt == null)
-        {
+        if(nbt == null) {
             nbt = new CompoundNBT();
         }
 

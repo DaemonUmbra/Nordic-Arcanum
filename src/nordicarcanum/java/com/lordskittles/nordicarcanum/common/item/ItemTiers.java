@@ -8,8 +8,7 @@ import net.minecraft.util.LazyValue;
 
 import java.util.function.Supplier;
 
-public enum ItemTiers implements IItemTier
-{
+public enum ItemTiers implements IItemTier {
     NORSE(2, 750, 6.0F, 2.5F, 10, () -> {
         return Ingredient.fromItems(Items.norse_ingot.get());
     }),
@@ -31,6 +30,7 @@ public enum ItemTiers implements IItemTier
     private final LazyValue<Ingredient> repairMaterial;
 
     private ItemTiers(int harvestLevelIn, int maxUsesIn, float efficiencyIn, float attackDamageIn, int enchantabilityIn, Supplier<Ingredient> repairMaterialIn) {
+
         this.harvestLevel = harvestLevelIn;
         this.maxUses = maxUsesIn;
         this.efficiency = efficiencyIn;
@@ -40,38 +40,38 @@ public enum ItemTiers implements IItemTier
     }
 
     @Override
-    public int getMaxUses()
-    {
+    public int getMaxUses() {
+
         return this.maxUses;
     }
 
     @Override
-    public float getEfficiency()
-    {
+    public float getEfficiency() {
+
         return this.efficiency;
     }
 
     @Override
-    public float getAttackDamage()
-    {
+    public float getAttackDamage() {
+
         return this.attackDamage;
     }
 
     @Override
-    public int getHarvestLevel()
-    {
+    public int getHarvestLevel() {
+
         return this.harvestLevel;
     }
 
     @Override
-    public int getEnchantability()
-    {
+    public int getEnchantability() {
+
         return this.enchantability;
     }
 
     @Override
-    public Ingredient getRepairMaterial()
-    {
+    public Ingredient getRepairMaterial() {
+
         return this.repairMaterial.getValue();
     }
 }

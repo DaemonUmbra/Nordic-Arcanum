@@ -12,39 +12,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Mod.EventBusSubscriber(modid = ArcanumAPI.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class ServerEvents
-{
+public class ServerEvents {
+
     private static List<IServerLifecycleListener> lifecycleListeners = new ArrayList<>();
 
-    public static void registerListener(IServerLifecycleListener listener)
-    {
-        if (!lifecycleListeners.contains(listener))
-        {
+    public static void registerListener(IServerLifecycleListener listener) {
+
+        if(! lifecycleListeners.contains(listener)) {
             lifecycleListeners.add(listener);
         }
     }
 
     @SubscribeEvent
-    public static void onServerStart(FMLServerStartedEvent event)
-    {
-        for (IServerLifecycleListener listener : lifecycleListeners)
-        {
+    public static void onServerStart(FMLServerStartedEvent event) {
+
+        for(IServerLifecycleListener listener : lifecycleListeners) {
             listener.onServerStart();
         }
     }
 
     @SubscribeEvent
-    public static void onServerStop(FMLServerStoppedEvent event)
-    {
-        for (IServerLifecycleListener listener : lifecycleListeners)
-        {
+    public static void onServerStop(FMLServerStoppedEvent event) {
+
+        for(IServerLifecycleListener listener : lifecycleListeners) {
             listener.onServerStop();
         }
     }
 
     @SubscribeEvent
-    public static void onServerStarting(FMLServerStartingEvent event)
-    {
+    public static void onServerStarting(FMLServerStartingEvent event) {
+
         event.getServer().getCommandManager().getDispatcher().register(Commands.register());
     }
 }

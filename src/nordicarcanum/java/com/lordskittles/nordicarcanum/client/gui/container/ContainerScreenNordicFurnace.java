@@ -8,24 +8,23 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
 
-public class ContainerScreenNordicFurnace extends ContainerScreenBase<ContainerNordicFurnace>
-{
-    public ContainerScreenNordicFurnace(ContainerNordicFurnace container, PlayerInventory inventory, ITextComponent textComponent)
-    {
+public class ContainerScreenNordicFurnace extends ContainerScreenBase<ContainerNordicFurnace> {
+
+    public ContainerScreenNordicFurnace(ContainerNordicFurnace container, PlayerInventory inventory, ITextComponent textComponent) {
+
         super(NordicArcanum.MODID, NordicNames.NORDIC_FURNACE, container, inventory, textComponent);
 
         setTextureRect(0, 0, 176, 166);
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack stack, float partialTicks, int mouseX, int mouseY)
-    {
+    protected void drawGuiContainerBackgroundLayer(MatrixStack stack, float partialTicks, int mouseX, int mouseY) {
+
         super.drawGuiContainerBackgroundLayer(stack, partialTicks, mouseX, mouseY);
         int left = this.guiLeft;
         int top = this.guiTop;
 
-        if (this.container.isBurning())
-        {
+        if(this.container.isBurning()) {
             int burnTime = this.container.getBurnLeftScaled();
             this.blit(stack, left + 38, top + 35 + 12 - burnTime, 176, 12 - burnTime, 14, burnTime + 1);
         }

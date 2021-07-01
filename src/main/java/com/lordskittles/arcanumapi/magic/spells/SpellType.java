@@ -1,7 +1,6 @@
 package com.lordskittles.arcanumapi.magic.spells;
 
-public enum SpellType
-{
+public enum SpellType {
     Projectile("Projectile", 0),
     Touch("Touch", 1),
     Self("Self", 2),
@@ -9,19 +8,20 @@ public enum SpellType
 
     private String name;
     private int id;
-    private SpellType(String name, int id)
-    {
+
+    SpellType(String name, int id) {
+
         this.name = name;
         this.id = id;
     }
 
-    public String getName()
-    {
+    public String getName() {
+
         return this.name;
     }
 
-    public int getId()
-    {
+    public int getId() {
+
         return this.id;
     }
 }

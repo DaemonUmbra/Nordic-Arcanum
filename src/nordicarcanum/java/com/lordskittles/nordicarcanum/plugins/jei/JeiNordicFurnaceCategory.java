@@ -19,15 +19,15 @@ import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
 
-public class JeiNordicFurnaceCategory implements IRecipeCategory<NordicFurnaceRecipe>
-{
+public class JeiNordicFurnaceCategory implements IRecipeCategory<NordicFurnaceRecipe> {
+
     private final String localizedName;
     private final IDrawable background;
     private final IDrawable icon;
     private final IDrawableAnimated progressBar;
 
-    JeiNordicFurnaceCategory()
-    {
+    JeiNordicFurnaceCategory() {
+
         localizedName = I18n.format(Blocks.nordic_furnace.get().getTranslationKey());
         background = NordicArcanumJeiPlugin.jeiHelpers.getGuiHelper().createDrawable(NordicTextures.JEI_NORDIC_FURNACE, 0, 0, 176, 97);
         icon = NordicArcanumJeiPlugin.jeiHelpers.getGuiHelper().createDrawableIngredient(new ItemStack(Blocks.nordic_furnace.get()));
@@ -37,45 +37,45 @@ public class JeiNordicFurnaceCategory implements IRecipeCategory<NordicFurnaceRe
     }
 
     @Override
-    public ResourceLocation getUid()
-    {
+    public ResourceLocation getUid() {
+
         return NordicCategoryID.NORDIC_FURNACE;
     }
 
     @Override
-    public Class<? extends NordicFurnaceRecipe> getRecipeClass()
-    {
+    public Class<? extends NordicFurnaceRecipe> getRecipeClass() {
+
         return NordicFurnaceRecipe.class;
     }
 
     @Override
-    public String getTitle()
-    {
+    public String getTitle() {
+
         return localizedName;
     }
 
     @Override
-    public IDrawable getBackground()
-    {
+    public IDrawable getBackground() {
+
         return background;
     }
 
     @Override
-    public IDrawable getIcon()
-    {
+    public IDrawable getIcon() {
+
         return icon;
     }
 
     @Override
-    public void setIngredients(NordicFurnaceRecipe recipe, IIngredients ingredients)
-    {
+    public void setIngredients(NordicFurnaceRecipe recipe, IIngredients ingredients) {
+
         ingredients.setInputIngredients(recipe.getIngredients());
         ingredients.setOutputs(VanillaTypes.ITEM, ImmutableList.of(recipe.getRecipeOutput()));
     }
 
     @Override
-    public void setRecipe(IRecipeLayout recipeLayout, NordicFurnaceRecipe recipe, IIngredients ingredients)
-    {
+    public void setRecipe(IRecipeLayout recipeLayout, NordicFurnaceRecipe recipe, IIngredients ingredients) {
+
         IGuiItemStackGroup guiStacks = recipeLayout.getItemStacks();
         List<List<ItemStack>> inputs = ingredients.getInputs(VanillaTypes.ITEM);
         List<List<ItemStack>> outputs = ingredients.getOutputs(VanillaTypes.ITEM);
@@ -91,8 +91,8 @@ public class JeiNordicFurnaceCategory implements IRecipeCategory<NordicFurnaceRe
     }
 
     @Override
-    public void draw(NordicFurnaceRecipe recipe, MatrixStack stack, double mouseX, double mouseY)
-    {
+    public void draw(NordicFurnaceRecipe recipe, MatrixStack stack, double mouseX, double mouseY) {
+
         progressBar.draw(stack, 81, 25);
     }
 }

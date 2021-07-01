@@ -10,35 +10,33 @@ import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class PacketFluidUpdate extends PacketBase
-{
+public class PacketFluidUpdate extends PacketBase {
+
     private final BlockPos pos;
     private final CompoundNBT updateTag;
     private final float scale;
 
-    public PacketFluidUpdate(TileEntityFluidInventory tile)
-    {
+    public PacketFluidUpdate(TileEntityFluidInventory tile) {
+
         this(tile.getPos(), tile.getUpdateTag(), tile.prevScale);
     }
 
-    private PacketFluidUpdate(BlockPos pos, CompoundNBT updateTag, float scale)
-    {
+    private PacketFluidUpdate(BlockPos pos, CompoundNBT updateTag, float scale) {
+
         this.pos = pos;
         this.updateTag = updateTag;
         this.scale = scale;
     }
 
-    public static void handle(PacketFluidUpdate message, Supplier<NetworkEvent.Context> context)
-    {
+    public static void handle(PacketFluidUpdate message, Supplier<NetworkEvent.Context> context) {
+
         context.get().enqueueWork(() ->
         {
             TileEntityFluidInventory tile = ClientUtilities.getTileEntity(TileEntityFluidInventory.class, message.pos);
-            if (tile == null)
-            {
+            if(tile == null) {
                 ArcanumAPI.LOG.info("Update tile packet received for position: {} in world, but no valid tile was found.", message.pos);
             }
-            else
-            {
+            else {
                 tile.handleScaleUpdate(message.updateTag, message.scale);
             }
         });
@@ -46,15 +44,15 @@ public class PacketFluidUpdate extends PacketBase
         context.get().setPacketHandled(true);
     }
 
-    public static void encode(PacketFluidUpdate packet, PacketBuffer buffer)
-    {
+    public static void encode(PacketFluidUpdate packet, PacketBuffer buffer) {
+
         buffer.writeBlockPos(packet.pos);
         buffer.writeCompoundTag(packet.updateTag);
         buffer.writeFloat(packet.scale);
     }
 
-    public static PacketFluidUpdate decode(PacketBuffer buffer)
-    {
+    public static PacketFluidUpdate decode(PacketBuffer buffer) {
+
         return new PacketFluidUpdate(buffer.readBlockPos(), buffer.readCompoundTag(), buffer.readFloat());
     }
 }

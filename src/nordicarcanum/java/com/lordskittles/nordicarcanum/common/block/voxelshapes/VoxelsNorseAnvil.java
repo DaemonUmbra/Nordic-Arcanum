@@ -8,8 +8,8 @@ import net.minecraft.util.math.shapes.VoxelShapes;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class VoxelsNorseAnvil
-{
+public class VoxelsNorseAnvil {
+
     public static final Optional<VoxelShape> NORTH_SOUTH = Stream.of(
             Block.makeCuboidShape(2.4705882352941178, 0, 3.5294117647058822, 14.470588235294118, 4, 11.529411764705882),
             Block.makeCuboidShape(4.470588235294118, 4, 4.529411764705882, 12.470588235294118, 5, 10.529411764705882),
@@ -28,7 +28,7 @@ public class VoxelsNorseAnvil
             Block.makeCuboidShape(12.470588235294118, 11, 5.529411764705882, 13.470588235294118, 16, 9.529411764705882),
             Block.makeCuboidShape(13.470588235294118, 11.75, 6.029411764705882, 15.470588235294118, 15.75, 9.029411764705882),
             Block.makeCuboidShape(15.470588235294118, 13.5, 6.529411764705882, 16.470588235294116, 15.5, 8.529411764705882)
-            ).reduce((v1, v2) -> {return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);});
+    ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR));
 
     public static final Optional<VoxelShape> EAST_WEST = Stream.of(
             Block.makeCuboidShape(4, 0, 2, 12, 4, 14),
@@ -48,5 +48,5 @@ public class VoxelsNorseAnvil
             Block.makeCuboidShape(6, 11, 12, 10, 16, 13),
             Block.makeCuboidShape(6.5, 11.75, 13, 9.5, 15.75, 15),
             Block.makeCuboidShape(7, 13.5, 15, 9, 15.5, 15.999999999999998)
-            ).reduce((v1, v2) -> {return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);});
+    ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR));
 }

@@ -8,8 +8,8 @@ import net.minecraft.util.math.shapes.VoxelShapes;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class VoxelsSigilPodium
-{
+public class VoxelsSigilPodium {
+
     public static Optional<VoxelShape> SHAPE = Stream.of(
             Block.makeCuboidShape(0, 0, 0, 16, 3, 16),
             Block.makeCuboidShape(2, 3, 2, 14, 9, 14),
@@ -30,5 +30,5 @@ public class VoxelsSigilPodium
             Block.makeCuboidShape(1, 3, 1, 2, 9, 2),
             Block.makeCuboidShape(14, 3, 1, 15, 9, 2),
             Block.makeCuboidShape(14, 3, 14, 15, 9, 15)
-            ).reduce((v1, v2) -> {return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);});
+    ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR));
 }

@@ -16,22 +16,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class DynamicMultiblockDetector<M extends IMultiblock, E extends Enum>
-{
-    private class MultiblockStartInfo
-    {
+public class DynamicMultiblockDetector<M extends IMultiblock, E extends Enum> {
+
+    private class MultiblockStartInfo {
+
         public PlacementSettings placement;
         public BlockPos position;
 
-        public MultiblockStartInfo(PlacementSettings settings, BlockPos position)
-        {
+        public MultiblockStartInfo(PlacementSettings settings, BlockPos position) {
+
             this.placement = settings;
             this.position = position;
         }
 
         @Override
-        public String toString()
-        {
+        public String toString() {
+
             return "Pos: " + position.toString() + " Placement: " + placement.getMirror().toString() + " - " + placement.getRotation().toString();
         }
     }
@@ -41,16 +41,16 @@ public class DynamicMultiblockDetector<M extends IMultiblock, E extends Enum>
     private final HashMap<E, Block[]> structureBlocks = new HashMap<>();
     private final IMultiblock<E> multiblock;
 
-    public DynamicMultiblockDetector(IMultiblock multiblock)
-    {
+    public DynamicMultiblockDetector(IMultiblock multiblock) {
+
         this.multiblock = multiblock;
     }
 
-    public boolean validate(IWorld world, BlockPos altar, E stage)
-    {
-        tryCacheTemplateInfo((ServerWorld)world);
+    public boolean validate(IWorld world, BlockPos altar, E stage) {
 
-        if(!structureBlocks.containsKey(stage) || !coreOffset.containsKey(stage) || !referenceOffset.containsKey(stage))
+        tryCacheTemplateInfo((ServerWorld) world);
+
+        if(! structureBlocks.containsKey(stage) || ! coreOffset.containsKey(stage) || ! referenceOffset.containsKey(stage))
             return false;
 
         MultiblockStartInfo start = getStartFor(altar, world, stage);
@@ -58,17 +58,14 @@ public class DynamicMultiblockDetector<M extends IMultiblock, E extends Enum>
         if(start == null)
             return false;
 
-        TemplateManager templateManager = ((ServerWorld)world).getStructureTemplateManager();
+        TemplateManager templateManager = ((ServerWorld) world).getStructureTemplateManager();
         Template template = multiblock.getTemplate(templateManager);
 
-        for(Block structureBlock : structureBlocks.get(stage))
-        {
-            for(Template.BlockInfo block : template.func_215381_a(start.position, start.placement, structureBlock))
-            {
-                if(block != null && !block.state.isAir())
-                {
+        for(Block structureBlock : structureBlocks.get(stage)) {
+            for(Template.BlockInfo block : template.func_215381_a(start.position, start.placement, structureBlock)) {
+                if(block != null && ! block.state.isAir()) {
                     BlockState stateAt = world.getBlockState(block.pos);
-                    if(stateAt != block.state && !(block.state.getBlock() instanceof AirBlock))
+                    if(stateAt != block.state && ! (block.state.getBlock() instanceof AirBlock))
                         return false;
                 }
             }
@@ -77,16 +74,15 @@ public class DynamicMultiblockDetector<M extends IMultiblock, E extends Enum>
         return true;
     }
 
-    private void tryCacheTemplateInfo(ServerWorld world)
-    {
-        for(E iter : multiblock.getValues())
-        {
+    private void tryCacheTemplateInfo(ServerWorld world) {
+
+        for(E iter : multiblock.getValues()) {
             tryCacheTemplateInfo(world, iter);
         }
     }
 
-    private void tryCacheTemplateInfo(ServerWorld world, E stage)
-    {
+    private void tryCacheTemplateInfo(ServerWorld world, E stage) {
+
         if(structureBlocks.containsKey(stage))
             return;
 
@@ -103,13 +99,10 @@ public class DynamicMultiblockDetector<M extends IMultiblock, E extends Enum>
         BlockPos core = null;
         BlockPos reference = null;
 
-        for(Template.BlockInfo block : template.func_215381_a(BlockPos.ZERO, placement, Blocks.STRUCTURE_BLOCK))
-        {
-            if(block.nbt != null)
-            {
+        for(Template.BlockInfo block : template.func_215381_a(BlockPos.ZERO, placement, Blocks.STRUCTURE_BLOCK)) {
+            if(block.nbt != null) {
                 StructureMode structureMode = StructureMode.valueOf(block.nbt.getString("mode"));
-                if(structureMode == StructureMode.DATA)
-                {
+                if(structureMode == StructureMode.DATA) {
                     String function = block.nbt.getString("metadata");
 
                     if(start == null && function.equals("start"))
@@ -127,8 +120,7 @@ public class DynamicMultiblockDetector<M extends IMultiblock, E extends Enum>
             }
         }
 
-        if(start == null || core == null || reference == null)
-        {
+        if(start == null || core == null || reference == null) {
             ArcanumAPI.LOG.fatal(multiblock.getRegistryName() + " structure for stage: " + stage.toString() + " is missing one of the following structure blocks: start, core, or reference.");
             return;
         }
@@ -137,37 +129,33 @@ public class DynamicMultiblockDetector<M extends IMultiblock, E extends Enum>
         referenceOffset.put(stage, core.subtract(reference));
     }
 
-    private Block[] getStructureBlocks(Template template)
-    {
+    private Block[] getStructureBlocks(Template template) {
+
         List<Template.BlockInfo> blockInfos = new ArrayList<Template.BlockInfo>(template.blocks.get(0).func_237157_a_());
         List<Block> blocks = new ArrayList<>();
 
-        for(Template.BlockInfo blockInfo : blockInfos)
-        {
+        for(Template.BlockInfo blockInfo : blockInfos) {
             if(blockInfo.state == Blocks.AIR.getDefaultState() || blockInfo.state.getBlock() instanceof StructureBlock)
                 continue;
 
-            if(!blocks.contains(blockInfo.state.getBlock()))
+            if(! blocks.contains(blockInfo.state.getBlock()))
                 blocks.add(blockInfo.state.getBlock());
         }
 
         Block[] blockArray = new Block[blocks.size()];
-        for(int i = 0; i < blockArray.length; i++)
-        {
+        for(int i = 0; i < blockArray.length; i++) {
             blockArray[i] = blocks.get(i);
         }
 
         return blockArray;
     }
 
-    private MultiblockStartInfo getStartFor(BlockPos altar, IWorld world, E stage)
-    {
-        for(Rotation rotation : Rotation.values())
-        {
+    private MultiblockStartInfo getStartFor(BlockPos altar, IWorld world, E stage) {
+
+        for(Rotation rotation : Rotation.values()) {
             BlockPos pos = referenceOffset.get(stage).rotate(rotation);
             BlockState state = world.getBlockState(altar.east(pos.getX()).down(pos.getY()).south(pos.getZ()));
-            if(multiblock.isValidBlock(state))
-            {
+            if(multiblock.isValidBlock(state)) {
                 pos = coreOffset.get(stage).rotate(rotation);
                 return new MultiblockStartInfo(new PlacementSettings().setRotation(rotation.add(Rotation.CLOCKWISE_180)).setMirror(Mirror.NONE), altar.east(pos.getX()).down(pos.getY()).south(pos.getZ()));
             }

@@ -6,20 +6,22 @@ import com.lordskittles.arcanumapi.common.inventory.crafting.ArcaneRecipeBase;
 import com.lordskittles.nordicarcanum.common.registry.RecipeSerializers;
 import com.lordskittles.nordicarcanum.common.registry.RecipeType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.*;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.ShapedRecipe;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
 import net.minecraftforge.common.util.RecipeMatcher;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 
-public class NordicFurnaceRecipe extends ArcaneRecipeBase
-{
+public class NordicFurnaceRecipe extends ArcaneRecipeBase {
+
     public final NonNullList<Ingredient> ingredients;
     public final ItemStack result;
     public final float experience;
@@ -27,8 +29,8 @@ public class NordicFurnaceRecipe extends ArcaneRecipeBase
 
     protected final ResourceLocation id;
 
-    public NordicFurnaceRecipe(ResourceLocation id, String group, NonNullList<Ingredient> ingredients, ItemStack result, float experience, int cookTime)
-    {
+    public NordicFurnaceRecipe(ResourceLocation id, String group, NonNullList<Ingredient> ingredients, ItemStack result, float experience, int cookTime) {
+
         super(RecipeType.nordic_furnace, group);
         this.ingredients = ingredients;
         this.result = result;
@@ -38,8 +40,8 @@ public class NordicFurnaceRecipe extends ArcaneRecipeBase
         this.id = id;
     }
 
-    public boolean matches(ItemStack[] inputs)
-    {
+    public boolean matches(ItemStack[] inputs) {
+
         NonNullList<ItemStack> items = NonNullList.withSize(inputs.length, ItemStack.EMPTY);
         items.set(0, inputs[0]);
         items.set(1, inputs[1]);
@@ -48,78 +50,75 @@ public class NordicFurnaceRecipe extends ArcaneRecipeBase
     }
 
     @Override
-    public NonNullList<Ingredient> getIngredients()
-    {
+    public NonNullList<Ingredient> getIngredients() {
+
         return ingredients;
     }
 
     @Override
-    public ItemStack getCraftingResult(DummyIInventory inv)
-    {
+    public ItemStack getCraftingResult(DummyIInventory inv) {
+
         return this.result;
     }
 
     @Override
-    public boolean canFit(int width, int height)
-    {
+    public boolean canFit(int width, int height) {
+
         return true;
     }
 
     @Override
-    public ItemStack getRecipeOutput()
-    {
+    public ItemStack getRecipeOutput() {
+
         return result;
     }
 
     @Override
-    public ResourceLocation getId()
-    {
+    public ResourceLocation getId() {
+
         return this.id;
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer()
-    {
+    public IRecipeSerializer<?> getSerializer() {
+
         return RecipeSerializers.nordic_furnace.get();
     }
 
     @Override
-    public IRecipeType<?> getType()
-    {
+    public IRecipeType<?> getType() {
+
         return this.type;
     }
 
     @Override
-    public String getGroup()
-    {
+    public String getGroup() {
+
         return this.group;
     }
 
-    public int getCookTime()
-    {
+    public int getCookTime() {
+
         return this.cookTime;
     }
 
-    public static class Serializer<T extends NordicFurnaceRecipe> extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<NordicFurnaceRecipe>
-    {
+    public static class Serializer<T extends NordicFurnaceRecipe> extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<NordicFurnaceRecipe> {
+
         @Override
-        public NordicFurnaceRecipe read(ResourceLocation recipeId, JsonObject json)
-        {
+        public NordicFurnaceRecipe read(ResourceLocation recipeId, JsonObject json) {
+
             String group = JSONUtils.getString(json, "group", "");
             NonNullList<Ingredient> ingredients = readIngredients(JSONUtils.getJsonArray(json, "ingredients"));
 
-            if (!json.has("result"))
-            {
+            if(! json.has("result")) {
                 throw new com.google.gson.JsonSyntaxException("Missing result, expected to find a string or object");
             }
 
             ItemStack outputStack = ItemStack.EMPTY;
-            if (json.get("result").isJsonObject())
-            {
+            if(json.get("result").isJsonObject()) {
                 outputStack = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "result"));
             }
-            else
-            {
+            else {
                 String result = JSONUtils.getString(json, "result");
                 ResourceLocation resultLocation = new ResourceLocation(result);
                 outputStack = new ItemStack(ForgeRegistries.ITEMS.getValue(resultLocation));
@@ -132,14 +131,13 @@ public class NordicFurnaceRecipe extends ArcaneRecipeBase
 
         @Nullable
         @Override
-        public NordicFurnaceRecipe read(ResourceLocation recipeId, PacketBuffer buffer)
-        {
+        public NordicFurnaceRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+
             String group = buffer.readString(32767);
 
             int size = buffer.readVarInt();
             NonNullList<Ingredient> ingredients = NonNullList.withSize(size, Ingredient.EMPTY);
-            for (int iter = 0; iter < size; iter++)
-            {
+            for(int iter = 0; iter < size; iter++) {
                 ingredients.set(iter, Ingredient.read(buffer));
             }
 
@@ -150,13 +148,12 @@ public class NordicFurnaceRecipe extends ArcaneRecipeBase
         }
 
         @Override
-        public void write(PacketBuffer buffer, NordicFurnaceRecipe recipe)
-        {
+        public void write(PacketBuffer buffer, NordicFurnaceRecipe recipe) {
+
             buffer.writeString(recipe.getGroup());
             buffer.writeVarInt(recipe.ingredients.size());
 
-            for (Ingredient ingredient : recipe.ingredients)
-            {
+            for(Ingredient ingredient : recipe.ingredients) {
                 ingredient.write(buffer);
             }
 
@@ -165,15 +162,13 @@ public class NordicFurnaceRecipe extends ArcaneRecipeBase
             buffer.writeVarInt(recipe.cookTime);
         }
 
-        private static NonNullList<Ingredient> readIngredients(JsonArray array)
-        {
+        private static NonNullList<Ingredient> readIngredients(JsonArray array) {
+
             NonNullList<Ingredient> ingredients = NonNullList.create();
 
-            for (int iter = 0; iter < array.size(); iter++)
-            {
+            for(int iter = 0; iter < array.size(); iter++) {
                 Ingredient ingredient = Ingredient.deserialize(array.get(iter));
-                if (!ingredient.hasNoMatchingItems())
-                {
+                if(! ingredient.hasNoMatchingItems()) {
                     ingredients.add(ingredient);
                 }
             }

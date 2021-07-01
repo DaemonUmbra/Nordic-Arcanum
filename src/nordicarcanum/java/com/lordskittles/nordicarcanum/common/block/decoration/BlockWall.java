@@ -7,16 +7,16 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.WallBlock;
 import net.minecraft.item.ItemGroup;
 
-public class BlockWall extends WallBlock implements IItemGroupHolder
-{
-    public BlockWall()
-    {
+public class BlockWall extends WallBlock implements IItemGroupHolder {
+
+    public BlockWall() {
+
         super(AbstractBlock.Properties.from(Blocks.STONE_BRICK_WALL));
     }
 
     @Override
-    public ItemGroup group()
-    {
+    public ItemGroup group() {
+
         return NordicWorldItemGroup.INSTANCE;
     }
 }

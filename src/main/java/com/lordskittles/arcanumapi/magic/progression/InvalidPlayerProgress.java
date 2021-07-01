@@ -1,10 +1,10 @@
 package com.lordskittles.arcanumapi.magic.progression;
 
-public class InvalidPlayerProgress extends PlayerProgress
-{
+public class InvalidPlayerProgress extends PlayerProgress {
+
     @Override
-    public boolean isValid()
-    {
+    public boolean isValid() {
+
         return false;
     }
 }

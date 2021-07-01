@@ -15,24 +15,24 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
-public class BlockDoor extends DoorBlock implements IItemGroupHolder
-{
-    public BlockDoor()
-    {
+public class BlockDoor extends DoorBlock implements IItemGroupHolder {
+
+    public BlockDoor() {
+
         super(Block.Properties.from(Blocks.OAK_DOOR));
     }
 
     @SuppressWarnings("deprecation")
     @Nonnull
     @Override
-    public VoxelShape getShape(@NotNull BlockState state, @NotNull IBlockReader world, @NotNull BlockPos pos, @NotNull ISelectionContext context)
-    {
+    public VoxelShape getShape(@NotNull BlockState state, @NotNull IBlockReader world, @NotNull BlockPos pos, @NotNull ISelectionContext context) {
+
         return Blocks.OAK_DOOR.getShape(state, world, pos, context);
     }
 
     @Override
-    public ItemGroup group()
-    {
+    public ItemGroup group() {
+
         return NordicWorldItemGroup.INSTANCE;
     }
 }

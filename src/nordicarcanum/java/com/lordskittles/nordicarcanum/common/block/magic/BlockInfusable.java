@@ -1,9 +1,9 @@
 package com.lordskittles.nordicarcanum.common.block.magic;
 
 import com.lordskittles.arcanumapi.common.block.MultiBlockPiece;
+import com.lordskittles.nordicarcanum.common.block.IInfusable;
 import com.lordskittles.nordicarcanum.common.block.crafting.BlockAlchemyTable;
 import com.lordskittles.nordicarcanum.common.block.crafting.BlockStaffWorkbench;
-import com.lordskittles.nordicarcanum.common.block.IInfusable;
 import com.lordskittles.nordicarcanum.common.block.decoration.BlockDecoration;
 import com.lordskittles.nordicarcanum.common.registry.Blocks;
 import net.minecraft.block.BlockState;
@@ -14,32 +14,30 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
-public class BlockInfusable extends BlockDecoration implements IInfusable
-{
-    public enum InfusionType
-    {
+public class BlockInfusable extends BlockDecoration implements IInfusable {
+
+    public enum InfusionType {
         STAFF_WORKBENCH,
         SIGIL_PODIUM
     }
 
     private final InfusionType type;
 
-    public BlockInfusable(Material material, MaterialColor color, InfusionType type)
-    {
+    public BlockInfusable(Material material, MaterialColor color, InfusionType type) {
+
         super(material, color);
 
         this.type = type;
     }
 
     @Override
-    public boolean isValid(IWorldReader world, BlockPos pos, BlockPos right, BlockState state)
-    {
+    public boolean isValid(IWorldReader world, BlockPos pos, BlockPos right, BlockState state) {
+
         BlockState rightState = world.getBlockState(right);
 
         BlockState feldspar = Blocks.feldspar_brick_deco.get().getDefaultState();
 
-        switch (type)
-        {
+        switch(type) {
             case STAFF_WORKBENCH:
                 return state == feldspar && rightState == feldspar;
             case SIGIL_PODIUM:
@@ -50,10 +48,9 @@ public class BlockInfusable extends BlockDecoration implements IInfusable
     }
 
     @Override
-    public void infuse(World world, BlockPos pos, BlockPos right, BlockState state, Direction direction)
-    {
-        switch (type)
-        {
+    public void infuse(World world, BlockPos pos, BlockPos right, BlockState state, Direction direction) {
+
+        switch(type) {
             case STAFF_WORKBENCH:
                 BlockState staffWorkbench = Blocks.staff_workbench.get().getDefaultState().with(BlockStaffWorkbench.FACING, direction);
 

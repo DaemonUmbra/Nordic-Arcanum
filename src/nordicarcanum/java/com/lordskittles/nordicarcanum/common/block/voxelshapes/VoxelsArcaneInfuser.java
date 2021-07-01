@@ -8,8 +8,8 @@ import net.minecraft.util.math.shapes.VoxelShapes;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class VoxelsArcaneInfuser
-{
+public class VoxelsArcaneInfuser {
+
     public static final Optional<VoxelShape> SHAPE = Stream.of(
             Block.makeCuboidShape(0, 0, 0, 16, 1, 16),
             Block.makeCuboidShape(1, 1, 1, 15, 3, 15),
@@ -48,5 +48,5 @@ public class VoxelsArcaneInfuser
             Block.makeCuboidShape(7, 11, 0, 9, 13, 3),
             Block.makeCuboidShape(7, 4, 13, 9, 6, 16),
             Block.makeCuboidShape(7, 6, 14, 9, 11, 16)
-    ).reduce((v1, v2) -> {return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);});
+    ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR));
 }

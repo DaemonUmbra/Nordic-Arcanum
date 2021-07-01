@@ -12,72 +12,71 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Quaternion;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
 
-public class TileRendererArcaneChest extends TileEntityRendererBase<TileEntityArcaneChest>
-{
-	private final ModelArcaneChest model = new ModelArcaneChest(NordicResourceLocations.ARCANE_CHEST);
+public class TileRendererArcaneChest extends TileEntityRendererBase<TileEntityArcaneChest> {
 
-	private int tick;
-	private final float multiplier = 0.0125f;
+    private final ModelArcaneChest model = new ModelArcaneChest(NordicResourceLocations.ARCANE_CHEST);
 
-	public TileRendererArcaneChest(TileEntityRendererDispatcher rendererDispatcherIn)
-	{
-		super(rendererDispatcherIn);
+    private int tick;
+    private final float multiplier = 0.0125f;
 
-		tick = 0;
-	}
+    public TileRendererArcaneChest(TileEntityRendererDispatcher rendererDispatcherIn) {
 
-	@Override
-	public boolean isGlobalRenderer(TileEntityArcaneChest te)
-	{
-		return true;
-	}
+        super(rendererDispatcherIn);
 
-	@Override
-	public void render(TileEntityArcaneChest tileEntity, float partialTicks, MatrixStack stack, IRenderTypeBuffer buffer, int light, int destroyStage)
-	{
-		this.tick++;
+        tick = 0;
+    }
 
-		World world = tileEntity.getWorld();
-		boolean worldExists = world != null;
-		BlockState state = worldExists ? tileEntity.getBlockState() : Blocks.arcane_chest.get().getDefaultState().with(BlockMagicChest.FACING, Direction.SOUTH);
-		Block block = state.getBlock();
+    @Override
+    public boolean isGlobalRenderer(TileEntityArcaneChest te) {
 
-		if (block instanceof BlockArcaneChest)
-		{
-			stack.push();
+        return true;
+    }
 
-			// Rotate chest the correct way
-			float angle = state.get(ChestBlock.FACING).getOpposite().rotateY().getHorizontalAngle();
-			stack.translate(0.5D, 0.5D, 0.5D);
-			stack.rotate(Vector3f.YP.rotationDegrees(-angle));
-			stack.translate(-0.5D, -0.5D, -0.5D);
+    @Override
+    public void render(TileEntityArcaneChest tileEntity, float partialTicks, MatrixStack stack, IRenderTypeBuffer buffer, int light, int destroyStage) {
 
-			// Align chest with bounds
-			stack.translate(0.5D, 1.4375D, 0.5D);
-			stack.rotate(Vector3f.XN.rotationDegrees(180));
+        this.tick++;
 
-			// Calculate bob
-			float delta = this.tick * 0.0125f;
-			float bob = MathHelper.sin(delta) * multiplier;
-			stack.translate(0D, bob, 0D);
+        World world = tileEntity.getWorld();
+        boolean worldExists = world != null;
+        BlockState state = worldExists ? tileEntity.getBlockState() : Blocks.arcane_chest.get().getDefaultState().with(BlockMagicChest.FACING, Direction.SOUTH);
+        Block block = state.getBlock();
 
-			// Calculate rotation offset
-			float rot = MathHelper.cos(delta) * multiplier;
-			Quaternion rotation = Vector3f.ZP.rotation(rot);
-			rotation.multiply(Vector3f.XP.rotation(rot));
-			rotation.multiply(Vector3f.YP.rotation(rot));
-			stack.rotate(rotation);
+        if(block instanceof BlockArcaneChest) {
+            stack.push();
 
-			model.render(stack, buffer, light, destroyStage, tileEntity, partialTicks);
+            // Rotate chest the correct way
+            float angle = state.get(ChestBlock.FACING).getOpposite().rotateY().getHorizontalAngle();
+            stack.translate(0.5D, 0.5D, 0.5D);
+            stack.rotate(Vector3f.YP.rotationDegrees(- angle));
+            stack.translate(- 0.5D, - 0.5D, - 0.5D);
 
-			stack.pop();
-		}
-	}
+            // Align chest with bounds
+            stack.translate(0.5D, 1.4375D, 0.5D);
+            stack.rotate(Vector3f.XN.rotationDegrees(180));
+
+            // Calculate bob
+            float delta = this.tick * 0.0125f;
+            float bob = MathHelper.sin(delta) * multiplier;
+            stack.translate(0D, bob, 0D);
+
+            // Calculate rotation offset
+            float rot = MathHelper.cos(delta) * multiplier;
+            Quaternion rotation = Vector3f.ZP.rotation(rot);
+            rotation.multiply(Vector3f.XP.rotation(rot));
+            rotation.multiply(Vector3f.YP.rotation(rot));
+            stack.rotate(rotation);
+
+            model.render(stack, buffer, light, destroyStage, tileEntity, partialTicks);
+
+            stack.pop();
+        }
+    }
 }
