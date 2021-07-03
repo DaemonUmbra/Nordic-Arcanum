@@ -34,6 +34,7 @@ public class AttunementAltarParticle extends SpriteTexturedParticle {
         this.particleBlue = f;
         this.canCollide = false;
         this.maxAge = (int) (Math.random() * 10.0D) + 30;
+        this.particleScale = 0.11F * (this.rand.nextFloat() * 0.5F + 0.5F) * 2.0F;
     }
 
     @Override

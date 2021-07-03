@@ -3,6 +3,8 @@ package com.lordskittles.nordicarcanum.common.block.magic;
 import com.lordskittles.arcanumapi.common.block.BlockMod;
 import com.lordskittles.arcanumapi.common.block.IItemBlockOverride;
 import com.lordskittles.arcanumapi.common.item.block.ItemBlockBase;
+import com.lordskittles.arcanumapi.magic.schools.IMagicSchool;
+import com.lordskittles.arcanumapi.magic.schools.SchoolType;
 import com.lordskittles.nordicarcanum.client.itemgroups.NordicItemGroup;
 import com.lordskittles.nordicarcanum.client.render.item.ItemStackAttunementAltarRender;
 import com.lordskittles.nordicarcanum.common.block.voxelshapes.VoxelsAttunementAltar;
@@ -20,6 +22,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemTier;
+import net.minecraft.particles.IParticleData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -96,31 +99,29 @@ public class BlockAttunementAltar extends BlockMod implements IItemBlockOverride
         for(BlockPos offset : offsets) {
             BlockPos blockPos = pos.add(offset);
             TileEntitySigilPodium podium = (TileEntitySigilPodium) worldIn.getTileEntity(blockPos);
-            if(podium != null && podium.getSchool() != null && rand.nextInt(5) == 0) {
-                worldIn.addParticle(Particles.attunement_altar_particle.get(), (double) pos.getX() + 0.5D, (double) pos.getY() + 2.5D, (double) pos.getZ() + 0.5D, offset.getX() + rand.nextFloat() - 0.5D, rand.nextFloat(), offset.getZ() + rand.nextFloat() - 0.5D);
+            if(podium != null && podium.getSchool() != null && podium.getSchool().getSchool() != SchoolType.Undiscovered && rand.nextInt(5) == 0) {
+                worldIn.addParticle(getParticleFromSchool(podium.getSchool()), (double) pos.getX() + 0.5D, (double) pos.getY() + 2.5D, (double) pos.getZ() + 0.5D, offset.getX() + rand.nextFloat() - 0.5D, rand.nextFloat(), offset.getZ() + rand.nextFloat() - 0.5D);
             }
         }
+    }
 
-        // Retaining Enchantment table code for when we optimise the code above
-//        for (int i = -2; i <= 2; ++i) {
-//            for (int j = -2; j <= 2; ++j) {
-//                if (i > -2 && i < 2 && j == -1) {
-//                    j = 2;
-//                }
-//
-//                if (rand.nextInt(16) == 0) {
-//                    for (int k = 0; k <= 1; ++k) {
-//                        BlockPos blockpos = pos.add(i, k, j);
-//                        if (worldIn.getBlockState(blockpos).getBlock() instanceof  BlockSigilPodium) {
-//                            if (!worldIn.isAirBlock(pos.add(i / 2, 0, j / 2))) {
-//                                break;
-//                            }
-//
-//                            worldIn.addParticle(Particles.attunement_altar_particle.get(), (double) pos.getX() + 0.5D, (double) pos.getY() + 2.0D, (double) pos.getZ() + 0.5D, (double) ((float) i + rand.nextFloat()) - 0.5D, (double) ((float) k - rand.nextFloat() - 1.0F), (double) ((float) j + rand.nextFloat()) - 0.5D);
-//                        }
-//                    }
-//                }
-//            }
-//        }
+    private IParticleData getParticleFromSchool(IMagicSchool school) {
+
+        switch(school.getSchool()) {
+            case Ur:
+                return Particles.ur_particle.get();
+            case Kaun:
+                return Particles.kaun_particle.get();
+            case Ar:
+                return Particles.ar_particle.get();
+            case Hagal:
+                return Particles.hagal_particle.get();
+            case Yr:
+                return Particles.yr_particle.get();
+            case Fe:
+                return Particles.fe_particle.get();
+        }
+
+        return null;
     }
 }

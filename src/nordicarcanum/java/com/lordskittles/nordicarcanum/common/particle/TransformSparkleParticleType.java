@@ -2,6 +2,7 @@ package com.lordskittles.nordicarcanum.common.particle;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.serialization.Codec;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleType;
@@ -12,17 +13,20 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Locale;
 
-public class TranslucentColoredParticleData implements IParticleData {
+public class TransformSparkleParticleType extends ParticleType<TransformSparkleParticleType> implements IParticleData {
 
-    public static final IDeserializer<TranslucentColoredParticleData> DESERIALIZER = createSerializer();
+    public static final IDeserializer<TransformSparkleParticleType> DESERIALIZER = createSerializer();
+
+    private final Codec<TransformSparkleParticleType> CODEC = Codec.unit(this::getType);
 
     private final float red;
     private final float green;
     private final float blue;
     private final float alpha;
 
-    public TranslucentColoredParticleData(float red, float green, float blue, float alpha) {
+    public TransformSparkleParticleType(float red, float green, float blue, float alpha) {
 
+        super(false, DESERIALIZER);
         this.red = red;
         this.green = green;
         this.blue = blue;
@@ -54,9 +58,9 @@ public class TranslucentColoredParticleData implements IParticleData {
     }
 
     @Override
-    public ParticleType<?> getType() {
+    public TransformSparkleParticleType getType() {
 
-        return /*Particles.translucent_colored_particle.get()*/null;
+        return this;
     }
 
     @Override
@@ -74,12 +78,18 @@ public class TranslucentColoredParticleData implements IParticleData {
         return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f", Registry.PARTICLE_TYPE.getKey(this.getType()), this.red, this.green, this.blue, this.alpha);
     }
 
-    private static final IDeserializer<TranslucentColoredParticleData> createSerializer() {
+    @Override
+    public Codec<TransformSparkleParticleType> func_230522_e_() {
 
-        return new IDeserializer<TranslucentColoredParticleData>() {
+        return CODEC;
+    }
+
+    private static final IDeserializer<TransformSparkleParticleType> createSerializer() {
+
+        return new IDeserializer<TransformSparkleParticleType>() {
 
             @Override
-            public TranslucentColoredParticleData deserialize(ParticleType<TranslucentColoredParticleData> type, StringReader reader) throws CommandSyntaxException {
+            public TransformSparkleParticleType deserialize(ParticleType<TransformSparkleParticleType> type, StringReader reader) throws CommandSyntaxException {
 
                 reader.expect(' ');
                 float red = (float) reader.readDouble();
@@ -87,13 +97,13 @@ public class TranslucentColoredParticleData implements IParticleData {
                 float blue = (float) reader.readDouble();
                 float alpha = (float) reader.readDouble();
 
-                return new TranslucentColoredParticleData(red, green, blue, alpha);
+                return new TransformSparkleParticleType(red, green, blue, alpha);
             }
 
             @Override
-            public TranslucentColoredParticleData read(ParticleType<TranslucentColoredParticleData> type, PacketBuffer buffer) {
+            public TransformSparkleParticleType read(ParticleType<TransformSparkleParticleType> type, PacketBuffer buffer) {
 
-                return new TranslucentColoredParticleData(buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat());
+                return new TransformSparkleParticleType(buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat());
             }
         };
     }

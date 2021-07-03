@@ -29,10 +29,10 @@ public class ContainerNordicFurnace extends ContainerBase<TileEntityNordicFurnac
 
         this.furnaceData = furnaceData;
 
-        createInputSlot(Tile, 0, 25, 17);
-        createInputSlot(Tile, 1, 49, 17);
-        createFuelSlot(Tile, 2, 37, 52);
-        createOutputSlot(Tile, 3, 135, 35);
+        createInputSlot(Tile, 0, 11, 19);
+        createInputSlot(Tile, 1, 37, 19);
+        createFuelSlot(Tile, 2, 24, 59);
+        createOutputSlot(Tile, 3, 121, 22);
 
         generateMainPlayerInventory(playerInventory, 8, 84);
         generatePlayerInventoryHotbar(playerInventory, 8, 142);
@@ -115,7 +115,7 @@ public class ContainerNordicFurnace extends ContainerBase<TileEntityNordicFurnac
             recipesUsed = 200;
         }
 
-        return burnTime * 13 / recipesUsed;
+        return burnTime * 23 / recipesUsed;
     }
 
     @OnlyIn(Dist.CLIENT)

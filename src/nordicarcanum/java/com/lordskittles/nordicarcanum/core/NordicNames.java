@@ -215,4 +215,7 @@ public class NordicNames {
     public static final String CHANGE_SCHOOL_GUI = GUI + CHANGE_SCHOOL_ID;
     public static final String SPELL_DISPLAY = GUI + ArcanumNames.SPELLS + ".display";
     public static final String ARCANUM_BAR = GUI + ArcanumNames.ARCANUM + ".bar";
+
+    // Particles
+    public static final String TRANSFORM_SPARKLE = "transform_sparkle";
 }
