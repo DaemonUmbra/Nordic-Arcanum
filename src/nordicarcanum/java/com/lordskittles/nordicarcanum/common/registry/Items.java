@@ -21,7 +21,7 @@ public class Items {
 
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, NordicArcanum.MODID);
 
-    public static final RegistryObject<Item> arcane_dust = ITEMS.register(NordicNames.ARCANE_DUST, () -> new ItemDust(NordicWorldItemGroup.INSTANCE));
+    public static final RegistryObject<Item> arcane_powder = ITEMS.register(NordicNames.ARCANE_POWDER, () -> new ItemDust(NordicWorldItemGroup.INSTANCE));
     public static final RegistryObject<Item> feldspar_dust = ITEMS.register(NordicNames.FELDSPAR + NordicNames.DUST_SUFFIX, ItemDust::new);
     public static final RegistryObject<Item> carnelian_dust = ITEMS.register(NordicNames.CARNELIAN + NordicNames.DUST_SUFFIX, ItemDust::new);
     public static final RegistryObject<Item> garnet_dust = ITEMS.register(NordicNames.GARNET + NordicNames.DUST_SUFFIX, ItemDust::new);

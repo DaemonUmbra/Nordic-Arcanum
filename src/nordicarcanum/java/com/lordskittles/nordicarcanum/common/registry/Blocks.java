@@ -37,7 +37,7 @@ public class Blocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, NordicArcanum.MODID);
 
     //WORLD BLOCKS
-    public static final RegistryObject<Block> arcane_dust_ore = BLOCKS.register(NordicNames.ARCANE_DUST + NordicNames.ORE_SUFFIX, () -> new BlockOre(ItemTier.STONE.getHarvestLevel(), 4));
+    public static final RegistryObject<Block> arcane_dust_ore = BLOCKS.register(NordicNames.ARCANE_POWDER + NordicNames.ORE_SUFFIX, () -> new BlockOre(ItemTier.STONE.getHarvestLevel(), 4));
     public static final RegistryObject<Block> feldspar = BLOCKS.register(NordicNames.FELDSPAR, () -> new BlockOre(ItemTier.STONE.getHarvestLevel(), 0, 1.5F));
     public static final RegistryObject<Block> carnelian_ore = BLOCKS.register(NordicNames.CARNELIAN + NordicNames.ORE_SUFFIX, () -> new BlockOre(ItemTier.IRON.getHarvestLevel(), 0));
     public static final RegistryObject<Block> garnet_ore = BLOCKS.register(NordicNames.GARNET + NordicNames.ORE_SUFFIX, () -> new BlockOre(ItemTier.IRON.getHarvestLevel(), 0));

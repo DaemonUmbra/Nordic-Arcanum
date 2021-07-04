@@ -1,5 +1,5 @@
 {
-	"item.nordicarcanum.arcane_dust": "Arcane Dust",
+	"item.nordicarcanum.arcane_powder": "Weak Arcane Powder",
 	"item.nordicarcanum.carnelian_dust": "Carnelian Dust",
 	"item.nordicarcanum.feldspar_dust": "Feldspar Dust",
 	"item.nordicarcanum.garnet_dust": "Garnet Dust",
@@ -97,7 +97,7 @@
 
 	"item.nordicarcanum.liquid_arcanum_bucket": "Liquid Arcanum Bucket",
 
-	"block.nordicarcanum.arcane_dust_compact": "Arcane Dust Block",
+	"block.nordicarcanum.arcane_powder_compact": "Weak Arcane Powder Block",
 	"block.nordicarcanum.carnelian_crystal_compact": "Carnelian Block",
 	"block.nordicarcanum.garnet_crystal_compact": "Garnet Block",
 	"block.nordicarcanum.thulite_crystal_compact": "Thulite Block",
@@ -113,7 +113,7 @@
 	"block.nordicarcanum.chiseled_feldspar_brick_deco": "Chiseled Feldspar Brick",
 	"block.nordicarcanum.feldspar_pillar": "Feldspar Pillar",
 
-	"block.nordicarcanum.arcane_dust_ore": "Arcane Dust Ore",
+	"block.nordicarcanum.arcane_powder_ore": "Arcane Powder Ore",
 	"block.nordicarcanum.carnelian_ore": "Carnelian Ore",
 	"block.nordicarcanum.garnet_ore": "Garnet Ore",
 	"block.nordicarcanum.thulite_ore": "Thulite Ore",
@@ -237,8 +237,8 @@
 
 	"nordicarcanum.achievement.sigil_found": "Start your Journey",
 	"nordicarcanum.achievement.sigil_found.desc": "Find an ancient pillar and obtain the magic sigil found within.",
-	"nordicarcanum.achievement.arcane_dust": "A Tingling Feeling",
-	"nordicarcanum.achievement.arcane_dust.desc": "Find some Arcane Dust ore in the world and mine it up.",
+	"nordicarcanum.achievement.arcane_powder": "A Tingling Feeling",
+	"nordicarcanum.achievement.arcane_powder.desc": "Find some Weak Arcane Powder ore in the world and mine it up.",
 	"nordicarcanum.achievement.crafting_cloth": "Crafting with Magic",
 	"nordicarcanum.achievement.crafting_cloth.desc": "Crafted a magical cloth to craft magical items."
 }

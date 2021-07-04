@@ -2,6 +2,6 @@
     "parent": "block/cube_all",
     "textures": 
     {
-        "all": "nordicarcanum:blocks/ores/arcane_dust_ore"
+        "all": "nordicarcanum:blocks/ores/arcane_powder_ore"
     }
 }

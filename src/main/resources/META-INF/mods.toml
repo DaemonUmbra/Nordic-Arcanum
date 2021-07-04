@@ -1,13 +1,13 @@
 modLoader="javafml" #mandatory
 loaderVersion="[34,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
-issueTrackerURL="https://github.com/Team-Arcanum/Arcanum-API/issues" #optional
+issueTrackerURL="https://github.com/Team-Arcanum/Arcanum-API-Issues/issues" #optional
 license="MIT"
 
 [[mods]] #mandatory
     modId="arcanumapi" #mandatory
     version="0.4.2" #mandatory
     displayName="Arcanum API" #mandatory
-    updateJSONURL="https://raw.githubusercontent.com/Team-Arcanum/Arcanum-API/master/release_info.json" #optional
+    updateJSONURL="https://raw.githubusercontent.com/Team-Arcanum/Arcanum-API-Issues/master/release_info.json" #optional
     displayURL="https://www.curseforge.com/minecraft/mc-mods/arcanum-api" #optional
     logoFile="examplemod.png" #optional
     credits="" #optional

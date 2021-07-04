@@ -2,7 +2,7 @@
 	"type": "nordicarcanum:arcane_infuser",
 	"ingredient":
 	{
-		"item": "nordicarcanum:arcane_dust"
+		"item": "nordicarcanum:arcane_powder"
 	},
 	"fluid_ingredient":
 	{

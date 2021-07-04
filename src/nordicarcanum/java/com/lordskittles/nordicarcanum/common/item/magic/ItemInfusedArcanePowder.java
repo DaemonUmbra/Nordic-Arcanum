@@ -6,6 +6,7 @@ import com.lordskittles.arcanumapi.common.utilities.MathUtilities;
 import com.lordskittles.nordicarcanum.client.itemgroups.NordicItemGroup;
 import com.lordskittles.nordicarcanum.common.block.IInfusable;
 import com.lordskittles.nordicarcanum.common.block.magic.BlockSigilPodium;
+import com.lordskittles.nordicarcanum.common.registry.Blocks;
 import com.lordskittles.nordicarcanum.common.registry.Particles;
 import com.lordskittles.nordicarcanum.common.registry.Sounds;
 import net.minecraft.block.BlockState;
@@ -59,7 +60,7 @@ public class ItemInfusedArcanePowder extends ItemMod {
                 playInfusionEffect(world, player, pos);
                 adjustItemStack(stack, player);
 
-                world.setBlockState(pos, state);
+                world.setBlockState(pos, Blocks.arcane_glass.get().getDefaultState());
 
                 return ActionResultType.SUCCESS;
             }

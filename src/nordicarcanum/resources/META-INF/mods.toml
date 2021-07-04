@@ -1,13 +1,13 @@
 modLoader="javafml" #mandatory
 loaderVersion="[34,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
-issueTrackerURL="https://github.com/Team-Arcanum/Nordic-Arcanum/issues" #optional
+issueTrackerURL="https://github.com/Team-Arcanum/Nordic-Arcanum-Issues/issues" #optional
 license="MIT"
 
 [[mods]] #mandatory
     modId="nordicarcanum"
     version="0.6.2"
     displayName="Nordic Arcanum"
-    updateJSONURL="https://raw.githubusercontent.com/Team-Arcanum/Nordic-Arcanum/master/release_info.json"
+    updateJSONURL="https://raw.githubusercontent.com/Team-Arcanum/Nordic-Arcanum-Issues/master/release_info.json"
     displayURL="https://www.curseforge.com/minecraft/mc-mods/nordic-arcanum"
     logoFile="icon.png"
     credits="Melonslise from The Forge Project Discord for his amazing help with the Crafting Cloth rendering, TurtyWurty for his amazing starter tutorials, desht from Team Pnuematic for his help with errors we encountered and his unending patience"

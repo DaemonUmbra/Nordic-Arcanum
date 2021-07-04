@@ -85,7 +85,7 @@ public class NordicNames {
     public static final String DARK_OAK = "dark_oak";
     public static final String ACACIA = "acacia";
 
-    public static final String ARCANE_DUST = "arcane_dust";
+    public static final String ARCANE_POWDER = "arcane_powder";
     public static final String FELDSPAR = "feldspar";
     public static final String CARNELIAN = "carnelian";
     public static final String GARNET = "garnet";
@@ -136,7 +136,7 @@ public class NordicNames {
     public static final String ENDER_PEARL = "ender_pearl";
 
     public static final String POLISHED_FELDSPAR = FELDSPAR + "_polished";
-    public static final String ARCANE_DUST_COMPACT = ARCANE_DUST + COMPACT_SUFFIX;
+    public static final String ARCANE_DUST_COMPACT = ARCANE_POWDER + COMPACT_SUFFIX;
     public static final String CARNELIAN_COMPACT = CARNELIAN + CRYSTAL_SUFFIX + COMPACT_SUFFIX;
     public static final String GARNET_COMPACT = GARNET + CRYSTAL_SUFFIX + COMPACT_SUFFIX;
     public static final String THULITE_COMPACT = THULITE + CRYSTAL_SUFFIX + COMPACT_SUFFIX;

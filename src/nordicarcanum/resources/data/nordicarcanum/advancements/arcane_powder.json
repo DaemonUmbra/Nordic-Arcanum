@@ -4,15 +4,15 @@
   {
     "icon":
     {
-      "item": "nordicarcanum:arcane_dust"
+      "item": "nordicarcanum:arcane_powder"
     },
     "title":
     {
-      "translate": "nordicarcanum.achievement.arcane_dust"
+      "translate": "nordicarcanum.achievement.arcane_powder"
     },
     "description":
     {
-      "translate": "nordicarcanum.achievement.arcane_dust.desc"
+      "translate": "nordicarcanum.achievement.arcane_powder.desc"
     },
     "background": "nordicarcanum:textures/gui/advancement_bg.png"
   },
@@ -26,7 +26,7 @@
         "items":
         [
           {
-            "item": "nordicarcanum:arcane_dust"
+            "item": "nordicarcanum:arcane_powder"
           }
         ]
       }

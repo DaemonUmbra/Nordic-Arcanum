@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "nordicarcanum:arcane_dust_compact"
+          "name": "nordicarcanum:arcane_powder_compact"
         }
       ],
       "conditions": [

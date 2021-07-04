@@ -3,12 +3,12 @@
 	"ingredients": 
 	[
 		{
-			"item": "nordicarcanum:arcane_dust_compact"
+			"item": "nordicarcanum:arcane_powder_compact"
 		}
 	],
 	"result":
 	{
-		"item": "nordicarcanum:arcane_dust",
+		"item": "nordicarcanum:arcane_powder",
 		"count": 9
 	}
 }

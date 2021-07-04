@@ -42,8 +42,8 @@ public class EntityEvents {
     public static void onItemPickup(PlayerEvent.ItemPickupEvent event) {
 
         if(event.getPlayer() instanceof ServerPlayerEntity) {
-            if(event.getStack().getItem() == Items.arcane_dust.get()) {
-                Advancements.arcane_dust_obtain.trigger((ServerPlayerEntity) event.getPlayer());
+            if(event.getStack().getItem() == Items.arcane_powder.get()) {
+                Advancements.arcane_powder_obtain.trigger((ServerPlayerEntity) event.getPlayer());
             }
         }
     }

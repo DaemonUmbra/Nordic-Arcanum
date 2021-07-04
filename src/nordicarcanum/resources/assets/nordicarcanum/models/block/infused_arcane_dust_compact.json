@@ -1,7 +1,0 @@
-{
-    "parent": "block/cube_all",
-    "textures": 
-    {
-        "all": "nordicarcanum:blocks/compact_blocks/infused_arcane_dust_compact"
-    }
-}
