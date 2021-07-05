@@ -1,0 +1,7 @@
+{
+    "parent": "block/cube_all",
+    "textures": 
+    {
+        "all": "nordicarcanum:blocks/ores/deepslate_thulite_ore"
+    }
+}

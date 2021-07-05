@@ -37,7 +37,7 @@ public class Blocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, NordicArcanum.MODID);
 
     //WORLD BLOCKS
-    public static final RegistryObject<Block> arcane_dust_ore = BLOCKS.register(NordicNames.ARCANE_POWDER + NordicNames.ORE_SUFFIX, () -> new BlockOre(ItemTier.STONE.getHarvestLevel(), 4));
+    public static final RegistryObject<Block> arcane_powder_ore = BLOCKS.register(NordicNames.ARCANE_POWDER + NordicNames.ORE_SUFFIX, () -> new BlockOre(ItemTier.STONE.getHarvestLevel(), 4));
     public static final RegistryObject<Block> feldspar = BLOCKS.register(NordicNames.FELDSPAR, () -> new BlockOre(ItemTier.STONE.getHarvestLevel(), 0, 1.5F));
     public static final RegistryObject<Block> carnelian_ore = BLOCKS.register(NordicNames.CARNELIAN + NordicNames.ORE_SUFFIX, () -> new BlockOre(ItemTier.IRON.getHarvestLevel(), 0));
     public static final RegistryObject<Block> garnet_ore = BLOCKS.register(NordicNames.GARNET + NordicNames.ORE_SUFFIX, () -> new BlockOre(ItemTier.IRON.getHarvestLevel(), 0));
@@ -46,6 +46,15 @@ public class Blocks {
     public static final RegistryObject<Block> bismuth_ore = BLOCKS.register(NordicNames.BISMUTH + NordicNames.ORE_SUFFIX, () -> new BlockOre(ItemTier.STONE.getHarvestLevel(), 0));
     public static final RegistryObject<Block> nickle_ore = BLOCKS.register(NordicNames.NICKLE + NordicNames.ORE_SUFFIX, () -> new BlockOre(ItemTier.IRON.getHarvestLevel(), 0));
     public static final RegistryObject<Block> silver_ore = BLOCKS.register(NordicNames.SILVER + NordicNames.ORE_SUFFIX, () -> new BlockOre(ItemTier.IRON.getHarvestLevel(), 0));
+
+    public static final RegistryObject<Block> arcane_powder_deepslate_ore = BLOCKS.register(NordicNames.ARCANE_POWDER + NordicNames.DEEPSLATE_ORE_SUFFIX, () -> new BlockOre(ItemTier.STONE.getHarvestLevel(), 4));
+    public static final RegistryObject<Block> carnelian_deepslate_ore = BLOCKS.register(NordicNames.CARNELIAN + NordicNames.DEEPSLATE_ORE_SUFFIX, () -> new BlockOre(ItemTier.IRON.getHarvestLevel(), 0));
+    public static final RegistryObject<Block> garnet_deepslate_ore = BLOCKS.register(NordicNames.GARNET + NordicNames.DEEPSLATE_ORE_SUFFIX, () -> new BlockOre(ItemTier.IRON.getHarvestLevel(), 0));
+    public static final RegistryObject<Block> thulite_deepslate_ore = BLOCKS.register(NordicNames.THULITE + NordicNames.DEEPSLATE_ORE_SUFFIX, () -> new BlockOre(ItemTier.IRON.getHarvestLevel(), 0));
+
+    public static final RegistryObject<Block> bismuth_deepslate_ore = BLOCKS.register(NordicNames.BISMUTH + NordicNames.DEEPSLATE_ORE_SUFFIX, () -> new BlockOre(ItemTier.STONE.getHarvestLevel(), 0));
+    public static final RegistryObject<Block> nickle_deepslate_ore = BLOCKS.register(NordicNames.NICKLE + NordicNames.DEEPSLATE_ORE_SUFFIX, () -> new BlockOre(ItemTier.IRON.getHarvestLevel(), 0));
+    public static final RegistryObject<Block> silver_deepslate_ore = BLOCKS.register(NordicNames.SILVER + NordicNames.DEEPSLATE_ORE_SUFFIX, () -> new BlockOre(ItemTier.IRON.getHarvestLevel(), 0));
 
     public static final RegistryObject<Block> arcane_dust_compact = BLOCKS.register(NordicNames.ARCANE_DUST_COMPACT, BlockCompactResource::new);
     public static final RegistryObject<Block> carnelian_crystal_compact = BLOCKS.register(NordicNames.CARNELIAN_COMPACT, BlockCompactResource::new);

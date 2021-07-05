@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class OreGeneration {
 
-    private static final BlockState arcane_dust = Blocks.arcane_dust_ore.get().getDefaultState();
+    private static final BlockState arcane_dust = Blocks.arcane_powder_ore.get().getDefaultState();
     private static final BlockState feldspar = Blocks.feldspar.get().getDefaultState();
 
     private static final BlockState carnelian = Blocks.carnelian_ore.get().getDefaultState();

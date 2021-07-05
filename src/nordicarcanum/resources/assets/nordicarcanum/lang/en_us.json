@@ -121,6 +121,14 @@
 	"block.nordicarcanum.nickle_ore": "Nickel Ore",
 	"block.nordicarcanum.bismuth_ore": "Bismuth Ore",
 
+	"block.nordicarcanum.arcane_powder_deepslate_ore": "Deepslate Arcane Powder Ore",
+	"block.nordicarcanum.carnelian_deepslate_ore": "Deepslate Carnelian Ore",
+	"block.nordicarcanum.garnet_deepslate_ore": "Deepslate Garnet Ore",
+	"block.nordicarcanum.thulite_deepslate_ore": "Deepslate Thulite Ore",
+	"block.nordicarcanum.silver_deepslate_ore": "Deepslate Silver Ore",
+	"block.nordicarcanum.nickle_deepslate_ore": "Deepslate Nickel Ore",
+	"block.nordicarcanum.bismuth_deepslate_ore": "Deepslate Bismuth Ore",
+
 	"block.nordicarcanum.carved_deepslate_brick": "Carved Deepslate Brick",
 	"block.nordicarcanum.deepslate_pillar": "Deepslate Pillar",
 	"block.nordicarcanum.activated_deepslate_pillar": "Deepslate Pillar (Activated)",

@@ -16,6 +16,6 @@ public class NordicWorldItemGroup extends ItemGroup {
     @Override
     public ItemStack createIcon() {
 
-        return new ItemStack(Blocks.arcane_dust_ore.get());
+        return new ItemStack(Blocks.arcane_powder_ore.get());
     }
 }

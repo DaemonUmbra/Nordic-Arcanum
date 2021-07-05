@@ -38,6 +38,7 @@ public class NordicNames {
     public static final String METAL_SUFFIX = "_metal";
     public static final String PLANKS_SUFFIX = "_plank";
     public static final String ORE_SUFFIX = "_ore";
+    public static final String DEEPSLATE_ORE_SUFFIX = "_deepslate_ore";
     public static final String SAPLING_SUFFIX = "_sapling";
     public static final String LEAVES_SUFFIX = "_leaves";
     public static final String DECO_SUFFIX = "_deco";
