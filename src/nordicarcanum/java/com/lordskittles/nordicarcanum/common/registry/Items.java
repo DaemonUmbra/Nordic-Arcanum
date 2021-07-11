@@ -36,6 +36,12 @@ public class Items {
     public static final RegistryObject<Item> silver_ingot = ITEMS.register(NordicNames.SILVER + NordicNames.INGOT_SUFFIX, ItemIngot::new);
     public static final RegistryObject<Item> steel_ingot = ITEMS.register(NordicNames.STEEL + NordicNames.INGOT_SUFFIX, ItemIngot::new);
     public static final RegistryObject<Item> norse_ingot = ITEMS.register(NordicNames.NORSE + NordicNames.INGOT_SUFFIX, ItemIngot::new);
+    public static final RegistryObject<Item> electrum_ingot = ITEMS.register(NordicNames.ELECTRUM + NordicNames.INGOT_SUFFIX, ItemIngot::new);
+    public static final RegistryObject<Item> bronze_ingot = ITEMS.register(NordicNames.BRONZE + NordicNames.INGOT_SUFFIX, ItemIngot::new);
+    public static final RegistryObject<Item> mithril_ingot = ITEMS.register(NordicNames.MITHRIL + NordicNames.INGOT_SUFFIX, ItemIngot::new);
+    public static final RegistryObject<Item> billon_ingot = ITEMS.register(NordicNames.BILLON + NordicNames.INGOT_SUFFIX, ItemIngot::new);
+    public static final RegistryObject<Item> sun_steel_ingot = ITEMS.register(NordicNames.SUN_STEEL + NordicNames.INGOT_SUFFIX, ItemIngot::new);
+    public static final RegistryObject<Item> sea_steel_ingot = ITEMS.register(NordicNames.SEA_STEEL + NordicNames.INGOT_SUFFIX, ItemIngot::new);
 
     public static final RegistryObject<Item> bismuth_raw_ore = ITEMS.register(NordicNames.BISMUTH + NordicNames.RAW_ORE_SUFFIX, ItemRawOre::new);
     public static final RegistryObject<Item> nickle_raw_ore = ITEMS.register(NordicNames.NICKLE + NordicNames.RAW_ORE_SUFFIX, ItemRawOre::new);

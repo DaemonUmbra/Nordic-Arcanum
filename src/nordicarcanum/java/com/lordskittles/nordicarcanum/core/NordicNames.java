@@ -97,6 +97,12 @@ public class NordicNames {
     public static final String BISMUTH = "bismuth";
     public static final String STEEL = "steel";
     public static final String NORSE = "norse";
+    public static final String ELECTRUM = "electrum";
+    public static final String BRONZE = "bronze";
+    public static final String MITHRIL = "mithril";
+    public static final String BILLON = "billon";
+    public static final String SUN_STEEL = "sea_steel";
+    public static final String SEA_STEEL = "sun_steel";
     public static final String IRON = "iron";
     public static final String GOLD = "gold";
 
