@@ -1,8 +1,9 @@
-package com.lordskittles.arcanumapi.common.registry;
+package com.lordskittles.nordicarcanum.common.registry;
 
 import com.lordskittles.arcanumapi.core.ArcanumAPI;
-import com.lordskittles.arcanumapi.magic.schools.MagicSchool;
-import com.lordskittles.arcanumapi.magic.schools.SchoolType;
+import com.lordskittles.nordicarcanum.core.NordicArcanum;
+import com.lordskittles.nordicarcanum.magic.schools.MagicSchool;
+import com.lordskittles.nordicarcanum.magic.schools.SchoolType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -13,20 +14,20 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-@ObjectHolder(ArcanumAPI.MODID)
-@Mod.EventBusSubscriber(modid = ArcanumAPI.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@ObjectHolder(NordicArcanum.MODID)
+@Mod.EventBusSubscriber(modid = NordicArcanum.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class MagicSchools {
 
     private static Map<Integer, MagicSchool> idSchools = new HashMap<>();
     private static Map<ResourceLocation, MagicSchool> schools = new HashMap<>();
 
-    public static final MagicSchool undiscovered = new MagicSchool(ArcanumAPI.MODID, SchoolType.Undiscovered);
-    public static final MagicSchool ur = new MagicSchool(ArcanumAPI.MODID, SchoolType.Ur);
-    public static final MagicSchool kaun = new MagicSchool(ArcanumAPI.MODID, SchoolType.Kaun);
-    public static final MagicSchool ar = new MagicSchool(ArcanumAPI.MODID, SchoolType.Ar);
-    public static final MagicSchool hagal = new MagicSchool(ArcanumAPI.MODID, SchoolType.Hagal);
-    public static final MagicSchool yr = new MagicSchool(ArcanumAPI.MODID, SchoolType.Yr);
-    public static final MagicSchool fe = new MagicSchool(ArcanumAPI.MODID, SchoolType.Fe);
+    public static final MagicSchool undiscovered = new MagicSchool(NordicArcanum.MODID, SchoolType.Undiscovered);
+    public static final MagicSchool ur = new MagicSchool(NordicArcanum.MODID, SchoolType.Ur);
+    public static final MagicSchool kaun = new MagicSchool(NordicArcanum.MODID, SchoolType.Kaun);
+    public static final MagicSchool ar = new MagicSchool(NordicArcanum.MODID, SchoolType.Ar);
+    public static final MagicSchool hagal = new MagicSchool(NordicArcanum.MODID, SchoolType.Hagal);
+    public static final MagicSchool yr = new MagicSchool(NordicArcanum.MODID, SchoolType.Yr);
+    public static final MagicSchool fe = new MagicSchool(NordicArcanum.MODID, SchoolType.Fe);
 
     public static final void registerSchool(MagicSchool school) {
 

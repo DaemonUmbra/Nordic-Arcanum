@@ -1,4 +1,4 @@
-package com.lordskittles.arcanumapi.magic;
+package com.lordskittles.arcanumapi.arcanum;
 
 import com.lordskittles.arcanumapi.common.network.PacketHandlerBase;
 import com.lordskittles.arcanumapi.common.network.PacketPlayerArcanumUpdate;

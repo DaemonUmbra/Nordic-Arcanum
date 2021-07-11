@@ -1,4 +1,4 @@
-package com.lordskittles.arcanumapi.magic.progression;
+package com.lordskittles.nordicarcanum.magic.progression;
 
 import com.lordskittles.arcanumapi.core.NBTConstants;
 import net.minecraft.nbt.CompoundNBT;

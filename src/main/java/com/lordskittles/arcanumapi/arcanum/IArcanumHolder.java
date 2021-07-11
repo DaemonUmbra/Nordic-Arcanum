@@ -1,4 +1,4 @@
-package com.lordskittles.arcanumapi.magic;
+package com.lordskittles.arcanumapi.arcanum;
 
 public interface IArcanumHolder extends IArcanumUser {
 

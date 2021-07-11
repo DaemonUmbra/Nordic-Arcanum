@@ -1,7 +1,7 @@
 package com.lordskittles.nordicarcanum.common.item.magic;
 
 import com.lordskittles.arcanumapi.common.item.ItemMod;
-import com.lordskittles.arcanumapi.magic.ArcanumServerManager;
+import com.lordskittles.arcanumapi.arcanum.ArcanumServerManager;
 import com.lordskittles.nordicarcanum.client.itemgroups.NordicItemGroup;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import net.minecraft.advancements.CriteriaTriggers;

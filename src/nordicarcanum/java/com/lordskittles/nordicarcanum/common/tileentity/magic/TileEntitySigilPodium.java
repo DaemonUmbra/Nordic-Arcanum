@@ -1,7 +1,7 @@
 package com.lordskittles.nordicarcanum.common.tileentity.magic;
 
 import com.lordskittles.arcanumapi.common.utilities.NBTUtilities;
-import com.lordskittles.arcanumapi.magic.schools.IMagicSchool;
+import com.lordskittles.nordicarcanum.magic.schools.IMagicSchool;
 import com.lordskittles.nordicarcanum.common.item.magic.ItemSigil;
 import com.lordskittles.nordicarcanum.common.registry.Sounds;
 import com.lordskittles.nordicarcanum.common.registry.TileEntities;

@@ -2,7 +2,7 @@ package com.lordskittles.arcanumapi.common.network;
 
 import com.lordskittles.arcanumapi.common.utilities.ClientUtilities;
 import com.lordskittles.arcanumapi.core.ArcanumAPI;
-import com.lordskittles.arcanumapi.magic.IArcanumTile;
+import com.lordskittles.arcanumapi.arcanum.IArcanumTile;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;

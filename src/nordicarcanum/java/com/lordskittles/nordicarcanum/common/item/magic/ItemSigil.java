@@ -1,14 +1,14 @@
 package com.lordskittles.nordicarcanum.common.item.magic;
 
 import com.lordskittles.arcanumapi.common.item.ItemMod;
-import com.lordskittles.arcanumapi.common.registry.MagicSchools;
+import com.lordskittles.nordicarcanum.common.registry.MagicSchools;
 import com.lordskittles.arcanumapi.common.utilities.MiscUtilities;
 import com.lordskittles.arcanumapi.common.utilities.NBTUtilities;
-import com.lordskittles.arcanumapi.magic.progression.PlayerProgress;
-import com.lordskittles.arcanumapi.magic.progression.ProgressionHelper;
-import com.lordskittles.arcanumapi.magic.progression.ProgressionManager;
-import com.lordskittles.arcanumapi.magic.schools.IMagicSchool;
-import com.lordskittles.arcanumapi.magic.schools.MagicSchool;
+import com.lordskittles.nordicarcanum.magic.progression.PlayerProgress;
+import com.lordskittles.nordicarcanum.magic.progression.ProgressionHelper;
+import com.lordskittles.nordicarcanum.magic.progression.ProgressionManager;
+import com.lordskittles.nordicarcanum.magic.schools.IMagicSchool;
+import com.lordskittles.nordicarcanum.magic.schools.MagicSchool;
 import com.lordskittles.nordicarcanum.client.itemgroups.NordicItemGroup;
 import com.lordskittles.nordicarcanum.common.advancements.Advancements;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;

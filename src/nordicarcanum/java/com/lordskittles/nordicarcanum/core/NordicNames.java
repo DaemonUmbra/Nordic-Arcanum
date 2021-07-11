@@ -4,6 +4,23 @@ import com.lordskittles.arcanumapi.core.ArcanumNames;
 
 public class NordicNames {
 
+    public static final String MAGIC_SCHOOLS = "magic_schools";
+    public static final String SPELLS = "spells";
+
+    public static final String DISCOVERED_SUFFIX = "_discovered";
+
+    // Commands
+    public static final String RESET_SCHOOLS_COMMAND = "reset_schools";
+
+    // Misc
+    public static final String UNDISCOVERED = "undiscovered";
+    public static final String UR = "ur";
+    public static final String KAUN = "kaun";
+    public static final String AR = "ar";
+    public static final String HAGAL = "hagal";
+    public static final String YR = "yr";
+    public static final String FE = "fe";
+
     public static final String TIER_1 = "Midgard";
     public static final String TIER_2 = "Muspelheim";
     public static final String TIER_3 = "Asgardian";
@@ -226,7 +243,7 @@ public class NordicNames {
 
     // Screens
     public static final String CHANGE_SCHOOL_GUI = GUI + CHANGE_SCHOOL_ID;
-    public static final String SPELL_DISPLAY = GUI + ArcanumNames.SPELLS + ".display";
+    public static final String SPELL_DISPLAY = GUI + SPELLS + ".display";
     public static final String ARCANUM_BAR = GUI + ArcanumNames.ARCANUM + ".bar";
 
     // Particles

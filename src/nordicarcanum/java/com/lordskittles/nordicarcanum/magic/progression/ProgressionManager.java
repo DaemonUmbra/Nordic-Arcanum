@@ -1,6 +1,6 @@
-package com.lordskittles.arcanumapi.magic.progression;
+package com.lordskittles.nordicarcanum.magic.progression;
 
-import com.lordskittles.arcanumapi.magic.schools.MagicSchool;
+import com.lordskittles.nordicarcanum.magic.schools.MagicSchool;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.fml.LogicalSide;
 

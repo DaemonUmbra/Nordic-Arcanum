@@ -5,7 +5,7 @@ import com.lordskittles.arcanumapi.common.network.PacketHandlerBase;
 import com.lordskittles.arcanumapi.common.tileentity.TileEntityMagicChest;
 import com.lordskittles.arcanumapi.common.utilities.ClientUtilities;
 import com.lordskittles.arcanumapi.common.utilities.NBTUtilities;
-import com.lordskittles.arcanumapi.magic.ArcanumServerManager;
+import com.lordskittles.arcanumapi.arcanum.ArcanumServerManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;

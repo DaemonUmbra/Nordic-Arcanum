@@ -1,4 +1,4 @@
-package com.lordskittles.arcanumapi.magic.progression;
+package com.lordskittles.nordicarcanum.magic.progression;
 
 public class InvalidPlayerProgress extends PlayerProgress {
 

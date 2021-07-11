@@ -1,4 +1,15 @@
 {
+	"nordicarcanum.ur.info": "School of Ur (Water)",
+	"nordicarcanum.kaun.info": "School of Kaun (Flame)",
+	"nordicarcanum.ar.info": "School of Ar (Earth)",
+	"nordicarcanum.hagal.info": "School of Hagal (Storm)",
+	"nordicarcanum.yr.info": "School of Yr (Protection)",
+	"nordicarcanum.fe.info": "School of Fe (Summoning)",
+	"nordicarcanum.misc.noinfo": "Undiscovered School",
+	"nordicarcanum.school.discovered.chat": "You have just discovered the ",
+
+	"nordicarcanum.command.reset_schools": "Reset discovered schools",
+
 	"item.nordicarcanum.arcane_powder": "Weak Arcane Powder",
 	"item.nordicarcanum.carnelian_dust": "Carnelian Dust",
 	"item.nordicarcanum.feldspar_dust": "Feldspar Dust",

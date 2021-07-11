@@ -1,7 +1,8 @@
-package com.lordskittles.arcanumapi.magic.schools;
+package com.lordskittles.nordicarcanum.magic.schools;
 
 import com.lordskittles.arcanumapi.core.ArcanumAPI;
 import com.lordskittles.arcanumapi.core.NBTConstants;
+import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.*;
@@ -34,18 +35,18 @@ public interface IMagicSchool extends Comparable<IMagicSchool> {
 
     static StringTextComponent getUndiscoveredText() {
 
-        return new StringTextComponent(TextFormatting.BLUE + I18n.format(ArcanumAPI.MODID + ".misc.noinfo"));
+        return new StringTextComponent(TextFormatting.BLUE + I18n.format(NordicArcanum.MODID + ".misc.noinfo"));
     }
 
     static ITextComponent getDiscoveredChatMessage(MagicSchool school) {
 
-        return new TranslationTextComponent(ArcanumAPI.MODID + ".school.discovered.chat").setStyle(Style.EMPTY.setFormatting(TextFormatting.WHITE))
+        return new TranslationTextComponent(NordicArcanum.MODID + ".school.discovered.chat").setStyle(Style.EMPTY.setFormatting(TextFormatting.WHITE))
                 .appendSibling(new TranslationTextComponent(school.getUnlocalizedInfo()).setStyle(Style.EMPTY.setFormatting(school.getColor())));
     }
 
     default String getUnlocalizedInfo() {
 
-        return ArcanumAPI.MODID + "." + getUnlocalizedName() + ".info";
+        return NordicArcanum.MODID + "." + getUnlocalizedName() + ".info";
     }
 
     default TextFormatting getColor() {

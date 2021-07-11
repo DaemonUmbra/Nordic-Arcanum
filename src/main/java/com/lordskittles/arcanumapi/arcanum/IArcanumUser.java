@@ -1,4 +1,4 @@
-package com.lordskittles.arcanumapi.magic;
+package com.lordskittles.arcanumapi.arcanum;
 
 import net.minecraft.entity.player.PlayerEntity;
 
