@@ -1,0 +1,9 @@
+{
+	"variants":
+	{
+		"":
+		{ 
+			"model": "nordicarcanum:block/seasteel_metal_compact"
+		}
+	}
+}

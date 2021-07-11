@@ -1,0 +1,9 @@
+{
+	"variants":
+	{
+		"":
+		{ 
+			"model": "nordicarcanum:block/sunsteel_metal_compact"
+		}
+	}
+}

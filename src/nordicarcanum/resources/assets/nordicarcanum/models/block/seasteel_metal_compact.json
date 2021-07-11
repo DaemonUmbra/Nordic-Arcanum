@@ -1,0 +1,7 @@
+{
+    "parent": "block/cube_all",
+    "textures": 
+    {
+        "all": "nordicarcanum:blocks/compact_blocks/seasteel_metal_compact"
+    }
+}
