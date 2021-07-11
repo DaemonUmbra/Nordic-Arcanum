@@ -4,11 +4,11 @@ import com.lordskittles.nordicarcanum.common.registry.Blocks;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 
-public class NordicWorldItemGroup extends ItemGroup {
+public class NordicResourcesItemGroup extends ItemGroup {
 
-    public static final NordicWorldItemGroup INSTANCE = new NordicWorldItemGroup(ItemGroup.GROUPS.length, "nordicworldtab");
+    public static final NordicResourcesItemGroup INSTANCE = new NordicResourcesItemGroup(ItemGroup.GROUPS.length, "nordicresourcestab");
 
-    private NordicWorldItemGroup(int index, String label) {
+    private NordicResourcesItemGroup(int index, String label) {
 
         super(index, label);
     }

@@ -1,7 +1,7 @@
 package com.lordskittles.nordicarcanum.common.block.world;
 
 import com.lordskittles.arcanumapi.common.block.IItemGroupHolder;
-import com.lordskittles.nordicarcanum.client.itemgroups.NordicWorldItemGroup;
+import com.lordskittles.nordicarcanum.client.itemgroups.NordicResourcesItemGroup;
 import net.minecraft.block.*;
 import net.minecraft.block.trees.Tree;
 import net.minecraft.item.BlockItemUseContext;
@@ -101,6 +101,6 @@ public class BlockSapling extends BushBlock implements IGrowable, IItemGroupHold
     @Override
     public ItemGroup group() {
 
-        return NordicWorldItemGroup.INSTANCE;
+        return NordicResourcesItemGroup.INSTANCE;
     }
 }

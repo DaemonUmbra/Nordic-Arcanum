@@ -1,7 +1,7 @@
 package com.lordskittles.nordicarcanum.common.block.decoration;
 
 import com.lordskittles.arcanumapi.common.block.BlockMod;
-import com.lordskittles.nordicarcanum.client.itemgroups.NordicWorldItemGroup;
+import com.lordskittles.nordicarcanum.client.itemgroups.NordicResourcesItemGroup;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -19,6 +19,6 @@ public class BlockCompactResource extends BlockMod {
                 .harvestLevel(ItemTier.WOOD.getHarvestLevel())
                 .harvestTool(ToolType.PICKAXE));
 
-        this.group = NordicWorldItemGroup.INSTANCE;
+        this.group = NordicResourcesItemGroup.INSTANCE;
     }
 }

@@ -1,7 +1,7 @@
 package com.lordskittles.nordicarcanum.common.block.world;
 
 import com.lordskittles.arcanumapi.common.block.IItemGroupHolder;
-import com.lordskittles.nordicarcanum.client.itemgroups.NordicWorldItemGroup;
+import com.lordskittles.nordicarcanum.client.itemgroups.NordicResourcesItemGroup;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.LeavesBlock;
@@ -17,6 +17,6 @@ public class BlockLeaves extends LeavesBlock implements IItemGroupHolder {
     @Override
     public ItemGroup group() {
 
-        return NordicWorldItemGroup.INSTANCE;
+        return NordicResourcesItemGroup.INSTANCE;
     }
 }

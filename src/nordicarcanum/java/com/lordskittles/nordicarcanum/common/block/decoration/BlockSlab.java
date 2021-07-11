@@ -1,7 +1,7 @@
 package com.lordskittles.nordicarcanum.common.block.decoration;
 
 import com.lordskittles.arcanumapi.common.block.IItemGroupHolder;
-import com.lordskittles.nordicarcanum.client.itemgroups.NordicWorldItemGroup;
+import com.lordskittles.nordicarcanum.client.itemgroups.NordicResourcesItemGroup;
 import net.minecraft.block.Block;
 import net.minecraft.block.SlabBlock;
 import net.minecraft.block.SoundType;
@@ -34,6 +34,6 @@ public class BlockSlab extends SlabBlock implements IItemGroupHolder {
     @Override
     public ItemGroup group() {
 
-        return NordicWorldItemGroup.INSTANCE;
+        return NordicResourcesItemGroup.INSTANCE;
     }
 }

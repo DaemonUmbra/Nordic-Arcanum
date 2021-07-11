@@ -107,11 +107,17 @@
 	"block.nordicarcanum.carnelian_crystal_compact": "Carnelian Block",
 	"block.nordicarcanum.garnet_crystal_compact": "Garnet Block",
 	"block.nordicarcanum.thulite_crystal_compact": "Thulite Block",
-	"block.nordicarcanum.steel_metal_compact": "Steel Block",
 	"block.nordicarcanum.silver_metal_compact": "Silver Block",
 	"block.nordicarcanum.bismuth_metal_compact": "Bismuth Block",
 	"block.nordicarcanum.nickle_metal_compact": "Nickel Block",
+	"block.nordicarcanum.steel_metal_compact": "Steel Block",
 	"block.nordicarcanum.norse_compact": "Norse Block",
+	"block.nordicarcanum.electrum_metal_compact": "Electrum Block",
+	"block.nordicarcanum.bronze_metal_compact": "Bronze Block",
+	"block.nordicarcanum.mithril_metal_compact": "Mithril Block",
+	"block.nordicarcanum.billon_metal_compact": "Billon Block",
+	"block.nordicarcanum.sun_steel_metal_compact": "Sun Steel Block",
+	"block.nordicarcanum.sea_steel_metal_compact": "Sea Steel Block",
 
 	"block.nordicarcanum.feldspar": "Feldspar",
 	"block.nordicarcanum.feldspar_polished": "Polished Feldspar",
@@ -218,7 +224,7 @@
 	"block.nordicarcanum.liquid_arcanum": "Liquid Arcanum",
 	
 	"itemGroup.nordictab": "Nordic Arcanum",
-	"itemGroup.nordicworldtab": "Nordic Arcanum: World",
+	"itemGroup.nordicresourcestab": "Nordic Arcanum: Resources",
 
 	"container.arcane_chest": "Arcane Chest",
 	"container.impossible_chest": "Impossible Chest",

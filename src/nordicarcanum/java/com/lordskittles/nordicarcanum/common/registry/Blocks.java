@@ -66,6 +66,12 @@ public class Blocks {
     public static final RegistryObject<Block> silver_metal_compact = BLOCKS.register(NordicNames.SILVER_COMPACT, BlockCompactResource::new);
     public static final RegistryObject<Block> steel_metal_compact = BLOCKS.register(NordicNames.STEEL_COMPACT, () -> new BlockInfusable(Material.IRON, MaterialColor.GRAY, BlockInfusable.InfusionType.STAFF_WORKBENCH));
     public static final RegistryObject<Block> norse_compact = BLOCKS.register(NordicNames.NORSE_COMPACT, BlockCompactResource::new);
+    public static final RegistryObject<Block> electrum_compact = BLOCKS.register(NordicNames.ELECTRUM_COMPACT, BlockCompactResource::new);
+    public static final RegistryObject<Block> bronze_compact = BLOCKS.register(NordicNames.BRONZE_COMPACT, BlockCompactResource::new);
+    public static final RegistryObject<Block> mithril_compact = BLOCKS.register(NordicNames.MITHRIL_COMPACT, BlockCompactResource::new);
+    public static final RegistryObject<Block> billon_compact = BLOCKS.register(NordicNames.BILLON_COMPACT, BlockCompactResource::new);
+    public static final RegistryObject<Block> sun_steel_compact = BLOCKS.register(NordicNames.SUN_STEEL_COMPACT, BlockCompactResource::new);
+    public static final RegistryObject<Block> sea_steel_compact = BLOCKS.register(NordicNames.SEA_STEEL_COMPACT, BlockCompactResource::new);
 
     public static final RegistryObject<Block> yew_sapling = BLOCKS.register(NordicNames.YEW + NordicNames.SAPLING_SUFFIX, () -> new BlockSapling(TreeYew::new));
     public static final RegistryObject<Block> pine_sapling = BLOCKS.register(NordicNames.PINE + NordicNames.SAPLING_SUFFIX, () -> new BlockSapling(TreePine::new));

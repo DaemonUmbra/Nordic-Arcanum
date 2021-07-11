@@ -153,6 +153,12 @@ public class NordicNames {
     public static final String BISMUTH_COMPACT = BISMUTH + METAL_SUFFIX + COMPACT_SUFFIX;
     public static final String STEEL_COMPACT = STEEL + METAL_SUFFIX + COMPACT_SUFFIX;
     public static final String NORSE_COMPACT = NORSE + COMPACT_SUFFIX;
+    public static final String ELECTRUM_COMPACT = ELECTRUM + METAL_SUFFIX + COMPACT_SUFFIX;
+    public static final String BRONZE_COMPACT = BRONZE + METAL_SUFFIX + COMPACT_SUFFIX;
+    public static final String MITHRIL_COMPACT = MITHRIL + METAL_SUFFIX + COMPACT_SUFFIX;
+    public static final String BILLON_COMPACT = BILLON + METAL_SUFFIX + COMPACT_SUFFIX;
+    public static final String SUN_STEEL_COMPACT = SUN_STEEL + METAL_SUFFIX + COMPACT_SUFFIX;
+    public static final String SEA_STEEL_COMPACT = SEA_STEEL + METAL_SUFFIX + COMPACT_SUFFIX;
 
     public static final String MAGIC_SIGIL = "magic_sigil";
     public static final String SHAPING_HAMMER = "shaping_hammer";

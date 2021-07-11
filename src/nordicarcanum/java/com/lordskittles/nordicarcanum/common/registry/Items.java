@@ -2,7 +2,7 @@ package com.lordskittles.nordicarcanum.common.registry;
 
 import com.lordskittles.arcanumapi.common.item.ItemMod;
 import com.lordskittles.nordicarcanum.client.itemgroups.NordicItemGroup;
-import com.lordskittles.nordicarcanum.client.itemgroups.NordicWorldItemGroup;
+import com.lordskittles.nordicarcanum.client.itemgroups.NordicResourcesItemGroup;
 import com.lordskittles.nordicarcanum.common.item.*;
 import com.lordskittles.nordicarcanum.common.item.crafting.*;
 import com.lordskittles.nordicarcanum.common.item.magic.*;
@@ -21,7 +21,7 @@ public class Items {
 
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, NordicArcanum.MODID);
 
-    public static final RegistryObject<Item> arcane_powder = ITEMS.register(NordicNames.ARCANE_POWDER, () -> new ItemDust(NordicWorldItemGroup.INSTANCE));
+    public static final RegistryObject<Item> arcane_powder = ITEMS.register(NordicNames.ARCANE_POWDER, () -> new ItemDust(NordicResourcesItemGroup.INSTANCE));
     public static final RegistryObject<Item> feldspar_dust = ITEMS.register(NordicNames.FELDSPAR + NordicNames.DUST_SUFFIX, ItemDust::new);
     public static final RegistryObject<Item> carnelian_dust = ITEMS.register(NordicNames.CARNELIAN + NordicNames.DUST_SUFFIX, ItemDust::new);
     public static final RegistryObject<Item> garnet_dust = ITEMS.register(NordicNames.GARNET + NordicNames.DUST_SUFFIX, ItemDust::new);
@@ -87,7 +87,7 @@ public class Items {
     public static final RegistryObject<Item> viking_saw = ITEMS.register(NordicNames.VIKING_SAW, ItemVikingSaw::new);
     public static final RegistryObject<Item> mortar_pestle = ITEMS.register(NordicNames.MORTAR_PESTLE, ItemMortarPestle::new);
     public static final RegistryObject<Item> infused_arcane_powder = ITEMS.register(NordicNames.INFUSED_ARCANE_POWDER, ItemInfusedArcanePowder::new);
-    public static final RegistryObject<Item> liquid_arcanum_bucket = ITEMS.register(NordicNames.LIQUID_ARCANUM + NordicNames.BUCKET, () -> new BucketItem(Fluids.liquid_arcanum, new Item.Properties().group(NordicWorldItemGroup.INSTANCE).maxStackSize(1)));
+    public static final RegistryObject<Item> liquid_arcanum_bucket = ITEMS.register(NordicNames.LIQUID_ARCANUM + NordicNames.BUCKET, () -> new BucketItem(Fluids.liquid_arcanum, new Item.Properties().group(NordicResourcesItemGroup.INSTANCE).maxStackSize(1)));
     public static final RegistryObject<Item> arcanum_bottle = ITEMS.register(NordicNames.ARCANUM_BOTTLE, ItemArcanumBottle::new);
 
     public static final RegistryObject<Item> pedestal_cast = ITEMS.register(NordicNames.PEDESTAL + NordicNames.CAST, () -> new ItemBindingCast(BindingShape.Pedestal));

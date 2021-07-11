@@ -1,7 +1,7 @@
 package com.lordskittles.nordicarcanum.common.block.world;
 
 import com.lordskittles.arcanumapi.common.block.BlockMod;
-import com.lordskittles.nordicarcanum.client.itemgroups.NordicWorldItemGroup;
+import com.lordskittles.nordicarcanum.client.itemgroups.NordicResourcesItemGroup;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -28,7 +28,7 @@ public class BlockStatue extends BlockMod {
 
         super(properties);
 
-        this.group = NordicWorldItemGroup.INSTANCE;
+        this.group = NordicResourcesItemGroup.INSTANCE;
         this.setDefaultState(this.getStateContainer().getBaseState().with(FACING, Direction.NORTH));
     }
 

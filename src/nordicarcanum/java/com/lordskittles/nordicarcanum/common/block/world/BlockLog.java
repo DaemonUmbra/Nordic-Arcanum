@@ -1,7 +1,7 @@
 package com.lordskittles.nordicarcanum.common.block.world;
 
 import com.lordskittles.arcanumapi.common.block.IItemGroupHolder;
-import com.lordskittles.nordicarcanum.client.itemgroups.NordicWorldItemGroup;
+import com.lordskittles.nordicarcanum.client.itemgroups.NordicResourcesItemGroup;
 import com.lordskittles.nordicarcanum.common.registry.Blocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -26,7 +26,7 @@ public class BlockLog extends RotatedPillarBlock implements IItemGroupHolder {
     @Override
     public ItemGroup group() {
 
-        return NordicWorldItemGroup.INSTANCE;
+        return NordicResourcesItemGroup.INSTANCE;
     }
 
     @Nullable
