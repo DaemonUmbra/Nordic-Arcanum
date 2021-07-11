@@ -101,8 +101,8 @@ public class NordicNames {
     public static final String BRONZE = "bronze";
     public static final String MITHRIL = "mithril";
     public static final String BILLON = "billon";
-    public static final String SUN_STEEL = "sea_steel";
-    public static final String SEA_STEEL = "sun_steel";
+    public static final String SUNSTEEL = "seasteel";
+    public static final String SEASTEEL = "sunsteel";
     public static final String IRON = "iron";
     public static final String GOLD = "gold";
 
@@ -157,8 +157,8 @@ public class NordicNames {
     public static final String BRONZE_COMPACT = BRONZE + METAL_SUFFIX + COMPACT_SUFFIX;
     public static final String MITHRIL_COMPACT = MITHRIL + METAL_SUFFIX + COMPACT_SUFFIX;
     public static final String BILLON_COMPACT = BILLON + METAL_SUFFIX + COMPACT_SUFFIX;
-    public static final String SUN_STEEL_COMPACT = SUN_STEEL + METAL_SUFFIX + COMPACT_SUFFIX;
-    public static final String SEA_STEEL_COMPACT = SEA_STEEL + METAL_SUFFIX + COMPACT_SUFFIX;
+    public static final String SUN_STEEL_COMPACT = SUNSTEEL + METAL_SUFFIX + COMPACT_SUFFIX;
+    public static final String SEA_STEEL_COMPACT = SEASTEEL + METAL_SUFFIX + COMPACT_SUFFIX;
 
     public static final String MAGIC_SIGIL = "magic_sigil";
     public static final String SHAPING_HAMMER = "shaping_hammer";

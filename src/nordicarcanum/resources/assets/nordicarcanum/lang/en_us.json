@@ -17,8 +17,8 @@
 	"item.nordicarcanum.bronze_ingot": "Bronze Ingot",
 	"item.nordicarcanum.mithril_ingot": "Mithril Ingot",
 	"item.nordicarcanum.billon_ingot": "Billon Ingot",
-	"item.nordicarcanum.sun_steel_ingot": "Sun Steel Ingot",
-	"item.nordicarcanum.sea_steel_ingot": "Sea Steel Ingot",
+	"item.nordicarcanum.sunsteel_ingot": "Sunsteel Ingot",
+	"item.nordicarcanum.seasteel_ingot": "Seasteel Ingot",
 
 	"item.nordicarcanum.bismuth_raw": "Raw Bismuth",
 	"item.nordicarcanum.silver_raw": "Raw Silver",
@@ -116,8 +116,8 @@
 	"block.nordicarcanum.bronze_metal_compact": "Bronze Block",
 	"block.nordicarcanum.mithril_metal_compact": "Mithril Block",
 	"block.nordicarcanum.billon_metal_compact": "Billon Block",
-	"block.nordicarcanum.sun_steel_metal_compact": "Sun Steel Block",
-	"block.nordicarcanum.sea_steel_metal_compact": "Sea Steel Block",
+	"block.nordicarcanum.sunsteel_metal_compact": "Sunsteel Block",
+	"block.nordicarcanum.seasteel_metal_compact": "Seasteel Block",
 
 	"block.nordicarcanum.feldspar": "Feldspar",
 	"block.nordicarcanum.feldspar_polished": "Polished Feldspar",
