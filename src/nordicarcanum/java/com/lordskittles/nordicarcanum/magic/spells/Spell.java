@@ -1,9 +1,10 @@
-package com.lordskittles.arcanumapi.magic.spells;
+package com.lordskittles.nordicarcanum.magic.spells;
 
-import com.lordskittles.arcanumapi.common.registry.Spells;
 import com.lordskittles.arcanumapi.common.utilities.MagicUtilities;
 import com.lordskittles.arcanumapi.core.ArcanumAPI;
-import com.lordskittles.arcanumapi.magic.schools.SchoolType;
+import com.lordskittles.nordicarcanum.common.registry.Spells;
+import com.lordskittles.nordicarcanum.core.NordicArcanum;
+import com.lordskittles.nordicarcanum.magic.schools.SchoolType;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
@@ -25,7 +26,7 @@ public abstract class Spell extends ForgeRegistryEntry<Spell> {
         this.name = name;
         this.arcanumCost = arcanumCost;
 
-        this.setRegistryName(ArcanumAPI.RL(modID, name));
+        this.setRegistryName(NordicArcanum.RL(modID, name));
         Spells.registerSpell(school, this);
     }
 

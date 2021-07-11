@@ -2,8 +2,8 @@ package com.lordskittles.nordicarcanum.common.tileentity.crafting;
 
 import com.lordskittles.arcanumapi.common.tileentity.TileEntityInventory;
 import com.lordskittles.arcanumapi.common.utilities.NBTUtilities;
-import com.lordskittles.arcanumapi.magic.ArcanumServerManager;
-import com.lordskittles.arcanumapi.magic.IArcanumTile;
+import com.lordskittles.arcanumapi.arcanum.ArcanumServerManager;
+import com.lordskittles.arcanumapi.arcanum.IArcanumTile;
 import com.lordskittles.nordicarcanum.common.inventory.containers.ContainerCraftingCloth;
 import com.lordskittles.nordicarcanum.common.registry.TileEntities;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;

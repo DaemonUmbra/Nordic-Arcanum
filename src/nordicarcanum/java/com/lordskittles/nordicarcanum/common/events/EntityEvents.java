@@ -1,7 +1,7 @@
 package com.lordskittles.nordicarcanum.common.events;
 
 import com.lordskittles.arcanumapi.common.utilities.MagicUtilities;
-import com.lordskittles.arcanumapi.magic.ArcanumServerManager;
+import com.lordskittles.arcanumapi.arcanum.ArcanumServerManager;
 import com.lordskittles.nordicarcanum.common.advancements.Advancements;
 import com.lordskittles.nordicarcanum.common.registry.Blocks;
 import com.lordskittles.nordicarcanum.common.registry.Items;

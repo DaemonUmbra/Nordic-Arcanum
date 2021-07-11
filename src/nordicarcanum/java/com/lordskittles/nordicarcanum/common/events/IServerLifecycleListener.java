@@ -1,4 +1,4 @@
-package com.lordskittles.arcanumapi.common.event;
+package com.lordskittles.nordicarcanum.common.events;
 
 import javax.annotation.Nullable;
 

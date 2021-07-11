@@ -1,8 +1,11 @@
 package com.lordskittles.nordicarcanum.core;
 
 import com.lordskittles.nordicarcanum.common.advancements.Advancements;
+import com.lordskittles.nordicarcanum.common.events.ServerEvents;
 import com.lordskittles.nordicarcanum.common.network.PacketHandler;
 import com.lordskittles.nordicarcanum.common.registry.*;
+import com.lordskittles.nordicarcanum.magic.progression.ProgressionIOThread;
+import com.lordskittles.nordicarcanum.magic.schools.MagicSchool;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -10,9 +13,12 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.Collection;
 
 @Mod(NordicArcanum.MODID)
 @Mod.EventBusSubscriber(modid = NordicArcanum.MODID, bus = Bus.MOD)
@@ -32,6 +38,7 @@ public class NordicArcanum {
         version = new Version(ModLoadingContext.get().getActiveContainer().getModInfo().getVersion());
 
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        modEventBus.addListener(this::setup);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, NordicConfig.SPEC);
         NordicConfig.load();
@@ -56,7 +63,22 @@ public class NordicArcanum {
 
         Advancements.register();
 
+        ServerEvents.registerListener(ProgressionIOThread.startup());
+
         MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    public void setup(FMLCommonSetupEvent event) {
+
+        Collection<MagicSchool> schools = MagicSchools.getIdSchools();
+        for(MagicSchool school : schools) {
+            school.loadSpells();
+        }
+    }
+
+    public static ResourceLocation RL(String modId, String location) {
+
+        return new ResourceLocation(modId, location);
     }
 
     public static ResourceLocation RL(String location) {

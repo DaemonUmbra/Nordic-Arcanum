@@ -22,12 +22,12 @@ public class Particles {
 
     public static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, NordicArcanum.MODID);
 
-    public static final RegistryObject<AttunementAltarParticleType> ar_particle = PARTICLES.register(ArcanumNames.AR + NordicNames.PARTICLE, () -> new AttunementAltarParticleType(1, 1, 1, 1));
-    public static final RegistryObject<AttunementAltarParticleType> fe_particle = PARTICLES.register(ArcanumNames.FE + NordicNames.PARTICLE, () -> new AttunementAltarParticleType(1, 1, 1, 1));
-    public static final RegistryObject<AttunementAltarParticleType> hagal_particle = PARTICLES.register(ArcanumNames.HAGAL + NordicNames.PARTICLE, () -> new AttunementAltarParticleType(1, 1, 1, 1));
-    public static final RegistryObject<AttunementAltarParticleType> kaun_particle = PARTICLES.register(ArcanumNames.KAUN + NordicNames.PARTICLE, () -> new AttunementAltarParticleType(1, 1, 1, 1));
-    public static final RegistryObject<AttunementAltarParticleType> ur_particle = PARTICLES.register(ArcanumNames.UR + NordicNames.PARTICLE, () -> new AttunementAltarParticleType(1, 1, 1, 1));
-    public static final RegistryObject<AttunementAltarParticleType> yr_particle = PARTICLES.register(ArcanumNames.YR + NordicNames.PARTICLE, () -> new AttunementAltarParticleType(1, 1, 1, 1));
+    public static final RegistryObject<AttunementAltarParticleType> ar_particle = PARTICLES.register(NordicNames.AR + NordicNames.PARTICLE, () -> new AttunementAltarParticleType(1, 1, 1, 1));
+    public static final RegistryObject<AttunementAltarParticleType> fe_particle = PARTICLES.register(NordicNames.FE + NordicNames.PARTICLE, () -> new AttunementAltarParticleType(1, 1, 1, 1));
+    public static final RegistryObject<AttunementAltarParticleType> hagal_particle = PARTICLES.register(NordicNames.HAGAL + NordicNames.PARTICLE, () -> new AttunementAltarParticleType(1, 1, 1, 1));
+    public static final RegistryObject<AttunementAltarParticleType> kaun_particle = PARTICLES.register(NordicNames.KAUN + NordicNames.PARTICLE, () -> new AttunementAltarParticleType(1, 1, 1, 1));
+    public static final RegistryObject<AttunementAltarParticleType> ur_particle = PARTICLES.register(NordicNames.UR + NordicNames.PARTICLE, () -> new AttunementAltarParticleType(1, 1, 1, 1));
+    public static final RegistryObject<AttunementAltarParticleType> yr_particle = PARTICLES.register(NordicNames.YR + NordicNames.PARTICLE, () -> new AttunementAltarParticleType(1, 1, 1, 1));
     public static final RegistryObject<TransformSparkleParticleType> transform_sparkle_particle = PARTICLES.register(NordicNames.TRANSFORM_SPARKLE + NordicNames.PARTICLE, () -> new TransformSparkleParticleType(1, 1, 1, 1));
 
     @SubscribeEvent

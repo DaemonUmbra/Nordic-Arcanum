@@ -1,4 +1,4 @@
-package com.lordskittles.arcanumapi.magic.spells;
+package com.lordskittles.nordicarcanum.magic.spells;
 
 public enum SpellType {
     Projectile("Projectile", 0),

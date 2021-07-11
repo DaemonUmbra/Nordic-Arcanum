@@ -1,7 +1,8 @@
-package com.lordskittles.arcanumapi.common.registry;
+package com.lordskittles.nordicarcanum.common.registry;
 
-import com.lordskittles.arcanumapi.common.command.CommandResetSchools;
+import com.lordskittles.nordicarcanum.common.command.CommandResetSchools;
 import com.lordskittles.arcanumapi.core.ArcanumAPI;
+import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.command.CommandSource;
@@ -14,7 +15,7 @@ public class Commands {
 
     public static LiteralArgumentBuilder<CommandSource> register() {
 
-        return net.minecraft.command.Commands.literal(ArcanumAPI.MODID)
+        return net.minecraft.command.Commands.literal(NordicArcanum.MODID)
                 .requires(cs -> cs.getEntity() instanceof ServerPlayerEntity)
                 .then(CommandResetSchools.register());
     }
@@ -27,6 +28,6 @@ public class Commands {
 
     public static ITextComponent getCommandFeedback(String name) {
 
-        return new TranslationTextComponent(ArcanumAPI.MODID + ".command." + name);
+        return new TranslationTextComponent(NordicArcanum.MODID + ".command." + name);
     }
 }

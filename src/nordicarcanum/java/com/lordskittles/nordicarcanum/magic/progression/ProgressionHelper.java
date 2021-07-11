@@ -1,7 +1,8 @@
-package com.lordskittles.arcanumapi.magic.progression;
+package com.lordskittles.nordicarcanum.magic.progression;
 
 import com.google.common.io.Files;
 import com.lordskittles.arcanumapi.core.ArcanumAPI;
+import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -68,8 +69,8 @@ public class ProgressionHelper {
             loadUnsafe(uuid, playerFile);
         }
         catch(Exception e) {
-            ArcanumAPI.LOG.warn("Unable to load progress from default progress file. Attempting loading backup.");
-            ArcanumAPI.LOG.warn("Erroneous file: " + playerFile.getName());
+            NordicArcanum.LOG.warn("Unable to load progress from default progress file. Attempting loading backup.");
+            NordicArcanum.LOG.warn("Erroneous file: " + playerFile.getName());
             e.printStackTrace();
 
             playerFile = getPlayerBackupFile(uuid);
@@ -78,8 +79,8 @@ public class ProgressionHelper {
                 Files.copy(playerFile, getPlayerFile(uuid));
             }
             catch(Exception e1) {
-                ArcanumAPI.LOG.warn("Unable to load progress from backup progress file. Copying relevant files to error files.");
-                ArcanumAPI.LOG.warn("Erroneous file: " + playerFile.getName());
+                NordicArcanum.LOG.warn("Unable to load progress from backup progress file. Copying relevant files to error files.");
+                NordicArcanum.LOG.warn("Erroneous file: " + playerFile.getName());
                 e1.printStackTrace();
 
                 File plOriginal = getPlayerFile(uuid);
@@ -87,12 +88,12 @@ public class ProgressionHelper {
                 try {
                     Files.copy(plOriginal, new File(plOriginal.getParent(), plOriginal.getName() + ".lerror"));
                     Files.copy(plBackup, new File(plBackup.getParent(), plBackup.getName() + ".lerror"));
-                    ArcanumAPI.LOG.warn("Copied progression files to error files. In case you would like to try me (HellFirePvP) to maybe see what i can do about maybe recovering the files,");
-                    ArcanumAPI.LOG.warn("send them over to me at the issue tracker https://github.com/HellFirePvP/AstralSorcery/issues - 90% that i won't be able to do anything, but reporting it would still be great.");
+                    NordicArcanum.LOG.warn("Copied progression files to error files. In case you would like to try me (HellFirePvP) to maybe see what i can do about maybe recovering the files,");
+                    NordicArcanum.LOG.warn("send them over to me at the issue tracker https://github.com/HellFirePvP/AstralSorcery/issues - 90% that i won't be able to do anything, but reporting it would still be great.");
                 }
                 catch(IOException e2) {
-                    ArcanumAPI.LOG.warn("Unable to copy files to error-files.");
-                    ArcanumAPI.LOG.warn("I've had enough. I can't even access or open the files apparently. I'm giving up.");
+                    NordicArcanum.LOG.warn("Unable to copy files to error-files.");
+                    NordicArcanum.LOG.warn("I've had enough. I can't even access or open the files apparently. I'm giving up.");
                     e2.printStackTrace();
                 }
                 plOriginal.delete();
@@ -171,7 +172,7 @@ public class ProgressionHelper {
         if(server == null)
             return null;
 
-        File dir = new File(server.func_240776_a_(new FolderName(ArcanumAPI.MODID)).toUri());
+        File dir = new File(server.func_240776_a_(new FolderName(NordicArcanum.MODID)).toUri());
         if(! dir.exists()) {
             dir.mkdirs();
         }

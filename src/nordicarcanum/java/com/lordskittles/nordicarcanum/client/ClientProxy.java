@@ -1,7 +1,7 @@
 package com.lordskittles.nordicarcanum.client;
 
 import com.lordskittles.arcanumapi.client.render.item.ItemModelWrapper;
-import com.lordskittles.arcanumapi.magic.schools.IMagicSchool;
+import com.lordskittles.nordicarcanum.magic.schools.IMagicSchool;
 import com.lordskittles.nordicarcanum.client.gui.container.*;
 import com.lordskittles.nordicarcanum.client.render.block.model.CraftingClothModel;
 import com.lordskittles.nordicarcanum.client.render.item.*;

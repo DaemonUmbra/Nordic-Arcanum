@@ -1,8 +1,8 @@
-package com.lordskittles.arcanumapi.common.command;
+package com.lordskittles.nordicarcanum.common.command;
 
-import com.lordskittles.arcanumapi.common.registry.Commands;
-import com.lordskittles.arcanumapi.core.ArcanumNames;
-import com.lordskittles.arcanumapi.magic.progression.ProgressionManager;
+import com.lordskittles.nordicarcanum.common.registry.Commands;
+import com.lordskittles.nordicarcanum.core.NordicNames;
+import com.lordskittles.nordicarcanum.magic.progression.ProgressionManager;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.command.CommandSource;
@@ -13,7 +13,7 @@ public class CommandResetSchools {
 
     public static ArgumentBuilder<CommandSource, ?> register() {
 
-        return Commands.register(ArcanumNames.RESET_SCHOOLS_COMMAND, CommandResetSchools.class)
+        return Commands.register(NordicNames.RESET_SCHOOLS_COMMAND, CommandResetSchools.class)
                 .requires(cs -> cs.hasPermissionLevel(4))
                 .executes(CommandResetSchools::execute);
     }
@@ -25,7 +25,7 @@ public class CommandResetSchools {
 
         if(entity instanceof PlayerEntity) {
             ProgressionManager.resetSchools((PlayerEntity) entity);
-            source.sendFeedback(Commands.getCommandFeedback(ArcanumNames.RESET_SCHOOLS_COMMAND), true);
+            source.sendFeedback(Commands.getCommandFeedback(NordicNames.RESET_SCHOOLS_COMMAND), true);
         }
 
         return 0;

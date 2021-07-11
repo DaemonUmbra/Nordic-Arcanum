@@ -1,9 +1,10 @@
-package com.lordskittles.arcanumapi.magic.progression;
+package com.lordskittles.nordicarcanum.magic.progression;
 
 import com.google.common.collect.Maps;
 import com.google.common.io.Files;
-import com.lordskittles.arcanumapi.common.event.IServerLifecycleListener;
+import com.lordskittles.nordicarcanum.common.events.IServerLifecycleListener;
 import com.lordskittles.arcanumapi.core.ArcanumAPI;
+import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompressedStreamTools;
 
@@ -130,7 +131,7 @@ public class ProgressionIOThread extends TimerTask implements IServerLifecycleLi
             Files.copy(playerFile, ProgressionHelper.getPlayerBackupFile(uuid));
         }
         catch(IOException exception) {
-            ArcanumAPI.LOG.warn("Failed copying progress file contents to backup file!");
+            NordicArcanum.LOG.warn("Failed copying progress file contents to backup file!");
             exception.printStackTrace();
         }
 

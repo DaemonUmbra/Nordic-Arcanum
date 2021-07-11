@@ -2,8 +2,8 @@ package com.lordskittles.arcanumapi.common.tileentity;
 
 import com.lordskittles.arcanumapi.common.network.PacketHandlerBase;
 import com.lordskittles.arcanumapi.common.utilities.MagicUtilities;
-import com.lordskittles.arcanumapi.magic.ArcanumServerManager;
-import com.lordskittles.arcanumapi.magic.IArcanumUser;
+import com.lordskittles.arcanumapi.arcanum.ArcanumServerManager;
+import com.lordskittles.arcanumapi.arcanum.IArcanumUser;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.tileentity.TileEntityType;
