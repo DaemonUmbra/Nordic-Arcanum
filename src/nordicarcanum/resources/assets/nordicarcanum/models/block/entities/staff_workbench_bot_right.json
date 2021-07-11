@@ -3,7 +3,7 @@
 	"texture_size": [128, 128],
 	"textures": {
 		"0": "nordicarcanum:blocks/entities/staff_workbench",
-		"particle": "nordicarcanum:blocks/entities/staff_workbench"
+		"particle": "nordicarcanum:blocks/compact_blocks/steel_metal_compact"
 	},
 	"elements": [
 		{

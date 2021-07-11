@@ -49,4 +49,14 @@ public class BlockInfusablePillar extends BlockPillar implements IInfusable {
             world.setBlockState(pos, state.with(ACTIVATED, true));
         }
     }
+
+    @Override
+    public BlockPos[] getInfusedPositions(World world, BlockPos pos, BlockPos right, BlockState state, Direction direction) {
+
+        if(state.get(ACTIVATED)) {
+            return new BlockPos[] { pos, pos.up() };
+        }
+
+        return new BlockPos[] { pos };
+    }
 }

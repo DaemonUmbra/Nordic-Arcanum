@@ -5,6 +5,7 @@ import com.lordskittles.arcanumapi.common.block.IItemBlockOverride;
 import com.lordskittles.arcanumapi.common.item.block.ItemBlockBase;
 import com.lordskittles.nordicarcanum.client.itemgroups.NordicItemGroup;
 import com.lordskittles.nordicarcanum.client.render.item.ItemStackSigilPodiumRender;
+import com.lordskittles.nordicarcanum.common.block.IInfusable;
 import com.lordskittles.nordicarcanum.common.block.voxelshapes.VoxelsSigilPodium;
 import com.lordskittles.nordicarcanum.common.item.magic.ItemSigil;
 import com.lordskittles.nordicarcanum.common.registry.TileEntities;
@@ -24,18 +25,20 @@ import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nullable;
 
-public class BlockSigilPodium extends BlockMod implements IItemBlockOverride {
+public class BlockSigilPodium extends BlockMod implements IItemBlockOverride, IInfusable {
 
     public static final BooleanProperty ISCORE = BooleanProperty.create("is_core");
 
@@ -111,5 +114,23 @@ public class BlockSigilPodium extends BlockMod implements IItemBlockOverride {
     public BlockItem getOverride() {
 
         return new ItemBlockBase(this, new Item.Properties().group(group()).setISTER(() -> ItemStackSigilPodiumRender::new));
+    }
+
+    @Override
+    public boolean isValid(IWorldReader world, BlockPos pos, BlockPos right, BlockState state) {
+
+        return !state.get(ISCORE);
+    }
+
+    @Override
+    public void infuse(World world, BlockPos pos, BlockPos right, BlockState state, Direction direction) {
+
+        world.setBlockState(pos, state.with(BlockSigilPodium.ISCORE, true));
+    }
+
+    @Override
+    public BlockPos[] getInfusedPositions(World world, BlockPos pos, BlockPos right, BlockState state, Direction direction) {
+
+        return new BlockPos[] { pos };
     }
 }

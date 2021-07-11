@@ -34,12 +34,15 @@ public class BlockInfusable extends BlockDecoration implements IInfusable {
     public boolean isValid(IWorldReader world, BlockPos pos, BlockPos right, BlockState state) {
 
         BlockState rightState = world.getBlockState(right);
+        BlockState upRightState = world.getBlockState(right.up()).getBlock().getDefaultState();
+        BlockState upState = world.getBlockState(pos.up()).getBlock().getDefaultState();
 
-        BlockState feldspar = Blocks.feldspar_brick_deco.get().getDefaultState();
+        BlockState steel_block = Blocks.steel_metal_compact.get().getDefaultState();
+        BlockState yew_stair = Blocks.yew_stairs.get().getDefaultState();
 
         switch(type) {
             case STAFF_WORKBENCH:
-                return state == feldspar && rightState == feldspar;
+                return state == steel_block && rightState == steel_block && upRightState == yew_stair && upState == yew_stair;
             case SIGIL_PODIUM:
                 return state == Blocks.carved_deepslate_brick.get().getDefaultState();
         }
@@ -63,5 +66,17 @@ public class BlockInfusable extends BlockDecoration implements IInfusable {
                 world.setBlockState(pos, Blocks.sigil_podium.get().getDefaultState());
                 break;
         }
+    }
+
+    @Override
+    public BlockPos[] getInfusedPositions(World world, BlockPos pos, BlockPos right, BlockState state, Direction direction) {
+        switch(type) {
+            case STAFF_WORKBENCH:
+                return new BlockPos[] { pos, pos.up(), right, right.up() };
+            case SIGIL_PODIUM:
+                return new BlockPos[] { pos };
+        }
+
+        return new BlockPos[] { pos };
     }
 }

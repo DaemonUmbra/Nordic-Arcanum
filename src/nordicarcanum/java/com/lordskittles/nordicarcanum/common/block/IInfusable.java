@@ -11,4 +11,6 @@ public interface IInfusable {
     default boolean isValid(IWorldReader world, BlockPos pos, BlockPos right, BlockState state) { return true; }
 
     void infuse(World world, BlockPos pos, BlockPos right, BlockState state, Direction direction);
+
+    BlockPos[] getInfusedPositions(World world, BlockPos pos, BlockPos right, BlockState state, Direction direction);
 }

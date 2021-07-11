@@ -64,7 +64,7 @@ public class Blocks {
     public static final RegistryObject<Block> bismuth_metal_compact = BLOCKS.register(NordicNames.BISMUTH_COMPACT, BlockCompactResource::new);
     public static final RegistryObject<Block> nickle_metal_compact = BLOCKS.register(NordicNames.NICKLE_COMPACT, BlockCompactResource::new);
     public static final RegistryObject<Block> silver_metal_compact = BLOCKS.register(NordicNames.SILVER_COMPACT, BlockCompactResource::new);
-    public static final RegistryObject<Block> steel_metal_compact = BLOCKS.register(NordicNames.STEEL_COMPACT, BlockCompactResource::new);
+    public static final RegistryObject<Block> steel_metal_compact = BLOCKS.register(NordicNames.STEEL_COMPACT, () -> new BlockInfusable(Material.IRON, MaterialColor.GRAY, BlockInfusable.InfusionType.STAFF_WORKBENCH));
     public static final RegistryObject<Block> norse_compact = BLOCKS.register(NordicNames.NORSE_COMPACT, BlockCompactResource::new);
 
     public static final RegistryObject<Block> yew_sapling = BLOCKS.register(NordicNames.YEW + NordicNames.SAPLING_SUFFIX, () -> new BlockSapling(TreeYew::new));
@@ -88,7 +88,7 @@ public class Blocks {
     public static final RegistryObject<Block> pine_plank = BLOCKS.register(NordicNames.PINE + NordicNames.PLANKS_SUFFIX, BlockPlank::new);
 
     public static final RegistryObject<Block> polished_feldspar = BLOCKS.register(NordicNames.POLISHED_FELDSPAR, BlockCompactResource::new);
-    public static final RegistryObject<Block> feldspar_brick_deco = BLOCKS.register(NordicNames.FELDSPAR_BRICK + NordicNames.DECO_SUFFIX, () -> new BlockInfusable(Material.ROCK, MaterialColor.SNOW, BlockInfusable.InfusionType.STAFF_WORKBENCH));
+    public static final RegistryObject<Block> feldspar_brick_deco = BLOCKS.register(NordicNames.FELDSPAR_BRICK + NordicNames.DECO_SUFFIX, () -> new BlockDecoration(Material.ROCK, MaterialColor.SNOW));
     public static final RegistryObject<Block> chiseled_feldspar_brick_deco = BLOCKS.register(NordicNames.CHISELED_FELDSPAR_BRICK + NordicNames.DECO_SUFFIX, () -> new BlockDecoration(Material.ROCK, MaterialColor.SNOW));
     public static final RegistryObject<Block> feldspar_pillar = BLOCKS.register(NordicNames.FELDSPAR + NordicNames.PILLAR_SUFFIX, BlockPillar::new);
 
