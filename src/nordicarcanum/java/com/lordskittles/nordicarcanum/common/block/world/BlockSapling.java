@@ -2,6 +2,7 @@ package com.lordskittles.nordicarcanum.common.block.world;
 
 import com.lordskittles.arcanumapi.common.block.IItemGroupHolder;
 import com.lordskittles.nordicarcanum.client.itemgroups.NordicResourcesItemGroup;
+import com.lordskittles.nordicarcanum.common.block.world.trees.NordicTree;
 import net.minecraft.block.*;
 import net.minecraft.block.trees.Tree;
 import net.minecraft.item.BlockItemUseContext;
@@ -25,9 +26,9 @@ public class BlockSapling extends BushBlock implements IGrowable, IItemGroupHold
     public static final IntegerProperty STAGE = BlockStateProperties.STAGE_0_1;
     protected static final VoxelShape SHAPE = Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 
-    private final Supplier<Tree> tree;
+    private final Supplier<NordicTree> tree;
 
-    public BlockSapling(Supplier<Tree> tree) {
+    public BlockSapling(Supplier<NordicTree> tree) {
 
         super(Block.Properties.from(Blocks.DEAD_BUSH));
 
@@ -70,7 +71,9 @@ public class BlockSapling extends BushBlock implements IGrowable, IItemGroupHold
                 return;
             }
 
-            this.tree.get().attemptGrowTree(world, world.getChunkProvider().getChunkGenerator(), pos, state, rand);
+            if(this.tree.get().attemptGrowTree(world, world.getChunkProvider().getChunkGenerator(), pos, state, rand)) {
+                world.setBlockState(pos, this.tree.get().getConfig().trunkProvider.getBlockState(rand, pos));
+            }
         }
     }
 

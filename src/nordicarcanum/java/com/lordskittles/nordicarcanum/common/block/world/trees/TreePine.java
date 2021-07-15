@@ -13,7 +13,7 @@ import net.minecraft.world.gen.feature.TwoLayerFeature;
 
 import java.util.Random;
 
-public class TreePine extends Tree {
+public class TreePine extends NordicTree {
 
     public static final BaseTreeFeatureConfig CONFIG = (new BaseTreeFeatureConfig.Builder(new SimpleBlockStateProvider(Blocks.pine_log.get().getDefaultState()),
             new SimpleBlockStateProvider(Blocks.pine_leaves.get().getDefaultState()), new PineFoliage(FeatureSpread.create(2, 0), FeatureSpread.create(0, 0), 3),
@@ -23,5 +23,11 @@ public class TreePine extends Tree {
     protected ConfiguredFeature<BaseTreeFeatureConfig, ?> getTreeFeature(Random rand, boolean bool) {
 
         return Features.pine_tree.get().withConfiguration(CONFIG);
+    }
+
+    @Override
+    public BaseTreeFeatureConfig getConfig() {
+
+        return CONFIG;
     }
 }

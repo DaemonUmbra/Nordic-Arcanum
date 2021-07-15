@@ -51,30 +51,31 @@ public abstract class TrunkPlacerBase extends AbstractTrunkPlacer {
 
         func_236909_a_(this.world, start.down());
 
-        placeTrunk(start, changed);
+        placeTrunk(start, changed, bounds);
 
         return ImmutableList.of(new FoliagePlacer.Foliage(start.up(this.baseHeight), 0, false));
     }
 
-    protected abstract void placeTrunk(BlockPos position, Set<BlockPos> changedLogs);
+    protected abstract void placeTrunk(BlockPos position, Set<BlockPos> changedLogs, MutableBoundingBox area);
 
-    protected boolean placeLog(BlockPos pos, Set<BlockPos> changedLogs) {
+    protected boolean placeLog(BlockPos pos, Set<BlockPos> changedLogs, MutableBoundingBox area) {
 
-        return placeLog(pos, (Direction.Axis) null, changedLogs);
+        return placeLog(pos, (Direction.Axis) null, changedLogs, area);
     }
 
     @SuppressWarnings("unchecked")
-    protected boolean placeLog(BlockPos pos, Direction.Axis axis, Set<BlockPos> changedLogs) {
+    protected boolean placeLog(BlockPos pos, Direction.Axis axis, Set<BlockPos> changedLogs, MutableBoundingBox area) {
 
         BlockState directedLog = (axis != null && this.logAxisProperty != null) ? (BlockState) this.config.trunkProvider.getBlockState(this.random, pos).with(this.logAxisProperty, (Comparable) axis) : this.config.trunkProvider.getBlockState(this.random, pos);
-        return placeBlock(pos, directedLog, changedLogs);
+        return placeBlock(pos, directedLog, changedLogs, area);
     }
 
-    private boolean placeBlock(BlockPos pos, BlockState state, Set<BlockPos> changedBlocks) {
+    private boolean placeBlock(BlockPos pos, BlockState state, Set<BlockPos> changedBlocks, MutableBoundingBox area) {
 
         if(TreeFeature.isReplaceableAt(world, pos)) {
             TreeFeature.setBlockStateWithoutUpdate(world, pos, state);
             changedBlocks.add(pos.toImmutable());
+            area.expandTo(new MutableBoundingBox(pos, pos));
 
             return true;
         }
