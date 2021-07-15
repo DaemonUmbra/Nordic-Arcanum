@@ -6,6 +6,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MutableBoundingBox;
 
 import java.util.Set;
 
@@ -19,28 +20,28 @@ public class YewTrunk extends TrunkPlacerBase {
     }
 
     @Override
-    protected void placeTrunk(BlockPos position, Set<BlockPos> changedLogs) {
+    protected void placeTrunk(BlockPos position, Set<BlockPos> changedLogs, MutableBoundingBox area) {
 
         BlockPos pos = position;
 
         for(int iter = 0; iter < 7; iter++) {
             pos = new BlockPos(position.getX(), position.getY() + iter, position.getZ());
-            placeLog(pos, changedLogs);
+            placeLog(pos, changedLogs, area);
         }
 
         for(int x = - 2; x <= 2; x++) {
             pos = new BlockPos(position.getX() + x, position.getY() + 4, position.getZ());
-            placeLog(pos, Direction.Axis.X, changedLogs);
+            placeLog(pos, Direction.Axis.X, changedLogs, area);
         }
 
         for(int z = - 2; z <= 2; z++) {
             pos = new BlockPos(position.getX(), position.getY() + 4, position.getZ() + z);
-            placeLog(pos, Direction.Axis.Z, changedLogs);
+            placeLog(pos, Direction.Axis.Z, changedLogs, area);
         }
 
-        placeLog(new BlockPos(position.getX() + 1, position.getY() + 6, position.getZ()), Direction.Axis.X, changedLogs);
-        placeLog(new BlockPos(position.getX() - 1, position.getY() + 6, position.getZ()), Direction.Axis.X, changedLogs);
-        placeLog(new BlockPos(position.getX(), position.getY() + 6, position.getZ() + 1), Direction.Axis.Z, changedLogs);
-        placeLog(new BlockPos(position.getX(), position.getY() + 6, position.getZ() - 1), Direction.Axis.Z, changedLogs);
+        placeLog(new BlockPos(position.getX() + 1, position.getY() + 6, position.getZ()), Direction.Axis.X, changedLogs, area);
+        placeLog(new BlockPos(position.getX() - 1, position.getY() + 6, position.getZ()), Direction.Axis.X, changedLogs, area);
+        placeLog(new BlockPos(position.getX(), position.getY() + 6, position.getZ() + 1), Direction.Axis.Z, changedLogs, area);
+        placeLog(new BlockPos(position.getX(), position.getY() + 6, position.getZ() - 1), Direction.Axis.Z, changedLogs, area);
     }
 }
