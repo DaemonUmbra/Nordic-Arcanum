@@ -77,7 +77,7 @@ public abstract class StructurePieceBase extends TemplateStructurePiece {
     protected void handleDataMarker(String function, BlockPos pos, IServerWorld world, Random rand, MutableBoundingBox sbb) {
 
         if("chest".equals(function)) {
-            world.setBlockState(pos, this.structure_block_replacement != null ? this.structure_block_replacement : Blocks.AIR.getDefaultState(), 3);
+            world.setBlockState(pos, this.structure_block_replacement != null ? this.structure_block_replacement : Blocks.AIR.getDefaultState(), 2);
             TileEntity tile = world.getTileEntity(pos.down());
             if(tile instanceof ChestTileEntity && this.loot_table != null) {
                 ChestTileEntity chest = (ChestTileEntity) tile;

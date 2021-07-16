@@ -18,16 +18,32 @@ import net.minecraftforge.common.world.BiomeGenerationSettingsBuilder;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
 
 public class FeatureGeneration {
+
+    private static Biome.Category[] temple_blacklist = new Biome.Category[]
+            {
+                    Biome.Category.BEACH,
+                    Biome.Category.NETHER,
+                    Biome.Category.OCEAN,
+                    Biome.Category.DESERT,
+                    Biome.Category.MESA,
+                    Biome.Category.MUSHROOM,
+                    Biome.Category.RIVER,
+                    Biome.Category.THEEND
+            };
 
     public static void generateStructures(BiomeLoadingEvent event) {
 
         Biome.Category category = event.getCategory();
-        if(category != Biome.Category.OCEAN) {
+        if(category != Biome.Category.OCEAN && category != Biome.Category.NETHER && category != Biome.Category.THEEND) {
             addStructureToBiome(event.getGeneration(), Structures.norse_pillar_feature, NordicConfig.genPillars.get());
+            addStructureToBiome(event.getGeneration(), Structures.shrine_feature, NordicConfig.genShrines.get());
+        }
 
-            addStructureToBiome(event.getGeneration(), Structures.shrine_baldur_feature, NordicConfig.genShrines.get());
+        if(! Arrays.asList(temple_blacklist).contains(category)) {
+            addStructureToBiome(event.getGeneration(), Structures.temple_feature, NordicConfig.genTemples.get());
         }
     }
 

@@ -186,6 +186,7 @@ public class NordicNames {
 
     public static final String DEEPSLATE = "deepslate";
     public static final String ANCIENT_NORSE = "ancient_norse";
+    public static final String ANCIENT_TEMPLE = "ancient_temple";
     public static final String ANCIENT_NORSE_BRICK = ANCIENT_NORSE + BRICK_SUFFIX;
     public static final String CARVED_DEEPSLATE = "carved_" + DEEPSLATE + BRICK_SUFFIX;
     public static final String DEEPSLATE_PILLAR = DEEPSLATE + PILLAR_SUFFIX;

@@ -78,6 +78,7 @@ public class NordicConfig {
     public static ForgeConfigSpec.BooleanValue genPine;
 
     public static ForgeConfigSpec.BooleanValue genPillars;
+    public static ForgeConfigSpec.BooleanValue genTemples;
     public static ForgeConfigSpec.BooleanValue genShrines;
     public static ForgeConfigSpec.BooleanValue genArcanumLakes;
     public static ForgeConfigSpec.IntValue arcanumLakeChance;
@@ -172,6 +173,7 @@ public class NordicConfig {
             startGroup("Decorations");
             {
                 genPillars = BUILDER.comment("Should Ancient Norse Pillars generate in the world?").define("genNorsePillars", true);
+                genTemples = BUILDER.comment("Should Ancient Temples generate in the world?").define("genTemples", true);
                 genShrines = BUILDER.comment("Should Shrines generate in the world?").define("genShrines", true);
                 genArcanumLakes = BUILDER.comment("Should Liquid Arcanum Lakes generate in the world?").define("genArcanumLakes", true);
                 arcanumLakeChance = BUILDER.comment("What is the chance that Liquid Arcanum Lakes generate in the world?").defineInRange("arcanumLakeChance", 15, 0, 100);

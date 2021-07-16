@@ -38,14 +38,14 @@ public class ShrinePieces {
             super(manager, structure, pos, rotation, offsetMap, Structures.shrine_piece, 0);
 
             this.loot_table = loot;
-            this.structure_block_replacement = net.minecraft.block.Blocks.AIR.getDefaultState();
+            this.structure_block_replacement = Blocks.feldspar_pillar.get().getDefaultState();
         }
 
         public Piece(TemplateManager manager, CompoundNBT nbt) {
 
             super(manager, nbt, Structures.pillar_piece);
 
-            this.structure_block_replacement = net.minecraft.block.Blocks.AIR.getDefaultState();
+            this.structure_block_replacement = Blocks.feldspar_pillar.get().getDefaultState();
         }
 
         @Override
@@ -54,7 +54,7 @@ public class ShrinePieces {
             super.handleDataMarker(function, pos, world, rand, sbb);
 
             if("statue".equals(function)) {
-                world.setBlockState(pos, statues[rand.nextInt(statues.length)].getDefaultState().with(BlockStatue.FACING, getDirectionFromRotation()), 3);
+                world.setBlockState(pos, statues[rand.nextInt(statues.length)].getDefaultState().with(BlockStatue.FACING, getDirectionFromRotation()), 2);
             }
         }
 
