@@ -1,0 +1,17 @@
+{
+	"variants":
+	{
+		"type=bottom":
+		{ 
+			"model": "nordicarcanum:block/cracked_feldspar_polished_slab"
+		},
+		"type=top":
+		{ 
+			"model": "nordicarcanum:block/cracked_feldspar_polished_slab_top"
+		},
+		"type=double":
+		{ 
+			"model": "nordicarcanum:block/cracked_feldspar_polished"
+		}
+	}
+}

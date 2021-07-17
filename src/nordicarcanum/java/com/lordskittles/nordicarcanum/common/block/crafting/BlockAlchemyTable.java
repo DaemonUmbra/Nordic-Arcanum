@@ -146,7 +146,7 @@ public class BlockAlchemyTable extends BlockMod {
 
         if(! player.isCreative()) {
             world.addEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(Blocks.yew_stairs.get(), 1)));
-            world.addEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(Blocks.feldspar_brick_deco.get(), 1)));
+            world.addEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(Blocks.feldspar_brick.get(), 1)));
             world.addEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(net.minecraft.block.Blocks.CAULDRON, 1)));
             world.addEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(Blocks.yew_plank.get(), 1)));
         }

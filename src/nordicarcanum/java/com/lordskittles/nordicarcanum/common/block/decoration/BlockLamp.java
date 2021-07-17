@@ -1,6 +1,7 @@
 package com.lordskittles.nordicarcanum.common.block.decoration;
 
 import com.lordskittles.arcanumapi.common.block.BlockMod;
+import com.lordskittles.nordicarcanum.client.itemgroups.NordicDecorationItemGroup;
 import com.lordskittles.nordicarcanum.client.itemgroups.NordicItemGroup;
 import com.lordskittles.nordicarcanum.common.block.SidePlacement;
 import net.minecraft.block.AbstractBlock;
@@ -29,7 +30,7 @@ public class BlockLamp extends BlockMod {
 
         this.placement = placement;
         this.shape = shape;
-        this.group = NordicItemGroup.INSTANCE;
+        this.group = NordicDecorationItemGroup.INSTANCE;
     }
 
     @Override
