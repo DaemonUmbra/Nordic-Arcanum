@@ -1,0 +1,8 @@
+{
+    "parent": "block/stairs_inner",
+    "textures": {
+        "bottom": "nordicarcanum:blocks/earth_blocks/cracked_feldspar",
+        "top": "nordicarcanum:blocks/earth_blocks/cracked_feldspar",
+        "side": "nordicarcanum:blocks/earth_blocks/cracked_feldspar"
+    }
+}
