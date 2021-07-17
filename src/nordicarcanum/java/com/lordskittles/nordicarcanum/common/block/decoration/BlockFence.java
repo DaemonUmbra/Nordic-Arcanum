@@ -1,7 +1,7 @@
 package com.lordskittles.nordicarcanum.common.block.decoration;
 
 import com.lordskittles.arcanumapi.common.block.IItemGroupHolder;
-import com.lordskittles.nordicarcanum.client.itemgroups.NordicResourcesItemGroup;
+import com.lordskittles.nordicarcanum.client.itemgroups.NordicDecorationItemGroup;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FenceBlock;
 import net.minecraft.item.ItemGroup;
@@ -16,6 +16,6 @@ public class BlockFence extends FenceBlock implements IItemGroupHolder {
     @Override
     public ItemGroup group() {
 
-        return NordicResourcesItemGroup.INSTANCE;
+        return NordicDecorationItemGroup.INSTANCE;
     }
 }

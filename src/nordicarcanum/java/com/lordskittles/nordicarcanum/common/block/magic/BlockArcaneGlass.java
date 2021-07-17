@@ -1,6 +1,7 @@
 package com.lordskittles.nordicarcanum.common.block.magic;
 
 import com.lordskittles.arcanumapi.common.block.BlockMod;
+import com.lordskittles.nordicarcanum.client.itemgroups.NordicDecorationItemGroup;
 import com.lordskittles.nordicarcanum.client.itemgroups.NordicItemGroup;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -22,7 +23,7 @@ public class BlockArcaneGlass extends BlockMod {
                 .hardnessAndResistance(1.0f)
                 .sound(SoundType.GLASS));
 
-        this.group = NordicItemGroup.INSTANCE;
+        this.group = NordicDecorationItemGroup.INSTANCE;
     }
 
     @OnlyIn(Dist.CLIENT)

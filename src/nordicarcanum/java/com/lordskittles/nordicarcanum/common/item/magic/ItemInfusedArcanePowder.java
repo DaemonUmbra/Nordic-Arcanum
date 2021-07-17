@@ -4,6 +4,7 @@ import com.lordskittles.arcanumapi.common.item.ItemMod;
 import com.lordskittles.arcanumapi.common.utilities.BlockUtilities;
 import com.lordskittles.arcanumapi.common.utilities.MathUtilities;
 import com.lordskittles.nordicarcanum.client.itemgroups.NordicItemGroup;
+import com.lordskittles.nordicarcanum.client.itemgroups.NordicResourcesItemGroup;
 import com.lordskittles.nordicarcanum.common.block.IInfusable;
 import com.lordskittles.nordicarcanum.common.registry.Blocks;
 import com.lordskittles.nordicarcanum.common.registry.Particles;
@@ -27,7 +28,7 @@ public class ItemInfusedArcanePowder extends ItemMod {
 
     public ItemInfusedArcanePowder() {
 
-        super(new Item.Properties().group(NordicItemGroup.INSTANCE).maxStackSize(4));
+        super(new Item.Properties().group(NordicResourcesItemGroup.INSTANCE).maxStackSize(4));
     }
 
     @Override

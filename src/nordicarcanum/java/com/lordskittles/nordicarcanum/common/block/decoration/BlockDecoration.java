@@ -1,7 +1,7 @@
 package com.lordskittles.nordicarcanum.common.block.decoration;
 
 import com.lordskittles.arcanumapi.common.block.BlockMod;
-import com.lordskittles.nordicarcanum.client.itemgroups.NordicResourcesItemGroup;
+import com.lordskittles.nordicarcanum.client.itemgroups.NordicDecorationItemGroup;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -16,7 +16,7 @@ public class BlockDecoration extends BlockMod {
                 .hardnessAndResistance(1.5f, 6.0f)
                 .sound(SoundType.STONE));
 
-        this.group = NordicResourcesItemGroup.INSTANCE;
+        this.group = NordicDecorationItemGroup.INSTANCE;
     }
 
     public BlockDecoration(float hardness) {
@@ -25,7 +25,7 @@ public class BlockDecoration extends BlockMod {
                 .hardnessAndResistance(hardness, 6.0f)
                 .sound(SoundType.STONE));
 
-        this.group = NordicResourcesItemGroup.INSTANCE;
+        this.group = NordicDecorationItemGroup.INSTANCE;
     }
 
     public BlockDecoration(int lightLevel) {
@@ -34,7 +34,7 @@ public class BlockDecoration extends BlockMod {
                 .hardnessAndResistance(0.5f, 3.0f)
                 .sound(SoundType.GLASS), lightLevel);
 
-        this.group = NordicResourcesItemGroup.INSTANCE;
+        this.group = NordicDecorationItemGroup.INSTANCE;
     }
 
     public BlockDecoration(Material material, MaterialColor color, int harvestLevel) {
@@ -44,7 +44,7 @@ public class BlockDecoration extends BlockMod {
                 .sound(SoundType.GLASS)
                 .harvestLevel(harvestLevel));
 
-        this.group = NordicResourcesItemGroup.INSTANCE;
+        this.group = NordicDecorationItemGroup.INSTANCE;
     }
 
     public BlockDecoration(Block.Properties properties, ItemGroup group) {

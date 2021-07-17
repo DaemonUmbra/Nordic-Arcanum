@@ -136,6 +136,14 @@
 	"block.nordicarcanum.chiseled_feldspar_brick_deco": "Chiseled Feldspar Brick",
 	"block.nordicarcanum.feldspar_pillar": "Feldspar Pillar",
 
+	"block.nordicarcanum.mossy_feldspar": "Mossy Feldspar",
+	"block.nordicarcanum.mossy_feldspar_polished": "Mossy Polished Feldspar",
+	"block.nordicarcanum.mossy_feldspar_brick": "Mossy Feldspar Brick",
+
+	"block.nordicarcanum.cracked_feldspar": "Cracked Feldspar",
+	"block.nordicarcanum.cracked_feldspar_polished": "Cracked Polished Feldspar",
+	"block.nordicarcanum.cracked_feldspar_brick": "Cracked Feldspar Brick",
+
 	"block.nordicarcanum.arcane_powder_ore": "Arcane Powder Ore",
 	"block.nordicarcanum.carnelian_ore": "Carnelian Ore",
 	"block.nordicarcanum.garnet_ore": "Garnet Ore",
@@ -159,16 +167,36 @@
 	"block.nordicarcanum.juniper_stair": "Juniper Stairs",
 	"block.nordicarcanum.yew_stair": "Yew Stairs",
 	"block.nordicarcanum.pine_stair": "Pine Stairs",
+	"block.nordicarcanum.norse_metal_stair": "Norse Metal Stairs",
+
+	"block.nordicarcanum.feldspar_stair": "Feldspar Stairs",
 	"block.nordicarcanum.feldspar_polished_stair": "Polished Feldspar Stairs",
 	"block.nordicarcanum.feldspar_brick_stair": "Feldspar Brick Stairs",
-	"block.nordicarcanum.norse_metal_stair": "Norse Metal Stairs",
+
+	"block.nordicarcanum.cracked_feldspar_stair": "Cracked Feldspar Stairs",
+	"block.nordicarcanum.cracked_feldspar_polished_stair": "Cracked Polished Feldspar Stairs",
+	"block.nordicarcanum.cracked_feldspar_brick_stair": "Cracked Feldspar Brick Stairs",
+
+	"block.nordicarcanum.mossy_feldspar_stair": "Mossy Feldspar Stairs",
+	"block.nordicarcanum.mossy_feldspar_polished_stair": "Mossy Polished Feldspar Stairs",
+	"block.nordicarcanum.mossy_feldspar_brick_stair": "Mossy Feldspar Brick Stairs",
 
 	"block.nordicarcanum.yew_slab": "Yew Slab",
 	"block.nordicarcanum.pine_slab": "Pine Slab",
 	"block.nordicarcanum.juniper_slab": "Juniper Slab",
+	"block.nordicarcanum.norse_metal_slab": "Norse Metal Slab",
+
+	"block.nordicarcanum.feldspar_slab": "Feldspar Slab",
 	"block.nordicarcanum.feldspar_polished_slab": "Polished Feldspar Slab",
 	"block.nordicarcanum.feldspar_brick_slab": "Feldspar Brick Slab",
-	"block.nordicarcanum.norse_metal_slab": "Norse Metal Slab",
+
+	"block.nordicarcanum.cracked_feldspar_slab": "Cracked Feldspar Slab",
+	"block.nordicarcanum.cracked_feldspar_polished_slab": "Cracked Polished Feldspar Slab",
+	"block.nordicarcanum.cracked_feldspar_brick_slab": "Cracked Feldspar Brick Slab",
+
+	"block.nordicarcanum.mossy_feldspar_slab": "Mossy Feldspar Slab",
+	"block.nordicarcanum.mossy_feldspar_polished_slab": "Mossy Polished Feldspar Slab",
+	"block.nordicarcanum.mossy_feldspar_brick_slab": "Mossy Feldspar Brick Slab",
 
 	"block.nordicarcanum.yew_log": "Yew Log",
 	"block.nordicarcanum.pine_log": "Pine Log",
@@ -226,15 +254,16 @@
 	"block.nordicarcanum.tyr_statue": "Statue of Tyr",
 
 	"block.nordicarcanum.infused_norse_compact": "Norse Block (Infused)",
-	"block.nordicarcanum.infused_arcane_dust_compact": "Infused Arcane Power Block",
+	"block.nordicarcanum.infused_arcane_powder_compact": "Infused Arcane Power Block",
 	"block.nordicarcanum.infused_feldspar_brick": "Feldspar Brick (Infused)",
 
 	"block.nordicarcanum.bifrost": "Bifrost",
 	"block.nordicarcanum.ruined_bifrost": "Ruined Bifrost",
 
 	"block.nordicarcanum.liquid_arcanum": "Liquid Arcanum",
-	
+
 	"itemGroup.nordictab": "Nordic Arcanum",
+	"itemGroup.nordicdecorationtab": "Nordic Arcanum: Decoration",
 	"itemGroup.nordicresourcestab": "Nordic Arcanum: Resources",
 
 	"container.arcane_chest": "Arcane Chest",

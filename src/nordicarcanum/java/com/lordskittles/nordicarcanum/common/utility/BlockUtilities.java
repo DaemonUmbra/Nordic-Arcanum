@@ -44,8 +44,8 @@ public class BlockUtilities {
 
     public static boolean isAltarMultiblockComplete(IWorld world, BlockPos start) {
 
-        Block chiseledCalcite = Blocks.chiseled_feldspar_brick_deco.get();
-        Block calciteBrick = Blocks.feldspar_brick_deco.get();
+        Block chiseledCalcite = Blocks.chiseled_feldspar_brick.get();
+        Block calciteBrick = Blocks.feldspar_brick.get();
 
         BlockPos topPodium = locateTopPodium(world, start);
 

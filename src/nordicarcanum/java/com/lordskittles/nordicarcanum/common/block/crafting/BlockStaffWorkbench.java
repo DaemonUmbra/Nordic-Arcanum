@@ -64,7 +64,7 @@ public class BlockStaffWorkbench extends BlockMod {
         switch(piece) {
             case BOTTOM_LEFT:
             case BOTTOM_RIGHT:
-                block = Blocks.feldspar_brick_deco.get();
+                block = Blocks.feldspar_brick.get();
                 break;
             case TOP_LEFT:
             case TOP_RIGHT:
@@ -141,7 +141,7 @@ public class BlockStaffWorkbench extends BlockMod {
 
         if(! player.isCreative()) {
             world.addEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(Blocks.pine_stairs.get(), 2)));
-            world.addEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(Blocks.feldspar_brick_deco.get(), 2)));
+            world.addEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(Blocks.feldspar_brick.get(), 2)));
         }
 
         world.playEvent(player, 2001, pos, getStateId(state));

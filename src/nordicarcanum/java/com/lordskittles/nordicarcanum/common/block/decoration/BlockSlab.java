@@ -1,6 +1,7 @@
 package com.lordskittles.nordicarcanum.common.block.decoration;
 
 import com.lordskittles.arcanumapi.common.block.IItemGroupHolder;
+import com.lordskittles.nordicarcanum.client.itemgroups.NordicDecorationItemGroup;
 import com.lordskittles.nordicarcanum.client.itemgroups.NordicResourcesItemGroup;
 import net.minecraft.block.Block;
 import net.minecraft.block.SlabBlock;
@@ -34,6 +35,6 @@ public class BlockSlab extends SlabBlock implements IItemGroupHolder {
     @Override
     public ItemGroup group() {
 
-        return NordicResourcesItemGroup.INSTANCE;
+        return NordicDecorationItemGroup.INSTANCE;
     }
 }

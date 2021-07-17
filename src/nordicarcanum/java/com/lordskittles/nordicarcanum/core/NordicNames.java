@@ -36,6 +36,8 @@ public class NordicNames {
 
     // Prefixes
     public static final String CHISELED_PREFIX = "chiseled_";
+    public static final String MOSSY_PREFIX = "mossy_";
+    public static final String CRACKED_PREFIX = "cracked_";
     public static final String INFUSED = "infused_";
     public static final String ENTITY = "entity.";
     public static final String GUI = NordicArcanum.MODID + ".gui.";
