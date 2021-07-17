@@ -1,5 +1,5 @@
 {
-    "parent": "block/stairs_inner",
+    "parent": "block/inner_stairs",
     "textures": {
         "bottom": "nordicarcanum:blocks/earth_blocks/feldspar",
         "top": "nordicarcanum:blocks/earth_blocks/feldspar",

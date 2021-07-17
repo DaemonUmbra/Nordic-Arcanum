@@ -1,5 +1,5 @@
 {
-    "parent": "block/stairs_outer",
+    "parent": "block/outer_stairs",
     "textures": {
         "bottom": "nordicarcanum:blocks/earth_blocks/mossy_feldspar_brick",
         "top": "nordicarcanum:blocks/earth_blocks/mossy_feldspar_brick",
