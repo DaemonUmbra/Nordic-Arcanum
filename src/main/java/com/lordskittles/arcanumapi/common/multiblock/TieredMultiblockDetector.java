@@ -1,4 +1,4 @@
-package com.lordskittles.arcanumapi.common.utilities;
+package com.lordskittles.arcanumapi.common.multiblock;
 
 import com.lordskittles.arcanumapi.core.ArcanumAPI;
 import net.minecraft.block.*;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class DynamicMultiblockDetector<M extends IMultiblock, E extends Enum> {
+public class TieredMultiblockDetector<M extends ITieredMultiblock, E extends Enum> {
 
     private class MultiblockStartInfo {
 
@@ -39,9 +39,9 @@ public class DynamicMultiblockDetector<M extends IMultiblock, E extends Enum> {
     private final HashMap<E, BlockPos> coreOffset = new HashMap<>();
     private final HashMap<E, BlockPos> referenceOffset = new HashMap<>();
     private final HashMap<E, Block[]> structureBlocks = new HashMap<>();
-    private final IMultiblock<E> multiblock;
+    private final ITieredMultiblock<E> multiblock;
 
-    public DynamicMultiblockDetector(IMultiblock multiblock) {
+    public TieredMultiblockDetector(ITieredMultiblock multiblock) {
 
         this.multiblock = multiblock;
     }
@@ -76,7 +76,7 @@ public class DynamicMultiblockDetector<M extends IMultiblock, E extends Enum> {
 
     private void tryCacheTemplateInfo(ServerWorld world) {
 
-        for(E iter : multiblock.getValues()) {
+        for(E iter : multiblock.getTierValues()) {
             tryCacheTemplateInfo(world, iter);
         }
     }

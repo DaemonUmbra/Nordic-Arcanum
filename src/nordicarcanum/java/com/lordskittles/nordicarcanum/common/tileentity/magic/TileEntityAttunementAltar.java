@@ -1,7 +1,7 @@
 package com.lordskittles.nordicarcanum.common.tileentity.magic;
 
-import com.lordskittles.arcanumapi.common.utilities.DynamicMultiblockDetector;
-import com.lordskittles.arcanumapi.common.utilities.IMultiblock;
+import com.lordskittles.arcanumapi.common.multiblock.TieredMultiblockDetector;
+import com.lordskittles.arcanumapi.common.multiblock.ITieredMultiblock;
 import com.lordskittles.nordicarcanum.common.block.magic.BlockSigilPodium;
 import com.lordskittles.nordicarcanum.common.inventory.containers.ContainerAttunementAltar;
 import com.lordskittles.nordicarcanum.common.network.PacketMultiblockFormed;
@@ -27,9 +27,9 @@ import net.minecraft.world.gen.feature.template.TemplateManager;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class TileEntityAttunementAltar extends TileEntity implements INamedContainerProvider, IMultiblock<GameStage> {
+public class TileEntityAttunementAltar extends TileEntity implements INamedContainerProvider, ITieredMultiblock<GameStage> {
 
-    public DynamicMultiblockDetector<TileEntityAttunementAltar, GameStage> detector;
+    public TieredMultiblockDetector<TileEntityAttunementAltar, GameStage> detector;
 
     public boolean isMultiblockFormed = false;
 
@@ -47,7 +47,7 @@ public class TileEntityAttunementAltar extends TileEntity implements INamedConta
         super(TileEntities.attunement_altar.get());
 
         this.title = new TranslationTextComponent("container." + NordicNames.ATTUNEMENT_ALTAR);
-        detector = new DynamicMultiblockDetector<>(this);
+        detector = new TieredMultiblockDetector<>(this);
     }
 
     public List<TileEntitySigilPodium> getPodiums() {
@@ -82,7 +82,7 @@ public class TileEntityAttunementAltar extends TileEntity implements INamedConta
     }
 
     @Override
-    public GameStage[] getValues() {
+    public GameStage[] getTierValues() {
 
         return GameStage.values();
     }

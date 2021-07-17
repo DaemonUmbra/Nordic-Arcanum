@@ -2,7 +2,7 @@ package com.lordskittles.nordicarcanum.common.network;
 
 import com.lordskittles.arcanumapi.common.network.PacketBase;
 import com.lordskittles.arcanumapi.common.utilities.ClientUtilities;
-import com.lordskittles.arcanumapi.common.utilities.IMultiblock;
+import com.lordskittles.arcanumapi.common.multiblock.ITieredMultiblock;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
@@ -18,7 +18,7 @@ public class PacketMultiblockFormed extends PacketBase {
     private final CompoundNBT updateTag;
     private final boolean isFormed;
 
-    public PacketMultiblockFormed(IMultiblock multiblock) {
+    public PacketMultiblockFormed(ITieredMultiblock multiblock) {
 
         this.isFormed = multiblock.isFormed();
         this.pos = multiblock.getPos();
@@ -41,8 +41,8 @@ public class PacketMultiblockFormed extends PacketBase {
                 NordicArcanum.LOG.info("Update tile packet received for position: {} in world, but no valid tile was found.", message.pos);
             }
             else {
-                if(tile instanceof IMultiblock) {
-                    ((IMultiblock) tile).setFormed(message.isFormed);
+                if(tile instanceof ITieredMultiblock) {
+                    ((ITieredMultiblock) tile).setFormed(message.isFormed);
                     tile.handleUpdateTag(tile.getBlockState(), message.updateTag);
                 }
                 else {

@@ -1,4 +1,4 @@
-package com.lordskittles.arcanumapi.common.utilities;
+package com.lordskittles.arcanumapi.common.multiblock;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
@@ -7,9 +7,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.gen.feature.template.Template;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
-public interface IMultiblock<T extends Enum> {
+public interface IMultiblock {
 
-    T[] getValues();
+    MultiblockReference[] getReferences();
 
     Template getTemplate(TemplateManager templateManager);
 

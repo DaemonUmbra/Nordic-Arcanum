@@ -74,7 +74,7 @@ public class ItemInfusedArcanePowder extends ItemMod {
         Vector3d playerPos = MathUtilities.posToHandPos(player, context.getHand());
         Random rand = world.rand;
 
-        int count = 50;
+        int count = 256;
         for(int i = 0; i < count / pos.length; i++) {
 
             boolean floaty = (i < count / 3);
