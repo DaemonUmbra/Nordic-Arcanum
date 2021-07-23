@@ -98,9 +98,12 @@ public class BlockAttunementAltar extends BlockMod implements IItemBlockOverride
 
         for(BlockPos offset : offsets) {
             BlockPos blockPos = pos.add(offset);
-            TileEntitySigilPodium podium = (TileEntitySigilPodium) worldIn.getTileEntity(blockPos);
-            if(podium != null && podium.getSchool() != null && podium.getSchool().getSchool() != SchoolType.Undiscovered && rand.nextInt(5) == 0) {
-                worldIn.addParticle(getParticleFromSchool(podium.getSchool()), (double) pos.getX() + 0.5D, (double) pos.getY() + 2.5D, (double) pos.getZ() + 0.5D, offset.getX() + rand.nextFloat() - 0.5D, rand.nextFloat(), offset.getZ() + rand.nextFloat() - 0.5D);
+            TileEntity entity = worldIn.getTileEntity(blockPos);
+            if(entity instanceof TileEntitySigilPodium) {
+                TileEntitySigilPodium podium = (TileEntitySigilPodium) entity;
+                if(podium != null && podium.getSchool() != null && podium.getSchool().getSchool() != SchoolType.Undiscovered && rand.nextInt(5) == 0) {
+                    worldIn.addParticle(getParticleFromSchool(podium.getSchool()), (double) pos.getX() + 0.5D, (double) pos.getY() + 2.5D, (double) pos.getZ() + 0.5D, offset.getX() + rand.nextFloat() - 0.5D, rand.nextFloat(), offset.getZ() + rand.nextFloat() - 0.5D);
+                }
             }
         }
     }
