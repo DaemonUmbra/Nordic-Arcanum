@@ -1,9 +1,9 @@
 package com.lordskittles.arcanumapi.common.utilities;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.state.Property;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
 
 import java.util.Collection;
 
@@ -13,7 +13,7 @@ public class BlockUtilities {
     public static Property getAxisProperty(BlockState log) {
 
         for(Property property : log.getProperties()) {
-            Collection allowedValues = property.getAllowedValues();
+            Collection allowedValues = property.getPossibleValues();
             if(allowedValues.contains(Direction.Axis.X) && allowedValues.contains(Direction.Axis.Y) && allowedValues.contains(Direction.Axis.Z)) {
                 return property;
             }
@@ -25,7 +25,7 @@ public class BlockUtilities {
     public static Property getPersistentProperty(BlockState leaves) {
 
         for(Property property : leaves.getProperties()) {
-            Collection allowedValues = property.getAllowedValues();
+            Collection allowedValues = property.getPossibleValues();
             if(allowedValues.contains(Boolean.valueOf(true)) && allowedValues.contains(Boolean.valueOf(false))) {
                 return property;
             }

@@ -5,8 +5,8 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.model.Model;
-import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.client.model.Model;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3f;
 
@@ -14,11 +14,11 @@ import javax.annotation.Nonnull;
 
 public class ModelAttunementAltar extends Model {
 
-    private final ModelRenderer podium;
-    private final ModelRenderer pillar;
-    private final ModelRenderer bowlsides;
-    private final ModelRenderer crystal;
-    private final ModelRenderer ring;
+    private final ModelPart podium;
+    private final ModelPart pillar;
+    private final ModelPart bowlsides;
+    private final ModelPart crystal;
+    private final ModelPart ring;
 
     private final RenderType RENDER_TYPE = getRenderType(NordicResourceLocations.ATTUNEMENT_ALTAR);
     private final float multiplier = 0.0125f;

@@ -1,11 +1,11 @@
 package com.lordskittles.nordicarcanum.common.inventory;
 
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 
-public class ClothInventory extends CraftingInventory {
+public class ClothInventory extends CraftingContainer {
 
-    public ClothInventory(Container eventHandlerIn) {
+    public ClothInventory(AbstractContainerMenu eventHandlerIn) {
 
         super(eventHandlerIn, 3, 3);
     }

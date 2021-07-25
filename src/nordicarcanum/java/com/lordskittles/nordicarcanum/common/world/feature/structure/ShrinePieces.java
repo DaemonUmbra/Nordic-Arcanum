@@ -4,15 +4,17 @@ import com.lordskittles.arcanumapi.common.world.feature.structure.StructurePiece
 import com.lordskittles.nordicarcanum.common.block.decoration.BlockStatue;
 import com.lordskittles.nordicarcanum.common.registry.Blocks;
 import com.lordskittles.nordicarcanum.common.registry.Structures;
-import net.minecraft.block.Block;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.gen.feature.template.TemplateManager;
+import com.lordskittles.nordicarcanum.core.NordicResourceLocations;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
 
 import java.util.Map;
 import java.util.Random;
@@ -33,28 +35,28 @@ public class ShrinePieces {
                         Blocks.tyr_statue.get()
                 };
 
-        public Piece(TemplateManager manager, ResourceLocation structure, BlockPos pos, Rotation rotation, Map<ResourceLocation, BlockPos> offsetMap, ResourceLocation loot) {
+        public Piece(StructureManager manager, ResourceLocation structure, BlockPos pos, Rotation rotation, int height) {
 
-            super(manager, structure, pos, rotation, offsetMap, Structures.shrine_piece, 0);
+            super(Structures.shrine_piece, height, manager, structure, structure.getPath(), makeSettings(rotation), pos, StructureShrine.offset);
 
-            this.loot_table = loot;
-            this.structure_block_replacement = Blocks.feldspar_pillar.get().getDefaultState();
+            this.loot_table = NordicResourceLocations.SHRINE_LOOT;
+            this.structure_block_replacement = Blocks.feldspar_pillar.get().defaultBlockState();
         }
 
-        public Piece(TemplateManager manager, CompoundNBT nbt) {
+        public Piece(ServerLevel world, CompoundTag nbt) {
 
-            super(manager, nbt, Structures.pillar_piece);
+            super(Structures.shrine_piece, nbt, world, (level) -> { return makeSettings(Rotation.valueOf("Rot")); });
 
-            this.structure_block_replacement = Blocks.feldspar_pillar.get().getDefaultState();
+            this.structure_block_replacement = Blocks.feldspar_pillar.get().defaultBlockState();
         }
 
         @Override
-        protected void handleDataMarker(String function, BlockPos pos, IServerWorld world, Random rand, MutableBoundingBox sbb) {
+        protected void handleDataMarker(String function, BlockPos pos, ServerLevelAccessor world, Random rand, BoundingBox sbb) {
 
             super.handleDataMarker(function, pos, world, rand, sbb);
 
             if("statue".equals(function)) {
-                world.setBlockState(pos, statues[rand.nextInt(statues.length)].getDefaultState().with(BlockStatue.FACING, getDirectionFromRotation()), 2);
+                world.setBlock(pos, statues[rand.nextInt(statues.length)].defaultBlockState().setValue(BlockStatue.FACING, getDirectionFromRotation()), 2);
             }
         }
 

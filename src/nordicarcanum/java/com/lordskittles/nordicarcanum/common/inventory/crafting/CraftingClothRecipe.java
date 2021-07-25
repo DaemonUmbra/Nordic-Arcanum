@@ -10,17 +10,17 @@ import com.lordskittles.nordicarcanum.common.registry.RecipeSerializers;
 import com.lordskittles.nordicarcanum.common.registry.RecipeType;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.lordskittles.nordicarcanum.core.NordicNames;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
@@ -29,6 +29,8 @@ import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+
+import com.lordskittles.arcanumapi.common.inventory.crafting.ArcaneRecipeBase.DummyIInventory;
 
 public class CraftingClothRecipe extends ArcaneRecipeBase {
 
@@ -106,18 +108,18 @@ public class CraftingClothRecipe extends ArcaneRecipeBase {
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
 
         return RecipeSerializers.crafting_cloth.get();
     }
 
     @Override
-    public IRecipeType<?> getType() {
+    public RecipeType<?> getType() {
 
         return this.type;
     }
 
-    public boolean matchesNoArcanum(CraftingInventory inv, PlayerEntity player) {
+    public boolean matchesNoArcanum(CraftingContainer inv, Player player) {
 
         for(int x = 0; x <= inv.getWidth() - getWidth(); ++ x) {
             for(int y = 0; y <= inv.getHeight() - getHeight(); ++ y) {
@@ -132,7 +134,7 @@ public class CraftingClothRecipe extends ArcaneRecipeBase {
         return false;
     }
 
-    public boolean matches(CraftingInventory inv, PlayerEntity player) {
+    public boolean matches(CraftingContainer inv, Player player) {
 
         if(! MagicUtilities.canUseArcanum(player, this.arcanum))
             return false;
@@ -140,7 +142,7 @@ public class CraftingClothRecipe extends ArcaneRecipeBase {
         return matchesNoArcanum(inv, player);
     }
 
-    private boolean checkMatch(CraftingInventory craftingInventory, int xInput, int yInput, boolean p_77573_4_) {
+    private boolean checkMatch(CraftingContainer craftingInventory, int xInput, int yInput, boolean p_77573_4_) {
 
         for(int x = 0; x < craftingInventory.getWidth(); ++ x) {
             for(int y = 0; y < craftingInventory.getHeight(); ++ y) {

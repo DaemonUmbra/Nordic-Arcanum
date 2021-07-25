@@ -13,13 +13,13 @@ import com.lordskittles.nordicarcanum.common.item.crafting.BindingShape;
 import com.lordskittles.nordicarcanum.common.item.magic.ItemBinding;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.lordskittles.nordicarcanum.core.NordicResourceLocations;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.model.Model;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.model.Model;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -37,19 +37,19 @@ public class ItemStackBindingRender extends ItemStackTERenderBase {
     public static ItemModelWrapper model;
 
     @Override
-    protected void renderItemSpecific(ItemStack stack, MatrixStack matrix, IRenderTypeBuffer buffer, int light, int overlay, ItemCameraTransforms.TransformType transform) {
+    protected void renderItemSpecific(ItemStack stack, PoseStack matrix, MultiBufferSource buffer, int light, int overlay, ItemTransforms.TransformType transform) {
 
         Model model = null;
 
         ItemBinding binding = (ItemBinding) stack.getItem();
 
-        CompoundNBT nbt = stack.getTag();
+        CompoundTag nbt = stack.getTag();
 
         if(nbt == null) {
-            nbt = new CompoundNBT();
+            nbt = new CompoundTag();
         }
 
-        CompoundNBT localNBT = NBTUtilities.getPersistentData(NordicArcanum.MODID, nbt);
+        CompoundTag localNBT = NBTUtilities.getPersistentData(NordicArcanum.MODID, nbt);
         BindingShape shape = BindingShape.get(localNBT.getInt(NBTConstants.BINDING_SHAPE_KEY));
 
         BindingMaterial material = binding.getMaterial();

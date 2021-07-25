@@ -3,34 +3,37 @@ package com.lordskittles.arcanumapi.common.world.feature.trees;
 import com.mojang.datafixers.Products;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.block.RotatedPillarBlock;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.gen.IWorldGenerationReader;
-import net.minecraft.world.gen.feature.BaseTreeFeatureConfig;
-import net.minecraft.world.gen.feature.FeatureSpread;
-import net.minecraft.world.gen.foliageplacer.FoliagePlacer;
-import net.minecraft.world.gen.foliageplacer.FoliagePlacerType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.world.level.LevelSimulatedRW;
+import net.minecraft.world.level.LevelSimulatedReader;
+import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerType;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 
 import java.util.Random;
 import java.util.Set;
+import java.util.function.BiConsumer;
 
 public abstract class FoliagePlacerBase extends FoliagePlacer {
 
-    protected static <P extends FoliagePlacerBase> Products.P3<RecordCodecBuilder.Mu<P>, FeatureSpread, FeatureSpread, Integer> func_236740_a_(RecordCodecBuilder.Instance<P> instance) {
+    protected static <P extends FoliagePlacerBase> Products.P3<RecordCodecBuilder.Mu<P>, IntProvider, IntProvider, Integer> blobParts(RecordCodecBuilder.Instance<P> instance) {
 
-        return func_242830_b(instance).and(Codec.intRange(0, 16).fieldOf("height").forGetter((foliage) -> foliage.height));
+        return foliagePlacerParts(instance).and(Codec.intRange(0, 16).fieldOf("height").forGetter((foliage) -> foliage.height));
     }
 
     protected final int height;
     protected Random random;
-    protected IWorldGenerationReader world;
-    protected MutableBoundingBox bounds;
+    protected LevelSimulatedReader world;
+    protected BoundingBox bounds;
 
-    private BaseTreeFeatureConfig config;
+    private TreeConfiguration config;
     private final FoliagePlacerType<?> type;
 
-    public FoliagePlacerBase(FeatureSpread spreadA, FeatureSpread spreadB, int height, FoliagePlacerType<?> type) {
+    public FoliagePlacerBase(IntProvider spreadA, IntProvider spreadB, int height, FoliagePlacerType<?> type) {
 
         super(spreadA, spreadB);
 
@@ -38,38 +41,37 @@ public abstract class FoliagePlacerBase extends FoliagePlacer {
         this.type = type;
     }
 
-    protected abstract void placeLeaves(BlockPos position, Set<BlockPos> changedLeaves);
+    protected abstract void placeLeaves(BlockPos position, BiConsumer<BlockPos, BlockState> changedLeaves);
 
     @Override
-    protected FoliagePlacerType<?> getPlacerType() {
+    protected FoliagePlacerType<?> type() {
 
         return type;
     }
 
     @Override
-    protected void func_230372_a_(IWorldGenerationReader world, Random random, BaseTreeFeatureConfig config, int p_230372_4_, Foliage foliage, int p_230372_6_, int p_230372_7_, Set<BlockPos> changedLeaves, int p_230372_9_, MutableBoundingBox bounds) {
+    protected void createFoliage(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> consumer, Random random, TreeConfiguration config, int p_230372_4_, FoliageAttachment foliage, int p_230372_6_, int p_230372_7_, int p_230372_9_) {
 
         this.world = world;
         this.random = random;
-        this.bounds = bounds;
         this.config = config;
 
-        placeLeaves(foliage.func_236763_a_(), changedLeaves);
+        placeLeaves(foliage.pos(), consumer);
     }
 
     @Override
-    public int func_230374_a_(Random random, int p_230374_2_, BaseTreeFeatureConfig config) {
+    public int foliageHeight(Random random, int p_230374_2_, TreeConfiguration config) {
 
         return height;
     }
 
     @Override
-    protected boolean func_230373_a_(Random rand, int p_230373_2_, int p_230373_3_, int p_230373_4_, int p_230373_5_, boolean p_230373_6_) {
+    protected boolean shouldSkipLocation(Random rand, int p_230373_2_, int p_230373_3_, int p_230373_4_, int p_230373_5_, boolean p_230373_6_) {
 
         return p_230373_2_ == p_230373_5_ && p_230373_4_ == p_230373_5_ && (rand.nextInt(2) == 0 || p_230373_3_ == 0);
     }
 
-    protected void placeLeafBox(BlockPos startPos, BlockPos endPos, Set<BlockPos> changedLeaves) {
+    protected void placeLeafBox(BlockPos startPos, BlockPos endPos, BiConsumer<BlockPos, BlockState> changedLeaves) {
 
         for(int x = 0; x < endPos.getX(); x++) {
             for(int y = 0; y < endPos.getY(); y++) {
@@ -81,12 +83,11 @@ public abstract class FoliagePlacerBase extends FoliagePlacer {
         }
     }
 
-    protected void placeLeaf(BlockPos pos, Set<BlockPos> changedLeaves) {
+    protected void placeLeaf(BlockPos pos, BiConsumer<BlockPos, BlockState> changedLeaves) {
 
-        if(! this.world.hasBlockState(pos, (state1) -> { return state1.getBlock() instanceof RotatedPillarBlock; })) {
-            this.world.setBlockState(pos, config.leavesProvider.getBlockState(this.random, pos), 13);
+        if(! this.world.isStateAtPosition(pos, (state1) -> { return state1.getBlock() instanceof RotatedPillarBlock; })) {
 
-            changedLeaves.add(pos.toImmutable());
+            changedLeaves.accept(pos.immutable(), config.foliageProvider.getState(this.random, pos));
         }
     }
 }

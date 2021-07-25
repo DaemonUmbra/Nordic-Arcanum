@@ -6,12 +6,12 @@ package com.lordskittles.nordicarcanum.client.render.item.model;// Made with Blo
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.model.Model;
-import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.client.model.Model;
+import net.minecraft.client.model.geom.ModelPart;
 
 public class ModelBindingCage extends Model {
 
-    private final ModelRenderer binding4;
+    private final ModelPart binding4;
 
     public ModelBindingCage() {
 

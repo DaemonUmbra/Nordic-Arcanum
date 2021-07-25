@@ -3,6 +3,8 @@ package com.lordskittles.arcanumapi.client.render;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
 import net.minecraftforge.fluids.FluidStack;
 
+import it.unimi.dsi.fastutil.Hash.Strategy;
+
 public class FluidRenderMap<V> extends Object2ObjectOpenCustomHashMap<FluidStack, V> {
 
     public FluidRenderMap() {

@@ -2,7 +2,7 @@ package com.lordskittles.nordicarcanum.core;
 
 import com.lordskittles.nordicarcanum.common.item.crafting.BindingMaterial;
 import com.lordskittles.nordicarcanum.common.item.crafting.RodMaterial;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 public class NordicResourceLocations {
 

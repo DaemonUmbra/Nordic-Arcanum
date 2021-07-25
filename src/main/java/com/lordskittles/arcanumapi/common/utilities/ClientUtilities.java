@@ -1,21 +1,21 @@
 package com.lordskittles.arcanumapi.common.utilities;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import javax.annotation.Nonnull;
 import java.util.function.Supplier;
 
 public class ClientUtilities {
 
-    public static <T extends TileEntity> T getTileEntity(@Nonnull Class<T> clazz, @Nonnull BlockPos pos) {
+    public static <T extends BlockEntity> T getTileEntity(@Nonnull Class<T> clazz, @Nonnull BlockPos pos) {
 
-        World world = Minecraft.getInstance().world;
-        TileEntity tile = world.getTileEntity(pos);
+        Level world = Minecraft.getInstance().level;
+        BlockEntity tile = world.getBlockEntity(pos);
         if(tile == null) {
             return null;
         }
@@ -27,9 +27,9 @@ public class ClientUtilities {
         return null;
     }
 
-    public static PlayerEntity getPlayer(Supplier<NetworkEvent.Context> context) {
+    public static Player getPlayer(Supplier<NetworkEvent.Context> context) {
 
-        PlayerEntity player = context.get().getSender();
+        Player player = context.get().getSender();
         if(player == null) {
             player = Minecraft.getInstance().player;
         }

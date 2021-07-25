@@ -6,57 +6,63 @@ import com.lordskittles.arcanumapi.common.tileentity.TileEntityMagicChest;
 import com.lordskittles.arcanumapi.common.utilities.ClientUtilities;
 import com.lordskittles.arcanumapi.common.utilities.NBTUtilities;
 import com.lordskittles.arcanumapi.arcanum.ArcanumServerManager;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.HorizontalBlock;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTier;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Containers;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tiers;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ToolType;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+
 public abstract class BlockMagicChest<T extends TileEntityMagicChest> extends BlockMod {
 
-    public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
+    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     private final int slotCount;
 
     private final Class<T> tileClass;
     private final String modid;
 
-    public BlockMagicChest(Class<T> tileClass, ItemGroup group, String modid, int slotCount) {
+    public BlockMagicChest(Class<T> tileClass, CreativeModeTab group, String modid, int slotCount) {
 
-        super(Block.Properties.create(Material.WOOD, MaterialColor.BLACK)
-                .hardnessAndResistance(2.5f, 2.5f)
+        super(Block.Properties.of(Material.WOOD, MaterialColor.COLOR_BLACK)
+                .strength(2.5f, 2.5f)
                 .sound(SoundType.WOOD)
-                .harvestLevel(ItemTier.STONE.getHarvestLevel())
+                .harvestLevel(Tiers.STONE.getLevel())
                 .harvestTool(ToolType.PICKAXE));
 
         this.slotCount = slotCount;
@@ -66,31 +72,31 @@ public abstract class BlockMagicChest<T extends TileEntityMagicChest> extends Bl
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, @Nullable BlockGetter world, List<Component> tooltip, TooltipFlag flag) {
 
-        CompoundNBT nbt = NBTUtilities.getPersistentData(modid, stack);
+        CompoundTag nbt = NBTUtilities.getPersistentData(modid, stack);
         NonNullList list = NonNullList.withSize(slotCount, ItemStack.EMPTY);
-        ItemStackHelper.loadAllItems(nbt, list);
+        ContainerHelper.loadAllItems(nbt, list);
 
         for(int i = 0; i < list.size(); i++) {
             ItemStack item = (ItemStack) list.get(i);
 
             if(! item.isEmpty()) {
-                IFormattableTextComponent component = new StringTextComponent(TextFormatting.GREEN + "");
-                component.appendSibling(item.getItem().getName());
-                component.appendSibling(new StringTextComponent(TextFormatting.AQUA + " " + ((Integer) item.getCount()).toString()));
+                MutableComponent component = new TextComponent(ChatFormatting.GREEN + "");
+                component.append(item.getItem().getDescription());
+                component.append(new TextComponent(ChatFormatting.AQUA + " " + ((Integer) item.getCount()).toString()));
 
                 tooltip.add(component);
             }
         }
 
-        super.addInformation(stack, world, tooltip, flag);
+        super.appendHoverText(stack, world, tooltip, flag);
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
 
-        switch(state.get(FACING)) {
+        switch(state.getValue(FACING)) {
             case NORTH:
                 return VoxelsMagicChest.NORTH.get();
             case EAST:
@@ -106,62 +112,62 @@ public abstract class BlockMagicChest<T extends TileEntityMagicChest> extends Bl
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
 
-        return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().rotateY().getOpposite());
+        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getClockWise().getOpposite());
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
 
-        if(! world.isRemote) {
-            TileEntity tile = world.getTileEntity(pos);
+        if(! world.isClientSide) {
+            BlockEntity tile = world.getBlockEntity(pos);
             if(tileClass.isInstance(tile)) {
-                NetworkHooks.openGui((ServerPlayerEntity) player, tileClass.cast(tile), pos);
+                NetworkHooks.openGui((ServerPlayer) player, tileClass.cast(tile), pos);
             }
         }
 
-        return ActionResultType.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+    public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
 
-        TileEntity tile = world.getTileEntity(pos);
+        BlockEntity tile = world.getBlockEntity(pos);
         if(tileClass.isInstance(tile)) {
             T chest = tileClass.cast(tile);
-            CompoundNBT nbt = NBTUtilities.getPersistentData(modid, stack);
+            CompoundTag nbt = NBTUtilities.getPersistentData(modid, stack);
 
-            NonNullList list = NonNullList.withSize(chest.getSizeInventory(), ItemStack.EMPTY);
-            ItemStackHelper.loadAllItems(nbt, list);
+            NonNullList list = NonNullList.withSize(chest.getContainerSize(), ItemStack.EMPTY);
+            ContainerHelper.loadAllItems(nbt, list);
 
             chest.setItems(list);
         }
 
-        super.onBlockPlacedBy(world, pos, state, placer, stack);
+        super.setPlacedBy(world, pos, state, placer, stack);
     }
 
     protected abstract PacketHandlerBase getPacketHandler();
 
     @Override
-    public void onReplaced(BlockState oldState, World world, BlockPos pos, BlockState newState, boolean isMoving) {
+    public void onRemove(BlockState oldState, Level world, BlockPos pos, BlockState newState, boolean isMoving) {
 
         if(oldState != newState) {
             TileEntityMagicChest chest = ClientUtilities.getTileEntity(tileClass, pos);
             if(chest != null) {
-                ItemStack stack = oldState.getBlock().getItem(world, pos, oldState);
-                PlayerEntity player = world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 15D, null);
+                ItemStack stack = oldState.getBlock().getCloneItemStack(world, pos, oldState);
+                Player player = world.getNearestPlayer(pos.getX(), pos.getY(), pos.getZ(), 15D, null);
                 if(chest.canRetainInventory(player)) {
-                    CompoundNBT nbt = NBTUtilities.getPersistentData(modid, stack);
+                    CompoundTag nbt = NBTUtilities.getPersistentData(modid, stack);
 
-                    ItemStackHelper.saveAllItems(nbt, chest.getItems());
-                    stack.write(nbt);
+                    ContainerHelper.saveAllItems(nbt, chest.getItems());
+                    stack.save(nbt);
 
-                    InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack);
+                    Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack);
 
-                    if(player instanceof ServerPlayerEntity) {
+                    if(player instanceof ServerPlayer) {
                         try {
-                            ArcanumServerManager.useArcanum((ServerPlayerEntity) player, chest.getRetainCost(), getPacketHandler());
+                            ArcanumServerManager.useArcanum((ServerPlayer) player, chest.getRetainCost(), getPacketHandler());
                         }
                         catch(Exception e) {
                             e.printStackTrace();
@@ -170,16 +176,16 @@ public abstract class BlockMagicChest<T extends TileEntityMagicChest> extends Bl
                 }
                 else {
                     if(! player.isCreative()) {
-                        InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack);
+                        Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack);
                     }
-                    InventoryHelper.dropItems(world, pos, tileClass.cast(chest).getItems());
+                    Containers.dropContents(world, pos, tileClass.cast(chest).getItems());
                 }
             }
         }
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 
         builder.add(FACING);
     }
@@ -187,20 +193,14 @@ public abstract class BlockMagicChest<T extends TileEntityMagicChest> extends Bl
     @Override
     public BlockState rotate(BlockState state, Rotation rotation) {
 
-        return state.with(FACING, rotation.rotate(state.get(FACING)));
+        return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
     }
 
     @Override
     public BlockState mirror(BlockState state, Mirror mirror) {
 
-        return state.rotate(mirror.toRotation(state.get(FACING)));
+        return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
 
-    @Override
-    public boolean hasTileEntity(BlockState state) {
-
-        return true;
-    }
-
-    public abstract TileEntity createTileEntity(BlockState state, IBlockReader world);
+    public abstract BlockEntity createBlockEntity(BlockState state, BlockGetter world);
 }

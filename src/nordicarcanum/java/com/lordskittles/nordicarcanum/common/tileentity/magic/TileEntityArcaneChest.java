@@ -6,25 +6,21 @@ import com.lordskittles.nordicarcanum.common.registry.TileEntities;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.lordskittles.nordicarcanum.core.NordicInventorySlots;
 import com.lordskittles.nordicarcanum.core.NordicNames;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class TileEntityArcaneChest extends TileEntityMagicChest<TileEntityArcaneChest> {
 
-    public TileEntityArcaneChest(TileEntityType<?> tileEntityTypeIn) {
+    public TileEntityArcaneChest(BlockPos pos, BlockState state) {
 
-        super(tileEntityTypeIn, NordicInventorySlots.ARCANE_CHEST, NordicNames.ARCANE_CHEST, 10f, NordicArcanum.MODID, NordicArcanum.PACKET_HANDLER);
-    }
-
-    public TileEntityArcaneChest() {
-
-        this(TileEntities.arcane_chest.get());
+        super(TileEntities.arcane_chest.get(), pos, state, NordicInventorySlots.ARCANE_CHEST, NordicNames.ARCANE_CHEST, 10f, NordicArcanum.MODID, NordicArcanum.PACKET_HANDLER);
     }
 
     @Override
-    public Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
 
         return new ContainerArcaneChest(id, playerInventory, this);
     }

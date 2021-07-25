@@ -7,13 +7,13 @@ import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockModelRenderer;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
+import net.minecraft.client.renderer.block.ModelBlockRenderer;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ModelManager;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelManager;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
@@ -26,15 +26,15 @@ public class TileRendererAttunementAltar extends TileEntityRendererBase<TileEnti
     private int currentRot;
     private final float multiplier = 0.0125f;
 
-    private IBakedModel bakedModel;
-    private final BlockModelRenderer renderer;
+    private BakedModel bakedModel;
+    private final ModelBlockRenderer renderer;
     private final ModelManager modelManager;
 
-    public TileRendererAttunementAltar(TileEntityRendererDispatcher dispatcher) {
+    public TileRendererAttunementAltar(BlockEntityRenderDispatcher dispatcher) {
 
         super(dispatcher);
 
-        BlockRendererDispatcher blockDispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
+        BlockRenderDispatcher blockDispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
         renderer = blockDispatcher.getBlockModelRenderer();
         modelManager = blockDispatcher.getBlockModelShapes().getModelManager();
     }

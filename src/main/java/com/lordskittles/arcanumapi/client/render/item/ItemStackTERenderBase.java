@@ -1,23 +1,30 @@
 package com.lordskittles.arcanumapi.client.render.item;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.vector.Vector3f;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.model.geom.EntityModelSet;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
+import net.minecraft.world.item.ItemStack;
+import com.mojang.math.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 
 @OnlyIn(Dist.CLIENT)
-public abstract class ItemStackTERenderBase extends ItemStackTileEntityRenderer {
+public abstract class ItemStackTERenderBase extends BlockEntityWithoutLevelRenderer {
 
-    protected abstract void renderItemSpecific(ItemStack stack, MatrixStack matrix, IRenderTypeBuffer buffer, int light, int overlay, TransformType transform);
+    public ItemStackTERenderBase(BlockEntityRenderDispatcher dispatcher, EntityModelSet modelSet) {
 
-    protected abstract void renderBlockSpecific(ItemStack stack, MatrixStack matrix, IRenderTypeBuffer buffer, int light, int overlay, TransformType transform);
+        super(dispatcher, modelSet);
+    }
+
+    protected abstract void renderItemSpecific(ItemStack stack, PoseStack matrix, MultiBufferSource buffer, int light, int overlay, TransformType transform);
+
+    protected abstract void renderBlockSpecific(ItemStack stack, PoseStack matrix, MultiBufferSource buffer, int light, int overlay, TransformType transform);
 
     protected TransformType transform;
 
@@ -30,21 +37,21 @@ public abstract class ItemStackTERenderBase extends ItemStackTileEntityRenderer 
         return false;
     }
 
-    protected void renderWithTransform(ItemStack stack, MatrixStack matrix, IRenderTypeBuffer buffer, int light, int overlay) {
+    protected void renderWithTransform(ItemStack stack, PoseStack matrix, MultiBufferSource buffer, int light, int overlay) {
 
         TransformType transform = getTransform(stack);
         if(transform == TransformType.GUI) {
-            matrix.rotate(Vector3f.YP.rotationDegrees(180));
+            matrix.mulPose(Vector3f.YP.rotationDegrees(180));
         }
 
         renderBlockSpecific(stack, matrix, buffer, light, overlay, transform);
 
         if(! earlyExit()) {
             if(transform == TransformType.GUI) {
-                matrix.rotate(Vector3f.YP.rotationDegrees(90));
+                matrix.mulPose(Vector3f.YP.rotationDegrees(90));
             }
             else {
-                matrix.rotate(Vector3f.YP.rotationDegrees(180));
+                matrix.mulPose(Vector3f.YP.rotationDegrees(180));
             }
 
             renderItemSpecific(stack, matrix, buffer, light, overlay, transform);
@@ -52,14 +59,14 @@ public abstract class ItemStackTERenderBase extends ItemStackTileEntityRenderer 
     }
 
     @Override
-    public void func_239207_a_(ItemStack stack, ItemCameraTransforms.TransformType transformType, MatrixStack matrix, IRenderTypeBuffer buffer, int light, int overlay) {
+    public void renderByItem(ItemStack stack, ItemTransforms.TransformType transformType, PoseStack matrix, MultiBufferSource buffer, int light, int overlay) {
 
         this.transform = transformType;
 
-        matrix.push();
+        matrix.pushPose();
         matrix.translate(0.5, 0.5, 0.5);
-        matrix.rotate(Vector3f.YP.rotationDegrees(180));
+        matrix.mulPose(Vector3f.YP.rotationDegrees(180));
         renderWithTransform(stack, matrix, buffer, light, overlay);
-        matrix.pop();
+        matrix.popPose();
     }
 }

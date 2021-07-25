@@ -6,34 +6,34 @@ import com.lordskittles.arcanumapi.common.utilities.ClientUtilities;
 import com.lordskittles.arcanumapi.common.utilities.FluidUtilities;
 import com.lordskittles.arcanumapi.common.utilities.NBTUtilities;
 import com.lordskittles.arcanumapi.arcanum.ArcanumServerManager;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTier;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.IBlockDisplayReader;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Containers;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tiers;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
@@ -47,12 +47,12 @@ public abstract class BlockTank<T extends TileEntityFluidInventory> extends Bloc
     private final String modid;
     private final PacketHandlerBase packetHandler;
 
-    public BlockTank(SoundType sound, ItemGroup group, Class<T> tileClass, String modid, PacketHandlerBase packetHandler) {
+    public BlockTank(SoundType sound, CreativeModeTab group, Class<T> tileClass, String modid, PacketHandlerBase packetHandler) {
 
-        super(Block.Properties.create(Material.ROCK, MaterialColor.STONE)
-                .hardnessAndResistance(3.0F, 3.0F)
+        super(Block.Properties.of(Material.STONE, MaterialColor.STONE)
+                .strength(3.0F, 3.0F)
                 .sound(sound)
-                .harvestLevel(ItemTier.STONE.getHarvestLevel())
+                .harvestLevel(Tiers.STONE.getLevel())
                 .harvestTool(ToolType.PICKAXE));
 
         this.tileClass = tileClass;
@@ -61,43 +61,43 @@ public abstract class BlockTank<T extends TileEntityFluidInventory> extends Bloc
         this.group = group;
     }
 
-    public abstract TileEntity createTileEntity(BlockState state, IBlockReader world);
+    public abstract BlockEntity createTileEntity(BlockState state, BlockGetter world);
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, @Nullable BlockGetter world, List<Component> tooltip, TooltipFlag flag) {
 
-        CompoundNBT nbt = NBTUtilities.getPersistentData(modid, stack);
+        CompoundTag nbt = NBTUtilities.getPersistentData(modid, stack);
         FluidStack fluid = FluidStack.loadFluidStackFromNBT(nbt);
 
         if(! fluid.isEmpty()) {
-            IFormattableTextComponent component = new StringTextComponent(TextFormatting.GREEN + "");
-            component.appendSibling(fluid.getDisplayName());
-            component.appendSibling(new StringTextComponent(TextFormatting.AQUA + " " + ((Integer) fluid.getAmount()).toString()));
+            MutableComponent component = new TextComponent(ChatFormatting.GREEN + "");
+            component.append(fluid.getDisplayName());
+            component.append(new TextComponent(ChatFormatting.AQUA + " " + ((Integer) fluid.getAmount()).toString()));
 
             tooltip.add(component);
         }
 
-        super.addInformation(stack, world, tooltip, flag);
+        super.appendHoverText(stack, world, tooltip, flag);
     }
 
     @Override
-    public void onReplaced(BlockState oldState, World world, BlockPos pos, BlockState newState, boolean isMoving) {
+    public void onRemove(BlockState oldState, Level world, BlockPos pos, BlockState newState, boolean isMoving) {
 
         if(oldState != newState) {
             TileEntityFluidInventory tank = ClientUtilities.getTileEntity(tileClass, pos);
             if(tank != null) {
-                PlayerEntity player = world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 15D, null);
-                ItemStack stack = oldState.getBlock().getItem(world, pos, oldState);
+                Player player = world.getNearestPlayer(pos.getX(), pos.getY(), pos.getZ(), 15D, null);
+                ItemStack stack = oldState.getBlock().getCloneItemStack(world, pos, oldState);
                 if(tank.canRetainInventory(player)) {
-                    CompoundNBT nbt = NBTUtilities.getPersistentData(modid, stack);
+                    CompoundTag nbt = NBTUtilities.getPersistentData(modid, stack);
 
                     FluidUtilities.saveFluid(nbt, stack, tank.getFluid());
 
-                    InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack);
+                    Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack);
 
-                    if(player instanceof ServerPlayerEntity) {
+                    if(player instanceof ServerPlayer) {
                         try {
-                            ArcanumServerManager.useArcanum((ServerPlayerEntity) player, tank.getRetainCost(), packetHandler);
+                            ArcanumServerManager.useArcanum((ServerPlayer) player, tank.getRetainCost(), packetHandler);
                         }
                         catch(Exception e) {
                             e.printStackTrace();
@@ -106,7 +106,7 @@ public abstract class BlockTank<T extends TileEntityFluidInventory> extends Bloc
                 }
                 else {
                     if(! player.isCreative()) {
-                        InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack);
+                        Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack);
                     }
                 }
             }
@@ -114,30 +114,30 @@ public abstract class BlockTank<T extends TileEntityFluidInventory> extends Bloc
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
 
-        TileEntity tile = world.getTileEntity(pos);
+        BlockEntity tile = world.getBlockEntity(pos);
 
-        if(! world.isRemote) {
+        if(! world.isClientSide) {
             if(tile instanceof TileEntityFluidInventory) {
                 onTileActivated(world, player, (TileEntityFluidInventory) tile, pos, hand);
 
                 if(FluidUtilities.tryFluidInsert(tile, null, player, hand)) {
-                    world.playSound(null, pos, SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.BLOCKS, 1.0f, 1.0f);
-                    return ActionResultType.SUCCESS;
+                    world.playSound(null, pos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 1.0f, 1.0f);
+                    return InteractionResult.SUCCESS;
                 }
                 else
                     if(FluidUtilities.tryFluidExtract(tile, null, player, hand)) {
-                        world.playSound(null, pos, SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.BLOCKS, 1.0f, 1.0f);
-                        return ActionResultType.SUCCESS;
+                        world.playSound(null, pos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 1.0f, 1.0f);
+                        return InteractionResult.SUCCESS;
                     }
             }
         }
 
-        return ActionResultType.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
-    protected void onTileActivated(World world, PlayerEntity player, TileEntityFluidInventory tile, BlockPos pos, Hand hand) {
+    protected void onTileActivated(Level world, Player player, TileEntityFluidInventory tile, BlockPos pos, InteractionHand hand) {
 
     }
 
@@ -148,21 +148,15 @@ public abstract class BlockTank<T extends TileEntityFluidInventory> extends Bloc
 //    }
 
     @Override
-    public boolean hasTileEntity(BlockState state) {
-
-        return true;
-    }
-
-    @Override
-    public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) {
+    public int getLightEmission(BlockState state, BlockGetter world, BlockPos pos) {
 
         int ambientLight = 0;
-        TileEntityFluidInventory tile = (TileEntityFluidInventory) world.getTileEntity(pos);
+        TileEntityFluidInventory tile = (TileEntityFluidInventory) world.getBlockEntity(pos);
         if(tile != null) {
             FluidStack fluid = tile.getFluid();
             if(! fluid.isEmpty()) {
                 FluidAttributes fluidAttributes = fluid.getFluid().getAttributes();
-                ambientLight = Math.max(ambientLight, world instanceof IBlockDisplayReader ? fluidAttributes.getLuminosity((IBlockDisplayReader) world, pos)
+                ambientLight = Math.max(ambientLight, world instanceof BlockAndTintGetter ? fluidAttributes.getLuminosity((BlockAndTintGetter) world, pos)
                                                                                            : fluidAttributes.getLuminosity(fluid));
             }
         }

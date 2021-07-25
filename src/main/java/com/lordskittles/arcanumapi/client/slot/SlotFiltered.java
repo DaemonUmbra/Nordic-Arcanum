@@ -1,16 +1,16 @@
 package com.lordskittles.arcanumapi.client.slot;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 public class SlotFiltered extends Slot {
 
     private Item item;
     private int size;
 
-    public SlotFiltered(Item item, int size, IInventory inventory, int index, int xPosition, int yPosition) {
+    public SlotFiltered(Item item, int size, Container inventory, int index, int xPosition, int yPosition) {
 
         super(inventory, index, xPosition, yPosition);
 
@@ -19,13 +19,13 @@ public class SlotFiltered extends Slot {
     }
 
     @Override
-    public boolean isItemValid(ItemStack stack) {
+    public boolean mayPlace(ItemStack stack) {
 
         return stack.getItem().equals(this.item);
     }
 
     @Override
-    public int getItemStackLimit(ItemStack stack) {
+    public int getMaxStackSize(ItemStack stack) {
 
         return this.size;
     }

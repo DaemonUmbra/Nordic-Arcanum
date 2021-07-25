@@ -6,7 +6,7 @@ import com.lordskittles.nordicarcanum.common.network.PacketHandler;
 import com.lordskittles.nordicarcanum.common.registry.*;
 import com.lordskittles.nordicarcanum.magic.progression.ProgressionIOThread;
 import com.lordskittles.nordicarcanum.magic.schools.MagicSchool;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;

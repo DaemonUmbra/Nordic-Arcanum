@@ -12,7 +12,7 @@ import com.lordskittles.nordicarcanum.common.registry.Particles;
 import com.lordskittles.nordicarcanum.common.registry.TileEntities;
 import com.lordskittles.nordicarcanum.common.tileentity.magic.TileEntityAttunementAltar;
 import com.lordskittles.nordicarcanum.common.tileentity.magic.TileEntitySigilPodium;
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;

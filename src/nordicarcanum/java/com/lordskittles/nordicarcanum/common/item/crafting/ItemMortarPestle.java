@@ -2,7 +2,7 @@ package com.lordskittles.nordicarcanum.common.item.crafting;
 
 import com.lordskittles.arcanumapi.common.item.ItemMod;
 import com.lordskittles.nordicarcanum.client.itemgroups.NordicItemGroup;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class ItemMortarPestle extends ItemMod {

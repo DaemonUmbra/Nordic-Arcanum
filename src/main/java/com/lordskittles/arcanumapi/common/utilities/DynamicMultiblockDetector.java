@@ -1,29 +1,35 @@
 package com.lordskittles.arcanumapi.common.utilities;
 
 import com.lordskittles.arcanumapi.core.ArcanumAPI;
-import net.minecraft.block.*;
-import net.minecraft.state.properties.StructureMode;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.gen.feature.template.PlacementSettings;
-import net.minecraft.world.gen.feature.template.Template;
-import net.minecraft.world.gen.feature.template.TemplateManager;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.properties.StructureMode;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
+import net.minecraft.server.level.ServerLevel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import net.minecraft.world.level.block.AirBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.StructureBlock;
+import net.minecraft.world.level.block.state.BlockState;
+
 public class DynamicMultiblockDetector<M extends IMultiblock, E extends Enum> {
 
     private class MultiblockStartInfo {
 
-        public PlacementSettings placement;
+        public StructurePlaceSettings placement;
         public BlockPos position;
 
-        public MultiblockStartInfo(PlacementSettings settings, BlockPos position) {
+        public MultiblockStartInfo(StructurePlaceSettings settings, BlockPos position) {
 
             this.placement = settings;
             this.position = position;
@@ -46,9 +52,9 @@ public class DynamicMultiblockDetector<M extends IMultiblock, E extends Enum> {
         this.multiblock = multiblock;
     }
 
-    public boolean validate(IWorld world, BlockPos altar, E stage) {
+    public boolean validate(LevelAccessor world, BlockPos altar, E stage) {
 
-        tryCacheTemplateInfo((ServerWorld) world);
+        tryCacheTemplateInfo((ServerLevel) world);
 
         if(! structureBlocks.containsKey(stage) || ! coreOffset.containsKey(stage) || ! referenceOffset.containsKey(stage))
             return false;
@@ -58,11 +64,11 @@ public class DynamicMultiblockDetector<M extends IMultiblock, E extends Enum> {
         if(start == null)
             return false;
 
-        TemplateManager templateManager = ((ServerWorld) world).getStructureTemplateManager();
-        Template template = multiblock.getTemplate(templateManager);
+        StructureManager templateManager = ((ServerLevel) world).getStructureManager();
+        StructureTemplate template = multiblock.getTemplate(templateManager);
 
         for(Block structureBlock : structureBlocks.get(stage)) {
-            for(Template.BlockInfo block : template.func_215381_a(start.position, start.placement, structureBlock)) {
+            for(StructureTemplate.StructureBlockInfo block : template.filterBlocks(start.position, start.placement, structureBlock)) {
                 if(block != null && ! block.state.isAir()) {
                     BlockState stateAt = world.getBlockState(block.pos);
                     if(stateAt != block.state && ! (block.state.getBlock() instanceof AirBlock))
@@ -74,32 +80,32 @@ public class DynamicMultiblockDetector<M extends IMultiblock, E extends Enum> {
         return true;
     }
 
-    private void tryCacheTemplateInfo(ServerWorld world) {
+    private void tryCacheTemplateInfo(ServerLevel world) {
 
         for(E iter : multiblock.getValues()) {
             tryCacheTemplateInfo(world, iter);
         }
     }
 
-    private void tryCacheTemplateInfo(ServerWorld world, E stage) {
+    private void tryCacheTemplateInfo(ServerLevel world, E stage) {
 
         if(structureBlocks.containsKey(stage))
             return;
 
-        TemplateManager templateManager = world.getStructureTemplateManager();
-        Template template = multiblock.getTemplate(templateManager);
+        StructureManager templateManager = world.getStructureManager();
+        StructureTemplate template = multiblock.getTemplate(templateManager);
 
         structureBlocks.put(stage, getStructureBlocks(template));
 
         if(coreOffset.containsKey(stage) && referenceOffset.containsKey(stage))
             return;
 
-        PlacementSettings placement = new PlacementSettings().setRotation(Rotation.NONE).setMirror(Mirror.NONE);
+        StructurePlaceSettings placement = new StructurePlaceSettings().setRotation(Rotation.NONE).setMirror(Mirror.NONE);
         BlockPos start = null;
         BlockPos core = null;
         BlockPos reference = null;
 
-        for(Template.BlockInfo block : template.func_215381_a(BlockPos.ZERO, placement, Blocks.STRUCTURE_BLOCK)) {
+        for(StructureTemplate.StructureBlockInfo block : template.filterBlocks(BlockPos.ZERO, placement, Blocks.STRUCTURE_BLOCK)) {
             if(block.nbt != null) {
                 StructureMode structureMode = StructureMode.valueOf(block.nbt.getString("mode"));
                 if(structureMode == StructureMode.DATA) {
@@ -129,13 +135,13 @@ public class DynamicMultiblockDetector<M extends IMultiblock, E extends Enum> {
         referenceOffset.put(stage, core.subtract(reference));
     }
 
-    private Block[] getStructureBlocks(Template template) {
+    private Block[] getStructureBlocks(StructureTemplate template) {
 
-        List<Template.BlockInfo> blockInfos = new ArrayList<Template.BlockInfo>(template.blocks.get(0).func_237157_a_());
+        List<StructureTemplate.StructureBlockInfo> blockInfos = new ArrayList<StructureTemplate.StructureBlockInfo>(template.palettes.get(0).blocks());
         List<Block> blocks = new ArrayList<>();
 
-        for(Template.BlockInfo blockInfo : blockInfos) {
-            if(blockInfo.state == Blocks.AIR.getDefaultState() || blockInfo.state.getBlock() instanceof StructureBlock)
+        for(StructureTemplate.StructureBlockInfo blockInfo : blockInfos) {
+            if(blockInfo.state == Blocks.AIR.defaultBlockState() || blockInfo.state.getBlock() instanceof StructureBlock)
                 continue;
 
             if(! blocks.contains(blockInfo.state.getBlock()))
@@ -150,14 +156,14 @@ public class DynamicMultiblockDetector<M extends IMultiblock, E extends Enum> {
         return blockArray;
     }
 
-    private MultiblockStartInfo getStartFor(BlockPos altar, IWorld world, E stage) {
+    private MultiblockStartInfo getStartFor(BlockPos altar, LevelAccessor world, E stage) {
 
         for(Rotation rotation : Rotation.values()) {
             BlockPos pos = referenceOffset.get(stage).rotate(rotation);
-            BlockState state = world.getBlockState(altar.east(pos.getX()).down(pos.getY()).south(pos.getZ()));
+            BlockState state = world.getBlockState(altar.east(pos.getX()).below(pos.getY()).south(pos.getZ()));
             if(multiblock.isValidBlock(state)) {
                 pos = coreOffset.get(stage).rotate(rotation);
-                return new MultiblockStartInfo(new PlacementSettings().setRotation(rotation.add(Rotation.CLOCKWISE_180)).setMirror(Mirror.NONE), altar.east(pos.getX()).down(pos.getY()).south(pos.getZ()));
+                return new MultiblockStartInfo(new StructurePlaceSettings().setRotation(rotation.getRotated(Rotation.CLOCKWISE_180)).setMirror(Mirror.NONE), altar.east(pos.getX()).below(pos.getY()).south(pos.getZ()));
             }
         }
 

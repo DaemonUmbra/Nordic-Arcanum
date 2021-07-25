@@ -3,11 +3,11 @@ package com.lordskittles.nordicarcanum.client.render.tileentity;
 import com.lordskittles.arcanumapi.client.render.tileentity.TileEntityRendererBase;
 import com.lordskittles.nordicarcanum.client.render.tileentity.model.ModelNordicAnvil;
 import com.lordskittles.nordicarcanum.common.tileentity.crafting.TileEntityNordicAnvil;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
@@ -16,13 +16,13 @@ public class TileRendererNordicAnvil extends TileEntityRendererBase<TileEntityNo
 
     private static ModelNordicAnvil anvil = new ModelNordicAnvil();
 
-    public TileRendererNordicAnvil(TileEntityRendererDispatcher rendererDispatcherIn) {
+    public TileRendererNordicAnvil(BlockEntityRenderDispatcher rendererDispatcherIn) {
 
         super(rendererDispatcherIn);
     }
 
     @Override
-    public void render(TileEntityNordicAnvil tile, float ticks, MatrixStack stack, IRenderTypeBuffer buffer, int light, int overlay) {
+    public void render(TileEntityNordicAnvil tile, float ticks, PoseStack stack, MultiBufferSource buffer, int light, int overlay) {
 
         stack.push();
 

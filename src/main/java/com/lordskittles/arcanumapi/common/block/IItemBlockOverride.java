@@ -1,6 +1,6 @@
 package com.lordskittles.arcanumapi.common.block;
 
-import net.minecraft.item.BlockItem;
+import net.minecraft.world.item.BlockItem;
 
 public interface IItemBlockOverride {
 

@@ -10,7 +10,7 @@ import com.lordskittles.nordicarcanum.common.item.crafting.RodShape;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;

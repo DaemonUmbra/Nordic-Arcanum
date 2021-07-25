@@ -3,7 +3,7 @@ package com.lordskittles.nordicarcanum.common.block.decoration;
 import com.lordskittles.arcanumapi.common.block.BlockMod;
 import com.lordskittles.nordicarcanum.client.itemgroups.NordicDecorationItemGroup;
 import com.lordskittles.nordicarcanum.client.itemgroups.NordicResourcesItemGroup;
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;

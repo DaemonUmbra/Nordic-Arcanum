@@ -3,10 +3,10 @@ package com.lordskittles.arcanumapi.common.network;
 import com.lordskittles.arcanumapi.common.utilities.ClientUtilities;
 import com.lordskittles.arcanumapi.core.ArcanumAPI;
 import com.lordskittles.arcanumapi.arcanum.IArcanumTile;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.network.NetworkEvent.Context;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraftforge.fmllegacy.network.NetworkEvent.Context;
 
 import java.util.function.Supplier;
 
@@ -27,7 +27,7 @@ public class PacketTileArcanumUpdate extends PacketBase {
 
         context.get().enqueueWork(() ->
         {
-            TileEntity tile = ClientUtilities.getTileEntity(TileEntity.class, message.pos);
+            BlockEntity tile = ClientUtilities.getTileEntity(BlockEntity.class, message.pos);
             if(tile == null) {
                 ArcanumAPI.LOG.info("Update arcanum packet received for position: {} in world, but no valid tile was found.", message.pos);
             }
@@ -42,14 +42,14 @@ public class PacketTileArcanumUpdate extends PacketBase {
         context.get().setPacketHandled(true);
     }
 
-    public static void encode(PacketTileArcanumUpdate packet, PacketBuffer buffer) {
+    public static void encode(PacketTileArcanumUpdate packet, FriendlyByteBuf buffer) {
 
         buffer.writeBlockPos(packet.pos);
         buffer.writeFloat(packet.current);
         buffer.writeFloat(packet.maximum);
     }
 
-    public static PacketTileArcanumUpdate decode(PacketBuffer buffer) {
+    public static PacketTileArcanumUpdate decode(FriendlyByteBuf buffer) {
 
         return new PacketTileArcanumUpdate(buffer.readBlockPos(), buffer.readFloat(), buffer.readFloat());
     }

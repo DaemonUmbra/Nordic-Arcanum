@@ -1,16 +1,18 @@
 package com.lordskittles.arcanumapi.common.block;
 
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemGroup;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.item.CreativeModeTab;
+
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class BlockMod extends Block implements IItemGroupHolder {
 
-    protected ItemGroup group;
+    protected CreativeModeTab group;
 
-    public BlockMod(AbstractBlock.Properties properties, int lightLevel) {
+    public BlockMod(BlockBehaviour.Properties properties, int lightLevel) {
 
-        super(properties.setLightLevel((state) -> lightLevel));
+        super(properties.lightLevel((state) -> lightLevel));
     }
 
     public BlockMod(Properties properties) {
@@ -18,7 +20,7 @@ public class BlockMod extends Block implements IItemGroupHolder {
         super(properties);
     }
 
-    public ItemGroup group() {
+    public CreativeModeTab group() {
 
         return group;
     }

@@ -1,12 +1,12 @@
 package com.lordskittles.nordicarcanum.magic.progression;
 
 import com.lordskittles.nordicarcanum.magic.schools.MagicSchool;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.fml.LogicalSide;
 
 public class ProgressionManager {
 
-    public static boolean resetSchools(PlayerEntity player) {
+    public static boolean resetSchools(Player player) {
 
         PlayerProgress progress = ProgressionHelper.getProgress(player, LogicalSide.SERVER);
         if(! progress.isValid())
@@ -17,7 +17,7 @@ public class ProgressionManager {
         return true;
     }
 
-    public static boolean learnSchool(MagicSchool school, PlayerEntity player) {
+    public static boolean learnSchool(MagicSchool school, Player player) {
 
         PlayerProgress progress = ProgressionHelper.getProgress(player, LogicalSide.SERVER);
         if(! progress.isValid())

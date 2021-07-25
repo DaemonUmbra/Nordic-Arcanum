@@ -1,33 +1,33 @@
 package com.lordskittles.arcanumapi.client.render;
 
 import com.lordskittles.arcanumapi.core.ArcanumAPI;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.crash.CrashReport;
-import net.minecraft.crash.CrashReportCategory;
-import net.minecraft.crash.ReportedException;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.world.World;
+import net.minecraft.CrashReport;
+import net.minecraft.CrashReportCategory;
+import net.minecraft.ReportedException;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
+import com.mojang.math.Vector3f;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Mod;
@@ -103,66 +103,66 @@ public class ArcaneRenderer {
 
     }
 
-    public static void renderObject(@Nullable Model3D model, @Nonnull MatrixStack stack, IVertexBuilder buffer, int argb, int light) {
+    public static void renderObject(@Nullable Model3D model, @Nonnull PoseStack stack, VertexConsumer buffer, int argb, int light) {
 
         if(model != null) {
             RenderResizableCuboid.INSTANCE.renderCube(model, stack, buffer, argb, light);
         }
     }
 
-    public static <T extends ItemEntity> void renderItemEntity(T entity, DVector3 pos, DVector3 scale, float ticks, MatrixStack stack, IRenderTypeBuffer buffer, int light) {
+    public static <T extends ItemEntity> void renderItemEntity(T entity, DVector3 pos, DVector3 scale, float ticks, PoseStack stack, MultiBufferSource buffer, int light) {
 
-        EntityRenderer<? super T> renderer = Minecraft.getInstance().getRenderManager().getRenderer(entity);
+        EntityRenderer<? super T> renderer = Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(entity);
 
         try {
-            Vector3d position = renderer.getRenderOffset(entity, ticks);
-            double x = pos.x + position.getX();
-            double y = pos.y + position.getY();
-            double z = pos.z + position.getZ();
+            Vec3 position = renderer.getRenderOffset(entity, ticks);
+            double x = pos.x + position.x();
+            double y = pos.y + position.y();
+            double z = pos.z + position.z();
 
-            stack.push();
+            stack.pushPose();
             stack.translate(x, y, z);
             stack.scale((float) scale.x, (float) scale.y, (float) scale.z);
             renderItem(entity, ticks, stack, buffer, light);
-            stack.pop();
+            stack.popPose();
         }
         catch(Throwable throwable) {
-            CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Rendering entity in world");
-            CrashReportCategory itemCategory = crashreport.makeCategory("Entity being rendered");
-            entity.fillCrashReport(itemCategory);
-            CrashReportCategory renderCategory = crashreport.makeCategory("Renderer details");
-            renderCategory.addDetail("Assigned renderer", renderer);
-            renderCategory.addDetail("Location", CrashReportCategory.getCoordinateInfo(pos.x, pos.y, pos.z));
-            renderCategory.addDetail("Delta", ticks);
+            CrashReport crashreport = CrashReport.forThrowable(throwable, "Rendering entity in world");
+            CrashReportCategory itemCategory = crashreport.addCategory("Entity being rendered");
+            entity.fillCrashReportCategory(itemCategory);
+            CrashReportCategory renderCategory = crashreport.addCategory("Renderer details");
+            renderCategory.setDetail("Assigned renderer", renderer);
+//            renderCategory.setDetail("Location", CrashReportCategory.formatLocation(pos.x, pos.y, pos.z));
+            renderCategory.setDetail("Delta", ticks);
             throw new ReportedException(crashreport);
         }
     }
 
-    public static void renderItem(ItemEntity entity, float ticks, MatrixStack stack, IRenderTypeBuffer buffer, int light) {
+    public static void renderItem(ItemEntity entity, float ticks, PoseStack stack, MultiBufferSource buffer, int light) {
 
-        World world = entity.world;
-        Random random = world.rand;
+        Level world = entity.level;
+        Random random = world.random;
         ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
 
-        stack.push();
+        stack.pushPose();
         ItemStack itemStack = entity.getItem();
-        int i = itemStack.isEmpty() ? 187 : Item.getIdFromItem(itemStack.getItem()) + itemStack.getDamage();
+        int i = itemStack.isEmpty() ? 187 : Item.getId(itemStack.getItem()) + itemStack.getDamageValue();
         random.setSeed(i);
-        IBakedModel model = renderer.getItemModelWithOverrides(itemStack, world, (LivingEntity) null);
-        float bob = (MathHelper.sin((entity.age + ticks) / 10.0f + entity.hoverStart) * 0.1f + 0.1f) * 0.25f;
+        BakedModel model = renderer.getModel(itemStack, world, (LivingEntity) null, 0);
+        float bob = (Mth.sin((entity.age + ticks) / 10.0f + entity.bobOffs) * 0.1f + 0.1f) * 0.25f;
 
         stack.translate(0, bob + 0.25f, 0);
 
-        float rotation = (((float) entity.getAge() + ticks) / 20.0F + entity.hoverStart) * 0.5f;
-        stack.rotate(Vector3f.YP.rotation(rotation));
+        float rotation = (((float) entity.getAge() + ticks) / 20.0F + entity.bobOffs) * 0.5f;
+        stack.mulPose(Vector3f.YP.rotation(rotation));
 
-        renderer.renderItem(itemStack, ItemCameraTransforms.TransformType.GROUND, false, stack, buffer, light, OverlayTexture.NO_OVERLAY, model);
-        stack.pop();
+        renderer.render(itemStack, ItemTransforms.TransformType.GROUND, false, stack, buffer, light, OverlayTexture.NO_OVERLAY, model);
+        stack.popPose();
     }
 
     public static void resetColor() {
 
-        RenderSystem.color4f(1, 1, 1, 1);
+//        RenderSystem.color4f(1, 1, 1, 1);
     }
 
     public static float getRed(int color) {
@@ -234,9 +234,9 @@ public class ArcaneRenderer {
         if(glow >= 15) {
             return ArcaneRenderer.FULL_LIGHT;
         }
-        int blockLight = LightTexture.getLightBlock(light);
-        int skyLight = LightTexture.getLightSky(light);
-        return LightTexture.packLight(Math.max(blockLight, glow), Math.max(skyLight, glow));
+        int blockLight = LightTexture.block(light);
+        int skyLight = LightTexture.sky(light);
+        return LightTexture.pack(Math.max(blockLight, glow), Math.max(skyLight, glow));
     }
 
     public static TextureAtlasSprite getFluidTexture(@Nonnull FluidStack fluidStack, @Nonnull FluidType type) {
@@ -254,7 +254,7 @@ public class ArcaneRenderer {
 
     public static TextureAtlasSprite getSprite(ResourceLocation spriteLocation) {
 
-        return Minecraft.getInstance().getAtlasSpriteGetter(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply(spriteLocation);
+        return Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(spriteLocation);
     }
 
     public enum FluidType {

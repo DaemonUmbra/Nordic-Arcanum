@@ -3,37 +3,36 @@ package com.lordskittles.arcanumapi.common.world.feature.trees;
 import com.google.common.collect.Sets;
 import com.lordskittles.arcanumapi.common.utilities.BlockUtilities;
 import com.mojang.serialization.Codec;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
-import net.minecraft.state.Property;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.IWorldGenerationBaseReader;
-import net.minecraft.world.gen.IWorldGenerationReader;
-import net.minecraft.world.gen.feature.BaseTreeFeatureConfig;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.TreeFeature;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.LevelSimulatedReader;
+import net.minecraft.world.level.LevelSimulatedRW;
+import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.TreeFeature;
 
 import java.util.Random;
 import java.util.Set;
 
 @SuppressWarnings("rawtypes")
-public abstract class FeatureTree<T extends BaseTreeFeatureConfig> extends Feature<T> {
+public abstract class FeatureTree<T extends TreeConfiguration> extends Feature<T> {
 
     protected Property logAxisProperty;
 
     private final BlockState log;
     private final BlockState leaves;
 
-    protected BaseTreeFeatureConfig config;
+    protected TreeConfiguration config;
     protected Random random;
-    protected IWorld world;
+    protected WorldGenLevel world;
 
     public FeatureTree(BlockState log, BlockState leaves, Codec<T> config) {
 
@@ -44,19 +43,16 @@ public abstract class FeatureTree<T extends BaseTreeFeatureConfig> extends Featu
         this.logAxisProperty = BlockUtilities.getAxisProperty(this.log);
     }
 
-    @Override
-    public boolean generate(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, T config) {
+    public boolean place(FeaturePlaceContext<T> context) {
 
-        this.random = rand;
-        this.config = config;
-        this.world = (IWorld) world;
+        this.random = context.random();
 
         Set<BlockPos> changedLeaves = Sets.newHashSet();
         Set<BlockPos> changedLogs = Sets.newHashSet();
 
-        if(isDirtAt(world, pos.down()) && isAirOrLeavesAt(world, pos)) {
-            placeTrunk(pos, changedLogs);
-            placeLeaves(pos, changedLeaves);
+        if(isGrassOrDirt(world, context.origin().below()) && isAirOrLeavesAt(world, context.origin())) {
+            placeTrunk(context.origin(), changedLogs);
+            placeLeaves(context.origin(), changedLeaves);
             return true;
         }
 
@@ -77,9 +73,9 @@ public abstract class FeatureTree<T extends BaseTreeFeatureConfig> extends Featu
 
     protected void placeLeaf(BlockPos pos, Set<BlockPos> changedLeaves) {
 
-        this.world.setBlockState(pos, leaves, 13);
+        this.world.setBlock(pos, leaves, 13);
 
-        changedLeaves.add(pos.toImmutable());
+        changedLeaves.add(pos.immutable());
     }
 
     protected boolean placeLog(BlockPos pos, Set<BlockPos> changedLogs) {
@@ -90,15 +86,15 @@ public abstract class FeatureTree<T extends BaseTreeFeatureConfig> extends Featu
     @SuppressWarnings("unchecked")
     protected boolean placeLog(BlockPos pos, Direction.Axis axis, Set<BlockPos> changedLogs) {
 
-        BlockState directedLog = (axis != null && this.logAxisProperty != null) ? (BlockState) log.with(this.logAxisProperty, (Comparable) axis) : log;
+        BlockState directedLog = (axis != null && this.logAxisProperty != null) ? (BlockState) log.setValue(this.logAxisProperty, (Comparable) axis) : log;
         return placeBlock(pos, directedLog, changedLogs);
     }
 
     private boolean placeBlock(BlockPos pos, BlockState state, Set<BlockPos> changedBlocks) {
 
         if(isReplaceableAt(world, pos)) {
-            this.setBlockState(world, pos, state);
-            changedBlocks.add(pos.toImmutable());
+            this.setBlock(world, pos, state);
+            changedBlocks.add(pos.immutable());
 
             return true;
         }
@@ -110,70 +106,70 @@ public abstract class FeatureTree<T extends BaseTreeFeatureConfig> extends Featu
 
     protected abstract void placeLeaves(BlockPos position, Set<BlockPos> changedLeaves);
 
-    protected void setDirtAt(IWorldGenerationReader world, BlockPos pos) {
+    protected void setDirtAt(LevelSimulatedRW world, BlockPos pos) {
 
-        world.setBlockState(pos, Blocks.DIRT.getDefaultState(), 3);
+        world.setBlock(pos, Blocks.DIRT.defaultBlockState(), 3);
     }
 
     protected void placeDirt(BlockPos pos) {
 
-        if(! TreeFeature.isReplaceableAt(world, pos)) {
-            TreeFeature.setBlockStateWithoutUpdate(world, pos, Blocks.DIRT.getDefaultState());
+        if(! TreeFeature.validTreePos(world, pos)) {
+            world.setBlock(pos, Blocks.DIRT.defaultBlockState(), 19);
         }
     }
 
-    public static boolean isReplaceableAt(IWorldGenerationBaseReader reader, BlockPos position) {
+    public static boolean isReplaceableAt(LevelSimulatedReader reader, BlockPos position) {
 
         return isAirOrLeavesAt(reader, position) || isTallPlantAt(reader, position) || isWaterAt(reader, position);
     }
 
-    public static boolean isLogAt(IWorldGenerationBaseReader reader, BlockPos position) {
+    public static boolean isLogAt(LevelSimulatedReader reader, BlockPos position) {
 
-        return isReplaceableAt(reader, position) || reader.hasBlockState(position, (world) ->
+        return isReplaceableAt(reader, position) || reader.isStateAtPosition(position, (world) ->
         {
-            return world.isIn(BlockTags.LOGS);
+            return world.is(BlockTags.LOGS);
         });
     }
 
-    private static boolean isVineAt(IWorldGenerationBaseReader reader, BlockPos position) {
+    private static boolean isVineAt(LevelSimulatedReader reader, BlockPos position) {
 
-        return reader.hasBlockState(position, (state) ->
+        return reader.isStateAtPosition(position, (state) ->
         {
-            return state.matchesBlock(Blocks.VINE);
+            return state.is(Blocks.VINE);
         });
     }
 
-    private static boolean isWaterAt(IWorldGenerationBaseReader reader, BlockPos position) {
+    private static boolean isWaterAt(LevelSimulatedReader reader, BlockPos position) {
 
-        return reader.hasBlockState(position, (state) ->
+        return reader.isStateAtPosition(position, (state) ->
         {
-            return state.matchesBlock(Blocks.WATER);
+            return state.is(Blocks.WATER);
         });
     }
 
-    public static boolean isAirOrLeavesAt(IWorldGenerationBaseReader reader, BlockPos position) {
+    public static boolean isAirOrLeavesAt(LevelSimulatedReader reader, BlockPos position) {
 
-        return reader.hasBlockState(position, (world) ->
+        return reader.isStateAtPosition(position, (world) ->
         {
-            return world.isAir() || world.isIn(BlockTags.LEAVES);
+            return world.isAir() || world.is(BlockTags.LEAVES);
         });
     }
 
-    private static boolean isDirtOrFarmlandAt(IWorldGenerationBaseReader reader, BlockPos position) {
+    private static boolean isDirtOrFarmlandAt(LevelSimulatedReader reader, BlockPos position) {
 
-        return reader.hasBlockState(position, (world) ->
+        return reader.isStateAtPosition(position, (world) ->
         {
             Block block = world.getBlock();
             return isDirt(block) || block == Blocks.FARMLAND;
         });
     }
 
-    private static boolean isTallPlantAt(IWorldGenerationBaseReader reader, BlockPos position) {
+    private static boolean isTallPlantAt(LevelSimulatedReader reader, BlockPos position) {
 
-        return reader.hasBlockState(position, (world) ->
+        return reader.isStateAtPosition(position, (world) ->
         {
             Material material = world.getMaterial();
-            return material == Material.TALL_PLANTS;
+            return material == Material.REPLACEABLE_PLANT;
         });
     }
 

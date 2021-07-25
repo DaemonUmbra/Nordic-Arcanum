@@ -1,16 +1,17 @@
 package com.lordskittles.arcanumapi.common.tileentity;
 
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 
-public abstract class TileEntityTickable<T extends TileEntityTickable> extends TileEntityUpdateable implements ITickableTileEntity {
+public abstract class TileEntityTickable<T extends TileEntityTickable> extends TileEntityUpdateable {
 
     protected final T tile;
 
-    public TileEntityTickable(TileEntityType<?> tileEntityTypeIn, T tile) {
+    public TileEntityTickable(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state, T tile) {
 
-        super(tileEntityTypeIn);
+        super(tileEntityTypeIn, pos, state);
 
         this.tile = tile;
     }
@@ -18,8 +19,8 @@ public abstract class TileEntityTickable<T extends TileEntityTickable> extends T
     @Override
     public void tick() {
 
-        tick(this.world, this.tile);
+        tick(this.level, this.tile);
     }
 
-    protected abstract void tick(World world, T tile);
+    protected abstract void tick(Level world, T tile);
 }

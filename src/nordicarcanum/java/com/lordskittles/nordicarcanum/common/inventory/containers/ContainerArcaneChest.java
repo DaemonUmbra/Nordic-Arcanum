@@ -5,22 +5,22 @@ import com.lordskittles.nordicarcanum.common.registry.Blocks;
 import com.lordskittles.nordicarcanum.common.registry.Containers;
 import com.lordskittles.nordicarcanum.common.tileentity.magic.TileEntityArcaneChest;
 import com.lordskittles.nordicarcanum.core.NordicInventorySlots;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.util.Objects;
 
 public class ContainerArcaneChest extends ContainerStorageBase<TileEntityArcaneChest> {
 
-    public ContainerArcaneChest(final int windowId, final PlayerInventory playerInventory, final TileEntityArcaneChest tile) {
+    public ContainerArcaneChest(final int windowId, final Inventory playerInventory, final TileEntityArcaneChest tile) {
 
         super(Containers.arcane_chest.get(), NordicInventorySlots.ARCANE_CHEST, windowId, playerInventory, tile);
 
-        tile.openInventory(playerInventory.player);
+        tile.startOpen(playerInventory.player);
 
         // Main Inventory
         generateStorageSlots(0, 6, 9, 8, 8, 18);
@@ -30,23 +30,23 @@ public class ContainerArcaneChest extends ContainerStorageBase<TileEntityArcaneC
         generatePlayerInventoryHotbar(playerInventory, 8, 183);
     }
 
-    public ContainerArcaneChest(final int windowId, final PlayerInventory playerInventory, final PacketBuffer packetBuffer) {
+    public ContainerArcaneChest(final int windowId, final Inventory playerInventory, final FriendlyByteBuf packetBuffer) {
 
-        this(windowId, playerInventory, getTileEntity(playerInventory, packetBuffer));
+        this(windowId, playerInventory, getBlockEntity(playerInventory, packetBuffer));
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity player) {
+    public boolean stillValid(Player player) {
 
-        return isWithinUsableDistance(canInteract, player, Blocks.arcane_chest.get());
+        return Tile.stillValid(player);
     }
 
-    private static TileEntityArcaneChest getTileEntity(final PlayerInventory playerInventory, final PacketBuffer packetBuffer) {
+    private static TileEntityArcaneChest getBlockEntity(final Inventory playerInventory, final FriendlyByteBuf packetBuffer) {
 
         Objects.requireNonNull(playerInventory, "PlayerInventory cannot be null");
         Objects.requireNonNull(packetBuffer, "Data cannot be null");
 
-        final TileEntity tileAtPos = playerInventory.player.world.getTileEntity(packetBuffer.readBlockPos());
+        final BlockEntity tileAtPos = playerInventory.player.level.getBlockEntity(packetBuffer.readBlockPos());
         if(tileAtPos instanceof TileEntityArcaneChest) {
             return (TileEntityArcaneChest) tileAtPos;
         }
@@ -55,28 +55,28 @@ public class ContainerArcaneChest extends ContainerStorageBase<TileEntityArcaneC
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity player, int index) {
+    public ItemStack quickMoveStack(Player player, int index) {
 
         ItemStack stack = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
-        if(slot != null && slot.getHasStack()) {
-            ItemStack itemStack = slot.getStack();
+        Slot slot = this.slots.get(index);
+        if(slot != null && slot.hasItem()) {
+            ItemStack itemStack = slot.getItem();
             stack = itemStack.copy();
             if(index < nonPlayerSlotCount) {
-                if(! this.mergeItemStack(itemStack, this.nonPlayerSlotCount, this.inventorySlots.size(), true)) {
+                if(! this.moveItemStackTo(itemStack, this.nonPlayerSlotCount, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             }
             else
-                if(! this.mergeItemStack(itemStack, 0, this.nonPlayerSlotCount, false)) {
+                if(! this.moveItemStackTo(itemStack, 0, this.nonPlayerSlotCount, false)) {
                     return ItemStack.EMPTY;
                 }
 
             if(itemStack.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             }
             else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
         }
 

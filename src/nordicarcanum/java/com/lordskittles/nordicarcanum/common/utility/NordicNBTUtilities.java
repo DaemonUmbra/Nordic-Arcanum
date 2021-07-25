@@ -3,8 +3,8 @@ package com.lordskittles.nordicarcanum.common.utility;
 import com.lordskittles.arcanumapi.core.ArcanumNames;
 import com.lordskittles.nordicarcanum.core.NordicNames;
 import com.lordskittles.nordicarcanum.magic.schools.SchoolType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +15,9 @@ public class NordicNBTUtilities {
 
     private static SchoolType[] schools = new SchoolType[] { SchoolType.Ur, SchoolType.Kaun, SchoolType.Ar, SchoolType.Hagal, SchoolType.Yr, SchoolType.Fe };
 
-    public static List<SchoolType> getUndiscoveredSchools(String modid, PlayerEntity player) {
+    public static List<SchoolType> getUndiscoveredSchools(String modid, Player player) {
 
-        CompoundNBT nbt = getPersistentData(modid, player.getPersistentData());
+        CompoundTag nbt = getPersistentData(modid, player.getPersistentData());
         List<SchoolType> schoolsToDiscover = new ArrayList<>();
 
         for(SchoolType school : NordicNBTUtilities.schools) {

@@ -3,12 +3,12 @@ package com.lordskittles.nordicarcanum.client.render.item.model;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.model.Model;
-import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.client.model.Model;
+import net.minecraft.client.model.geom.ModelPart;
 
 public class ModelBindingBrazier extends Model {
 
-    private final ModelRenderer binding2;
+    private final ModelPart binding2;
 
     public ModelBindingBrazier() {
 

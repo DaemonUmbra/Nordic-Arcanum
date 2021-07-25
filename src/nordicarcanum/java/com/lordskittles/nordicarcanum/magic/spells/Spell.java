@@ -5,11 +5,11 @@ import com.lordskittles.arcanumapi.core.ArcanumAPI;
 import com.lordskittles.nordicarcanum.common.registry.Spells;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.lordskittles.nordicarcanum.magic.schools.SchoolType;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 public abstract class Spell extends ForgeRegistryEntry<Spell> {
@@ -35,14 +35,14 @@ public abstract class Spell extends ForgeRegistryEntry<Spell> {
         return this.school;
     }
 
-    public ITextComponent getName() {
+    public Component getName() {
 
-        return new StringTextComponent("spell." + school.name + "." + this.name + ".name");
+        return new TextComponent("spell." + school.name + "." + this.name + ".name");
     }
 
-    public ITextComponent getDescription() {
+    public Component getDescription() {
 
-        return new StringTextComponent("spell." + school.name + "." + this.name + ".desc");
+        return new TextComponent("spell." + school.name + "." + this.name + ".desc");
     }
 
     public float getArcanumCost() {
@@ -55,7 +55,7 @@ public abstract class Spell extends ForgeRegistryEntry<Spell> {
         return this.arcanumCost * modifier;
     }
 
-    public void cast(World world, ServerPlayerEntity player, BlockPos pos, float cost) {
+    public void cast(Level world, ServerPlayer player, BlockPos pos, float cost) {
 
         if(MagicUtilities.canUseArcanum(player, cost))
             return;
@@ -66,5 +66,5 @@ public abstract class Spell extends ForgeRegistryEntry<Spell> {
         MagicUtilities.useArcanum(player, cost);
     }
 
-    public abstract boolean process(World world, ServerPlayerEntity player, BlockPos pos);
+    public abstract boolean process(Level world, ServerPlayer player, BlockPos pos);
 }

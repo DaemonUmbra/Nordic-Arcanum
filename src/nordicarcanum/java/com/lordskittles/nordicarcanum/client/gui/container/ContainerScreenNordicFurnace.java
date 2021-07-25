@@ -4,13 +4,13 @@ import com.lordskittles.arcanumapi.client.gui.container.ContainerScreenBase;
 import com.lordskittles.nordicarcanum.common.inventory.containers.ContainerNordicFurnace;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.lordskittles.nordicarcanum.core.NordicNames;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.chat.Component;
 
 public class ContainerScreenNordicFurnace extends ContainerScreenBase<ContainerNordicFurnace> {
 
-    public ContainerScreenNordicFurnace(ContainerNordicFurnace container, PlayerInventory inventory, ITextComponent textComponent) {
+    public ContainerScreenNordicFurnace(ContainerNordicFurnace container, Inventory inventory, Component textComponent) {
 
         super(NordicArcanum.MODID, NordicNames.NORDIC_FURNACE, container, inventory, textComponent);
 
@@ -18,7 +18,7 @@ public class ContainerScreenNordicFurnace extends ContainerScreenBase<ContainerN
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack stack, float partialTicks, int mouseX, int mouseY) {
+    protected void drawGuiContainerBackgroundLayer(PoseStack stack, float partialTicks, int mouseX, int mouseY) {
 
         super.drawGuiContainerBackgroundLayer(stack, partialTicks, mouseX, mouseY);
         int left = this.guiLeft;

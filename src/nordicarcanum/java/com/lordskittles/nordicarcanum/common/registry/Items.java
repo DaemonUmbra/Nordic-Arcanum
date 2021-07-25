@@ -12,10 +12,13 @@ import com.lordskittles.nordicarcanum.common.item.resource.ItemIngot;
 import com.lordskittles.nordicarcanum.common.item.resource.ItemRawOre;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.lordskittles.nordicarcanum.core.NordicNames;
-import net.minecraft.item.*;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.world.item.*;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.item.Item;
 
 public class Items {
 
@@ -87,7 +90,7 @@ public class Items {
     public static final RegistryObject<Item> viking_saw = ITEMS.register(NordicNames.VIKING_SAW, ItemVikingSaw::new);
     public static final RegistryObject<Item> mortar_pestle = ITEMS.register(NordicNames.MORTAR_PESTLE, ItemMortarPestle::new);
     public static final RegistryObject<Item> infused_arcane_powder = ITEMS.register(NordicNames.INFUSED_ARCANE_POWDER, ItemInfusedArcanePowder::new);
-    public static final RegistryObject<Item> liquid_arcanum_bucket = ITEMS.register(NordicNames.LIQUID_ARCANUM + NordicNames.BUCKET, () -> new BucketItem(Fluids.liquid_arcanum, new Item.Properties().group(NordicResourcesItemGroup.INSTANCE).maxStackSize(1)));
+    public static final RegistryObject<Item> liquid_arcanum_bucket = ITEMS.register(NordicNames.LIQUID_ARCANUM + NordicNames.BUCKET, () -> new BucketItem(Fluids.liquid_arcanum, new Item.Properties().tab(NordicResourcesItemGroup.INSTANCE).stacksTo(1)));
     public static final RegistryObject<Item> arcanum_bottle = ITEMS.register(NordicNames.ARCANUM_BOTTLE, ItemArcanumBottle::new);
 
     public static final RegistryObject<Item> pedestal_cast = ITEMS.register(NordicNames.PEDESTAL + NordicNames.CAST, () -> new ItemBindingCast(BindingShape.Pedestal));
@@ -100,27 +103,27 @@ public class Items {
     public static final RegistryObject<Item> bend_blueprint = ITEMS.register(NordicNames.BEND + NordicNames.BLUEPRINT, () -> new ItemRodBlueprint(RodShape.Bend));
     public static final RegistryObject<Item> pillar_blueprint = ITEMS.register(NordicNames.PILLAR + NordicNames.BLUEPRINT, () -> new ItemRodBlueprint(RodShape.Pillar));
 
-    public static final RegistryObject<Item> norse_hoe = ITEMS.register(NordicNames.NORSE + NordicNames.HOE_SUFFIX, () -> new HoeItem(ItemTiers.NORSE, - 2, - 1.0F, (new Item.Properties()).group(NordicItemGroup.INSTANCE)));
-    public static final RegistryObject<Item> norse_shovel = ITEMS.register(NordicNames.NORSE + NordicNames.SHOVEL_SUFFIX, () -> new ShovelItem(ItemTiers.NORSE, 1.5F, - 3.0F, (new Item.Properties()).group(NordicItemGroup.INSTANCE)));
-    public static final RegistryObject<Item> norse_pickaxe = ITEMS.register(NordicNames.NORSE + NordicNames.PICKAXE_SUFFIX, () -> new PickaxeItem(ItemTiers.NORSE, 1, - 2.8F, (new Item.Properties()).group(NordicItemGroup.INSTANCE)));
-    public static final RegistryObject<Item> norse_axe = ITEMS.register(NordicNames.NORSE + NordicNames.AXE_SUFFIX, () -> new AxeItem(ItemTiers.NORSE, 6.5F, - 3.5F, (new Item.Properties()).group(NordicItemGroup.INSTANCE)));
-    public static final RegistryObject<Item> norse_sword = ITEMS.register(NordicNames.NORSE + NordicNames.SWORD_SUFFIX, () -> new SwordItem(ItemTiers.NORSE, 3, - 2.4F, (new Item.Properties()).group(NordicItemGroup.INSTANCE)));
+    public static final RegistryObject<Item> norse_hoe = ITEMS.register(NordicNames.NORSE + NordicNames.HOE_SUFFIX, () -> new HoeItem(ItemTiers.NORSE, - 2, - 1.0F, (new Item.Properties()).tab(NordicItemGroup.INSTANCE)));
+    public static final RegistryObject<Item> norse_shovel = ITEMS.register(NordicNames.NORSE + NordicNames.SHOVEL_SUFFIX, () -> new ShovelItem(ItemTiers.NORSE, 1.5F, - 3.0F, (new Item.Properties()).tab(NordicItemGroup.INSTANCE)));
+    public static final RegistryObject<Item> norse_pickaxe = ITEMS.register(NordicNames.NORSE + NordicNames.PICKAXE_SUFFIX, () -> new PickaxeItem(ItemTiers.NORSE, 1, - 2.8F, (new Item.Properties()).tab(NordicItemGroup.INSTANCE)));
+    public static final RegistryObject<Item> norse_axe = ITEMS.register(NordicNames.NORSE + NordicNames.AXE_SUFFIX, () -> new AxeItem(ItemTiers.NORSE, 6.5F, - 3.5F, (new Item.Properties()).tab(NordicItemGroup.INSTANCE)));
+    public static final RegistryObject<Item> norse_sword = ITEMS.register(NordicNames.NORSE + NordicNames.SWORD_SUFFIX, () -> new SwordItem(ItemTiers.NORSE, 3, - 2.4F, (new Item.Properties()).tab(NordicItemGroup.INSTANCE)));
 
-    public static final RegistryObject<Item> thulite_hoe = ITEMS.register(NordicNames.THULITE + NordicNames.HOE_SUFFIX, () -> new HoeItem(ItemTiers.THULITE, - 3, 0F, (new Item.Properties()).group(NordicItemGroup.INSTANCE)));
-    public static final RegistryObject<Item> thulite_shovel = ITEMS.register(NordicNames.THULITE + NordicNames.SHOVEL_SUFFIX, () -> new ShovelItem(ItemTiers.THULITE, 1.5F, - 3.0F, (new Item.Properties()).group(NordicItemGroup.INSTANCE)));
-    public static final RegistryObject<Item> thulite_pickaxe = ITEMS.register(NordicNames.THULITE + NordicNames.PICKAXE_SUFFIX, () -> new PickaxeItem(ItemTiers.THULITE, 1, - 2.8F, (new Item.Properties()).group(NordicItemGroup.INSTANCE)));
-    public static final RegistryObject<Item> thulite_axe = ITEMS.register(NordicNames.THULITE + NordicNames.AXE_SUFFIX, () -> new AxeItem(ItemTiers.THULITE, 4.5F, - 3.4F, (new Item.Properties()).group(NordicItemGroup.INSTANCE)));
-    public static final RegistryObject<Item> thulite_sword = ITEMS.register(NordicNames.THULITE + NordicNames.SWORD_SUFFIX, () -> new SwordItem(ItemTiers.THULITE, 3, - 2.4F, (new Item.Properties()).group(NordicItemGroup.INSTANCE)));
+    public static final RegistryObject<Item> thulite_hoe = ITEMS.register(NordicNames.THULITE + NordicNames.HOE_SUFFIX, () -> new HoeItem(ItemTiers.THULITE, - 3, 0F, (new Item.Properties()).tab(NordicItemGroup.INSTANCE)));
+    public static final RegistryObject<Item> thulite_shovel = ITEMS.register(NordicNames.THULITE + NordicNames.SHOVEL_SUFFIX, () -> new ShovelItem(ItemTiers.THULITE, 1.5F, - 3.0F, (new Item.Properties()).tab(NordicItemGroup.INSTANCE)));
+    public static final RegistryObject<Item> thulite_pickaxe = ITEMS.register(NordicNames.THULITE + NordicNames.PICKAXE_SUFFIX, () -> new PickaxeItem(ItemTiers.THULITE, 1, - 2.8F, (new Item.Properties()).tab(NordicItemGroup.INSTANCE)));
+    public static final RegistryObject<Item> thulite_axe = ITEMS.register(NordicNames.THULITE + NordicNames.AXE_SUFFIX, () -> new AxeItem(ItemTiers.THULITE, 4.5F, - 3.4F, (new Item.Properties()).tab(NordicItemGroup.INSTANCE)));
+    public static final RegistryObject<Item> thulite_sword = ITEMS.register(NordicNames.THULITE + NordicNames.SWORD_SUFFIX, () -> new SwordItem(ItemTiers.THULITE, 3, - 2.4F, (new Item.Properties()).tab(NordicItemGroup.INSTANCE)));
 
-    public static final RegistryObject<Item> carnelian_hoe = ITEMS.register(NordicNames.CARNELIAN + NordicNames.HOE_SUFFIX, () -> new HoeItem(ItemTiers.CARNELIAN, - 3, 0F, (new Item.Properties()).group(NordicItemGroup.INSTANCE)));
-    public static final RegistryObject<Item> carnelian_shovel = ITEMS.register(NordicNames.CARNELIAN + NordicNames.SHOVEL_SUFFIX, () -> new ShovelItem(ItemTiers.CARNELIAN, 1.5F, - 3.0F, (new Item.Properties()).group(NordicItemGroup.INSTANCE)));
-    public static final RegistryObject<Item> carnelian_pickaxe = ITEMS.register(NordicNames.CARNELIAN + NordicNames.PICKAXE_SUFFIX, () -> new PickaxeItem(ItemTiers.CARNELIAN, 1, - 2.8F, (new Item.Properties()).group(NordicItemGroup.INSTANCE)));
-    public static final RegistryObject<Item> carnelian_axe = ITEMS.register(NordicNames.CARNELIAN + NordicNames.AXE_SUFFIX, () -> new AxeItem(ItemTiers.CARNELIAN, 4.5F, - 3.4F, (new Item.Properties()).group(NordicItemGroup.INSTANCE)));
-    public static final RegistryObject<Item> carnelian_sword = ITEMS.register(NordicNames.CARNELIAN + NordicNames.SWORD_SUFFIX, () -> new SwordItem(ItemTiers.CARNELIAN, 3, - 2.4F, (new Item.Properties()).group(NordicItemGroup.INSTANCE)));
+    public static final RegistryObject<Item> carnelian_hoe = ITEMS.register(NordicNames.CARNELIAN + NordicNames.HOE_SUFFIX, () -> new HoeItem(ItemTiers.CARNELIAN, - 3, 0F, (new Item.Properties()).tab(NordicItemGroup.INSTANCE)));
+    public static final RegistryObject<Item> carnelian_shovel = ITEMS.register(NordicNames.CARNELIAN + NordicNames.SHOVEL_SUFFIX, () -> new ShovelItem(ItemTiers.CARNELIAN, 1.5F, - 3.0F, (new Item.Properties()).tab(NordicItemGroup.INSTANCE)));
+    public static final RegistryObject<Item> carnelian_pickaxe = ITEMS.register(NordicNames.CARNELIAN + NordicNames.PICKAXE_SUFFIX, () -> new PickaxeItem(ItemTiers.CARNELIAN, 1, - 2.8F, (new Item.Properties()).tab(NordicItemGroup.INSTANCE)));
+    public static final RegistryObject<Item> carnelian_axe = ITEMS.register(NordicNames.CARNELIAN + NordicNames.AXE_SUFFIX, () -> new AxeItem(ItemTiers.CARNELIAN, 4.5F, - 3.4F, (new Item.Properties()).tab(NordicItemGroup.INSTANCE)));
+    public static final RegistryObject<Item> carnelian_sword = ITEMS.register(NordicNames.CARNELIAN + NordicNames.SWORD_SUFFIX, () -> new SwordItem(ItemTiers.CARNELIAN, 3, - 2.4F, (new Item.Properties()).tab(NordicItemGroup.INSTANCE)));
 
-    public static final RegistryObject<Item> garnet_hoe = ITEMS.register(NordicNames.GARNET + NordicNames.HOE_SUFFIX, () -> new HoeItem(ItemTiers.GARNET, - 3, 0F, (new Item.Properties()).group(NordicItemGroup.INSTANCE)));
-    public static final RegistryObject<Item> garnet_shovel = ITEMS.register(NordicNames.GARNET + NordicNames.SHOVEL_SUFFIX, () -> new ShovelItem(ItemTiers.GARNET, 1.5F, - 3.0F, (new Item.Properties()).group(NordicItemGroup.INSTANCE)));
-    public static final RegistryObject<Item> garnet_pickaxe = ITEMS.register(NordicNames.GARNET + NordicNames.PICKAXE_SUFFIX, () -> new PickaxeItem(ItemTiers.GARNET, 1, - 2.8F, (new Item.Properties()).group(NordicItemGroup.INSTANCE)));
-    public static final RegistryObject<Item> garnet_axe = ITEMS.register(NordicNames.GARNET + NordicNames.AXE_SUFFIX, () -> new AxeItem(ItemTiers.GARNET, 4.5F, - 3.4F, (new Item.Properties()).group(NordicItemGroup.INSTANCE)));
-    public static final RegistryObject<Item> garnet_sword = ITEMS.register(NordicNames.GARNET + NordicNames.SWORD_SUFFIX, () -> new SwordItem(ItemTiers.GARNET, 3, - 2.4F, (new Item.Properties()).group(NordicItemGroup.INSTANCE)));
+    public static final RegistryObject<Item> garnet_hoe = ITEMS.register(NordicNames.GARNET + NordicNames.HOE_SUFFIX, () -> new HoeItem(ItemTiers.GARNET, - 3, 0F, (new Item.Properties()).tab(NordicItemGroup.INSTANCE)));
+    public static final RegistryObject<Item> garnet_shovel = ITEMS.register(NordicNames.GARNET + NordicNames.SHOVEL_SUFFIX, () -> new ShovelItem(ItemTiers.GARNET, 1.5F, - 3.0F, (new Item.Properties()).tab(NordicItemGroup.INSTANCE)));
+    public static final RegistryObject<Item> garnet_pickaxe = ITEMS.register(NordicNames.GARNET + NordicNames.PICKAXE_SUFFIX, () -> new PickaxeItem(ItemTiers.GARNET, 1, - 2.8F, (new Item.Properties()).tab(NordicItemGroup.INSTANCE)));
+    public static final RegistryObject<Item> garnet_axe = ITEMS.register(NordicNames.GARNET + NordicNames.AXE_SUFFIX, () -> new AxeItem(ItemTiers.GARNET, 4.5F, - 3.4F, (new Item.Properties()).tab(NordicItemGroup.INSTANCE)));
+    public static final RegistryObject<Item> garnet_sword = ITEMS.register(NordicNames.GARNET + NordicNames.SWORD_SUFFIX, () -> new SwordItem(ItemTiers.GARNET, 3, - 2.4F, (new Item.Properties()).tab(NordicItemGroup.INSTANCE)));
 }

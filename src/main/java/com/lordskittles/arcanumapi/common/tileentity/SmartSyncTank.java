@@ -1,11 +1,13 @@
 package com.lordskittles.arcanumapi.common.tileentity;
 
 import com.lordskittles.arcanumapi.common.network.DescSynced;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 import javax.annotation.Nonnull;
+
+import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 
 public class SmartSyncTank extends FluidTank {
 
@@ -30,7 +32,7 @@ public class SmartSyncTank extends FluidTank {
 
     public void tick() {
 
-        if(this.owner.getWorld().isRemote) {
+        if(this.owner.getLevel().isClientSide) {
             super.setFluid(this.syncedFluidStackGui);
         }
         else {
@@ -112,7 +114,7 @@ public class SmartSyncTank extends FluidTank {
         // We don't use onContentsChanged() for sync purposes, because its gets called even for simulated changes,
         // and we have no way of knowing whether or not this is a simulation.
 
-        this.owner.markDirty();
+        this.owner.setChanged();
     }
 
     @Override
@@ -124,7 +126,7 @@ public class SmartSyncTank extends FluidTank {
     }
 
     @Override
-    public FluidTank readFromNBT(CompoundNBT nbt) {
+    public FluidTank readFromNBT(CompoundTag nbt) {
 
         FluidTank tank = super.readFromNBT(nbt);
         syncedFluidStackDesc = tank.getFluid().copy();

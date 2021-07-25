@@ -1,18 +1,18 @@
 package com.lordskittles.nordicarcanum.common.particle;
 
 import net.minecraft.client.particle.*;
-import net.minecraft.client.world.ClientWorld;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class AttunementAltarParticle extends SpriteTexturedParticle {
+public class AttunementAltarParticle extends TextureSheetParticle {
 
     private final double coordX;
     private final double coordY;
     private final double coordZ;
 
-    protected AttunementAltarParticle(ClientWorld world, double x, double y, double z, double motionX, double motionY, double motionZ) {
+    protected AttunementAltarParticle(ClientLevel world, double x, double y, double z, double motionX, double motionY, double motionZ) {
 
         super(world, x, y, z);
         this.motionX = motionX;

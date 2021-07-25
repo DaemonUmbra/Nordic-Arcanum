@@ -1,6 +1,6 @@
 package com.lordskittles.nordicarcanum.core;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 public class NordicTextures {
 

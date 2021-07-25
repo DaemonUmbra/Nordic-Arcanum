@@ -4,25 +4,25 @@ import com.lordskittles.nordicarcanum.common.registry.Blocks;
 import com.lordskittles.nordicarcanum.common.registry.Containers;
 import com.lordskittles.nordicarcanum.common.tileentity.magic.TileEntityAttunementAltar;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IWorldPosCallable;
+import net.minecraft.world.inventory.ContainerLevelAccess;
 
 import java.util.Objects;
 
-public class ContainerAttunementAltar extends Container {
+public class ContainerAttunementAltar extends AbstractContainerMenu {
 
     private final TileEntityAttunementAltar Tile;
-    private final IWorldPosCallable canInteract;
+    private final ContainerLevelAccess canInteract;
 
-    public ContainerAttunementAltar(final int windowId, final PlayerInventory playerInventory, final TileEntityAttunementAltar tile) {
+    public ContainerAttunementAltar(final int windowId, final Inventory playerInventory, final TileEntityAttunementAltar tile) {
 
         super(Containers.attunement_altar.get(), windowId);
 
         this.Tile = tile;
-        this.canInteract = IWorldPosCallable.of(Tile.getWorld(), Tile.getPos());
+        this.canInteract = ContainerLevelAccess.of(Tile.getWorld(), Tile.getPos());
     }
 
     public ContainerAttunementAltar(final int windowId, final PlayerInventory playerInventory, final PacketBuffer packetBuffer) {

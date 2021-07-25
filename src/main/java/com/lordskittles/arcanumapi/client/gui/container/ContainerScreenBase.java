@@ -1,18 +1,18 @@
 package com.lordskittles.arcanumapi.client.gui.container;
 
 import com.lordskittles.arcanumapi.core.ArcanumAPI;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public abstract class ContainerScreenBase<T extends Container> extends ContainerScreen<T> {
+public abstract class ContainerScreenBase<T extends AbstractContainerMenu> extends AbstractContainerScreen<T> {
 
     protected ResourceLocation texture = null;
     protected int textColor = 4210752;
@@ -31,7 +31,9 @@ public abstract class ContainerScreenBase<T extends Container> extends Container
     protected boolean drawPlayerText = false;
     protected boolean drawContainerText = false;
 
-    public ContainerScreenBase(String modID, String textureName, T container, PlayerInventory inventory, ITextComponent textComponent) {
+    protected Inventory inventory;
+
+    public ContainerScreenBase(String modID, String textureName, T container, Inventory inventory, Component textComponent) {
 
         super(container, inventory, textComponent);
 
@@ -47,10 +49,10 @@ public abstract class ContainerScreenBase<T extends Container> extends Container
 
     protected void setTextureRect(int left, int top, int width, int height) {
 
-        this.guiLeft = left;
-        this.guiTop = top;
-        this.xSize = width;
-        this.ySize = height;
+        this.leftPos = left;
+        this.topPos = top;
+        this.imageWidth = width;
+        this.imageHeight = height;
     }
 
     protected void setTextColor(int textColor) {
@@ -74,34 +76,34 @@ public abstract class ContainerScreenBase<T extends Container> extends Container
     }
 
     @Override
-    public void render(MatrixStack matrixStack, final int mouseX, final int mouseY, final float partialTicks) {
+    public void render(PoseStack matrixStack, final int mouseX, final int mouseY, final float partialTicks) {
 
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
 
-        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
+        this.renderTooltip(matrixStack, mouseX, mouseY);
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY) {
+    protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
 
         if(this.drawContainerText) {
-            this.font.drawString(matrixStack, this.title.getString(), this.containerNamePosX, this.containerNamePosY, this.textColor);
+            this.font.draw(matrixStack, this.title.getString(), this.containerNamePosX, this.containerNamePosY, this.textColor);
         }
 
         if(this.drawPlayerText) {
-            this.font.drawString(matrixStack, this.playerInventory.getDisplayName().getString(), this.playerInvTextX, this.playerInvTextY, this.textColor);
+            this.font.draw(matrixStack, this.inventory.getDisplayName().getString(), this.playerInvTextX, this.playerInvTextY, this.textColor);
         }
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(PoseStack matrixStack, float partialTicks, int mouseX, int mouseY) {
 
-        RenderSystem.color4f(this.red, this.green, this.blue, this.alpha);
-        this.minecraft.getTextureManager().bindTexture(this.texture);
+        RenderSystem.clearColor(this.red, this.green, this.blue, this.alpha);
+        this.minecraft.getTextureManager().bindForSetup(this.texture);
 
-        int x = (this.width - this.xSize) / 2;
-        int y = (this.height - this.ySize) / 2;
-        this.blit(matrixStack, x, y, 0, 0, this.xSize, this.ySize);
+        int x = (this.width - this.imageWidth) / 2;
+        int y = (this.height - this.imageHeight) / 2;
+        this.blit(matrixStack, x, y, 0, 0, this.imageWidth, this.imageHeight);
     }
 }

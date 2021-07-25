@@ -1,26 +1,26 @@
 package com.lordskittles.nordicarcanum.common.tileentity.crafting;
 
-import com.lordskittles.arcanumapi.common.tileentity.TileEntityInventory;
-import com.lordskittles.arcanumapi.common.utilities.NBTUtilities;
 import com.lordskittles.arcanumapi.arcanum.ArcanumServerManager;
 import com.lordskittles.arcanumapi.arcanum.IArcanumTile;
+import com.lordskittles.arcanumapi.common.tileentity.TileEntityInventory;
+import com.lordskittles.arcanumapi.common.utilities.NBTUtilities;
 import com.lordskittles.nordicarcanum.common.inventory.containers.ContainerCraftingCloth;
 import com.lordskittles.nordicarcanum.common.registry.TileEntities;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.lordskittles.nordicarcanum.core.NordicInventorySlots;
 import com.lordskittles.nordicarcanum.core.NordicNames;
-import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.data.IModelData;
@@ -34,7 +34,7 @@ import static com.lordskittles.nordicarcanum.core.NordicNBTConstants.FACADE_NBT_
 
 public class TileEntityCraftingCloth extends TileEntityInventory<TileEntityCraftingCloth> implements IArcanumTile {
 
-    public static final ModelProperty<IBakedModel> FACADE_MODEL = new ModelProperty<>();
+    public static final ModelProperty<BakedModel> FACADE_MODEL = new ModelProperty<>();
     public static final ModelProperty<BlockState> FACADE_STATE = new ModelProperty<>();
 
     private BlockState facadeState;
@@ -42,14 +42,9 @@ public class TileEntityCraftingCloth extends TileEntityInventory<TileEntityCraft
     private float currentArcanum;
     private float maximumArcanum;
 
-    protected TileEntityCraftingCloth(TileEntityType<?> type) {
+    public TileEntityCraftingCloth(BlockPos pos, BlockState state) {
 
-        super(type, NordicInventorySlots.CRAFTING_CLOTH, NordicNames.CRAFTING_CLOTH, NordicArcanum.MODID);
-    }
-
-    public TileEntityCraftingCloth() {
-
-        this(TileEntities.crafting_cloth.get());
+        super(TileEntities.crafting_cloth.get(), pos, state, NordicInventorySlots.CRAFTING_CLOTH, NordicNames.CRAFTING_CLOTH, NordicArcanum.MODID);
     }
 
     public void setFacadeState(BlockState facadeState) {
@@ -60,7 +55,7 @@ public class TileEntityCraftingCloth extends TileEntityInventory<TileEntityCraft
     public BlockState getFacadeState() {
 
         if(this.facadeState == null)
-            return net.minecraft.block.Blocks.AIR.getDefaultState();
+            return net.minecraft.world.level.block.Blocks.AIR.defaultBlockState();
 
         return this.facadeState;
     }
@@ -78,76 +73,76 @@ public class TileEntityCraftingCloth extends TileEntityInventory<TileEntityCraft
     public IModelData getModelData() {
 
         BlockState state = getFacadeState();
-        IBakedModel model = Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelShapes().getModel(state);
+        BakedModel model = Minecraft.getInstance().getModelManager().getBlockModelShaper().getBlockModel(state);
 
         return new ModelDataMap.Builder().withInitial(FACADE_MODEL, model).withInitial(FACADE_STATE, state).build();
     }
 
     @Override
-    public Container createMenu(int id, PlayerInventory playerInv, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int id, Inventory playerInv, Player player) {
 
         return new ContainerCraftingCloth(id, playerInv, this);
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet) {
 
         BlockState oldState = getFacadeState();
-        CompoundNBT nbt = packet.getNbtCompound();
+        CompoundTag nbt = packet.getTag();
         super.onDataPacket(net, packet);
-        read(getBlockState(), nbt);
+        load(nbt);
 
-        if(this.world != null && this.world.isRemote) {
+        if(this.level != null && this.level.isClientSide) {
             if(! getFacadeState().equals(oldState)) {
-                this.world.markChunkDirty(getPos(), this.getTileEntity());
+                this.level.blockEntityChanged(getBlockPos());
             }
         }
     }
 
     @Nullable
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
 
-        CompoundNBT nbt = new CompoundNBT();
-        write(nbt);
-        return new SUpdateTileEntityPacket(getPos(), 1, nbt);
+        CompoundTag nbt = new CompoundTag();
+        save(nbt);
+        return new ClientboundBlockEntityDataPacket(getBlockPos(), 1, nbt);
     }
 
     @Override
-    public CompoundNBT getUpdateTag() {
+    public CompoundTag getUpdateTag() {
 
-        CompoundNBT nbt = super.getUpdateTag();
-        write(nbt);
+        CompoundTag nbt = super.getUpdateTag();
+        save(nbt);
         return nbt;
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
+    public CompoundTag save(CompoundTag compound) {
 
-        CompoundNBT base = NBTUtilities.getPersistentData(NordicArcanum.MODID, compound);
+        CompoundTag base = NBTUtilities.getPersistentData(NordicArcanum.MODID, compound);
 
-        base.put(FACADE_NBT_KEY, NBTUtil.writeBlockState(this.facadeState));
+        base.put(FACADE_NBT_KEY, NbtUtils.writeBlockState(this.facadeState));
 
-        super.write(compound);
+        super.save(compound);
 
         return compound;
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT compound) {
+    public void load(CompoundTag compound) {
 
-        super.read(state, compound);
+        super.load(compound);
 
-        CompoundNBT base = NBTUtilities.getPersistentData(NordicArcanum.MODID, compound);
+        CompoundTag base = NBTUtilities.getPersistentData(NordicArcanum.MODID, compound);
 
-        this.setFacadeState(NBTUtil.readBlockState(base.getCompound(FACADE_NBT_KEY)));
+        this.setFacadeState(NbtUtils.readBlockState(base.getCompound(FACADE_NBT_KEY)));
     }
 
-    public void onOpened(PlayerEntity player) {
+    public void onOpened(Player player) {
 
-        if(! this.world.isRemote) {
+        if(! this.level.isClientSide) {
             try {
-                ArcanumServerManager.updateArcanum((ServerPlayerEntity) player, this, NordicArcanum.PACKET_HANDLER);
+                ArcanumServerManager.updateArcanum((ServerPlayer) player, this, NordicArcanum.PACKET_HANDLER);
             }
             catch(Exception e) {
                 e.printStackTrace();
@@ -166,13 +161,13 @@ public class TileEntityCraftingCloth extends TileEntityInventory<TileEntityCraft
     }
 
     @Override
-    public void useArcanum(PlayerEntity player, float cost) {
+    public void useArcanum(Player player, float cost) {
 
-        if(this.world.isRemote)
+        if(this.level.isClientSide)
             return;
 
         try {
-            ArcanumServerManager.useArcanum((ServerPlayerEntity) player, cost, this, NordicArcanum.PACKET_HANDLER);
+            ArcanumServerManager.useArcanum((ServerPlayer) player, cost, this, NordicArcanum.PACKET_HANDLER);
         }
         catch(Exception e) {
             e.printStackTrace();

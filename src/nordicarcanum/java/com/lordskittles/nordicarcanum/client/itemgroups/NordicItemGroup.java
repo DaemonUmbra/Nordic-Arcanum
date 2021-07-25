@@ -1,10 +1,10 @@
 package com.lordskittles.nordicarcanum.client.itemgroups;
 
 import com.lordskittles.nordicarcanum.common.registry.Items;
-import net.minecraft.item.ItemGroup;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.item.ItemStack;
 
-public class NordicItemGroup extends ItemGroup {
+public class NordicItemGroup extends CreativeModeTab {
 
     public static final NordicItemGroup INSTANCE = new NordicItemGroup(ItemGroup.GROUPS.length, "nordictab");
 

@@ -1,8 +1,8 @@
 package com.lordskittles.arcanumapi.arcanum;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 
 public interface IArcanumUser {
 
-    void useArcanum(PlayerEntity player, float cost);
+    void useArcanum(Player player, float cost);
 }

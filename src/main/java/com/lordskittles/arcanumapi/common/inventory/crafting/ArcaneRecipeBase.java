@@ -1,30 +1,30 @@
 package com.lordskittles.arcanumapi.common.inventory.crafting;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 
-public abstract class ArcaneRecipeBase implements IRecipe<ArcaneRecipeBase.DummyIInventory> {
+public abstract class ArcaneRecipeBase implements Recipe<ArcaneRecipeBase.DummyIInventory> {
 
     public final String group;
-    protected final IRecipeType<?> type;
+    protected final RecipeType<?> type;
 
-    public ArcaneRecipeBase(IRecipeType<?> type, String group) {
+    public ArcaneRecipeBase(RecipeType<?> type, String group) {
 
         this.type = type;
         this.group = group;
     }
 
     @Override
-    public boolean matches(DummyIInventory inv, World worldIn) {
+    public boolean matches(DummyIInventory inv, Level worldIn) {
 
         return true;
     }
 
-    public static class DummyIInventory implements IInventory {
+    public static class DummyIInventory implements Container {
 
         private static final DummyIInventory INSTANCE = new DummyIInventory();
 
@@ -34,7 +34,7 @@ public abstract class ArcaneRecipeBase implements IRecipe<ArcaneRecipeBase.Dummy
         }
 
         @Override
-        public int getSizeInventory() {
+        public int getContainerSize() {
 
             return 0;
         }
@@ -46,41 +46,41 @@ public abstract class ArcaneRecipeBase implements IRecipe<ArcaneRecipeBase.Dummy
         }
 
         @Override
-        public ItemStack getStackInSlot(int index) {
+        public ItemStack getItem(int index) {
 
             return ItemStack.EMPTY;
         }
 
         @Override
-        public ItemStack decrStackSize(int index, int count) {
+        public ItemStack removeItem(int index, int count) {
 
             return ItemStack.EMPTY;
         }
 
         @Override
-        public ItemStack removeStackFromSlot(int index) {
+        public ItemStack removeItemNoUpdate(int index) {
 
             return ItemStack.EMPTY;
         }
 
         @Override
-        public void setInventorySlotContents(int index, ItemStack stack) {
+        public void setItem(int index, ItemStack stack) {
 
         }
 
         @Override
-        public void markDirty() {
+        public void setChanged() {
 
         }
 
         @Override
-        public boolean isUsableByPlayer(PlayerEntity player) {
+        public boolean stillValid(Player player) {
 
             return false;
         }
 
         @Override
-        public void clear() {
+        public void clearContent() {
 
         }
     }

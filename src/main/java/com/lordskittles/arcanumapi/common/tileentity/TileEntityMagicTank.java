@@ -5,10 +5,12 @@ import com.lordskittles.arcanumapi.common.network.PacketHandlerBase;
 import com.lordskittles.arcanumapi.common.utilities.MagicUtilities;
 import com.lordskittles.arcanumapi.arcanum.ArcanumServerManager;
 import com.lordskittles.arcanumapi.arcanum.IArcanumUser;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 
 public abstract class TileEntityMagicTank<T extends TileEntityMagicTank> extends TileEntityFluidInventory<TileEntityMagicTank> implements IArcanumUser {
 
@@ -16,9 +18,9 @@ public abstract class TileEntityMagicTank<T extends TileEntityMagicTank> extends
     private final float retainCost;
     private final PacketHandlerBase packetHandler;
 
-    public TileEntityMagicTank(TileEntityType<?> tileEntityTypeIn, int capacity, float retainCost, PacketHandlerBase packetHandler) {
+    public TileEntityMagicTank(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state, int capacity, float retainCost, PacketHandlerBase packetHandler) {
 
-        super(tileEntityTypeIn);
+        super(tileEntityTypeIn, pos, state);
         this.capacity = capacity;
         this.retainCost = retainCost;
         this.packetHandler = packetHandler;
@@ -31,12 +33,12 @@ public abstract class TileEntityMagicTank<T extends TileEntityMagicTank> extends
     }
 
     @Override
-    public boolean canRetainInventory(PlayerEntity player) {
+    public boolean canRetainInventory(Player player) {
 
         return getCurrentArcanum(player) > this.retainCost;
     }
 
-    public float getCurrentArcanum(PlayerEntity player) {
+    public float getCurrentArcanum(Player player) {
 
         return MagicUtilities.getCurrentArcanum(player);
     }
@@ -48,11 +50,11 @@ public abstract class TileEntityMagicTank<T extends TileEntityMagicTank> extends
     }
 
     @Override
-    public void useArcanum(PlayerEntity player, float cost) {
+    public void useArcanum(Player player, float cost) {
 
-        if(player instanceof ServerPlayerEntity) {
+        if(player instanceof ServerPlayer) {
             try {
-                ArcanumServerManager.useArcanum((ServerPlayerEntity) player, cost, this, packetHandler);
+                ArcanumServerManager.useArcanum((ServerPlayer) player, cost, this, packetHandler);
             }
             catch(Exception e) {
                 e.printStackTrace();
@@ -61,7 +63,7 @@ public abstract class TileEntityMagicTank<T extends TileEntityMagicTank> extends
     }
 
     @Override
-    protected void sendPacket(PacketBase packet, TileEntity tracking) {
+    protected void sendPacket(PacketBase packet, BlockEntity tracking) {
 
         packetHandler.sendToAllTracking(packet, tracking);
     }

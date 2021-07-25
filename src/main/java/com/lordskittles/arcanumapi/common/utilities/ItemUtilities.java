@@ -1,14 +1,15 @@
 package com.lordskittles.arcanumapi.common.utilities;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.common.ForgeHooks;
 
 public class ItemUtilities {
 
-    public static boolean isFuel(ItemStack stack) {
+    public static boolean isFuel(ItemStack stack, RecipeType<?> recipeType) {
 
-        return ForgeHooks.getBurnTime(stack) > 0;
+        return ForgeHooks.getBurnTime(stack, recipeType) > 0;
     }
 
     public static boolean isEmptyOrAir(ItemStack stack) {
@@ -21,7 +22,7 @@ public class ItemUtilities {
         ItemStack stack = input.copy();
 
         if(input.isDamaged()) {
-            stack.setDamage(input.getDamage());
+            stack.setDamageValue(input.getDamageValue());
         }
 
         return stack;

@@ -3,13 +3,13 @@ package com.lordskittles.nordicarcanum.client.render.item.model;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.model.Model;
-import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.client.model.Model;
+import net.minecraft.client.model.geom.ModelPart;
 
 public class ModelStaffCrystal extends Model {
 
-    private final ModelRenderer crystal;
-    private final ModelRenderer rotation;
+    private final ModelPart crystal;
+    private final ModelPart rotation;
 
     public ModelStaffCrystal() {
 

@@ -1,13 +1,15 @@
 package com.lordskittles.arcanumapi.client.render.tileentity;
 
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
-public abstract class TileEntityRendererBase<T extends TileEntity> extends TileEntityRenderer<T> {
+public abstract class TileEntityRendererBase<T extends BlockEntity> implements BlockEntityRenderer<T> {
 
-    public TileEntityRendererBase(TileEntityRendererDispatcher rendererDispatcherIn) {
+    protected BlockEntityRenderDispatcher renderDispatcher;
 
-        super(rendererDispatcherIn);
+    public TileEntityRendererBase(BlockEntityRenderDispatcher rendererDispatcherIn) {
+
+        rendererDispatcherIn = rendererDispatcherIn;
     }
 }

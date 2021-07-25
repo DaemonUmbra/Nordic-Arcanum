@@ -3,15 +3,15 @@ package com.lordskittles.nordicarcanum.common.block.world;
 import com.lordskittles.arcanumapi.common.block.IItemGroupHolder;
 import com.lordskittles.nordicarcanum.client.itemgroups.NordicResourcesItemGroup;
 import com.lordskittles.nordicarcanum.common.registry.Blocks;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.RotatedPillarBlock;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nullable;
@@ -20,30 +20,30 @@ public class BlockLog extends RotatedPillarBlock implements IItemGroupHolder {
 
     public BlockLog() {
 
-        super(Block.Properties.from(net.minecraft.block.Blocks.OAK_LOG));
+        super(Block.Properties.copy(net.minecraft.world.level.block.Blocks.OAK_LOG));
     }
 
     @Override
-    public ItemGroup group() {
+    public CreativeModeTab group() {
 
         return NordicResourcesItemGroup.INSTANCE;
     }
 
     @Nullable
     @Override
-    public BlockState getToolModifiedState(BlockState state, World world, BlockPos pos, PlayerEntity player, ItemStack stack, ToolType toolType) {
+    public BlockState getToolModifiedState(BlockState state, Level world, BlockPos pos, Player player, ItemStack stack, ToolType toolType) {
 
         if(toolType == ToolType.AXE && state.getBlock() instanceof BlockLog) {
             BlockLog log = (BlockLog) (state.getBlock());
-            Direction.Axis axis = state.get(AXIS);
+            Direction.Axis axis = state.getValue(AXIS);
             if(log == Blocks.yew_log.get()) {
-                return Blocks.yew_log_stripped.get().getDefaultState().with(AXIS, axis);
+                return Blocks.yew_log_stripped.get().defaultBlockState().setValue(AXIS, axis);
             }
             else if(log == Blocks.pine_log.get()) {
-                return Blocks.pine_log_stripped.get().getDefaultState().with(AXIS, axis);
+                return Blocks.pine_log_stripped.get().defaultBlockState().setValue(AXIS, axis);
             }
             else if(log == Blocks.juniper_log.get()) {
-                return Blocks.juniper_log_stripped.get().getDefaultState().with(AXIS, axis);
+                return Blocks.juniper_log_stripped.get().defaultBlockState().setValue(AXIS, axis);
             }
         }
 

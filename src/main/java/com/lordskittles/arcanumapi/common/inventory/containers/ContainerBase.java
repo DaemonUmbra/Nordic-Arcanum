@@ -2,53 +2,53 @@ package com.lordskittles.arcanumapi.common.inventory.containers;
 
 import com.lordskittles.arcanumapi.client.slot.SlotOutput;
 import com.lordskittles.arcanumapi.common.tileentity.TileEntityInventory;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IWorldPosCallable;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.inventory.ContainerLevelAccess;
 
-public abstract class ContainerBase<T extends TileEntityInventory> extends Container implements INordicContainer {
+public abstract class ContainerBase<T extends TileEntityInventory> extends AbstractContainerMenu implements INordicContainer {
 
     public final T Tile;
-    protected final IWorldPosCallable canInteract;
+    protected final ContainerLevelAccess canInteract;
 
     protected int nonPlayerSlotCount = 0;
 
-    public ContainerBase(ContainerType<?> container, final int nonPlayerSlotCount, final int windowId, final PlayerInventory inventory, final T tile) {
+    public ContainerBase(MenuType<?> container, final int nonPlayerSlotCount, final int windowId, final Inventory inventory, final T tile) {
 
         super(container, windowId);
 
         this.Tile = tile;
-        this.canInteract = IWorldPosCallable.of(Tile.getWorld(), Tile.getPos());
+        this.canInteract = ContainerLevelAccess.create(Tile.getLevel(), Tile.getBlockPos());
         this.nonPlayerSlotCount = nonPlayerSlotCount;
     }
 
-    public IInventory getTileInventory() {
+    public Container getTileInventory() {
 
         return Tile;
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity player) {
+    public boolean stillValid(Player player) {
 
         return true;
     }
 
-    protected void createSlot(IInventory inventory, int index, int xPos, int yPos) {
+    protected void createSlot(Container inventory, int index, int xPos, int yPos) {
 
         this.addSlot(new Slot(inventory, index, xPos, yPos));
     }
 
-    protected void createOutputSlot(IInventory inventory, int index, int xPos, int yPos) {
+    protected void createOutputSlot(Container inventory, int index, int xPos, int yPos) {
 
         this.addSlot(new SlotOutput(inventory, index, xPos, yPos));
     }
 
-    protected int generateMainPlayerInventory(IInventory inventory, int startX, int startY) {
+    protected int generateMainPlayerInventory(Container inventory, int startX, int startY) {
 
         int startIndex = 9;
         int index = startIndex;
@@ -66,7 +66,7 @@ public abstract class ContainerBase<T extends TileEntityInventory> extends Conta
         return index;
     }
 
-    protected int generatePlayerInventoryHotbar(IInventory inventory, int startX, int startY) {
+    protected int generatePlayerInventoryHotbar(Container inventory, int startX, int startY) {
 
         int index = 0;
         int cols = 9;
@@ -81,28 +81,28 @@ public abstract class ContainerBase<T extends TileEntityInventory> extends Conta
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity player, int index) {
+    public ItemStack quickMoveStack(Player player, int index) {
 
         ItemStack stack = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
-        if(slot != null && slot.getHasStack()) {
-            ItemStack itemStack = slot.getStack();
+        Slot slot = this.slots.get(index);
+        if(slot != null && slot.hasItem()) {
+            ItemStack itemStack = slot.getItem();
             stack = itemStack.copy();
             if(index < this.nonPlayerSlotCount) {
-                if(! this.mergeItemStack(itemStack, this.nonPlayerSlotCount, this.inventorySlots.size(), true)) {
+                if(! this.moveItemStackTo(itemStack, this.nonPlayerSlotCount, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             }
             else
-                if(! this.mergeItemStack(itemStack, 0, this.nonPlayerSlotCount, false)) {
+                if(! this.moveItemStackTo(itemStack, 0, this.nonPlayerSlotCount, false)) {
                     return ItemStack.EMPTY;
                 }
 
             if(itemStack.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             }
             else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
         }
 

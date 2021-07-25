@@ -1,26 +1,26 @@
 package com.lordskittles.arcanumapi.common.utilities;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 public class MathUtilities {
 
-    public static Vector3d posToHandPos(Entity entity, Hand hand) {
+    public static Vec3 posToHandPos(Entity entity, InteractionHand hand) {
 
-        double px = entity.prevPosX;
-        double py = entity.prevPosY + entity.getBoundingBox().getYSize() * 0.6D;
-        double pz = entity.prevPosZ;
-        float m = (hand == Hand.MAIN_HAND) ? 0.0F : 180.0F;
-        px += (- MathHelper.cos((entity.rotationYaw + m) / 180.0F * 3.141593F) * 0.3F);
-        pz += (- MathHelper.sin((entity.rotationYaw + m) / 180.0F * 3.141593F) * 0.3F);
-        Vector3d vec3d = entity.getLook(1.0F);
+        double px = entity.xo;
+        double py = entity.yo + entity.getBoundingBox().getYsize() * 0.6D;
+        double pz = entity.zo;
+        float m = (hand == InteractionHand.MAIN_HAND) ? 0.0F : 180.0F;
+        px += (- Mth.cos((entity.getYRot() + m) / 180.0F * 3.141593F) * 0.3F);
+        pz += (- Mth.sin((entity.getYRot() + m) / 180.0F * 3.141593F) * 0.3F);
+        Vec3 vec3d = entity.getViewVector(1.0F);
         px += vec3d.x * 0.3D;
         py += vec3d.y * 0.3D;
         pz += vec3d.z * 0.3D;
-        return new Vector3d(px, py, pz);
+        return new Vec3(px, py, pz);
     }
 
     public static float deltaTime(float partialTicks, long worldTime) {

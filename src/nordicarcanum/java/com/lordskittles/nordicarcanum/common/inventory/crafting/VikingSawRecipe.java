@@ -5,18 +5,20 @@ import com.google.gson.JsonObject;
 import com.lordskittles.arcanumapi.common.inventory.crafting.ArcaneRecipeBase;
 import com.lordskittles.nordicarcanum.common.registry.RecipeSerializers;
 import com.lordskittles.nordicarcanum.common.registry.RecipeType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapedRecipe;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
+
+import com.lordskittles.arcanumapi.common.inventory.crafting.ArcaneRecipeBase.DummyIInventory;
 
 public class VikingSawRecipe extends ArcaneRecipeBase {
 
@@ -67,23 +69,23 @@ public class VikingSawRecipe extends ArcaneRecipeBase {
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
 
         return RecipeSerializers.viking_saw.get();
     }
 
     @Override
-    public IRecipeType<?> getType() {
+    public RecipeType<?> getType() {
 
         return this.type;
     }
 
-    public static class Serializer<T extends VikingSawRecipe> extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<VikingSawRecipe> {
+    public static class Serializer<T extends VikingSawRecipe> extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<VikingSawRecipe> {
 
         @Override
         public VikingSawRecipe read(ResourceLocation recipeId, JsonObject json) {
 
-            String group = JSONUtils.getString(json, "group", "");
+            String group = GsonHelper.getString(json, "group", "");
             JsonElement ingElement = (JsonElement) (JSONUtils.isJsonArray(json, "ingredient") ? JSONUtils.getJsonArray(json, "ingredient") : JSONUtils.getJsonObject(json, "ingredient"));
             Ingredient ingredient = Ingredient.deserialize(ingElement);
 

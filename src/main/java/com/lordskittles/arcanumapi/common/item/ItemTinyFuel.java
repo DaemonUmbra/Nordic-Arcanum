@@ -1,17 +1,16 @@
 package com.lordskittles.arcanumapi.common.item;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 
 public class ItemTinyFuel extends ItemMod {
 
     public ItemTinyFuel() {
 
-        super(new Item.Properties().group(ItemGroup.MISC));
+        super(new Item.Properties().tab(CreativeModeTab.TAB_MISC));
     }
 
-    @Override
     public int getBurnTime(ItemStack itemStack) {
 
         return 200;

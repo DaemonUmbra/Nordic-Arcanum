@@ -3,25 +3,25 @@ package com.lordskittles.arcanumapi.common.network;
 import com.lordskittles.arcanumapi.common.tileentity.TileEntityFluidInventory;
 import com.lordskittles.arcanumapi.common.utilities.ClientUtilities;
 import com.lordskittles.arcanumapi.core.ArcanumAPI;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.BlockPos;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
 public class PacketFluidUpdate extends PacketBase {
 
     private final BlockPos pos;
-    private final CompoundNBT updateTag;
+    private final CompoundTag updateTag;
     private final float scale;
 
     public PacketFluidUpdate(TileEntityFluidInventory tile) {
 
-        this(tile.getPos(), tile.getUpdateTag(), tile.prevScale);
+        this(tile.getBlockPos(), tile.getUpdateTag(), tile.prevScale);
     }
 
-    private PacketFluidUpdate(BlockPos pos, CompoundNBT updateTag, float scale) {
+    private PacketFluidUpdate(BlockPos pos, CompoundTag updateTag, float scale) {
 
         this.pos = pos;
         this.updateTag = updateTag;
@@ -44,15 +44,15 @@ public class PacketFluidUpdate extends PacketBase {
         context.get().setPacketHandled(true);
     }
 
-    public static void encode(PacketFluidUpdate packet, PacketBuffer buffer) {
+    public static void encode(PacketFluidUpdate packet, FriendlyByteBuf buffer) {
 
         buffer.writeBlockPos(packet.pos);
-        buffer.writeCompoundTag(packet.updateTag);
+        buffer.writeNbt(packet.updateTag);
         buffer.writeFloat(packet.scale);
     }
 
-    public static PacketFluidUpdate decode(PacketBuffer buffer) {
+    public static PacketFluidUpdate decode(FriendlyByteBuf buffer) {
 
-        return new PacketFluidUpdate(buffer.readBlockPos(), buffer.readCompoundTag(), buffer.readFloat());
+        return new PacketFluidUpdate(buffer.readBlockPos(), buffer.readNbt(), buffer.readFloat());
     }
 }

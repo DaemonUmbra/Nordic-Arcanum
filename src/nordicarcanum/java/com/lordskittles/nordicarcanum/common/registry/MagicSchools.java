@@ -4,7 +4,7 @@ import com.lordskittles.arcanumapi.core.ArcanumAPI;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.lordskittles.nordicarcanum.magic.schools.MagicSchool;
 import com.lordskittles.nordicarcanum.magic.schools.SchoolType;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;

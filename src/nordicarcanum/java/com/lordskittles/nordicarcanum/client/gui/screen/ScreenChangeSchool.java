@@ -3,11 +3,11 @@ package com.lordskittles.nordicarcanum.client.gui.screen;
 import com.lordskittles.arcanumapi.client.gui.screen.ScreenBase;
 import com.lordskittles.nordicarcanum.client.Keys;
 import com.lordskittles.nordicarcanum.core.NordicNames;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 
 public class ScreenChangeSchool extends ScreenBase {
 
-    public ScreenChangeSchool(PlayerEntity player) {
+    public ScreenChangeSchool(Player player) {
 
         super(NordicNames.CHANGE_SCHOOL_GUI, player);
     }

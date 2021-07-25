@@ -7,17 +7,17 @@ import com.lordskittles.nordicarcanum.common.block.magic.BlockArcaneChest;
 import com.lordskittles.nordicarcanum.common.registry.Blocks;
 import com.lordskittles.nordicarcanum.common.tileentity.magic.TileEntityArcaneChest;
 import com.lordskittles.nordicarcanum.core.NordicResourceLocations;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ChestBlock;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 public class TileRendererArcaneChest extends TileEntityRendererBase<TileEntityArcaneChest> {
 
@@ -26,7 +26,7 @@ public class TileRendererArcaneChest extends TileEntityRendererBase<TileEntityAr
     private int tick;
     private final float multiplier = 0.0125f;
 
-    public TileRendererArcaneChest(TileEntityRendererDispatcher rendererDispatcherIn) {
+    public TileRendererArcaneChest(BlockEntityRenderDispatcher rendererDispatcherIn) {
 
         super(rendererDispatcherIn);
 
@@ -40,11 +40,11 @@ public class TileRendererArcaneChest extends TileEntityRendererBase<TileEntityAr
     }
 
     @Override
-    public void render(TileEntityArcaneChest tileEntity, float partialTicks, MatrixStack stack, IRenderTypeBuffer buffer, int light, int destroyStage) {
+    public void render(TileEntityArcaneChest tileEntity, float partialTicks, PoseStack stack, MultiBufferSource buffer, int light, int destroyStage) {
 
         this.tick++;
 
-        World world = tileEntity.getWorld();
+        Level world = tileEntity.getWorld();
         boolean worldExists = world != null;
         BlockState state = worldExists ? tileEntity.getBlockState() : Blocks.arcane_chest.get().getDefaultState().with(BlockMagicChest.FACING, Direction.SOUTH);
         Block block = state.getBlock();

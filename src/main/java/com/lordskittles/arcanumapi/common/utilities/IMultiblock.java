@@ -1,17 +1,17 @@
 package com.lordskittles.arcanumapi.common.utilities;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.gen.feature.template.Template;
-import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
 
 public interface IMultiblock<T extends Enum> {
 
     T[] getValues();
 
-    Template getTemplate(TemplateManager templateManager);
+    StructureTemplate getTemplate(StructureManager templateManager);
 
     boolean isValidBlock(BlockState type);
 
@@ -23,7 +23,7 @@ public interface IMultiblock<T extends Enum> {
 
     BlockPos getPos();
 
-    CompoundNBT getUpdateTag();
+    CompoundTag getUpdateTag();
 
     ResourceLocation getRegistryName();
 }

@@ -5,14 +5,14 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.model.Model;
-import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.client.model.Model;
+import net.minecraft.client.model.geom.ModelPart;
 
 import javax.annotation.Nonnull;
 
 public class ModelSigilPodium extends Model {
 
-    private final ModelRenderer PodiumModel;
+    private final ModelPart PodiumModel;
 
     private RenderType RENDER_TYPE = getRenderType(NordicResourceLocations.SIGIL_PODIUM);
 

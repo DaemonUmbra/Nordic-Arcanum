@@ -4,13 +4,13 @@ import com.lordskittles.arcanumapi.common.item.ItemMod;
 import com.lordskittles.nordicarcanum.client.itemgroups.NordicItemGroup;
 import com.lordskittles.nordicarcanum.common.registry.Sounds;
 import com.lordskittles.nordicarcanum.common.tileentity.crafting.TileEntityNordicAnvil;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 public class ItemShapingHammer extends ItemMod {
 
@@ -20,9 +20,9 @@ public class ItemShapingHammer extends ItemMod {
     }
 
     @Override
-    public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
+    public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
 
-        World world = context.getWorld();
+        Level world = context.getWorld();
         BlockPos pos = context.getPos();
         TileEntity tile = world.getTileEntity(pos);
 

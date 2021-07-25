@@ -1,7 +1,7 @@
 package com.lordskittles.arcanumapi.core;
 
 import com.lordskittles.arcanumapi.common.registry.Items;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;

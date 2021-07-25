@@ -2,12 +2,12 @@ package com.lordskittles.nordicarcanum.common.inventory;
 
 import com.lordskittles.nordicarcanum.common.inventory.crafting.CraftingClothRecipe;
 import com.lordskittles.nordicarcanum.common.tileentity.crafting.TileEntityCraftingCloth;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.CraftResultInventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ResultContainer;
 
 import javax.annotation.Nonnull;
 
-public class ClothResultInventory extends CraftResultInventory {
+public class ClothResultInventory extends ResultContainer {
 
     private final TileEntityCraftingCloth tile;
 
@@ -19,7 +19,7 @@ public class ClothResultInventory extends CraftResultInventory {
     }
 
     @Override
-    public void onCrafting(@Nonnull PlayerEntity player) {
+    public void onCrafting(@Nonnull Player player) {
 
         if(this.getRecipeUsed() instanceof CraftingClothRecipe) {
             if(! this.tile.getWorld().isRemote) {

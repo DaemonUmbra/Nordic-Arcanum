@@ -4,31 +4,33 @@ import com.google.common.collect.ImmutableMap;
 import com.lordskittles.arcanumapi.common.world.feature.structure.StructureBase;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.mojang.serialization.Codec;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Rotation;
-import net.minecraft.util.SharedSeedRandom;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.level.levelgen.WorldgenRandom;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.registry.DynamicRegistries;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.provider.BiomeProvider;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.BiomeSource;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.StructureStart;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
 import java.util.Map;
 
-public class StructureNordicPillar extends StructureBase<NoFeatureConfig> {
+import net.minecraft.world.level.levelgen.feature.StructureFeature.StructureStartFactory;
+
+public class StructureNordicPillar extends StructureBase<NoneFeatureConfiguration> {
 
     private static final ResourceLocation pillar = NordicArcanum.RL("ancient_pillar");
     public static final Map<ResourceLocation, BlockPos> offset = ImmutableMap.of(pillar, new BlockPos(0, - 1, 0));
 
-    public StructureNordicPillar(Codec<NoFeatureConfig> codec) {
+    public StructureNordicPillar(Codec<NoneFeatureConfiguration> codec) {
 
         super(codec);
     }
@@ -52,19 +54,19 @@ public class StructureNordicPillar extends StructureBase<NoFeatureConfig> {
     }
 
     @Override
-    public IStartFactory<NoFeatureConfig> getStartFactory() {
+    public StructureStartFactory<NoneFeatureConfiguration> getStartFactory() {
 
         return StructureNordicPillar.Start::new;
     }
 
     @Override
-    public GenerationStage.Decoration getDecorationStage() {
+    public GenerationStep.Decoration getDecorationStage() {
 
-        return GenerationStage.Decoration.SURFACE_STRUCTURES;
+        return GenerationStep.Decoration.SURFACE_STRUCTURES;
     }
 
     @Override
-    protected boolean func_230363_a_(ChunkGenerator generator, BiomeProvider provider, long seed, SharedSeedRandom randomSeed, int chunkX, int chunkZ, Biome biome, ChunkPos chunkPos, NoFeatureConfig config) {
+    protected boolean func_230363_a_(ChunkGenerator generator, BiomeSource provider, long seed, WorldgenRandom randomSeed, int chunkX, int chunkZ, Biome biome, ChunkPos chunkPos, NoneFeatureConfiguration config) {
 
         if(chunkX == chunkPos.x && chunkZ == chunkPos.z) {
             return provider.hasStructure(this);

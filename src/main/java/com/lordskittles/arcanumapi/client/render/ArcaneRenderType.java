@@ -1,34 +1,36 @@
 package com.lordskittles.arcanumapi.client.render;
 
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.texture.AtlasTexture;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import net.minecraft.resources.ResourceLocation;
 import org.lwjgl.opengl.GL11;
+
+import net.minecraft.client.renderer.RenderStateShard.TextureStateShard;
+import net.minecraft.client.renderer.RenderType.CompositeState;
 
 public class ArcaneRenderType extends RenderType {
 
-    private static final AlphaState CUBOID_ALPHA = new AlphaState(0.1F);
+    //private static final TransparencyStateShard CUBOID_ALPHA = new TransparencyStateShard(0.1F);
 
-    private ArcaneRenderType(String name, VertexFormat format, int drawMode, int bufferSize, boolean useDelegate, boolean needsSorting, Runnable setupTask, Runnable clearTask) {
+    private ArcaneRenderType(String name, VertexFormat format, VertexFormat.Mode drawMode, int bufferSize, boolean useDelegate, boolean needsSorting, Runnable setupTask, Runnable clearTask) {
 
         super(name, format, drawMode, bufferSize, useDelegate, needsSorting, setupTask, clearTask);
     }
 
-    private static State.Builder preset(ResourceLocation location) {
+    private static CompositeState.CompositeStateBuilder preset(ResourceLocation location) {
 
-        return State.getBuilder()
-                .texture(new TextureState(location, false, false))
-                .cull(CULL_ENABLED)
-                .transparency(TRANSLUCENT_TRANSPARENCY)
-                .shadeModel(SHADE_ENABLED);
+        return CompositeState.builder()
+                .setTextureState(new TextureStateShard(location, false, false))
+                .setCullState(CULL)
+                .setTransparencyState(TRANSLUCENT_TRANSPARENCY);
     }
 
     public static RenderType resizableCuboid() {
 
-        State.Builder builder = preset(AtlasTexture.LOCATION_BLOCKS_TEXTURE).alpha(CUBOID_ALPHA);
+        CompositeState.CompositeStateBuilder builder = preset(TextureAtlas.LOCATION_BLOCKS);//.setTransparencyState(CUBOID_ALPHA);
 
-        return makeType("resizable_cuboid", DefaultVertexFormats.POSITION_COLOR_TEX_LIGHTMAP, GL11.GL_QUADS, 256, true, false, builder.build(true));
+        return create("resizable_cuboid", DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP, VertexFormat.Mode.QUADS, 256, true, false, builder.createCompositeState(true));
     }
 }

@@ -11,59 +11,52 @@ import com.lordskittles.nordicarcanum.common.utility.BlockUtilities;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.lordskittles.nordicarcanum.core.NordicNames;
 import com.lordskittles.nordicarcanum.magic.GameStage;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.gen.feature.template.Template;
-import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class TileEntityAttunementAltar extends TileEntity implements INamedContainerProvider, IMultiblock<GameStage> {
+public class TileEntityAttunementAltar extends BlockEntity implements MenuProvider, IMultiblock<GameStage> {
 
     public DynamicMultiblockDetector<TileEntityAttunementAltar, GameStage> detector;
 
     public boolean isMultiblockFormed = false;
 
-    private ITextComponent title;
+    private Component title;
 
-    public TileEntityAttunementAltar(TileEntityType<?> type) {
+    public TileEntityAttunementAltar(BlockPos pos, BlockState state) {
 
-        super(type);
+        super(TileEntities.attunement_altar.get(), pos, state);
 
-        this.title = new TranslationTextComponent("container." + NordicNames.ATTUNEMENT_ALTAR);
-    }
-
-    public TileEntityAttunementAltar() {
-
-        super(TileEntities.attunement_altar.get());
-
-        this.title = new TranslationTextComponent("container." + NordicNames.ATTUNEMENT_ALTAR);
+        this.title = new TranslatableComponent("container." + NordicNames.ATTUNEMENT_ALTAR);
         detector = new DynamicMultiblockDetector<>(this);
     }
 
     public List<TileEntitySigilPodium> getPodiums() {
 
-        return BlockUtilities.getPodiums(this.world, this.pos);
+        return BlockUtilities.getPodiums(this.level, this.getPos());
     }
 
     @Override
-    public ITextComponent getDisplayName() {
+    public Component getDisplayName() {
 
         return title;
     }
 
     @Nullable
     @Override
-    public Container createMenu(int windowId, PlayerInventory playerInv, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int windowId, Inventory playerInv, Player player) {
 
         return new ContainerAttunementAltar(windowId, playerInv, this);
     }
@@ -71,8 +64,14 @@ public class TileEntityAttunementAltar extends TileEntity implements INamedConta
     @Override
     public void validateStructure() {
 
-        this.isMultiblockFormed = detector.validate(this.world, this.pos, GameStage.Midgard);
+        this.isMultiblockFormed = detector.validate(this.level, this.getPos(), GameStage.Midgard);
         sendUpdatePacket();
+    }
+
+    @Override
+    public BlockPos getPos() {
+
+        return getBlockPos();
     }
 
     @Override
@@ -90,13 +89,13 @@ public class TileEntityAttunementAltar extends TileEntity implements INamedConta
     @Override
     public boolean isValidBlock(BlockState type) {
 
-        return type.getBlock() instanceof BlockSigilPodium && type.get(BlockSigilPodium.ISCORE);
+        return type.getBlock() instanceof BlockSigilPodium && type.getValue(BlockSigilPodium.ISCORE);
     }
 
     @Override
-    public Template getTemplate(TemplateManager templateManager) {
+    public StructureTemplate getTemplate(StructureManager manager) {
 
-        return templateManager.getTemplate(StructureResources.getTieredAltar(GameStage.Midgard));
+        return manager.get(StructureResources.getTieredAltar(GameStage.Midgard)).get();
     }
 
     @Override
@@ -116,17 +115,16 @@ public class TileEntityAttunementAltar extends TileEntity implements INamedConta
         sendUpdatePacket(this);
     }
 
-    public void sendUpdatePacket(TileEntity tracking) {
+    public void sendUpdatePacket(BlockEntity tracking) {
 
-        if(this.world.isRemote) {
+        if(this.level.isClientSide) {
             NordicArcanum.LOG.warn("Update packet call requested from client side", new Exception());
         }
-        else
-            if(isRemoved()) {
-                NordicArcanum.LOG.warn("Update packet call requested for removed tile", new Exception());
-            }
-            else {
-                NordicArcanum.PACKET_HANDLER.sendToAllTracking(new PacketMultiblockFormed(this), tracking);
-            }
+        else if(isRemoved()) {
+            NordicArcanum.LOG.warn("Update packet call requested for removed tile", new Exception());
+        }
+        else {
+            NordicArcanum.PACKET_HANDLER.sendToAllTracking(new PacketMultiblockFormed(this), tracking);
+        }
     }
 }

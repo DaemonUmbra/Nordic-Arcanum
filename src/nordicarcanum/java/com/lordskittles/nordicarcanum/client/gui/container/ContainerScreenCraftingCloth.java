@@ -4,16 +4,16 @@ import com.lordskittles.arcanumapi.client.gui.container.ContainerScreenBase;
 import com.lordskittles.nordicarcanum.common.inventory.containers.ContainerCraftingCloth;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.lordskittles.nordicarcanum.core.NordicNames;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.chat.Component;
 
 public class ContainerScreenCraftingCloth extends ContainerScreenBase<ContainerCraftingCloth> {
 
-    private final PlayerEntity player;
+    private final Player player;
 
-    public ContainerScreenCraftingCloth(ContainerCraftingCloth container, PlayerInventory inventory, ITextComponent title) {
+    public ContainerScreenCraftingCloth(ContainerCraftingCloth container, Inventory inventory, Component title) {
 
         super(NordicArcanum.MODID, NordicNames.CRAFTING_CLOTH, container, inventory, title);
 
@@ -23,7 +23,7 @@ public class ContainerScreenCraftingCloth extends ContainerScreenBase<ContainerC
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack stack, float partialTicks, int mouseX, int mouseY) {
+    protected void drawGuiContainerBackgroundLayer(PoseStack stack, float partialTicks, int mouseX, int mouseY) {
 
         super.drawGuiContainerBackgroundLayer(stack, partialTicks, mouseX, mouseY);
         int left = this.guiLeft;

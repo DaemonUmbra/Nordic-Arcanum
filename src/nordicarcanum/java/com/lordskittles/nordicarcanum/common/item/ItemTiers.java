@@ -1,14 +1,14 @@
 package com.lordskittles.nordicarcanum.common.item;
 
 import com.lordskittles.nordicarcanum.common.registry.Items;
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.LazyValue;
 
 import java.util.function.Supplier;
 
-public enum ItemTiers implements IItemTier {
+public enum ItemTiers implements Tier {
     NORSE(2, 750, 6.0F, 2.5F, 10, () -> {
         return Ingredient.fromItems(Items.norse_ingot.get());
     }),

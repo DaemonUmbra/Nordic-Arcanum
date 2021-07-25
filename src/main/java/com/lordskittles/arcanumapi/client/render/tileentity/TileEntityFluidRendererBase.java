@@ -6,12 +6,12 @@ import com.lordskittles.arcanumapi.client.render.ArcaneRenderer.DVector3;
 import com.lordskittles.arcanumapi.client.render.ArcaneRenderer.Model3D;
 import com.lordskittles.arcanumapi.client.render.FluidRenderMap;
 import com.lordskittles.arcanumapi.common.tileentity.TileEntityFluidInventory;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
@@ -21,7 +21,7 @@ public abstract class TileEntityFluidRendererBase<T extends TileEntityFluidInven
     protected static final FluidRenderMap<Int2ObjectMap<Model3D>> cachedFluids = new FluidRenderMap<>();
     protected static final int stages = 1400;
 
-    public TileEntityFluidRendererBase(TileEntityRendererDispatcher dispatcher) {
+    public TileEntityFluidRendererBase(BlockEntityRenderDispatcher dispatcher) {
 
         super(dispatcher);
     }
@@ -31,13 +31,13 @@ public abstract class TileEntityFluidRendererBase<T extends TileEntityFluidInven
         cachedFluids.clear();
     }
 
-    public void renderFluid(T tile, MatrixStack stack, IRenderTypeBuffer buffer, int light) {
+    public void renderFluid(T tile, PoseStack stack, MultiBufferSource buffer, int light) {
 
         FluidStack fluid = tile.getFluid();
         float fluidScale = tile.prevScale;
 
         if(! fluid.isEmpty() && fluidScale > 0) {
-            IVertexBuilder builder = buffer.getBuffer(ArcaneRenderType.resizableCuboid());
+            VertexConsumer builder = buffer.getBuffer(ArcaneRenderType.resizableCuboid());
             int modelNumber = Math.min(stages - 1, (int) (fluidScale * ((float) stages - 1)));
 
             ArcaneRenderer.renderObject(getFluidModel(fluid, modelNumber), stack, builder, ArcaneRenderer.getColorARGB(fluid, fluidScale),

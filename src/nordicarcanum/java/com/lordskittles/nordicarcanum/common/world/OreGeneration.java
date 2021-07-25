@@ -2,7 +2,7 @@ package com.lordskittles.nordicarcanum.common.world;
 
 import com.lordskittles.nordicarcanum.common.registry.Blocks;
 import com.lordskittles.nordicarcanum.core.NordicConfig;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
@@ -14,16 +14,16 @@ import org.jetbrains.annotations.NotNull;
 
 public class OreGeneration {
 
-    private static final BlockState arcane_dust = Blocks.arcane_powder_ore.get().getDefaultState();
-    private static final BlockState feldspar = Blocks.feldspar.get().getDefaultState();
+    private static final BlockState arcane_dust = Blocks.arcane_powder_ore.get().defaultBlockState();
+    private static final BlockState feldspar = Blocks.feldspar.get().defaultBlockState();
 
-    private static final BlockState carnelian = Blocks.carnelian_ore.get().getDefaultState();
-    private static final BlockState garnet = Blocks.garnet_ore.get().getDefaultState();
-    private static final BlockState thulite = Blocks.thulite_ore.get().getDefaultState();
+    private static final BlockState carnelian = Blocks.carnelian_ore.get().defaultBlockState();
+    private static final BlockState garnet = Blocks.garnet_ore.get().defaultBlockState();
+    private static final BlockState thulite = Blocks.thulite_ore.get().defaultBlockState();
 
-    private static final BlockState bismuth = Blocks.bismuth_ore.get().getDefaultState();
-    private static final BlockState silver = Blocks.silver_ore.get().getDefaultState();
-    private static final BlockState nickle = Blocks.nickle_ore.get().getDefaultState();
+    private static final BlockState bismuth = Blocks.bismuth_ore.get().defaultBlockState();
+    private static final BlockState silver = Blocks.silver_ore.get().defaultBlockState();
+    private static final BlockState nickle = Blocks.nickle_ore.get().defaultBlockState();
 
     public static void generateOre(@NotNull BiomeLoadingEvent event) {
 

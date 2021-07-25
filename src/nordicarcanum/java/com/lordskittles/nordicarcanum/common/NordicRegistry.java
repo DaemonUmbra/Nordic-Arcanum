@@ -1,7 +1,7 @@
 package com.lordskittles.nordicarcanum.common;
 
 import com.lordskittles.nordicarcanum.core.NordicTags;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 
 public class NordicRegistry {
 

@@ -12,25 +12,24 @@ import com.lordskittles.nordicarcanum.common.registry.TileEntities;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.lordskittles.nordicarcanum.core.NordicFluidValues;
 import com.lordskittles.nordicarcanum.core.NordicTags;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
-public class TileEntityArcaneInfuser extends TileEntityFluidInventory<TileEntityArcaneInfuser> implements IInventory {
+public class TileEntityArcaneInfuser extends TileEntityFluidInventory<TileEntityArcaneInfuser> implements Container {
 
     private ArcaneInfuserRecipe recipe = null;
 
@@ -40,19 +39,14 @@ public class TileEntityArcaneInfuser extends TileEntityFluidInventory<TileEntity
     protected IItemHandlerModifiable items = InventoryUtilities.createHandler(this);
     protected LazyOptional<IItemHandlerModifiable> itemHandler = LazyOptional.of(() -> items);
 
-    public TileEntityArcaneInfuser(TileEntityType<?> tileEntityTypeIn) {
+    public TileEntityArcaneInfuser(BlockPos pos, BlockState state) {
 
-        super(tileEntityTypeIn);
-    }
-
-    public TileEntityArcaneInfuser() {
-
-        this(TileEntities.arcane_infuser.get());
+        super(TileEntities.arcane_infuser.get(), pos, state);
     }
 
     private ArcaneInfuserRecipe getRecipe(ItemStack input, FluidStack fluidInput) {
 
-        return RecipeType.arcane_infuser.findFirst(world, recipe -> recipe.matches(input, fluidInput));
+        return RecipeType.arcane_infuser.findFirst(level, recipe -> recipe.matches(input, fluidInput));
     }
 
     public boolean setHeldItem(ItemStack stack) {
@@ -60,7 +54,7 @@ public class TileEntityArcaneInfuser extends TileEntityFluidInventory<TileEntity
         if(! this.getHeldItem().isEmpty())
             return false;
 
-        setInventorySlotContents(0, ItemUtilities.singleDeepCopy(stack));
+        setItem(0, ItemUtilities.singleDeepCopy(stack));
         sendUpdatePacket();
 
         return true;
@@ -104,7 +98,7 @@ public class TileEntityArcaneInfuser extends TileEntityFluidInventory<TileEntity
 
     private boolean isAboveHeatSource() {
 
-        BlockState below = this.world.getBlockState(getPos().down());
+        BlockState below = this.level.getBlockState(getBlockPos().below());
         return NordicTags.IsBlockInTag(below, NordicTags.HEAT_SOURCE);
     }
 
@@ -122,7 +116,7 @@ public class TileEntityArcaneInfuser extends TileEntityFluidInventory<TileEntity
         if(! isAboveHeatSource())
             return false;
 
-        return this.tank.getFluidAmount() >= this.recipe.fluidIngredient.getAmount() && this.getHeldItem().getCount() >= this.recipe.ingredient.getMatchingStacks()[0].getCount();
+        return this.tank.getFluidAmount() >= this.recipe.fluidIngredient.getAmount() && this.getHeldItem().getCount() >= this.recipe.ingredient.getItems()[0].getCount();
     }
 
     public void updateProgress() {
@@ -138,18 +132,18 @@ public class TileEntityArcaneInfuser extends TileEntityFluidInventory<TileEntity
         }
 
         if(output != ItemStack.EMPTY) {
-            BlockPos pos = getPos().up();
-            this.world.addEntity(new ItemEntity(this.world, pos.getX(), pos.getY(), pos.getZ(), output));
+            BlockPos pos = getBlockPos().above();
+            this.level.addFreshEntity(new ItemEntity(this.level, pos.getX(), pos.getY(), pos.getZ(), output));
             resetItem();
             this.tank.drain(this.recipe.fluidIngredient.getAmount(), IFluidHandler.FluidAction.EXECUTE);
             this.recipe = null;
-            this.markDirty();
+            this.setChanged();
         }
     }
 
     public void resetItem() {
 
-        setInventorySlotContents(0, ItemStack.EMPTY);
+        setItem(0, ItemStack.EMPTY);
         this.progress = 0;
     }
 
@@ -160,42 +154,42 @@ public class TileEntityArcaneInfuser extends TileEntityFluidInventory<TileEntity
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet) {
 
         SmartSyncTank tank = this.tank;
-        CompoundNBT nbt = packet.getNbtCompound();
+        CompoundTag nbt = packet.getTag();
         super.onDataPacket(net, packet);
-        read(getBlockState(), nbt);
+        load(nbt);
 
-        if(this.world != null && this.world.isRemote) {
+        if(this.level != null && this.level.isClientSide) {
             if(! this.tank.equals(tank)) {
-                this.world.markChunkDirty(getPos(), this.getTileEntity());
+                this.level.blockEntityChanged(getBlockPos());
             }
         }
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
+    public CompoundTag save(CompoundTag compound) {
 
-        super.write(compound);
+        super.save(compound);
 
-        CompoundNBT base = NBTUtilities.getPersistentData(NordicArcanum.MODID, compound);
-        ItemStackHelper.saveAllItems(base, this.contents);
+        CompoundTag base = NBTUtilities.getPersistentData(NordicArcanum.MODID, compound);
+        ContainerHelper.saveAllItems(base, this.contents);
 
         return compound;
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT compound) {
+    public void load(CompoundTag compound) {
 
-        super.read(state, compound);
+        super.load(compound);
 
-        CompoundNBT base = NBTUtilities.getPersistentData(NordicArcanum.MODID, compound);
-        ItemStackHelper.loadAllItems(base, this.contents);
+        CompoundTag base = NBTUtilities.getPersistentData(NordicArcanum.MODID, compound);
+        ContainerHelper.loadAllItems(base, this.contents);
     }
 
     @Override
-    protected void sendPacket(PacketBase packet, TileEntity tracking) {
+    protected void sendPacket(PacketBase packet, BlockEntity tracking) {
 
         NordicArcanum.PACKET_HANDLER.sendToAllTracking(packet, tracking);
     }
@@ -206,7 +200,7 @@ public class TileEntityArcaneInfuser extends TileEntityFluidInventory<TileEntity
     }
 
     @Override
-    public int getSizeInventory() {
+    public int getContainerSize() {
 
         return 1;
     }
@@ -218,47 +212,47 @@ public class TileEntityArcaneInfuser extends TileEntityFluidInventory<TileEntity
     }
 
     @Override
-    public ItemStack getStackInSlot(int index) {
+    public ItemStack getItem(int index) {
 
         return this.contents.get(index);
     }
 
     @Override
-    public ItemStack decrStackSize(int index, int count) {
+    public ItemStack removeItem(int index, int count) {
 
-        ItemStack stack = ItemStackHelper.getAndSplit(this.contents, index, count);
+        ItemStack stack = ContainerHelper.removeItem(this.contents, index, count);
         if(! stack.isEmpty()) {
-            this.markDirty();
+            this.setChanged();
         }
 
         return stack;
     }
 
     @Override
-    public ItemStack removeStackFromSlot(int index) {
+    public ItemStack removeItemNoUpdate(int index) {
 
-        return ItemStackHelper.getAndRemove(this.contents, index);
+        return ContainerHelper.takeItem(this.contents, index);
     }
 
     @Override
-    public void setInventorySlotContents(int index, ItemStack stack) {
+    public void setItem(int index, ItemStack stack) {
 
         this.contents.set(index, stack);
         sendUpdatePacket();
     }
 
     @Override
-    public boolean isUsableByPlayer(PlayerEntity player) {
+    public boolean stillValid(Player player) {
 
-        if(this.world.getTileEntity(this.pos) != this) {
+        if(this.level.getBlockEntity(this.getBlockPos()) != this) {
             return false;
         }
 
-        return ! (player.getDistanceSq((double) this.pos.getX() + 0.5D, (double) this.pos.getY() + 0.5D, (double) this.pos.getZ() + 0.5D) > 64.0D);
+        return ! (player.distanceToSqr((double) this.getBlockPos().getX() + 0.5D, (double) this.getBlockPos().getY() + 0.5D, (double) this.getBlockPos().getZ() + 0.5D) > 64.0D);
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
 
         this.contents.clear();
     }

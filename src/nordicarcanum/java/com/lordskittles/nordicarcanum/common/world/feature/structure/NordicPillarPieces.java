@@ -6,30 +6,33 @@ import com.lordskittles.nordicarcanum.common.block.magic.BlockInfusablePillar;
 import com.lordskittles.nordicarcanum.common.registry.Blocks;
 import com.lordskittles.nordicarcanum.common.registry.Structures;
 import com.lordskittles.nordicarcanum.core.NordicResourceLocations;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
 
 public class NordicPillarPieces {
 
     public static class Piece extends StructurePieceBase {
 
-        public Piece(TemplateManager manager, ResourceLocation structure, BlockPos pos, Rotation rotation) {
+        public Piece(StructureManager manager, ResourceLocation structure, BlockPos pos, Rotation rotation, int height) {
 
-            super(manager, structure, pos, rotation, StructureNordicPillar.offset, Structures.pillar_piece, 0);
+            super(Structures.pillar_piece, height, manager, structure, structure.getPath(), makeSettings(rotation), pos, StructureNordicPillar.offset);
 
             this.loot_table = NordicResourceLocations.PILLAR_LOOT;
-            this.structure_block_replacement = Blocks.deepslate_pillar.get().getDefaultState().with(BlockPillar.AXIS, Direction.Axis.Y).with(BlockInfusablePillar.ACTIVATED, true);
+            this.structure_block_replacement = Blocks.deepslate_pillar.get().defaultBlockState().setValue(BlockPillar.AXIS, Direction.Axis.Y).setValue(BlockInfusablePillar.ACTIVATED, true);
         }
 
-        public Piece(TemplateManager manager, CompoundNBT nbt) {
+        public Piece(ServerLevel world, CompoundTag nbt) {
 
-            super(manager, nbt, Structures.pillar_piece);
+            super(Structures.pillar_piece, nbt, world, (level) -> {
+                return makeSettings(Rotation.valueOf(nbt.getString("Rot")));
+            });
 
-            this.structure_block_replacement = Blocks.deepslate_pillar.get().getDefaultState().with(BlockPillar.AXIS, Direction.Axis.Y).with(BlockInfusablePillar.ACTIVATED, true);
+            this.structure_block_replacement = Blocks.deepslate_pillar.get().defaultBlockState().setValue(BlockPillar.AXIS, Direction.Axis.Y).setValue(BlockInfusablePillar.ACTIVATED, true);
         }
     }
 }

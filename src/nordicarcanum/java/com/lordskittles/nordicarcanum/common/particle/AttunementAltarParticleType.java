@@ -3,19 +3,21 @@ package com.lordskittles.nordicarcanum.common.particle;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ParticleType;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.util.Mth;
+import net.minecraft.core.Registry;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Locale;
 
-public class AttunementAltarParticleType extends ParticleType<AttunementAltarParticleType> implements IParticleData {
+import net.minecraft.core.particles.ParticleOptions.Deserializer;
 
-    public static final IParticleData.IDeserializer<AttunementAltarParticleType> DESERIALIZER = createSerializer();
+public class AttunementAltarParticleType extends ParticleType<AttunementAltarParticleType> implements ParticleOptions {
+
+    public static final ParticleOptions.Deserializer<AttunementAltarParticleType> DESERIALIZER = createSerializer();
 
     private final Codec<AttunementAltarParticleType> CODEC = Codec.unit(this::getType);
 
@@ -30,7 +32,7 @@ public class AttunementAltarParticleType extends ParticleType<AttunementAltarPar
         this.red = red;
         this.green = green;
         this.blue = blue;
-        this.alpha = MathHelper.clamp(alpha, 0.01f, 4.0f);
+        this.alpha = Mth.clamp(alpha, 0.01f, 4.0f);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -64,7 +66,7 @@ public class AttunementAltarParticleType extends ParticleType<AttunementAltarPar
     }
 
     @Override
-    public void write(PacketBuffer buffer) {
+    public void write(FriendlyByteBuf buffer) {
 
         buffer.writeFloat(this.red); buffer.writeFloat(this.green); buffer.writeFloat(this.blue);
         buffer.writeFloat(this.alpha);
@@ -82,9 +84,9 @@ public class AttunementAltarParticleType extends ParticleType<AttunementAltarPar
         return CODEC;
     }
 
-    private static final IParticleData.IDeserializer<AttunementAltarParticleType> createSerializer() {
+    private static final ParticleOptions.Deserializer<AttunementAltarParticleType> createSerializer() {
 
-        return new IDeserializer<AttunementAltarParticleType>() {
+        return new Deserializer<AttunementAltarParticleType>() {
 
             @Override
             public AttunementAltarParticleType deserialize(ParticleType<AttunementAltarParticleType> type, StringReader reader) throws CommandSyntaxException {
@@ -96,7 +98,7 @@ public class AttunementAltarParticleType extends ParticleType<AttunementAltarPar
             }
 
             @Override
-            public AttunementAltarParticleType read(ParticleType<AttunementAltarParticleType> type, PacketBuffer buffer) {
+            public AttunementAltarParticleType read(ParticleType<AttunementAltarParticleType> type, FriendlyByteBuf buffer) {
 
                 return new AttunementAltarParticleType(buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat());
             }

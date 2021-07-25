@@ -5,8 +5,8 @@ import com.google.common.io.Files;
 import com.lordskittles.nordicarcanum.common.events.IServerLifecycleListener;
 import com.lordskittles.arcanumapi.core.ArcanumAPI;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtIo;
 
 import java.io.File;
 import java.io.IOException;
@@ -136,9 +136,9 @@ public class ProgressionIOThread extends TimerTask implements IServerLifecycleLi
         }
 
         try {
-            CompoundNBT nbt = new CompoundNBT();
+            CompoundTag nbt = new CompoundTag();
             progress.store(nbt);
-            CompressedStreamTools.write(nbt, playerFile);
+            NbtIo.write(nbt, playerFile);
         }
         catch(IOException ignored) {}
     }

@@ -4,12 +4,12 @@ import com.lordskittles.arcanumapi.common.inventory.crafting.ArcaneRecipeBase;
 import com.lordskittles.nordicarcanum.common.inventory.crafting.*;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.lordskittles.nordicarcanum.core.NordicNames;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.World;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Registry;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.ArrayList;
@@ -19,7 +19,9 @@ import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-public class RecipeType<T extends ArcaneRecipeBase> implements IRecipeType<T> {
+import ArcaneRecipeBase;
+
+public class RecipeType<T extends ArcaneRecipeBase> implements RecipeType<T> {
 
     private static final List<RecipeType<? extends ArcaneRecipeBase>> TYPES = new ArrayList<>();
 
@@ -39,7 +41,7 @@ public class RecipeType<T extends ArcaneRecipeBase> implements IRecipeType<T> {
         return type;
     }
 
-    public static void registerRecipeTypes(IForgeRegistry<IRecipeSerializer<?>> registry) {
+    public static void registerRecipeTypes(IForgeRegistry<RecipeSerializer<?>> registry) {
 
         TYPES.forEach(type -> Registry.register(Registry.RECIPE_TYPE, type.registryName, type));
     }
@@ -60,7 +62,7 @@ public class RecipeType<T extends ArcaneRecipeBase> implements IRecipeType<T> {
         TYPES.forEach(type -> type.cachedRecipes.clear());
     }
 
-    public Map<ResourceLocation, T> getRecipes(World world) {
+    public Map<ResourceLocation, T> getRecipes(Level world) {
 
         if(cachedRecipes.isEmpty()) {
             RecipeManager recipeManager = world.getRecipeManager();
@@ -71,17 +73,17 @@ public class RecipeType<T extends ArcaneRecipeBase> implements IRecipeType<T> {
         return cachedRecipes;
     }
 
-    public Stream<T> stream(World world) {
+    public Stream<T> stream(Level world) {
 
         return getRecipes(world).values().stream();
     }
 
-    public T findFirst(World world, Predicate<T> predicate) {
+    public T findFirst(Level world, Predicate<T> predicate) {
 
         return stream(world).filter(predicate).findFirst().orElse(null);
     }
 
-    public T getRecipe(World world, ResourceLocation recipeId) {
+    public T getRecipe(Level world, ResourceLocation recipeId) {
 
         return getRecipes(world).get(recipeId);
     }

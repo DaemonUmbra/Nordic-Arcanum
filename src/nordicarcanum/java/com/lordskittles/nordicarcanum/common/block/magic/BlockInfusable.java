@@ -6,13 +6,14 @@ import com.lordskittles.nordicarcanum.common.block.crafting.BlockAlchemyTable;
 import com.lordskittles.nordicarcanum.common.block.crafting.BlockStaffWorkbench;
 import com.lordskittles.nordicarcanum.common.block.decoration.BlockDecoration;
 import com.lordskittles.nordicarcanum.common.registry.Blocks;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelReader;
 
 public class BlockInfusable extends BlockDecoration implements IInfusable {
 
@@ -31,48 +32,48 @@ public class BlockInfusable extends BlockDecoration implements IInfusable {
     }
 
     @Override
-    public boolean isValid(IWorldReader world, BlockPos pos, BlockPos right, BlockState state) {
+    public boolean isValid(LevelReader world, BlockPos pos, BlockPos right, BlockState state) {
 
         BlockState rightState = world.getBlockState(right);
-        BlockState upRightState = world.getBlockState(right.up()).getBlock().getDefaultState();
-        BlockState upState = world.getBlockState(pos.up()).getBlock().getDefaultState();
+        BlockState upRightState = world.getBlockState(right.above()).getBlock().defaultBlockState();
+        BlockState upState = world.getBlockState(pos.above()).getBlock().defaultBlockState();
 
-        BlockState steel_block = Blocks.steel_metal_compact.get().getDefaultState();
-        BlockState yew_stair = Blocks.yew_stairs.get().getDefaultState();
+        BlockState steel_block = Blocks.steel_metal_compact.get().defaultBlockState();
+        BlockState yew_stair = Blocks.yew_stairs.get().defaultBlockState();
 
         switch(type) {
             case STAFF_WORKBENCH:
                 return state == steel_block && rightState == steel_block && upRightState == yew_stair && upState == yew_stair;
             case SIGIL_PODIUM:
-                return state == Blocks.carved_deepslate_brick.get().getDefaultState();
+                return state == Blocks.carved_deepslate_brick.get().defaultBlockState();
         }
 
         return false;
     }
 
     @Override
-    public void infuse(World world, BlockPos pos, BlockPos right, BlockState state, Direction direction) {
+    public void infuse(Level world, BlockPos pos, BlockPos right, BlockState state, Direction direction) {
 
         switch(type) {
             case STAFF_WORKBENCH:
-                BlockState staffWorkbench = Blocks.staff_workbench.get().getDefaultState().with(BlockStaffWorkbench.FACING, direction);
+                BlockState staffWorkbench = Blocks.staff_workbench.get().defaultBlockState().setValue(BlockStaffWorkbench.FACING, direction);
 
-                world.setBlockState(pos, staffWorkbench.with(BlockAlchemyTable.PIECE, MultiBlockPiece.BOTTOM_LEFT));
-                world.setBlockState(pos.up(), staffWorkbench.with(BlockAlchemyTable.PIECE, MultiBlockPiece.TOP_LEFT));
-                world.setBlockState(right, staffWorkbench.with(BlockAlchemyTable.PIECE, MultiBlockPiece.BOTTOM_RIGHT));
-                world.setBlockState(right.up(), staffWorkbench.with(BlockAlchemyTable.PIECE, MultiBlockPiece.TOP_RIGHT));
+                world.setBlock(pos, staffWorkbench.setValue(BlockAlchemyTable.PIECE, MultiBlockPiece.BOTTOM_LEFT), 19);
+                world.setBlock(pos.above(), staffWorkbench.setValue(BlockAlchemyTable.PIECE, MultiBlockPiece.TOP_LEFT), 19);
+                world.setBlock(right, staffWorkbench.setValue(BlockAlchemyTable.PIECE, MultiBlockPiece.BOTTOM_RIGHT), 19);
+                world.setBlock(right.above(), staffWorkbench.setValue(BlockAlchemyTable.PIECE, MultiBlockPiece.TOP_RIGHT), 19);
                 break;
             case SIGIL_PODIUM:
-                world.setBlockState(pos, Blocks.sigil_podium.get().getDefaultState());
+                world.setBlock(pos, Blocks.sigil_podium.get().defaultBlockState(), 19);
                 break;
         }
     }
 
     @Override
-    public BlockPos[] getInfusedPositions(World world, BlockPos pos, BlockPos right, BlockState state, Direction direction) {
+    public BlockPos[] getInfusedPositions(Level world, BlockPos pos, BlockPos right, BlockState state, Direction direction) {
         switch(type) {
             case STAFF_WORKBENCH:
-                return new BlockPos[] { pos, pos.up(), right, right.up() };
+                return new BlockPos[] { pos, pos.above(), right, right.above() };
             case SIGIL_PODIUM:
                 return new BlockPos[] { pos };
         }

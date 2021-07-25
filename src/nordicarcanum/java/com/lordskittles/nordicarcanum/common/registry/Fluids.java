@@ -3,8 +3,8 @@ package com.lordskittles.nordicarcanum.common.registry;
 import com.lordskittles.nordicarcanum.common.fluid.FluidArcanum;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.lordskittles.nordicarcanum.core.NordicNames;
-import net.minecraft.fluid.Fluid;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 

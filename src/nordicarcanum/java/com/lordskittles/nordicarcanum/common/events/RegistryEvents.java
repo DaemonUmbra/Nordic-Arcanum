@@ -8,10 +8,10 @@ import com.lordskittles.nordicarcanum.common.registry.Blocks;
 import com.lordskittles.nordicarcanum.common.registry.FoliageType;
 import com.lordskittles.nordicarcanum.common.registry.RecipeType;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.world.gen.foliageplacer.FoliagePlacerType;
 import net.minecraftforge.common.crafting.CraftingHelper;
@@ -30,14 +30,14 @@ public class RegistryEvents {
         final IForgeRegistry<Item> registry = event.getRegistry();
         Blocks.BLOCKS.getEntries().stream().map(RegistryObject::get).forEach(block ->
         {
-            ItemGroup group = null;
+            CreativeModeTab group = null;
             BlockItem blockItem = null;
             if(block instanceof IItemGroupHolder) {
                 IItemGroupHolder holder = (IItemGroupHolder) block;
                 group = holder.group();
             }
             else {
-                if(! (block instanceof FlowingFluidBlock)) {
+                if(! (block instanceof LiquidBlock)) {
                     group = NordicItemGroup.INSTANCE;
                 }
             }

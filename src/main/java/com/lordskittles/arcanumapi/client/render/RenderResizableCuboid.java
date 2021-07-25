@@ -1,16 +1,16 @@
 package com.lordskittles.arcanumapi.client.render;
 
 import com.lordskittles.arcanumapi.client.render.ArcaneRenderer.Model3D;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Direction.Axis;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Direction.Axis;
+import com.mojang.math.Matrix4f;
+import net.minecraft.world.phys.Vec3;
+import com.mojang.math.Vector3f;
 
 import java.util.Arrays;
 
@@ -24,25 +24,25 @@ public class RenderResizableCuboid {
     private static final int V_MIN = 2;
     private static final int V_MAX = 3;
 
-    protected EntityRendererManager manager = Minecraft.getInstance().getRenderManager();
+    protected EntityRenderDispatcher manager = Minecraft.getInstance().getEntityRenderDispatcher();
 
     private static Vector3f withValue(Vector3f vector, Axis axis, float value) {
 
         if(axis == Axis.X) {
-            return new Vector3f(value, vector.getY(), vector.getZ());
+            return new Vector3f(value, vector.y(), vector.z());
         }
         else
             if(axis == Axis.Y) {
-                return new Vector3f(vector.getX(), value, vector.getZ());
+                return new Vector3f(vector.x(), value, vector.z());
             }
             else
                 if(axis == Axis.Z) {
-                    return new Vector3f(vector.getX(), vector.getY(), value);
+                    return new Vector3f(vector.x(), vector.y(), value);
                 }
         throw new RuntimeException("Was given a null axis! That was probably not meant to happen, please consider this a bug! (Vector = " + vector + ")");
     }
 
-    public static double getValue(Vector3d vector, Axis axis) {
+    public static double getValue(Vec3 vector, Axis axis) {
 
         if(axis == Axis.X) {
             return vector.x;
@@ -58,17 +58,17 @@ public class RenderResizableCuboid {
         throw new RuntimeException("Was given a null axis! That was probably not meant to happen, please consider this a bug! (Vector = " + vector + ")");
     }
 
-    public void renderCube(Model3D cube, MatrixStack matrix, IVertexBuilder buffer, int argb, int light) {
+    public void renderCube(Model3D cube, PoseStack matrix, VertexConsumer buffer, int argb, int light) {
 
         float red = ArcaneRenderer.getRed(argb);
         float blue = ArcaneRenderer.getBlue(argb);
         float green = ArcaneRenderer.getGreen(argb);
         float alpha = ArcaneRenderer.getAlpha(argb);
-        Vector3d size = new Vector3d(cube.sizeX(), cube.sizeY(), cube.sizeZ());
+        Vec3 size = new Vec3(cube.sizeX(), cube.sizeY(), cube.sizeZ());
 
-        matrix.push();
+        matrix.pushPose();
         matrix.translate(cube.min.x, cube.min.y, cube.min.z);
-        Matrix4f matrix4f = matrix.getLast().getMatrix();
+        Matrix4f matrix4f = matrix.last().pose();
 
         for(Direction face : Direction.values()) {
             int ordinal = face.ordinal();
@@ -82,11 +82,11 @@ public class RenderResizableCuboid {
                 face = face.getAxisDirection() == Direction.AxisDirection.NEGATIVE ? face : face.getOpposite();
                 Direction opposite = face.getOpposite();
 
-                float minU = sprite.getMinU();
-                float maxU = sprite.getMaxU();
+                float minU = sprite.getU0();
+                float maxU = sprite.getU1();
                 //Flip the v
-                float minV = sprite.getMaxV();
-                float maxV = sprite.getMinV();
+                float minV = sprite.getV1();
+                float maxV = sprite.getV0();
                 double sizeU = getValue(size, u);
                 double sizeV = getValue(size, v);
                 for(int uIndex = 0; uIndex < sizeU; uIndex++) {
@@ -120,10 +120,10 @@ public class RenderResizableCuboid {
             }
         }
 
-        matrix.pop();
+        matrix.popPose();
     }
 
-    private void renderPoint(Matrix4f matrix4f, IVertexBuilder buffer, Direction face, Axis u, Axis v, float other, float[] uv, float[] xyz, boolean minU, boolean minV,
+    private void renderPoint(Matrix4f matrix4f, VertexConsumer buffer, Direction face, Axis u, Axis v, float other, float[] uv, float[] xyz, boolean minU, boolean minV,
                              float red, float green, float blue, float alpha, int light) {
 
         int U_ARRAY = minU ? U_MIN : U_MAX;
@@ -131,6 +131,6 @@ public class RenderResizableCuboid {
         Vector3f vertex = withValue(V_ZERO, u, xyz[U_ARRAY]);
         vertex = withValue(vertex, v, xyz[V_ARRAY]);
         vertex = withValue(vertex, face.getAxis(), other);
-        buffer.pos(matrix4f, vertex.getX(), vertex.getY(), vertex.getZ()).color(red, green, blue, alpha).tex(uv[U_ARRAY], uv[V_ARRAY]).lightmap(light).endVertex();
+        buffer.vertex(matrix4f, vertex.x(), vertex.y(), vertex.z()).color(red, green, blue, alpha).uv(uv[U_ARRAY], uv[V_ARRAY]).uv2(light).endVertex();
     }
 }

@@ -6,13 +6,13 @@ import com.lordskittles.nordicarcanum.common.registry.Containers;
 import com.lordskittles.nordicarcanum.common.tileentity.crafting.TileEntityNordicFurnace;
 import com.lordskittles.nordicarcanum.core.NordicInventorySlots;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIntArray;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.util.IntArray;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -21,9 +21,9 @@ import java.util.Objects;
 
 public class ContainerNordicFurnace extends ContainerBase<TileEntityNordicFurnace> {
 
-    private final IIntArray furnaceData;
+    private final ContainerData furnaceData;
 
-    public ContainerNordicFurnace(final int windowId, final PlayerInventory playerInventory, final TileEntityNordicFurnace tile, final IIntArray furnaceData) {
+    public ContainerNordicFurnace(final int windowId, final Inventory playerInventory, final TileEntityNordicFurnace tile, final ContainerData furnaceData) {
 
         super(Containers.nordic_furnace.get(), NordicInventorySlots.NORDIC_FURNACE, windowId, playerInventory, tile);
 

@@ -7,7 +7,7 @@ import com.lordskittles.nordicarcanum.common.registry.Blocks;
 import com.lordskittles.nordicarcanum.common.registry.Items;
 import com.lordskittles.nordicarcanum.common.registry.Sounds;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.SoundEvents;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
@@ -21,8 +21,8 @@ public class EntityEvents {
     @SubscribeEvent
     public static void onEntityTick(LivingUpdateEvent event) {
 
-        if(event.getEntityLiving() instanceof PlayerEntity) {
-            PlayerEntity player = (PlayerEntity) event.getEntityLiving();
+        if(event.getEntityLiving() instanceof Player) {
+            Player player = (Player) event.getEntityLiving();
             if(player.world.getBlockState(player.getPosition()) == Blocks.liquid_arcanum.get().getDefaultState()) {
                 if(MagicUtilities.getCurrentArcanum(player) < 50) {
                     try {

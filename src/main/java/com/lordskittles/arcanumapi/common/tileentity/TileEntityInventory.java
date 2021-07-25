@@ -2,28 +2,28 @@ package com.lordskittles.arcanumapi.common.tileentity;
 
 import com.lordskittles.arcanumapi.common.utilities.InventoryUtilities;
 import com.lordskittles.arcanumapi.common.utilities.NBTUtilities;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootParameterSets;
-import net.minecraft.loot.LootParameters;
-import net.minecraft.loot.LootTable;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -32,7 +32,14 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public abstract class TileEntityInventory<T extends TileEntityInventory<T>> extends TileEntityUpdateable<T> implements IInventory, INamedContainerProvider, INameable {
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Nameable;
+
+public abstract class TileEntityInventory<T extends TileEntityInventory<T>> extends TileEntityUpdateable<T> implements Container, MenuProvider, Nameable {
 
     protected int numPlayersUsing;
 
@@ -45,15 +52,15 @@ public abstract class TileEntityInventory<T extends TileEntityInventory<T>> exte
     protected LazyOptional<IItemHandlerModifiable> itemHandler = LazyOptional.of(() -> items);
 
     private final int size;
-    private final ITextComponent title;
+    private final Component title;
     private final String modid;
 
-    public TileEntityInventory(TileEntityType<?> tileEntityTypeIn, int size, String containerId, String modid) {
+    public TileEntityInventory(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state, int size, String containerId, String modid) {
 
-        super(tileEntityTypeIn);
+        super(tileEntityTypeIn, pos, state);
 
         this.size = size;
-        this.title = new TranslationTextComponent("container." + containerId);
+        this.title = new TranslatableComponent("container." + containerId);
         this.contents = NonNullList.withSize(this.size, ItemStack.EMPTY);
         this.modid = modid;
     }
@@ -65,11 +72,11 @@ public abstract class TileEntityInventory<T extends TileEntityInventory<T>> exte
         other.setItems(list);
     }
 
-    public static int getPlayersUsing(IBlockReader reader, BlockPos pos) {
+    public static int getPlayersUsing(BlockGetter reader, BlockPos pos) {
 
         BlockState state = reader.getBlockState(pos);
-        if(state.hasTileEntity()) {
-            TileEntity tile = reader.getTileEntity(pos);
+        if(state.hasBlockEntity()) {
+            BlockEntity tile = reader.getBlockEntity(pos);
             if(tile instanceof TileEntityInventory) {
                 return ((TileEntityInventory) tile).numPlayersUsing;
             }
@@ -89,7 +96,7 @@ public abstract class TileEntityInventory<T extends TileEntityInventory<T>> exte
     }
 
     @Override
-    public int getSizeInventory() {
+    public int getContainerSize() {
 
         return size;
     }
@@ -103,13 +110,13 @@ public abstract class TileEntityInventory<T extends TileEntityInventory<T>> exte
     protected void onSlotChanged() {}
 
     @Override
-    public ItemStack getStackInSlot(int index) {
+    public ItemStack getItem(int index) {
 
         return this.contents.get(index);
     }
 
     @Override
-    public void setInventorySlotContents(int index, ItemStack stack) {
+    public void setItem(int index, ItemStack stack) {
 
         this.contents.set(index, stack);
 
@@ -117,58 +124,58 @@ public abstract class TileEntityInventory<T extends TileEntityInventory<T>> exte
     }
 
     @Override
-    public ItemStack decrStackSize(int index, int count) {
+    public ItemStack removeItem(int index, int count) {
 
-        ItemStack stack = ItemStackHelper.getAndSplit(this.contents, index, count);
+        ItemStack stack = ContainerHelper.removeItem(this.contents, index, count);
         if(! stack.isEmpty()) {
-            this.markDirty();
+            this.setChanged();
         }
 
         return stack;
     }
 
     @Override
-    public ItemStack removeStackFromSlot(int index) {
+    public ItemStack removeItemNoUpdate(int index) {
 
-        return ItemStackHelper.getAndRemove(this.contents, index);
+        return ContainerHelper.takeItem(this.contents, index);
     }
 
     @Override
-    public boolean isUsableByPlayer(PlayerEntity player) {
+    public boolean stillValid(Player player) {
 
-        if(this.world.getTileEntity(this.pos) != this) {
+        if(this.level.getBlockEntity(this.worldPosition) != this) {
             return false;
         }
 
-        return ! (player.getDistanceSq((double) this.pos.getX() + 0.5D, (double) this.pos.getY() + 0.5D, (double) this.pos.getZ() + 0.5D) > 64.0D);
+        return ! (player.distanceToSqr((double) this.worldPosition.getX() + 0.5D, (double) this.worldPosition.getY() + 0.5D, (double) this.worldPosition.getZ() + 0.5D) > 64.0D);
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
 
         this.contents.clear();
     }
 
     @Override
-    public ITextComponent getName() {
+    public Component getName() {
 
         return this.title;
     }
 
     @Override
-    public ITextComponent getDisplayName() {
+    public Component getDisplayName() {
 
         return getName();
     }
 
     @Nullable
     @Override
-    public abstract Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity player);
+    public abstract AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player);
 
     @Override
-    public void remove() {
+    public void setRemoved() {
 
-        super.remove();
+        super.setRemoved();
 
         if(itemHandler != null) {
             itemHandler.invalidate();
@@ -176,54 +183,54 @@ public abstract class TileEntityInventory<T extends TileEntityInventory<T>> exte
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT compound) {
+    public void load(CompoundTag compound) {
 
-        super.read(state, compound);
+        super.load(compound);
 
-        CompoundNBT base = NBTUtilities.getPersistentData(modid, compound);
+        CompoundTag base = NBTUtilities.getPersistentData(modid, compound);
 
-        this.contents = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
+        this.contents = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
 
         if(! this.checkLootAndRead(compound)) {
-            ItemStackHelper.loadAllItems(base, this.contents);
+            ContainerHelper.loadAllItems(base, this.contents);
         }
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
+    public CompoundTag save(CompoundTag compound) {
 
-        super.write(compound);
+        super.save(compound);
 
-        CompoundNBT base = NBTUtilities.getPersistentData(modid, compound);
+        CompoundTag base = NBTUtilities.getPersistentData(modid, compound);
 
         if(! this.checkLootAndWrite(compound)) {
-            ItemStackHelper.loadAllItems(base, this.contents);
+            ContainerHelper.loadAllItems(base, this.contents);
         }
 
         return compound;
     }
 
     @Override
-    public boolean receiveClientEvent(int id, int type) {
+    public boolean triggerEvent(int id, int type) {
 
         if(id == 1) {
             this.numPlayersUsing = type;
             return true;
         }
 
-        return super.receiveClientEvent(id, type);
+        return super.triggerEvent(id, type);
     }
 
-    @Override
-    public void updateContainingBlockInfo() {
-
-        super.updateContainingBlockInfo();
-
-        if(this.itemHandler != null) {
-            this.itemHandler.invalidate();
-            this.itemHandler = null;
-        }
-    }
+//    @Override
+//    public void clearCache() {
+//
+//        super.clearCache();
+//
+//        if(this.itemHandler != null) {
+//            this.itemHandler.invalidate();
+//            this.itemHandler = null;
+//        }
+//    }
 
     @Override
     public <T> LazyOptional getCapability(@Nonnull Capability<T> capability, @Nonnull Direction side) {
@@ -236,7 +243,7 @@ public abstract class TileEntityInventory<T extends TileEntityInventory<T>> exte
     }
 
     @Override
-    public void openInventory(PlayerEntity player) {
+    public void startOpen(Player player) {
 
         if(! player.isSpectator()) {
             if(this.numPlayersUsing < 0) {
@@ -249,7 +256,7 @@ public abstract class TileEntityInventory<T extends TileEntityInventory<T>> exte
     }
 
     @Override
-    public void closeInventory(PlayerEntity player) {
+    public void stopOpen(Player player) {
 
         if(! player.isSpectator()) {
             -- this.numPlayersUsing;
@@ -257,17 +264,17 @@ public abstract class TileEntityInventory<T extends TileEntityInventory<T>> exte
         }
     }
 
-    public void fillWithLoot(@Nullable PlayerEntity player) {
+    public void fillWithLoot(@Nullable Player player) {
 
-        if(this.lootTable != null && this.world.getServer() != null) {
-            LootTable loottable = this.world.getServer().getLootTableManager().getLootTableFromLocation(this.lootTable);
+        if(this.lootTable != null && this.level.getServer() != null) {
+            LootTable loottable = this.level.getServer().getLootTables().get(this.lootTable);
             this.lootTable = null;
-            LootContext.Builder lootcontext$builder = (new LootContext.Builder((ServerWorld) this.world)).withParameter(LootParameters.ORIGIN, new Vector3d(this.pos.getX(), this.pos.getY(), this.pos.getZ())).withSeed(this.lootTableSeed);
+            LootContext.Builder lootcontext$builder = (new LootContext.Builder((ServerLevel) this.level)).withParameter(LootContextParams.ORIGIN, new Vec3(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ())).withOptionalRandomSeed(this.lootTableSeed);
             if(player != null) {
-                lootcontext$builder.withLuck(player.getLuck()).withParameter(LootParameters.THIS_ENTITY, player);
+                lootcontext$builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
             }
 
-            loottable.fillInventory(this, lootcontext$builder.build(LootParameterSets.CHEST));
+            loottable.fill(this, lootcontext$builder.create(LootContextParamSets.CHEST));
         }
     }
 
@@ -277,7 +284,7 @@ public abstract class TileEntityInventory<T extends TileEntityInventory<T>> exte
         this.lootTableSeed = seedIn;
     }
 
-    protected boolean checkLootAndRead(CompoundNBT compound) {
+    protected boolean checkLootAndRead(CompoundTag compound) {
 
         if(compound.contains("LootTable", 8)) {
             this.lootTable = new ResourceLocation(compound.getString("LootTable"));
@@ -289,7 +296,7 @@ public abstract class TileEntityInventory<T extends TileEntityInventory<T>> exte
         }
     }
 
-    protected boolean checkLootAndWrite(CompoundNBT compound) {
+    protected boolean checkLootAndWrite(CompoundTag compound) {
 
         if(this.lootTable == null) {
             return false;
@@ -310,10 +317,10 @@ public abstract class TileEntityInventory<T extends TileEntityInventory<T>> exte
 
     protected void playSound(SoundEvent sound) {
 
-        double dx = (double) this.pos.getX() + 0.5D;
-        double dy = (double) this.pos.getY() + 0.5D;
-        double dz = (double) this.pos.getZ() + 0.5D;
+        double dx = (double) this.worldPosition.getX() + 0.5D;
+        double dy = (double) this.worldPosition.getY() + 0.5D;
+        double dz = (double) this.worldPosition.getZ() + 0.5D;
 
-        this.world.playSound((PlayerEntity) null, dx, dy, dz, sound, SoundCategory.BLOCKS, 0.5f, this.world.rand.nextFloat() * 0.1f + 0.9f);
+        this.level.playSound((Player) null, dx, dy, dz, sound, SoundSource.BLOCKS, 0.5f, this.level.random.nextFloat() * 0.1f + 0.9f);
     }
 }

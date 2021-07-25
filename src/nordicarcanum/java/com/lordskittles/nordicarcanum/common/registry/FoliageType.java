@@ -6,8 +6,8 @@ import com.lordskittles.nordicarcanum.common.world.feature.trees.PineFoliage;
 import com.lordskittles.nordicarcanum.common.world.feature.trees.YewFoliage;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.mojang.serialization.Codec;
-import net.minecraft.world.gen.foliageplacer.FoliagePlacer;
-import net.minecraft.world.gen.foliageplacer.FoliagePlacerType;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerType;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 

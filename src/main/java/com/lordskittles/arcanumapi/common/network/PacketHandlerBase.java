@@ -1,19 +1,20 @@
 package com.lordskittles.arcanumapi.common.network;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
-import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.PacketDistributor;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraftforge.fmllegacy.network.NetworkDirection;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkRegistry;
+import net.minecraftforge.fmllegacy.network.PacketDistributor;
+import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
+import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -39,14 +40,14 @@ public abstract class PacketHandlerBase {
 
     protected abstract SimpleChannel getChannel();
 
-    protected <MSG> void registerPacket(Class<MSG> type, BiConsumer<MSG, PacketBuffer> encoder, Function<PacketBuffer, MSG> decoder, BiConsumer<MSG, Supplier<NetworkEvent.Context>> consumer) {
+    protected <MSG> void registerPacket(Class<MSG> type, BiConsumer<MSG, FriendlyByteBuf> encoder, Function<FriendlyByteBuf, MSG> decoder, BiConsumer<MSG, Supplier<NetworkEvent.Context>> consumer) {
 
         getChannel().registerMessage(index++, type, encoder, decoder, consumer);
     }
 
-    public <MSG> void sendTo(MSG message, ServerPlayerEntity player) {
+    public <MSG> void sendTo(MSG message, ServerPlayer player) {
 
-        getChannel().sendTo(message, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
+        getChannel().sendTo(message, player.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
     }
 
     public <MSG> void sendToAll(MSG message) {
@@ -59,17 +60,17 @@ public abstract class PacketHandlerBase {
         getChannel().send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), message);
     }
 
-    public <MSG> void sendToAllTracking(MSG message, TileEntity tile) {
+    public <MSG> void sendToAllTracking(MSG message, BlockEntity tile) {
 
-        sendToAllTracking(message, tile.getWorld(), tile.getPos());
+        sendToAllTracking(message, tile.getLevel(), tile.getBlockPos());
     }
 
-    public <MSG> void sendToAllTracking(MSG message, World world, BlockPos pos) {
+    public <MSG> void sendToAllTracking(MSG message, Level world, BlockPos pos) {
 
-        if(world instanceof ServerWorld) {
+        if(world instanceof ServerLevel) {
             //If we have a ServerWorld just directly figure out the ChunkPos so as to not require looking up the chunk
             // This provides a decent performance boost over using the packet distributor
-            ((ServerWorld) world).getChunkProvider().chunkManager.getTrackingPlayers(new ChunkPos(pos), false).forEach(p -> sendTo(message, p));
+            ((ServerLevel) world).getChunkSource().chunkMap.getPlayers(new ChunkPos(pos), false).forEach(p -> sendTo(message, p));
         }
         else {
             //Otherwise fallback to entities tracking the chunk if some mod did something odd and our world is not a ServerWorld

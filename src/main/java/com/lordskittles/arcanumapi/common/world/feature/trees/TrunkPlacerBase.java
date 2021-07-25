@@ -2,30 +2,32 @@ package com.lordskittles.arcanumapi.common.world.feature.trees;
 
 import com.google.common.collect.ImmutableList;
 import com.lordskittles.arcanumapi.common.utilities.BlockUtilities;
-import net.minecraft.block.BlockState;
-import net.minecraft.state.Property;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.gen.IWorldGenerationReader;
-import net.minecraft.world.gen.feature.BaseTreeFeatureConfig;
-import net.minecraft.world.gen.feature.TreeFeature;
-import net.minecraft.world.gen.foliageplacer.FoliagePlacer;
-import net.minecraft.world.gen.trunkplacer.AbstractTrunkPlacer;
-import net.minecraft.world.gen.trunkplacer.TrunkPlacerType;
+import net.minecraft.world.level.LevelSimulatedReader;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.LevelSimulatedRW;
+import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
+import net.minecraft.world.level.levelgen.feature.TreeFeature;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
+import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
+import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
 
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.BiConsumer;
 
-public abstract class TrunkPlacerBase extends AbstractTrunkPlacer {
+public abstract class TrunkPlacerBase extends TrunkPlacer {
 
     protected Property logAxisProperty;
 
     protected Random random;
-    protected IWorldGenerationReader world;
+    protected LevelSimulatedReader world;
 
-    private BaseTreeFeatureConfig config;
+    private TreeConfiguration config;
     private final TrunkPlacerType<?> type;
 
     public TrunkPlacerBase(int baseHeight, int heightRandA, int heightRandB, TrunkPlacerType<?> type) {
@@ -36,46 +38,44 @@ public abstract class TrunkPlacerBase extends AbstractTrunkPlacer {
     }
 
     @Override
-    protected TrunkPlacerType<?> getPlacerType() {
+    protected TrunkPlacerType<?> type() {
 
         return type;
     }
 
     @Override
-    public List<FoliagePlacer.Foliage> getFoliages(IWorldGenerationReader world, Random random, int height, BlockPos start, Set<BlockPos> changed, MutableBoundingBox bounds, BaseTreeFeatureConfig config) {
+    public List<FoliagePlacer.FoliageAttachment> placeTrunk(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> consumer, Random random, int p_161871_, BlockPos start, TreeConfiguration config) {
 
         this.random = random;
         this.world = world;
         this.config = config;
-        this.logAxisProperty = BlockUtilities.getAxisProperty(this.config.trunkProvider.getBlockState(random, start));
+        this.logAxisProperty = BlockUtilities.getAxisProperty(this.config.trunkProvider.getState(this.random, start));
 
-        func_236909_a_(this.world, start.down());
+        setDirtAt(this.world, consumer, random, start.below(), config);
 
-        placeTrunk(start, changed, bounds);
+        placeTrunk(start, consumer);
 
-        return ImmutableList.of(new FoliagePlacer.Foliage(start.up(this.baseHeight), 0, false));
+        return ImmutableList.of(new FoliagePlacer.FoliageAttachment(start.above(this.baseHeight), 0, false));
     }
 
-    protected abstract void placeTrunk(BlockPos position, Set<BlockPos> changedLogs, MutableBoundingBox area);
+    protected abstract void placeTrunk(BlockPos position, BiConsumer<BlockPos, BlockState> changedLogs);
 
-    protected boolean placeLog(BlockPos pos, Set<BlockPos> changedLogs, MutableBoundingBox area) {
+    protected boolean placeLog(BlockPos pos, BiConsumer<BlockPos, BlockState> consumer) {
 
-        return placeLog(pos, (Direction.Axis) null, changedLogs, area);
+        return placeLog(pos, (Direction.Axis) null, consumer);
     }
 
     @SuppressWarnings("unchecked")
-    protected boolean placeLog(BlockPos pos, Direction.Axis axis, Set<BlockPos> changedLogs, MutableBoundingBox area) {
+    protected boolean placeLog(BlockPos pos, Direction.Axis axis, BiConsumer<BlockPos, BlockState> consumer) {
 
-        BlockState directedLog = (axis != null && this.logAxisProperty != null) ? (BlockState) this.config.trunkProvider.getBlockState(this.random, pos).with(this.logAxisProperty, (Comparable) axis) : this.config.trunkProvider.getBlockState(this.random, pos);
-        return placeBlock(pos, directedLog, changedLogs, area);
+        BlockState directedLog = (axis != null && this.logAxisProperty != null) ? (BlockState) this.config.trunkProvider.getState(this.random, pos).setValue(this.logAxisProperty, (Comparable) axis) : this.config.trunkProvider.getState(this.random, pos);
+        return placeBlock(pos, directedLog, consumer);
     }
 
-    private boolean placeBlock(BlockPos pos, BlockState state, Set<BlockPos> changedBlocks, MutableBoundingBox area) {
+    private boolean placeBlock(BlockPos pos, BlockState state, BiConsumer<BlockPos, BlockState> consumer) {
 
-        if(TreeFeature.isReplaceableAt(world, pos)) {
-            TreeFeature.setBlockStateWithoutUpdate(world, pos, state);
-            changedBlocks.add(pos.toImmutable());
-            area.expandTo(new MutableBoundingBox(pos, pos));
+        if(TreeFeature.validTreePos(world, pos)) {
+            consumer.accept(pos.immutable(), state);
 
             return true;
         }

@@ -1,20 +1,20 @@
 package com.lordskittles.arcanumapi.client.render.item;
 
 import com.google.common.collect.ImmutableMap;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.model.ItemOverrideList;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.TransformationMatrix;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.world.IBlockDisplayReader;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Transformation;
+import com.mojang.math.Vector3f;
+import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraftforge.client.model.data.IModelData;
 
 import javax.annotation.Nonnull;
@@ -23,21 +23,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-public class ItemModelWrapper implements IBakedModel {
+public class ItemModelWrapper implements BakedModel {
 
-    private final IBakedModel internal;
+    private final BakedModel internal;
 
     private TransformType transform = TransformType.NONE;
 
-    public ItemModelWrapper(IBakedModel internal) {
+    public ItemModelWrapper(BakedModel internal) {
 
         this.internal = internal;
-    }
-
-    @Override
-    public IBakedModel getBakedModel() {
-
-        return this.internal;
     }
 
     @Override
@@ -54,9 +48,9 @@ public class ItemModelWrapper implements IBakedModel {
     }
 
     @Override
-    public boolean isAmbientOcclusion() {
+    public boolean useAmbientOcclusion() {
 
-        return this.internal.isAmbientOcclusion();
+        return this.internal.useAmbientOcclusion();
     }
 
     @Override
@@ -66,50 +60,50 @@ public class ItemModelWrapper implements IBakedModel {
     }
 
     @Override
-    public boolean isSideLit() {
+    public boolean usesBlockLight() {
 
-        return this.internal.isSideLit();
+        return this.internal.usesBlockLight();
     }
 
     @Override
-    public boolean isBuiltInRenderer() {
+    public boolean isCustomRenderer() {
 
         return true;
     }
 
     @Override
-    public TextureAtlasSprite getParticleTexture() {
+    public TextureAtlasSprite getParticleIcon() {
 
-        return this.internal.getParticleTexture();
+        return this.internal.getParticleIcon();
     }
 
     @Override
-    public ItemOverrideList getOverrides() {
+    public ItemOverrides getOverrides() {
 
-        return ItemOverrideList.EMPTY;
+        return ItemOverrides.EMPTY;
     }
 
     @Nonnull
     @Deprecated
     @Override
-    public ItemCameraTransforms getItemCameraTransforms() {
+    public ItemTransforms getTransforms() {
 
-        return internal.getItemCameraTransforms();
+        return internal.getTransforms();
     }
 
     @Nonnull
     @Override
-    public IModelData getModelData(@Nonnull IBlockDisplayReader world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData tileData) {
+    public IModelData getModelData(@Nonnull BlockAndTintGetter world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData tileData) {
 
         return internal.getModelData(world, pos, state, tileData);
     }
 
     @Override
-    public IBakedModel handlePerspective(TransformType type, MatrixStack stack) {
+    public BakedModel handlePerspective(TransformType type, PoseStack stack) {
 
         transform = type;
 
-        TransformationMatrix matrix = transforms.get(type);
+        Transformation matrix = transforms.get(type);
         if(! matrix.isIdentity()) {
             matrix.push(stack);
         }
@@ -123,7 +117,7 @@ public class ItemModelWrapper implements IBakedModel {
         return this.transform;
     }
 
-    public static Map<TransformType, TransformationMatrix> transforms = ImmutableMap.<TransformType, TransformationMatrix>builder()
+    public static Map<TransformType, Transformation> transforms = ImmutableMap.<TransformType, Transformation>builder()
             .put(TransformType.GUI, get(0, 0, 0, 30, 225, 0, 0.625F))
             .put(TransformType.THIRD_PERSON_RIGHT_HAND, get(0, 2.5F, 0, 75, 45, 0, 0.375F))
             .put(TransformType.THIRD_PERSON_LEFT_HAND, get(0, 2.5F, 0, 75, 45, 0, 0.375F))
@@ -135,9 +129,9 @@ public class ItemModelWrapper implements IBakedModel {
             .put(TransformType.NONE, get(0, 0, 0, 0, 0, 0, 0))
             .build();
 
-    private static TransformationMatrix get(float tx, float ty, float tz, float ax, float ay, float az, float s) {
+    private static Transformation get(float tx, float ty, float tz, float ax, float ay, float az, float s) {
 
-        return new TransformationMatrix(new Vector3f(tx / 16, ty / 16, tz / 16),
+        return new Transformation(new Vector3f(tx / 16, ty / 16, tz / 16),
                 new Quaternion(ax, ay, az, true),
                 new Vector3f(s, s, s), null);
     }

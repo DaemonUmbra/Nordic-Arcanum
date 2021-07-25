@@ -3,24 +3,24 @@ package com.lordskittles.nordicarcanum.magic.schools;
 import com.lordskittles.nordicarcanum.common.registry.MagicSchools;
 import com.lordskittles.arcanumapi.core.ArcanumNames;
 import com.lordskittles.nordicarcanum.core.NordicNames;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.ChatFormatting;
 
 import javax.annotation.Nullable;
 
 public enum SchoolType {
-    Undiscovered(NordicNames.UNDISCOVERED, 0, TextFormatting.WHITE),
-    Ur(NordicNames.UR, 1, TextFormatting.AQUA),
-    Kaun(NordicNames.KAUN, 2, TextFormatting.RED),
-    Ar(NordicNames.AR, 3, TextFormatting.YELLOW),
-    Hagal(NordicNames.HAGAL, 4, TextFormatting.GRAY),
-    Yr(NordicNames.YR, 5, TextFormatting.GREEN),
-    Fe(NordicNames.FE, 6, TextFormatting.LIGHT_PURPLE);
+    Undiscovered(NordicNames.UNDISCOVERED, 0, ChatFormatting.WHITE),
+    Ur(NordicNames.UR, 1, ChatFormatting.AQUA),
+    Kaun(NordicNames.KAUN, 2, ChatFormatting.RED),
+    Ar(NordicNames.AR, 3, ChatFormatting.YELLOW),
+    Hagal(NordicNames.HAGAL, 4, ChatFormatting.GRAY),
+    Yr(NordicNames.YR, 5, ChatFormatting.GREEN),
+    Fe(NordicNames.FE, 6, ChatFormatting.LIGHT_PURPLE);
 
     public String name;
     public int id;
-    public TextFormatting color;
+    public ChatFormatting color;
 
-    SchoolType(String name, int id, TextFormatting color) {
+    SchoolType(String name, int id, ChatFormatting color) {
 
         this.name = name;
         this.id = id;

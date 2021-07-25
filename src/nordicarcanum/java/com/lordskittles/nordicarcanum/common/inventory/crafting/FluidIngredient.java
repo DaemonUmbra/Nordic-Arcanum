@@ -4,15 +4,15 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import net.minecraft.fluid.Fluid;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.tags.ITag;
+import net.minecraft.tags.Tag;
 import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
@@ -59,7 +59,7 @@ public class FluidIngredient extends Ingredient {
         return new FluidIngredient(Arrays.asList(fluids), amount);
     }
 
-    public static FluidIngredient of(int amount, ITag.INamedTag<Fluid> fluid) {
+    public static FluidIngredient of(int amount, Tag.Named<Fluid> fluid) {
 
         return new FluidIngredient(fluid.getName(), amount);
     }
@@ -67,7 +67,7 @@ public class FluidIngredient extends Ingredient {
     private Collection<Fluid> getFluidList() {
 
         if(fluids == null && tagId != null) {
-            ITag<Fluid> tag = FluidTags.getCollection().get(tagId);
+            Tag<Fluid> tag = FluidTags.getCollection().get(tagId);
             fluids = tag == null ? Collections.emptyList() : ImmutableList.copyOf(tag.getAllElements());
         }
         return fluids;

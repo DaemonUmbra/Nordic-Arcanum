@@ -3,25 +3,25 @@ package com.lordskittles.nordicarcanum.common.inventory.containers;
 import com.lordskittles.nordicarcanum.common.inventory.ClothResultInventory;
 import com.lordskittles.nordicarcanum.common.inventory.crafting.CraftingClothRecipe;
 import com.lordskittles.nordicarcanum.common.utility.RecipeUtilities;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.inventory.container.CraftingResultSlot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.inventory.ResultSlot;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.util.NonNullList;
 
 import javax.annotation.Nonnull;
 
-public class ClothResultSlot extends CraftingResultSlot {
+public class ClothResultSlot extends ResultSlot {
 
-    public ClothResultSlot(PlayerEntity player, CraftingInventory craftingInventory, ClothResultInventory result, int slotIndex, int xPosition, int yPosition) {
+    public ClothResultSlot(Player player, CraftingContainer craftingInventory, ClothResultInventory result, int slotIndex, int xPosition, int yPosition) {
 
         super(player, craftingInventory, result, slotIndex, xPosition, yPosition);
     }
 
     @Nonnull
     @Override
-    public ItemStack onTake(@Nonnull PlayerEntity thePlayer, @Nonnull ItemStack stack) {
+    public ItemStack onTake(@Nonnull Player thePlayer, @Nonnull ItemStack stack) {
 
         this.onCrafting(stack);
         net.minecraftforge.common.ForgeHooks.setCraftingPlayer(thePlayer);

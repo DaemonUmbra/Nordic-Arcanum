@@ -1,7 +1,7 @@
 package com.lordskittles.nordicarcanum.plugins.jei;
 
 import com.lordskittles.nordicarcanum.core.NordicNames;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import static com.lordskittles.nordicarcanum.core.NordicArcanum.RL;
 

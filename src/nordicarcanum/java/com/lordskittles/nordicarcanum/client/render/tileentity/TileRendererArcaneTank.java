@@ -4,22 +4,22 @@ import com.lordskittles.arcanumapi.client.render.ArcaneRenderer;
 import com.lordskittles.arcanumapi.client.render.tileentity.TileEntityFluidRendererBase;
 import com.lordskittles.nordicarcanum.client.render.tileentity.model.ModelArcaneTank;
 import com.lordskittles.nordicarcanum.common.tileentity.magic.TileEntityArcaneTank;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.util.math.vector.Vector3f;
 
 public class TileRendererArcaneTank extends TileEntityFluidRendererBase<TileEntityArcaneTank> {
 
     private final ModelArcaneTank ArcaneTank = new ModelArcaneTank();
 
-    public TileRendererArcaneTank(TileEntityRendererDispatcher rendererDispatcherIn) {
+    public TileRendererArcaneTank(BlockEntityRenderDispatcher rendererDispatcherIn) {
 
         super(rendererDispatcherIn);
     }
 
     @Override
-    public void render(TileEntityArcaneTank tileEntity, float ticks, MatrixStack stack, IRenderTypeBuffer buffer, int light, int overlay) {
+    public void render(TileEntityArcaneTank tileEntity, float ticks, PoseStack stack, MultiBufferSource buffer, int light, int overlay) {
 
         stack.push();
         stack.translate(0.5D, 1.5D, 0.5D);

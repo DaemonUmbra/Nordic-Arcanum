@@ -9,23 +9,23 @@ import com.lordskittles.nordicarcanum.common.block.voxelshapes.VoxelsArcaneInfus
 import com.lordskittles.nordicarcanum.common.registry.TileEntities;
 import com.lordskittles.nordicarcanum.common.tileentity.crafting.TileEntityArcaneInfuser;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Hand;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 
@@ -38,13 +38,13 @@ public class BlockArcaneInfuser extends BlockTank<TileEntityArcaneInfuser> {
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+    public BlockEntity createTileEntity(BlockState state, BlockGetter world) {
 
         return TileEntities.arcane_infuser.get().create();
     }
 
     @Override
-    protected void onTileActivated(World world, PlayerEntity player, TileEntityFluidInventory tile, BlockPos pos, Hand hand) {
+    protected void onTileActivated(Level world, Player player, TileEntityFluidInventory tile, BlockPos pos, InteractionHand hand) {
 
         TileEntityArcaneInfuser infuser = (TileEntityArcaneInfuser) tile;
         ItemStack held = player.getHeldItem(hand);

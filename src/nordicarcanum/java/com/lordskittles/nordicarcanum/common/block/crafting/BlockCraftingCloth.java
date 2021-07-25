@@ -4,27 +4,26 @@ import com.lordskittles.arcanumapi.common.block.BlockMod;
 import com.lordskittles.nordicarcanum.common.registry.Items;
 import com.lordskittles.nordicarcanum.common.registry.TileEntities;
 import com.lordskittles.nordicarcanum.common.tileentity.crafting.TileEntityCraftingCloth;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.color.BlockColors;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import net.minecraft.client.color.block.BlockColors;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
@@ -32,10 +31,10 @@ public class BlockCraftingCloth extends BlockMod {
 
     public BlockCraftingCloth() {
 
-        super(Block.Properties.create(Material.WOOL)
-                .hardnessAndResistance(- 1.0f, 0.8f)
-                .sound(SoundType.CLOTH)
-                .notSolid());
+        super(Block.Properties.of(Material.WOOL)
+                .strength(- 1.0f, 0.8f)
+                .sound(SoundType.WOOL)
+                .noOcclusion());
     }
 
     public void initColorHandler(BlockColors blockColors) {
@@ -56,38 +55,38 @@ public class BlockCraftingCloth extends BlockMod {
     }
 
     @Override
-    public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
+    public ItemStack getPickBlock(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player) {
 
         return new ItemStack(Items.crafting_cloth_item.get());
     }
 
     @Override
-    public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) {
+    public int getLightEmission(BlockState state, BlockGetter world, BlockPos pos) {
 
         BlockState facadeState = getFacadeBlock(world, pos);
         if(! isFacadeNull(facadeState)) {
-            return facadeState.getLightValue();
+            return facadeState.getLightEmission();
         }
 
-        return super.getLightValue(state, world, pos);
+        return super.getLightEmission(state, world, pos);
     }
 
     @Override
-    public float getAmbientOcclusionLightValue(BlockState state, IBlockReader world, BlockPos pos) {
+    public float getShadeBrightness(BlockState state, BlockGetter world, BlockPos pos) {
 
         BlockState facadeState = getFacadeBlock(world, pos);
 
         if(! isFacadeNull(facadeState)) {
-            return facadeState.getBlock().getAmbientOcclusionLightValue(facadeState, world, pos);
+            return facadeState.getBlock().getShadeBrightness(facadeState, world, pos);
         }
 
-        return super.getAmbientOcclusionLightValue(state, world, pos);
+        return super.getShadeBrightness(state, world, pos);
     }
 
     @Nullable
-    private BlockState getFacadeBlock(IBlockReader blockAccess, BlockPos pos) {
+    private BlockState getFacadeBlock(BlockGetter blockAccess, BlockPos pos) {
 
-        TileEntity te = blockAccess.getTileEntity(pos);
+        BlockEntity te = blockAccess.getBlockEntity(pos);
         if(te instanceof TileEntityCraftingCloth) {
             return ((TileEntityCraftingCloth) te).getFacadeState();
         }
@@ -96,7 +95,7 @@ public class BlockCraftingCloth extends BlockMod {
 
     private boolean isFacadeNull(BlockState facadeState) {
 
-        return (facadeState == null || facadeState == net.minecraft.block.Blocks.AIR.getDefaultState());
+        return (facadeState == null || facadeState == net.minecraft.world.level.block.Blocks.AIR.defaultBlockState());
     }
 
 //	@Override
@@ -118,48 +117,29 @@ public class BlockCraftingCloth extends BlockMod {
 //	}
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
 
-        if(! world.isRemote) {
-            TileEntity tile = world.getTileEntity(pos);
+        if(! world.isClientSide) {
+            BlockEntity tile = world.getBlockEntity(pos);
 
             if(tile instanceof TileEntityCraftingCloth) {
-                if(player.isSneaking()) {
+                if(player.isShiftKeyDown()) {
                     BlockState orginalState = ((TileEntityCraftingCloth) tile).getFacadeState();
 
-                    player.inventory.addItemStackToInventory(new ItemStack(Items.crafting_cloth_item.get()));
-                    world.setBlockState(pos, orginalState);
+                    player.getInventory().add(new ItemStack(Items.crafting_cloth_item.get()));
+                    world.setBlock(pos, orginalState, 19);
                 }
                 else {
-                    NetworkHooks.openGui((ServerPlayerEntity) player, (TileEntityCraftingCloth) tile, pos);
+                    NetworkHooks.openGui((ServerPlayer) player, (TileEntityCraftingCloth) tile, pos);
                 }
             }
 
         }
-        return ActionResultType.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     @Override
-    public boolean hasTileEntity(BlockState state) {
-
-        return true;
-    }
-
-    @Override
-    public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos) {
-
-        return ! world.getBlockState(pos.down()).hasTileEntity();
-    }
-
-    @Nullable
-    @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-
-        return TileEntities.crafting_cloth.get().create();
-    }
-
-    @Override
-    public boolean propagatesSkylightDown(BlockState state, IBlockReader reader, BlockPos pos) {
+    public boolean propagatesSkylightDown(BlockState state, BlockGetter reader, BlockPos pos) {
 
         BlockState facade = getFacadeBlock(reader, pos);
         return ! isFacadeNull(facade) ? facade.propagatesSkylightDown(reader, pos) : super.propagatesSkylightDown(state, reader, pos);
@@ -180,12 +160,12 @@ public class BlockCraftingCloth extends BlockMod {
 //	}
 
     @OnlyIn(Dist.CLIENT)
-    public boolean isSideInvisible(BlockState state, BlockState adjacentBlockState, Direction side) {
+    public boolean skipRendering(BlockState state, BlockState adjacentBlockState, Direction side) {
 
         if(state.getBlock().equals(adjacentBlockState.getBlock())) {
             return false;
         }
 
-        return super.isSideInvisible(state, adjacentBlockState, side);
+        return super.skipRendering(state, adjacentBlockState, side);
     }
 }

@@ -15,16 +15,16 @@ import com.lordskittles.nordicarcanum.common.block.world.trees.TreePine;
 import com.lordskittles.nordicarcanum.common.block.world.trees.TreeYew;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.lordskittles.nordicarcanum.core.NordicNames;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
-import net.minecraft.fluid.FlowingFluid;
-import net.minecraft.item.ItemTier;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.Tiers;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
 import net.minecraftforge.common.ToolType;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -32,30 +32,30 @@ public class Blocks {
 
     private static Block.Properties getFluidProperties() {
 
-        return Block.Properties.create(Material.WATER).doesNotBlockMovement().noDrops();
+        return Block.Properties.copy(net.minecraft.world.level.block.Blocks.WATER);
     }
 
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, NordicArcanum.MODID);
 
     //WORLD BLOCKS
-    public static final RegistryObject<Block> arcane_powder_ore = BLOCKS.register(NordicNames.ARCANE_POWDER + NordicNames.ORE_SUFFIX, () -> new BlockOre(ItemTier.STONE.getHarvestLevel(), 4));
-    public static final RegistryObject<Block> feldspar = BLOCKS.register(NordicNames.FELDSPAR, () -> new BlockOre(ItemTier.STONE.getHarvestLevel(), 0, 1.5F));
-    public static final RegistryObject<Block> carnelian_ore = BLOCKS.register(NordicNames.CARNELIAN + NordicNames.ORE_SUFFIX, () -> new BlockOre(ItemTier.IRON.getHarvestLevel(), 0));
-    public static final RegistryObject<Block> garnet_ore = BLOCKS.register(NordicNames.GARNET + NordicNames.ORE_SUFFIX, () -> new BlockOre(ItemTier.IRON.getHarvestLevel(), 0));
-    public static final RegistryObject<Block> thulite_ore = BLOCKS.register(NordicNames.THULITE + NordicNames.ORE_SUFFIX, () -> new BlockOre(ItemTier.IRON.getHarvestLevel(), 0));
+    public static final RegistryObject<Block> arcane_powder_ore = BLOCKS.register(NordicNames.ARCANE_POWDER + NordicNames.ORE_SUFFIX, () -> new BlockOre(Tiers.STONE.getLevel(), 4));
+    public static final RegistryObject<Block> feldspar = BLOCKS.register(NordicNames.FELDSPAR, () -> new BlockOre(Tiers.STONE.getLevel(), 0, 1.5F));
+    public static final RegistryObject<Block> carnelian_ore = BLOCKS.register(NordicNames.CARNELIAN + NordicNames.ORE_SUFFIX, () -> new BlockOre(Tiers.IRON.getLevel(), 0));
+    public static final RegistryObject<Block> garnet_ore = BLOCKS.register(NordicNames.GARNET + NordicNames.ORE_SUFFIX, () -> new BlockOre(Tiers.IRON.getLevel(), 0));
+    public static final RegistryObject<Block> thulite_ore = BLOCKS.register(NordicNames.THULITE + NordicNames.ORE_SUFFIX, () -> new BlockOre(Tiers.IRON.getLevel(), 0));
 
-    public static final RegistryObject<Block> bismuth_ore = BLOCKS.register(NordicNames.BISMUTH + NordicNames.ORE_SUFFIX, () -> new BlockOre(ItemTier.STONE.getHarvestLevel(), 0));
-    public static final RegistryObject<Block> nickle_ore = BLOCKS.register(NordicNames.NICKLE + NordicNames.ORE_SUFFIX, () -> new BlockOre(ItemTier.IRON.getHarvestLevel(), 0));
-    public static final RegistryObject<Block> silver_ore = BLOCKS.register(NordicNames.SILVER + NordicNames.ORE_SUFFIX, () -> new BlockOre(ItemTier.IRON.getHarvestLevel(), 0));
+    public static final RegistryObject<Block> bismuth_ore = BLOCKS.register(NordicNames.BISMUTH + NordicNames.ORE_SUFFIX, () -> new BlockOre(Tiers.STONE.getLevel(), 0));
+    public static final RegistryObject<Block> nickle_ore = BLOCKS.register(NordicNames.NICKLE + NordicNames.ORE_SUFFIX, () -> new BlockOre(Tiers.IRON.getLevel(), 0));
+    public static final RegistryObject<Block> silver_ore = BLOCKS.register(NordicNames.SILVER + NordicNames.ORE_SUFFIX, () -> new BlockOre(Tiers.IRON.getLevel(), 0));
 
-    public static final RegistryObject<Block> arcane_powder_deepslate_ore = BLOCKS.register(NordicNames.ARCANE_POWDER + NordicNames.DEEPSLATE_ORE_SUFFIX, () -> new BlockOre(ItemTier.STONE.getHarvestLevel(), 4));
-    public static final RegistryObject<Block> carnelian_deepslate_ore = BLOCKS.register(NordicNames.CARNELIAN + NordicNames.DEEPSLATE_ORE_SUFFIX, () -> new BlockOre(ItemTier.IRON.getHarvestLevel(), 0));
-    public static final RegistryObject<Block> garnet_deepslate_ore = BLOCKS.register(NordicNames.GARNET + NordicNames.DEEPSLATE_ORE_SUFFIX, () -> new BlockOre(ItemTier.IRON.getHarvestLevel(), 0));
-    public static final RegistryObject<Block> thulite_deepslate_ore = BLOCKS.register(NordicNames.THULITE + NordicNames.DEEPSLATE_ORE_SUFFIX, () -> new BlockOre(ItemTier.IRON.getHarvestLevel(), 0));
+    public static final RegistryObject<Block> arcane_powder_deepslate_ore = BLOCKS.register(NordicNames.ARCANE_POWDER + NordicNames.DEEPSLATE_ORE_SUFFIX, () -> new BlockOre(Tiers.STONE.getLevel(), 4));
+    public static final RegistryObject<Block> carnelian_deepslate_ore = BLOCKS.register(NordicNames.CARNELIAN + NordicNames.DEEPSLATE_ORE_SUFFIX, () -> new BlockOre(Tiers.IRON.getLevel(), 0));
+    public static final RegistryObject<Block> garnet_deepslate_ore = BLOCKS.register(NordicNames.GARNET + NordicNames.DEEPSLATE_ORE_SUFFIX, () -> new BlockOre(Tiers.IRON.getLevel(), 0));
+    public static final RegistryObject<Block> thulite_deepslate_ore = BLOCKS.register(NordicNames.THULITE + NordicNames.DEEPSLATE_ORE_SUFFIX, () -> new BlockOre(Tiers.IRON.getLevel(), 0));
 
-    public static final RegistryObject<Block> bismuth_deepslate_ore = BLOCKS.register(NordicNames.BISMUTH + NordicNames.DEEPSLATE_ORE_SUFFIX, () -> new BlockOre(ItemTier.STONE.getHarvestLevel(), 0));
-    public static final RegistryObject<Block> nickle_deepslate_ore = BLOCKS.register(NordicNames.NICKLE + NordicNames.DEEPSLATE_ORE_SUFFIX, () -> new BlockOre(ItemTier.IRON.getHarvestLevel(), 0));
-    public static final RegistryObject<Block> silver_deepslate_ore = BLOCKS.register(NordicNames.SILVER + NordicNames.DEEPSLATE_ORE_SUFFIX, () -> new BlockOre(ItemTier.IRON.getHarvestLevel(), 0));
+    public static final RegistryObject<Block> bismuth_deepslate_ore = BLOCKS.register(NordicNames.BISMUTH + NordicNames.DEEPSLATE_ORE_SUFFIX, () -> new BlockOre(Tiers.STONE.getLevel(), 0));
+    public static final RegistryObject<Block> nickle_deepslate_ore = BLOCKS.register(NordicNames.NICKLE + NordicNames.DEEPSLATE_ORE_SUFFIX, () -> new BlockOre(Tiers.IRON.getLevel(), 0));
+    public static final RegistryObject<Block> silver_deepslate_ore = BLOCKS.register(NordicNames.SILVER + NordicNames.DEEPSLATE_ORE_SUFFIX, () -> new BlockOre(Tiers.IRON.getLevel(), 0));
 
     public static final RegistryObject<Block> arcane_dust_compact = BLOCKS.register(NordicNames.ARCANE_DUST_COMPACT, BlockCompactResource::new);
     public static final RegistryObject<Block> carnelian_crystal_compact = BLOCKS.register(NordicNames.CARNELIAN_COMPACT, BlockCompactResource::new);
@@ -65,7 +65,7 @@ public class Blocks {
     public static final RegistryObject<Block> bismuth_metal_compact = BLOCKS.register(NordicNames.BISMUTH_COMPACT, BlockCompactResource::new);
     public static final RegistryObject<Block> nickle_metal_compact = BLOCKS.register(NordicNames.NICKLE_COMPACT, BlockCompactResource::new);
     public static final RegistryObject<Block> silver_metal_compact = BLOCKS.register(NordicNames.SILVER_COMPACT, BlockCompactResource::new);
-    public static final RegistryObject<Block> steel_metal_compact = BLOCKS.register(NordicNames.STEEL_COMPACT, () -> new BlockInfusable(Material.IRON, MaterialColor.GRAY, BlockInfusable.InfusionType.STAFF_WORKBENCH));
+    public static final RegistryObject<Block> steel_metal_compact = BLOCKS.register(NordicNames.STEEL_COMPACT, () -> new BlockInfusable(Material.METAL, MaterialColor.COLOR_GRAY, BlockInfusable.InfusionType.STAFF_WORKBENCH));
     public static final RegistryObject<Block> norse_compact = BLOCKS.register(NordicNames.NORSE_COMPACT, BlockCompactResource::new);
     public static final RegistryObject<Block> electrum_compact = BLOCKS.register(NordicNames.ELECTRUM_COMPACT, BlockCompactResource::new);
     public static final RegistryObject<Block> bronze_compact = BLOCKS.register(NordicNames.BRONZE_COMPACT, BlockCompactResource::new);
@@ -94,20 +94,20 @@ public class Blocks {
     public static final RegistryObject<Block> juniper_plank = BLOCKS.register(NordicNames.JUNIPER + NordicNames.PLANKS_SUFFIX, BlockPlank::new);
     public static final RegistryObject<Block> pine_plank = BLOCKS.register(NordicNames.PINE + NordicNames.PLANKS_SUFFIX, BlockPlank::new);
 
-    public static final RegistryObject<Block> polished_feldspar = BLOCKS.register(NordicNames.POLISHED_FELDSPAR, () -> new BlockDecoration(Material.ROCK, MaterialColor.WOOD));
-    public static final RegistryObject<Block> feldspar_brick = BLOCKS.register(NordicNames.FELDSPAR_BRICK + NordicNames.DECO_SUFFIX, () -> new BlockDecoration(Material.ROCK, MaterialColor.WOOD));
-    public static final RegistryObject<Block> chiseled_feldspar_brick = BLOCKS.register(NordicNames.CHISELED_FELDSPAR_BRICK + NordicNames.DECO_SUFFIX, () -> new BlockDecoration(Material.ROCK, MaterialColor.WOOD));
+    public static final RegistryObject<Block> polished_feldspar = BLOCKS.register(NordicNames.POLISHED_FELDSPAR, () -> new BlockDecoration(Material.STONE, MaterialColor.WOOD));
+    public static final RegistryObject<Block> feldspar_brick = BLOCKS.register(NordicNames.FELDSPAR_BRICK + NordicNames.DECO_SUFFIX, () -> new BlockDecoration(Material.STONE, MaterialColor.WOOD));
+    public static final RegistryObject<Block> chiseled_feldspar_brick = BLOCKS.register(NordicNames.CHISELED_FELDSPAR_BRICK + NordicNames.DECO_SUFFIX, () -> new BlockDecoration(Material.STONE, MaterialColor.WOOD));
     public static final RegistryObject<Block> feldspar_pillar = BLOCKS.register(NordicNames.FELDSPAR + NordicNames.PILLAR_SUFFIX, BlockPillar::new);
 
-    public static final RegistryObject<Block> cracked_feldspar = BLOCKS.register(NordicNames.CRACKED_PREFIX + NordicNames.FELDSPAR, () -> new BlockDecoration(Material.ROCK, MaterialColor.WOOD));
-    public static final RegistryObject<Block> cracked_polished_feldspar = BLOCKS.register(NordicNames.CRACKED_PREFIX + NordicNames.POLISHED_FELDSPAR, () -> new BlockDecoration(Material.ROCK, MaterialColor.WOOD));
-    public static final RegistryObject<Block> cracked_feldspar_brick = BLOCKS.register(NordicNames.CRACKED_PREFIX + NordicNames.FELDSPAR_BRICK, () -> new BlockDecoration(Material.ROCK, MaterialColor.WOOD));
+    public static final RegistryObject<Block> cracked_feldspar = BLOCKS.register(NordicNames.CRACKED_PREFIX + NordicNames.FELDSPAR, () -> new BlockDecoration(Material.STONE, MaterialColor.WOOD));
+    public static final RegistryObject<Block> cracked_polished_feldspar = BLOCKS.register(NordicNames.CRACKED_PREFIX + NordicNames.POLISHED_FELDSPAR, () -> new BlockDecoration(Material.STONE, MaterialColor.WOOD));
+    public static final RegistryObject<Block> cracked_feldspar_brick = BLOCKS.register(NordicNames.CRACKED_PREFIX + NordicNames.FELDSPAR_BRICK, () -> new BlockDecoration(Material.STONE, MaterialColor.WOOD));
 
-    public static final RegistryObject<Block> mossy_feldspar = BLOCKS.register(NordicNames.MOSSY_PREFIX + NordicNames.FELDSPAR, () -> new BlockDecoration(Material.ROCK, MaterialColor.WOOD));
-    public static final RegistryObject<Block> mossy_polished_feldspar = BLOCKS.register(NordicNames.MOSSY_PREFIX + NordicNames.POLISHED_FELDSPAR, () -> new BlockDecoration(Material.ROCK, MaterialColor.WOOD));
-    public static final RegistryObject<Block> mossy_feldspar_brick = BLOCKS.register(NordicNames.MOSSY_PREFIX + NordicNames.FELDSPAR_BRICK, () -> new BlockDecoration(Material.ROCK, MaterialColor.WOOD));
+    public static final RegistryObject<Block> mossy_feldspar = BLOCKS.register(NordicNames.MOSSY_PREFIX + NordicNames.FELDSPAR, () -> new BlockDecoration(Material.STONE, MaterialColor.WOOD));
+    public static final RegistryObject<Block> mossy_polished_feldspar = BLOCKS.register(NordicNames.MOSSY_PREFIX + NordicNames.POLISHED_FELDSPAR, () -> new BlockDecoration(Material.STONE, MaterialColor.WOOD));
+    public static final RegistryObject<Block> mossy_feldspar_brick = BLOCKS.register(NordicNames.MOSSY_PREFIX + NordicNames.FELDSPAR_BRICK, () -> new BlockDecoration(Material.STONE, MaterialColor.WOOD));
 
-    public static final RegistryObject<Block> carved_deepslate_brick = BLOCKS.register(NordicNames.CARVED_DEEPSLATE, () -> new BlockInfusable(Material.ROCK, MaterialColor.STONE, BlockInfusable.InfusionType.SIGIL_PODIUM));
+    public static final RegistryObject<Block> carved_deepslate_brick = BLOCKS.register(NordicNames.CARVED_DEEPSLATE, () -> new BlockInfusable(Material.STONE, MaterialColor.STONE, BlockInfusable.InfusionType.SIGIL_PODIUM));
     public static final RegistryObject<Block> deepslate_pillar = BLOCKS.register(NordicNames.DEEPSLATE_PILLAR, BlockInfusablePillar::new);
 
     public static final RegistryObject<Block> yew_fence = BLOCKS.register(NordicNames.YEW + NordicNames.FENCE_SUFFIX, BlockFence::new);
@@ -115,10 +115,10 @@ public class Blocks {
     public static final RegistryObject<Block> pine_fence = BLOCKS.register(NordicNames.PINE + NordicNames.FENCE_SUFFIX, BlockFence::new);
     public static final RegistryObject<Block> feldspar_wall = BLOCKS.register(NordicNames.FELDSPAR + NordicNames.WALL_SUFFIX, BlockWall::new);
 
-    public static final RegistryObject<Block> yew_slab = BLOCKS.register(NordicNames.YEW + NordicNames.SLAB_SUFFIX, () -> new BlockSlab(Block.Properties.from(net.minecraft.block.Blocks.OAK_SLAB)));
-    public static final RegistryObject<Block> juniper_slab = BLOCKS.register(NordicNames.JUNIPER + NordicNames.SLAB_SUFFIX, () -> new BlockSlab(Block.Properties.from(net.minecraft.block.Blocks.OAK_SLAB)));
-    public static final RegistryObject<Block> pine_slab = BLOCKS.register(NordicNames.PINE + NordicNames.SLAB_SUFFIX, () -> new BlockSlab(Block.Properties.from(net.minecraft.block.Blocks.OAK_SLAB)));
-    public static final RegistryObject<Block> norse_metal_slab = BLOCKS.register(NordicNames.NORSE + NordicNames.METAL_SUFFIX + NordicNames.SLAB_SUFFIX, () -> new BlockSlab(AbstractBlock.Properties.from(norse_compact.get())));
+    public static final RegistryObject<Block> yew_slab = BLOCKS.register(NordicNames.YEW + NordicNames.SLAB_SUFFIX, () -> new BlockSlab(Block.Properties.copy(net.minecraft.world.level.block.Blocks.OAK_SLAB)));
+    public static final RegistryObject<Block> juniper_slab = BLOCKS.register(NordicNames.JUNIPER + NordicNames.SLAB_SUFFIX, () -> new BlockSlab(Block.Properties.copy(net.minecraft.world.level.block.Blocks.OAK_SLAB)));
+    public static final RegistryObject<Block> pine_slab = BLOCKS.register(NordicNames.PINE + NordicNames.SLAB_SUFFIX, () -> new BlockSlab(Block.Properties.copy(net.minecraft.world.level.block.Blocks.OAK_SLAB)));
+    public static final RegistryObject<Block> norse_metal_slab = BLOCKS.register(NordicNames.NORSE + NordicNames.METAL_SUFFIX + NordicNames.SLAB_SUFFIX, () -> new BlockSlab(Block.Properties.copy(norse_compact.get())));
 
     public static final RegistryObject<Block> feldspar_slab = BLOCKS.register(NordicNames.FELDSPAR + NordicNames.SLAB_SUFFIX, BlockSlab::new);
     public static final RegistryObject<Block> polish_feldspar_slab = BLOCKS.register(NordicNames.POLISHED_FELDSPAR + NordicNames.SLAB_SUFFIX, BlockSlab::new);
@@ -132,10 +132,10 @@ public class Blocks {
     public static final RegistryObject<Block> mossy_polish_feldspar_slab = BLOCKS.register(NordicNames.MOSSY_PREFIX + NordicNames.POLISHED_FELDSPAR + NordicNames.SLAB_SUFFIX, BlockSlab::new);
     public static final RegistryObject<Block> mossy_feldspar_brick_slab = BLOCKS.register(NordicNames.MOSSY_PREFIX + NordicNames.FELDSPAR_BRICK + NordicNames.SLAB_SUFFIX, BlockSlab::new);
 
-    public static final RegistryObject<Block> yew_stairs = BLOCKS.register(NordicNames.YEW + NordicNames.STAIRS_SUFFIX, () -> new BlockStairs(yew_plank.get(), Material.WOOD, SoundType.WOOD, ItemTier.WOOD.getHarvestLevel(), ToolType.AXE, 3f));
-    public static final RegistryObject<Block> juniper_stairs = BLOCKS.register(NordicNames.JUNIPER + NordicNames.STAIRS_SUFFIX, () -> new BlockStairs(juniper_plank.get(), Material.WOOD, SoundType.WOOD, ItemTier.WOOD.getHarvestLevel(), ToolType.AXE, 3f));
-    public static final RegistryObject<Block> pine_stairs = BLOCKS.register(NordicNames.PINE + NordicNames.STAIRS_SUFFIX, () -> new BlockStairs(pine_plank.get(), Material.WOOD, SoundType.WOOD, ItemTier.WOOD.getHarvestLevel(), ToolType.AXE, 3f));
-    public static final RegistryObject<Block> norse_metal_stair = BLOCKS.register(NordicNames.NORSE + NordicNames.METAL_SUFFIX + NordicNames.STAIRS_SUFFIX, () -> new BlockStairs(norse_compact.get(), Material.IRON, SoundType.METAL));
+    public static final RegistryObject<Block> yew_stairs = BLOCKS.register(NordicNames.YEW + NordicNames.STAIRS_SUFFIX, () -> new BlockStairs(yew_plank.get(), Material.WOOD, SoundType.WOOD, Tiers.WOOD.getLevel(), ToolType.AXE, 3f));
+    public static final RegistryObject<Block> juniper_stairs = BLOCKS.register(NordicNames.JUNIPER + NordicNames.STAIRS_SUFFIX, () -> new BlockStairs(juniper_plank.get(), Material.WOOD, SoundType.WOOD, Tiers.WOOD.getLevel(), ToolType.AXE, 3f));
+    public static final RegistryObject<Block> pine_stairs = BLOCKS.register(NordicNames.PINE + NordicNames.STAIRS_SUFFIX, () -> new BlockStairs(pine_plank.get(), Material.WOOD, SoundType.WOOD, Tiers.WOOD.getLevel(), ToolType.AXE, 3f));
+    public static final RegistryObject<Block> norse_metal_stair = BLOCKS.register(NordicNames.NORSE + NordicNames.METAL_SUFFIX + NordicNames.STAIRS_SUFFIX, () -> new BlockStairs(norse_compact.get(), Material.METAL, SoundType.METAL));
 
     public static final RegistryObject<Block> feldspar_stairs = BLOCKS.register(NordicNames.FELDSPAR + NordicNames.STAIRS_SUFFIX, () -> new BlockStairs(feldspar.get()));
     public static final RegistryObject<Block> polished_feldspar_stairs = BLOCKS.register(NordicNames.POLISHED_FELDSPAR + NordicNames.STAIRS_SUFFIX, () -> new BlockStairs(polished_feldspar.get()));
@@ -174,22 +174,22 @@ public class Blocks {
     public static final RegistryObject<Block> crystal_light = BLOCKS.register(NordicNames.CRYSTAL_LIGHT, () -> new BlockLamp(SidePlacement.BOTTOM_ONLY, VoxelsCrystalLight.SHAPE.get()));
     public static final RegistryObject<Block> alfheim_light = BLOCKS.register(NordicNames.ALFHEIM_LIGHT, () -> new BlockLamp(SidePlacement.NORMAL, VoxelsAlfheimLight.SHAPE.get()));
 
-    public static final RegistryObject<Block> infused_arcane_dust_compact = BLOCKS.register(NordicNames.INFUSED + NordicNames.ARCANE_DUST_COMPACT, () -> new BlockDecoration(AbstractBlock.Properties.from(arcane_dust_compact.get()), NordicResourcesItemGroup.INSTANCE));
-    public static final RegistryObject<Block> infused_norse_metal = BLOCKS.register(NordicNames.INFUSED + NordicNames.NORSE_COMPACT, () -> new BlockDecoration(AbstractBlock.Properties.from(norse_compact.get()), NordicItemGroup.INSTANCE));
-    public static final RegistryObject<Block> infused_feldspar_brick = BLOCKS.register(NordicNames.INFUSED + NordicNames.FELDSPAR_BRICK, () -> new BlockDecoration(AbstractBlock.Properties.from(feldspar_brick.get()), NordicItemGroup.INSTANCE));
+    public static final RegistryObject<Block> infused_arcane_dust_compact = BLOCKS.register(NordicNames.INFUSED + NordicNames.ARCANE_DUST_COMPACT, () -> new BlockDecoration(Block.Properties.copy(arcane_dust_compact.get()), NordicResourcesItemGroup.INSTANCE));
+    public static final RegistryObject<Block> infused_norse_metal = BLOCKS.register(NordicNames.INFUSED + NordicNames.NORSE_COMPACT, () -> new BlockDecoration(Block.Properties.copy(norse_compact.get()), NordicItemGroup.INSTANCE));
+    public static final RegistryObject<Block> infused_feldspar_brick = BLOCKS.register(NordicNames.INFUSED + NordicNames.FELDSPAR_BRICK, () -> new BlockDecoration(Block.Properties.copy(feldspar_brick.get()), NordicItemGroup.INSTANCE));
 
     public static final RegistryObject<Block> bragi_statue = BLOCKS.register(NordicNames.BRAGI_STATUE, () -> new BlockStatue(carnelian_crystal_compact.get()));
     public static final RegistryObject<Block> freya_statue = BLOCKS.register(NordicNames.FREYA_STATUE, () -> new BlockStatue(silver_metal_compact.get()));
     public static final RegistryObject<Block> hel_statue = BLOCKS.register(NordicNames.HEL_STATUE, () -> new BlockStatue(norse_compact.get()));
     public static final RegistryObject<Block> loki_statue = BLOCKS.register(NordicNames.LOKI_STATUE, () -> new BlockStatue(bismuth_metal_compact.get()));
     public static final RegistryObject<Block> njord_statue = BLOCKS.register(NordicNames.NJORD_STATUE, () -> new BlockStatue(thulite_crystal_compact.get()));
-    public static final RegistryObject<Block> odin_statue = BLOCKS.register(NordicNames.ODIN_STATUE, () -> new BlockStatue(AbstractBlock.Properties.create(Material.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD)));
+    public static final RegistryObject<Block> odin_statue = BLOCKS.register(NordicNames.ODIN_STATUE, () -> new BlockStatue(Block.Properties.of(Material.WOOD).strength(2.0F).sound(SoundType.WOOD)));
     public static final RegistryObject<Block> thor_statue = BLOCKS.register(NordicNames.THOR_STATUE, () -> new BlockStatue(steel_metal_compact.get()));
-    public static final RegistryObject<Block> tyr_statue = BLOCKS.register(NordicNames.TYR_STATUE, () -> new BlockStatue(AbstractBlock.Properties.create(Material.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD)));
+    public static final RegistryObject<Block> tyr_statue = BLOCKS.register(NordicNames.TYR_STATUE, () -> new BlockStatue(Block.Properties.of(Material.WOOD).strength(2.0F).sound(SoundType.WOOD)));
 
-    public static final RegistryObject<Block> bifrost = BLOCKS.register(NordicNames.BIFROST, () -> new BlockDecoration(Block.Properties.create(Material.ROCK, MaterialColor.ICE).sound(SoundType.STONE).hardnessAndResistance(40F, 1000F).setRequiresTool().harvestLevel(ItemTier.DIAMOND.getHarvestLevel()).harvestTool(ToolType.PICKAXE), NordicResourcesItemGroup.INSTANCE));
-    public static final RegistryObject<Block> ruined_bifrost = BLOCKS.register(NordicNames.RUINED_BIFROST, () -> new BlockDecoration(Block.Properties.create(Material.ROCK, MaterialColor.ICE).sound(SoundType.STONE).hardnessAndResistance(40F, 1000F).setRequiresTool().harvestLevel(ItemTier.DIAMOND.getHarvestLevel()).harvestTool(ToolType.PICKAXE), NordicResourcesItemGroup.INSTANCE));
+    public static final RegistryObject<Block> bifrost = BLOCKS.register(NordicNames.BIFROST, () -> new BlockDecoration(Block.Properties.of(Material.STONE, MaterialColor.ICE).sound(SoundType.STONE).strength(40F, 1000F).requiresCorrectToolForDrops().harvestLevel(Tiers.DIAMOND.getLevel()).harvestTool(ToolType.PICKAXE), NordicResourcesItemGroup.INSTANCE));
+    public static final RegistryObject<Block> ruined_bifrost = BLOCKS.register(NordicNames.RUINED_BIFROST, () -> new BlockDecoration(Block.Properties.of(Material.STONE, MaterialColor.ICE).sound(SoundType.STONE).strength(40F, 1000F).requiresCorrectToolForDrops().harvestLevel(Tiers.DIAMOND.getLevel()).harvestTool(ToolType.PICKAXE), NordicResourcesItemGroup.INSTANCE));
 
-    public static final RegistryObject<FlowingFluidBlock> liquid_arcanum = BLOCKS.register(NordicNames.LIQUID_ARCANUM, () -> new FlowingFluidBlock(() -> (FlowingFluid) Fluids.liquid_arcanum.get(), getFluidProperties()));
+    public static final RegistryObject<LiquidBlock> liquid_arcanum = BLOCKS.register(NordicNames.LIQUID_ARCANUM, () -> new LiquidBlock(() -> (FlowingFluid) Fluids.liquid_arcanum.get(), getFluidProperties()));
 
 }

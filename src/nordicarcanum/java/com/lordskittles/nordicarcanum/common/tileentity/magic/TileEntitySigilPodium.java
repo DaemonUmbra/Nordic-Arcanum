@@ -6,32 +6,26 @@ import com.lordskittles.nordicarcanum.common.item.magic.ItemSigil;
 import com.lordskittles.nordicarcanum.common.registry.Sounds;
 import com.lordskittles.nordicarcanum.common.registry.TileEntities;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.AirItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.item.AirItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 
-public class TileEntitySigilPodium extends TileEntity implements ITickableTileEntity {
+public class TileEntitySigilPodium extends BlockEntity /*implements TickableBlockEntity*/ {
 
     private ItemStack heldSigil = ItemStack.EMPTY;
     protected int ticksExisted = 0;
 
-    public TileEntitySigilPodium(TileEntityType<?> type) {
+    public TileEntitySigilPodium(BlockPos pos, BlockState state) {
 
-        super(type);
-    }
-
-    public TileEntitySigilPodium() {
-
-        super(TileEntities.sigil_podium.get());
+        super(TileEntities.sigil_podium.get(), pos, state);
     }
 
     public ItemStack getHeldSigil() {
@@ -52,7 +46,7 @@ public class TileEntitySigilPodium extends TileEntity implements ITickableTileEn
     public ItemStack setHeldSigil(ItemStack sigil) {
 
         if(this.heldSigil == ItemStack.EMPTY) {
-            Sounds.play(SoundEvents.ENTITY_ITEM_PICKUP, this.world, this.pos, 0.5f);
+            Sounds.play(SoundEvents.ITEM_PICKUP, this.level, this.getBlockPos(), 0.5f);
             this.heldSigil = sigil;
             return ItemStack.EMPTY;
         }
@@ -75,60 +69,60 @@ public class TileEntitySigilPodium extends TileEntity implements ITickableTileEn
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet) {
 
         ItemStack stack = this.heldSigil;
-        CompoundNBT nbt = packet.getNbtCompound();
+        CompoundTag nbt = packet.getTag();
         super.onDataPacket(net, packet);
-        read(getBlockState(), nbt);
+        load(nbt);
 
-        if(this.world != null && this.world.isRemote) {
+        if(this.level != null && this.level.isClientSide) {
             if(! this.heldSigil.equals(stack)) {
-                this.world.markChunkDirty(getPos(), this.getTileEntity());
+                this.level.blockEntityChanged(getBlockPos());
             }
         }
     }
 
     @Nullable
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
 
-        CompoundNBT nbt = new CompoundNBT();
-        write(nbt);
-        return new SUpdateTileEntityPacket(getPos(), 1, nbt);
+        CompoundTag nbt = new CompoundTag();
+        save(nbt);
+        return new ClientboundBlockEntityDataPacket(getBlockPos(), 1, nbt);
     }
 
     @Override
-    public CompoundNBT getUpdateTag() {
+    public CompoundTag getUpdateTag() {
 
-        CompoundNBT nbt = super.getUpdateTag();
-        write(nbt);
+        CompoundTag nbt = super.getUpdateTag();
+        save(nbt);
         return nbt;
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
+    public CompoundTag save(CompoundTag compound) {
 
-        super.write(compound);
+        super.save(compound);
 
-        this.heldSigil.write(NBTUtilities.getPersistentData(NordicArcanum.MODID, compound));
+        this.heldSigil.save(NBTUtilities.getPersistentData(NordicArcanum.MODID, compound));
 
         return compound;
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT compound) {
+    public void load(CompoundTag compound) {
 
-        super.read(state, compound);
+        super.load(compound);
 
-        this.heldSigil = ItemStack.read(NBTUtilities.getPersistentData(NordicArcanum.MODID, compound));
+        this.heldSigil = ItemStack.of(NBTUtilities.getPersistentData(NordicArcanum.MODID, compound));
     }
 
-    @Override
-    public void tick() {
-
-        ticksExisted++;
-    }
+//    @Override
+//    public void tick() {
+//
+//        ticksExisted++;
+//    }
 
     public int getTicksExisted() {
 

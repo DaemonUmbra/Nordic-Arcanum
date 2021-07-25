@@ -12,15 +12,15 @@ import com.lordskittles.nordicarcanum.magic.schools.MagicSchool;
 import com.lordskittles.nordicarcanum.client.itemgroups.NordicItemGroup;
 import com.lordskittles.nordicarcanum.common.advancements.Advancements;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
@@ -33,12 +33,12 @@ public class ItemSigil extends ItemMod {
 
     public ItemSigil() {
 
-        super(new Item.Properties().group(NordicItemGroup.INSTANCE).maxStackSize(1));
+        super(new Item.Properties().tab(NordicItemGroup.INSTANCE).stacksTo(1));
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 
         IMagicSchool school = getSchool(stack);
 
@@ -49,20 +49,20 @@ public class ItemSigil extends ItemMod {
             tooltip.add(IMagicSchool.getUndiscoveredText());
         }
 
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
+    public void inventoryTick(ItemStack stack, Level world, Entity entity, int itemSlot, boolean isSelected) {
 
-        if(world.isRemote || ! (entity instanceof PlayerEntity))
+        if(world.isClientSide || ! (entity instanceof Player))
             return;
 
-        PlayerEntity player = (PlayerEntity) entity;
+        Player player = (Player) entity;
 
         IMagicSchool school = getSchool(stack);
         if(school == null) {
-            PlayerProgress progress = ProgressionHelper.getProgress((PlayerEntity) entity, LogicalSide.SERVER);
+            PlayerProgress progress = ProgressionHelper.getProgress((Player) entity, LogicalSide.SERVER);
 
             List<MagicSchool> schools = new ArrayList<>(MagicSchools.getIdSchools());
 
@@ -73,16 +73,16 @@ public class ItemSigil extends ItemMod {
                 }
             }
 
-            MagicSchool newSchool = MiscUtilities.getRandomEntry(schools, world.rand);
+            MagicSchool newSchool = MiscUtilities.getRandomEntry(schools, world.getRandom());
             if(newSchool != null) {
                 setSchool(stack, newSchool);
                 ProgressionManager.learnSchool(newSchool, player);
 
-                if(player instanceof ServerPlayerEntity) {
-                    Advancements.sigil_found.trigger((ServerPlayerEntity) player);
+                if(player instanceof ServerPlayer) {
+                    Advancements.sigil_found.trigger((ServerPlayer) player);
                 }
 
-                player.sendStatusMessage(IMagicSchool.getDiscoveredChatMessage(newSchool), true);
+                player.displayClientMessage(IMagicSchool.getDiscoveredChatMessage(newSchool), true);
             }
         }
 
@@ -96,6 +96,6 @@ public class ItemSigil extends ItemMod {
 
     public void setSchool(ItemStack stack, IMagicSchool school) {
 
-        school.writeToNBT(NBTUtilities.getPersistentData(NordicArcanum.MODID, stack));
+        school.save(NBTUtilities.getPersistentData(NordicArcanum.MODID, stack));
     }
 }

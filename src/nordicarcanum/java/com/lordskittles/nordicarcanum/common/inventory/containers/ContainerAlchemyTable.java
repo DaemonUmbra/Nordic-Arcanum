@@ -5,17 +5,17 @@ import com.lordskittles.nordicarcanum.common.registry.Containers;
 import com.lordskittles.nordicarcanum.common.tileentity.crafting.TileEntityAlchemyTable;
 import com.lordskittles.nordicarcanum.core.NordicInventorySlots;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.util.Objects;
 
 public class ContainerAlchemyTable extends ContainerBase<TileEntityAlchemyTable> {
 
-    public ContainerAlchemyTable(final int windowId, final PlayerInventory playerInventory, final TileEntityAlchemyTable tile) {
+    public ContainerAlchemyTable(final int windowId, final Inventory playerInventory, final TileEntityAlchemyTable tile) {
 
         super(Containers.alchemy_table.get(), NordicInventorySlots.ALCHEMY_TABLE, windowId, playerInventory, tile);
 
@@ -23,17 +23,17 @@ public class ContainerAlchemyTable extends ContainerBase<TileEntityAlchemyTable>
         generatePlayerInventoryHotbar(playerInventory, 8, 142);
     }
 
-    public ContainerAlchemyTable(final int windowId, final PlayerInventory playerInventory, final PacketBuffer packetBuffer) {
+    public ContainerAlchemyTable(final int windowId, final Inventory playerInventory, final FriendlyByteBuf packetBuffer) {
 
         this(windowId, playerInventory, getTileEntity(playerInventory, packetBuffer));
     }
 
-    private static TileEntityAlchemyTable getTileEntity(final PlayerInventory playerInventory, final PacketBuffer packetBuffer) {
+    private static TileEntityAlchemyTable getTileEntity(final Inventory playerInventory, final FriendlyByteBuf packetBuffer) {
 
         Objects.requireNonNull(playerInventory, "PlayerInventory cannot be null");
         Objects.requireNonNull(packetBuffer, "Data cannot be null");
 
-        final TileEntity tileAtPos = playerInventory.player.world.getTileEntity(packetBuffer.readBlockPos());
+        final BlockEntity tileAtPos = playerInventory.player.world.getTileEntity(packetBuffer.readBlockPos());
         if(tileAtPos instanceof TileEntityAlchemyTable) {
             return (TileEntityAlchemyTable) tileAtPos;
         }

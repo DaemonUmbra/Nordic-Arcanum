@@ -4,9 +4,9 @@ import com.lordskittles.arcanumapi.common.math.UVInt;
 import com.lordskittles.arcanumapi.common.math.Vector2Int;
 import com.lordskittles.arcanumapi.common.utilities.MultiFunction;
 import com.lordskittles.arcanumapi.common.utilities.VoidFunction;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 public class Tab {
 
@@ -23,12 +23,12 @@ public class Tab {
     protected final ResourceLocation texture;
     protected final Minecraft minecraft;
 
-    private final MultiFunction<MatrixStack, Integer, Integer, Integer, Integer, Integer, Integer> blit;
+    private final MultiFunction<PoseStack, Integer, Integer, Integer, Integer, Integer, Integer> blit;
     private final VoidFunction<ResourceLocation, Minecraft> applyTexture;
 
     private final GUISide side;
 
-    public Tab(boolean active, GUISide side, int index, Vector2Int pos, UVInt inactiveUV, UVInt activeUV, Vector2Int inactiveSize, Vector2Int activeSize, ResourceLocation textureLoc, Minecraft minecraft, MultiFunction<MatrixStack, Integer, Integer, Integer, Integer, Integer, Integer> blit, VoidFunction<ResourceLocation, Minecraft> applyTexture) {
+    public Tab(boolean active, GUISide side, int index, Vector2Int pos, UVInt inactiveUV, UVInt activeUV, Vector2Int inactiveSize, Vector2Int activeSize, ResourceLocation textureLoc, Minecraft minecraft, MultiFunction<PoseStack, Integer, Integer, Integer, Integer, Integer, Integer> blit, VoidFunction<ResourceLocation, Minecraft> applyTexture) {
 
         this.active = active;
         this.side = side;
@@ -48,7 +48,7 @@ public class Tab {
         this.applyTexture = applyTexture;
     }
 
-    public void draw(MatrixStack matrixStack) {
+    public void draw(PoseStack matrixStack) {
 
         this.applyTexture.apply(this.texture, this.minecraft);
 

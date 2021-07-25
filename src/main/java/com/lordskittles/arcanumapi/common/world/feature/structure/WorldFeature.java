@@ -1,37 +1,39 @@
 package com.lordskittles.arcanumapi.common.world.feature.structure;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.block.*;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.tileentity.ChestTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public abstract class WorldFeature<T extends IFeatureConfig> extends Feature<T> {
+public abstract class WorldFeature<T extends FeatureConfiguration> extends Feature<T> {
 
     protected enum TransformDirection {
         Forward,
         Right
     }
 
-    protected IWorld world;
+    protected LevelAccessor world;
     protected Random random;
     protected T config;
-    protected final MutableBoundingBox bounds;
+    protected final BoundingBox bounds;
     protected int rotation = 0;
 
-    public WorldFeature(Codec<T> configFactory, MutableBoundingBox bounds) {
+    public WorldFeature(Codec<T> configFactory, BoundingBox bounds) {
 
         super(configFactory);
 
@@ -39,17 +41,17 @@ public abstract class WorldFeature<T extends IFeatureConfig> extends Feature<T> 
     }
 
     @Override
-    public boolean generate(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, T config) {
+    public boolean place(FeaturePlaceContext<T> context) {
 
         this.world = world;
-        this.random = rand;
+        this.random = context.random();
         this.config = config;
-        this.rotation = rand.nextInt(3);
+        this.rotation = random.nextInt(3);
 
-        if(! validBounds(pos) || isFluid(pos.down()))
+        if(! validBounds(context.origin()) || isFluid(context.origin().below()))
             return false;
 
-        return place(pos, generator);
+        return place(context.origin(), context.chunkGenerator());
     }
 
     protected BlockState transformStairState(BlockState state, DirectionProperty property, Direction defaultDir) {
@@ -57,28 +59,28 @@ public abstract class WorldFeature<T extends IFeatureConfig> extends Feature<T> 
         switch(this.rotation) {
             case 0:
                 if(defaultDir == Direction.NORTH)
-                    return state.with(property, Direction.WEST);
+                    return state.setValue(property, Direction.WEST);
                 else
                     if(defaultDir == Direction.EAST)
-                        return state.with(property, Direction.SOUTH);
+                        return state.setValue(property, Direction.SOUTH);
             case 1:
                 if(defaultDir == Direction.NORTH)
-                    return state.with(property, Direction.NORTH);
+                    return state.setValue(property, Direction.NORTH);
                 else
                     if(defaultDir == Direction.EAST)
-                        return state.with(property, Direction.WEST);
+                        return state.setValue(property, Direction.WEST);
             case 2:
                 if(defaultDir == Direction.NORTH)
-                    return state.with(property, Direction.EAST);
+                    return state.setValue(property, Direction.EAST);
                 else
                     if(defaultDir == Direction.EAST)
-                        return state.with(property, Direction.NORTH);
+                        return state.setValue(property, Direction.NORTH);
             case 3:
                 if(defaultDir == Direction.NORTH)
-                    return state.with(property, Direction.SOUTH);
+                    return state.setValue(property, Direction.SOUTH);
                 else
                     if(defaultDir == Direction.EAST)
-                        return state.with(property, Direction.EAST);
+                        return state.setValue(property, Direction.EAST);
         }
 
         return state;
@@ -120,9 +122,9 @@ public abstract class WorldFeature<T extends IFeatureConfig> extends Feature<T> 
 
     protected boolean validBounds(BlockPos start) {
 
-        for(int x = bounds.minX; x < bounds.maxX; x++) {
-            for(int y = bounds.minY; y < bounds.maxY; y++) {
-                for(int z = bounds.minZ; z < bounds.maxZ; z++) {
+        for(int x = bounds.minX(); x < bounds.maxX(); x++) {
+            for(int y = bounds.minZ(); y < bounds.maxY(); y++) {
+                for(int z = bounds.minZ(); z < bounds.maxZ(); z++) {
                     BlockPos pos = new BlockPos(start.getX() + x, start.getY() + y, start.getZ() + z);
                     if(! isReplaceable(pos))
                         return false;
@@ -130,7 +132,7 @@ public abstract class WorldFeature<T extends IFeatureConfig> extends Feature<T> 
             }
         }
 
-        BlockPos downStart = start.down();
+        BlockPos downStart = start.below();
 
         if(! isGrassOrDirt(downStart) && ! isGravelOrSand(downStart) && ! isStone(downStart))
             return false;
@@ -151,13 +153,13 @@ public abstract class WorldFeature<T extends IFeatureConfig> extends Feature<T> 
 
         if(isReplaceable(pos)) {
             if(state == null) {
-                state = Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, Direction.NORTH);
+                state = Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
             }
 
-            this.world.setBlockState(pos, state, 2);
-            TileEntity tile = this.world.getTileEntity(pos);
-            if(tile instanceof ChestTileEntity) {
-                ((ChestTileEntity) tile).setLootTable(lootTable, random.nextLong());
+            this.world.setBlock(pos, state, 2);
+            BlockEntity tile = this.world.getBlockEntity(pos);
+            if(tile instanceof ChestBlockEntity) {
+                ((ChestBlockEntity) tile).setLootTable(lootTable, random.nextLong());
             }
 
             return true;
@@ -168,14 +170,14 @@ public abstract class WorldFeature<T extends IFeatureConfig> extends Feature<T> 
 
     protected boolean isFluid(BlockPos pos) {
 
-        return this.world.getBlockState(pos).getBlock() instanceof FlowingFluidBlock;
+        return this.world.getBlockState(pos).getBlock() instanceof LiquidBlock;
     }
 
     protected boolean isReplaceable(BlockPos pos) {
 
         BlockState state = this.world.getBlockState(pos);
 
-        return state.getBlock() instanceof LeavesBlock || state == Blocks.AIR.getDefaultState() || state.getBlock() instanceof BushBlock ||
+        return state.getBlock() instanceof LeavesBlock || state == Blocks.AIR.defaultBlockState() || state.getBlock() instanceof BushBlock ||
                isStone(pos) || isGrassOrDirt(pos) || isGravelOrSand(pos) || isSnow(pos);
     }
 
@@ -183,7 +185,7 @@ public abstract class WorldFeature<T extends IFeatureConfig> extends Feature<T> 
 
         BlockState state = this.world.getBlockState(pos);
 
-        return state.getBlock() instanceof LeavesBlock || state == Blocks.AIR.getDefaultState();
+        return state.getBlock() instanceof LeavesBlock || state == Blocks.AIR.defaultBlockState();
     }
 
     protected boolean isTallPlant(BlockPos pos) {
@@ -195,24 +197,24 @@ public abstract class WorldFeature<T extends IFeatureConfig> extends Feature<T> 
 
     protected boolean isGrassOrDirt(BlockPos pos) {
 
-        return this.world.getBlockState(pos) == Blocks.GRASS_BLOCK.getDefaultState() || this.world.getBlockState(pos) == Blocks.DIRT.getDefaultState() ||
-               this.world.getBlockState(pos) == Blocks.COARSE_DIRT.getDefaultState();
+        return this.world.getBlockState(pos) == Blocks.GRASS_BLOCK.defaultBlockState() || this.world.getBlockState(pos) == Blocks.DIRT.defaultBlockState() ||
+               this.world.getBlockState(pos) == Blocks.COARSE_DIRT.defaultBlockState();
     }
 
     protected boolean isStone(BlockPos pos) {
 
-        return this.world.getBlockState(pos) == Blocks.STONE.getDefaultState() || this.world.getBlockState(pos) == Blocks.ANDESITE.getDefaultState() ||
-               this.world.getBlockState(pos) == Blocks.DIORITE.getDefaultState() || this.world.getBlockState(pos) == Blocks.GRANITE.getDefaultState() ||
-               this.world.getBlockState(pos) == Blocks.SANDSTONE.getDefaultState();
+        return this.world.getBlockState(pos) == Blocks.STONE.defaultBlockState() || this.world.getBlockState(pos) == Blocks.ANDESITE.defaultBlockState() ||
+               this.world.getBlockState(pos) == Blocks.DIORITE.defaultBlockState() || this.world.getBlockState(pos) == Blocks.GRANITE.defaultBlockState() ||
+               this.world.getBlockState(pos) == Blocks.SANDSTONE.defaultBlockState();
     }
 
     protected boolean isGravelOrSand(BlockPos pos) {
 
-        return this.world.getBlockState(pos) == Blocks.GRAVEL.getDefaultState() || this.world.getBlockState(pos) == Blocks.SAND.getDefaultState();
+        return this.world.getBlockState(pos) == Blocks.GRAVEL.defaultBlockState() || this.world.getBlockState(pos) == Blocks.SAND.defaultBlockState();
     }
 
     protected boolean isSnow(BlockPos pos) {
 
-        return this.world.getBlockState(pos) == Blocks.SNOW.getDefaultState() || this.world.getBlockState(pos) == Blocks.SNOW_BLOCK.getDefaultState();
+        return this.world.getBlockState(pos) == Blocks.SNOW.defaultBlockState() || this.world.getBlockState(pos) == Blocks.SNOW_BLOCK.defaultBlockState();
     }
 }

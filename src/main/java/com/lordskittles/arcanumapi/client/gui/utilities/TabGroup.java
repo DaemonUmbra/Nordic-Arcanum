@@ -3,9 +3,9 @@ package com.lordskittles.arcanumapi.client.gui.utilities;
 import com.lordskittles.arcanumapi.common.math.UVInt;
 import com.lordskittles.arcanumapi.common.math.Vector2Int;
 import com.lordskittles.arcanumapi.common.utilities.MultiFunction;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +24,9 @@ public class TabGroup {
 
     private final ResourceLocation texture;
     private final Minecraft minecraft;
-    private final MultiFunction<MatrixStack, Integer, Integer, Integer, Integer, Integer, Integer> blit;
+    private final MultiFunction<PoseStack, Integer, Integer, Integer, Integer, Integer, Integer> blit;
 
-    public TabGroup(Vector2Int startPos, UVInt inactiveUV, UVInt activeUV, Vector2Int activeSize, Vector2Int inactiveSize, ResourceLocation texture, Minecraft minecraft, MultiFunction<MatrixStack, Integer, Integer, Integer, Integer, Integer, Integer> blit) {
+    public TabGroup(Vector2Int startPos, UVInt inactiveUV, UVInt activeUV, Vector2Int activeSize, Vector2Int inactiveSize, ResourceLocation texture, Minecraft minecraft, MultiFunction<PoseStack, Integer, Integer, Integer, Integer, Integer, Integer> blit) {
 
         this.startPos = startPos;
         this.inactiveUV = inactiveUV;
@@ -60,7 +60,7 @@ public class TabGroup {
                     this.texture,
                     this.minecraft,
                     this.blit,
-                    (location, minecraft) -> minecraft.getTextureManager().bindTexture(this.texture)
+                    (location, minecraft) -> minecraft.getTextureManager().bindForSetup(this.texture)
             )));
 
             switch(side) {
@@ -82,7 +82,7 @@ public class TabGroup {
         this.activeIndex = startActive;
     }
 
-    public void draw(MatrixStack matrixStack) {
+    public void draw(PoseStack matrixStack) {
 
         for(Tab tab : this.tabs) {
             tab.draw(matrixStack);

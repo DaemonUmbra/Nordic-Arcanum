@@ -17,19 +17,19 @@ import com.lordskittles.nordicarcanum.core.NordicNames;
 import com.lordskittles.nordicarcanum.core.NordicResourceLocations;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.INestedGuiEventHandler;
-import net.minecraft.client.renderer.Rectangle2d;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.components.events.ContainerEventHandler;
+import net.minecraft.client.renderer.Rect2i;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContainerScreenAttunementAltar extends ContainerScreenBase<ContainerAttunementAltar> implements INestedGuiEventHandler {
+public class ContainerScreenAttunementAltar extends ContainerScreenBase<ContainerAttunementAltar> implements ContainerEventHandler {
 
     public TileEntityAttunementAltar Tile;
 
@@ -38,14 +38,14 @@ public class ContainerScreenAttunementAltar extends ContainerScreenBase<Containe
     private List<MagicSchool> schools = new ArrayList<>();
 
     private final ResourceLocation backgroundTexture = NordicArcanum.RL("textures/gui/attunement_altar_background.png");
-    private final Rectangle2d bgRect = new Rectangle2d(4, 24, 204, 174);
+    private final Rect2i bgRect = new Rect2i(4, 24, 204, 174);
 
     private float scale = 1f;
     private Vector2Int position = new Vector2Int(0, 0);
 
     private TabGroup group;
 
-    public ContainerScreenAttunementAltar(ContainerAttunementAltar container, PlayerInventory inventory, ITextComponent title) {
+    public ContainerScreenAttunementAltar(ContainerAttunementAltar container, Inventory inventory, Component title) {
 
         super(NordicArcanum.MODID, NordicNames.ATTUNEMENT_ALTAR, container, inventory, title);
 
@@ -59,7 +59,7 @@ public class ContainerScreenAttunementAltar extends ContainerScreenBase<Containe
     public boolean mouseScrolled(double p_mouseScrolled_1_, double p_mouseScrolled_3_, double p_mouseScrolled_5_) {
 
         this.scale += p_mouseScrolled_5_ * 0.25f;
-        this.scale = MathHelper.clamp(this.scale, 0.25f, 1.5f);
+        this.scale = Mth.clamp(this.scale, 0.25f, 1.5f);
 
         return super.mouseScrolled(p_mouseScrolled_1_, p_mouseScrolled_3_, p_mouseScrolled_5_);
     }

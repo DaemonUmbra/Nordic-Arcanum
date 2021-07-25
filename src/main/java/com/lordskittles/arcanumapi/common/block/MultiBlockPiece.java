@@ -1,8 +1,8 @@
 package com.lordskittles.arcanumapi.common.block;
 
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.StringRepresentable;
 
-public enum MultiBlockPiece implements IStringSerializable {
+public enum MultiBlockPiece implements StringRepresentable {
     BOTTOM_LEFT("bot_left"),
     BOTTOM_RIGHT("bot_right"),
     TOP_LEFT("top_left"),
@@ -16,7 +16,7 @@ public enum MultiBlockPiece implements IStringSerializable {
     }
 
     @Override
-    public String getString() {
+    public String getSerializedName() {
 
         return name;
     }

@@ -5,15 +5,16 @@ import com.lordskittles.arcanumapi.common.network.PacketBase;
 import com.lordskittles.arcanumapi.common.network.PacketFluidUpdate;
 import com.lordskittles.arcanumapi.common.utilities.MathUtilities;
 import com.lordskittles.arcanumapi.core.ArcanumAPI;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
@@ -36,9 +37,9 @@ public abstract class TileEntityFluidInventory<T extends TileEntityFluidInventor
 
     private boolean needsPacket = false;
 
-    public TileEntityFluidInventory(TileEntityType<?> tileEntityTypeIn) {
+    public TileEntityFluidInventory(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state) {
 
-        super(tileEntityTypeIn);
+        super(tileEntityTypeIn, pos, state);
     }
 
     public FluidStack getFluid() {
@@ -56,7 +57,7 @@ public abstract class TileEntityFluidInventory<T extends TileEntityFluidInventor
         return 0;
     }
 
-    public boolean canRetainInventory(PlayerEntity player) {
+    public boolean canRetainInventory(Player player) {
 
         return false;
     }
@@ -76,12 +77,12 @@ public abstract class TileEntityFluidInventory<T extends TileEntityFluidInventor
         return super.getCapability(cap, side);
     }
 
-    private void shrinkHand(PlayerEntity player) {
+    private void shrinkHand(Player player) {
 
-        ItemStack heldItem = player.inventory.mainInventory.get(player.inventory.currentItem);
+        ItemStack heldItem = player.getInventory().items.get(player.getInventory().selected);
         heldItem.shrink(1);
 
-        player.setItemStackToSlot(EquipmentSlotType.MAINHAND, heldItem);
+        player.setItemSlot(EquipmentSlot.MAINHAND, heldItem);
     }
 
     public abstract int getCapacity();
@@ -112,25 +113,25 @@ public abstract class TileEntityFluidInventory<T extends TileEntityFluidInventor
 
     @Nullable
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
 
-        CompoundNBT nbt = new CompoundNBT();
-        write(nbt);
-        return new SUpdateTileEntityPacket(getPos(), 1, nbt);
+        CompoundTag nbt = new CompoundTag();
+        save(nbt);
+        return new ClientboundBlockEntityDataPacket(getBlockPos(), 1, nbt);
     }
 
     @Override
-    public CompoundNBT getUpdateTag() {
+    public CompoundTag getUpdateTag() {
 
-        CompoundNBT nbt = super.getUpdateTag();
-        write(nbt);
+        CompoundTag nbt = super.getUpdateTag();
+        save(nbt);
         return nbt;
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
+    public CompoundTag save(CompoundTag compound) {
 
-        super.write(compound);
+        super.save(compound);
 
         this.tank.writeToNBT(compound);
 
@@ -138,17 +139,17 @@ public abstract class TileEntityFluidInventory<T extends TileEntityFluidInventor
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT compound) {
+    public void load(CompoundTag compound) {
 
-        super.read(state, compound);
+        super.load(compound);
 
         this.tank.readFromNBT(compound);
     }
 
-    public void handleScaleUpdate(CompoundNBT nbt, float scale) {
+    public void handleScaleUpdate(CompoundTag nbt, float scale) {
 
         this.prevScale = scale;
-        handleUpdateTag(getBlockState(), nbt);
+        handleUpdateTag(nbt);
     }
 
     public void sendUpdatePacket() {
@@ -156,9 +157,9 @@ public abstract class TileEntityFluidInventory<T extends TileEntityFluidInventor
         sendUpdatePacket(this);
     }
 
-    public void sendUpdatePacket(TileEntity tracking) {
+    public void sendUpdatePacket(BlockEntity tracking) {
 
-        if(this.world.isRemote) {
+        if(this.level.isClientSide) {
             ArcanumAPI.LOG.warn("Update packet call requested from client side", new Exception());
         }
         else
@@ -170,5 +171,5 @@ public abstract class TileEntityFluidInventory<T extends TileEntityFluidInventor
             }
     }
 
-    protected abstract void sendPacket(PacketBase packet, TileEntity tracking);
+    protected abstract void sendPacket(PacketBase packet, BlockEntity tracking);
 }

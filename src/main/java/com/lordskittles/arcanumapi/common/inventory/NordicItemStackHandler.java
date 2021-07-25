@@ -1,21 +1,21 @@
 package com.lordskittles.arcanumapi.common.inventory;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 
 public class NordicItemStackHandler extends ItemStackHandler {
 
-    protected final TileEntity tile;
+    protected final BlockEntity tile;
 
     public NordicItemStackHandler(int size) {
 
         this(null, size);
     }
 
-    public NordicItemStackHandler(TileEntity tile, int size) {
+    public NordicItemStackHandler(BlockEntity tile, int size) {
 
         super(size);
         this.tile = tile;
@@ -26,7 +26,7 @@ public class NordicItemStackHandler extends ItemStackHandler {
 
         super.onContentsChanged(slot);
         if(this.tile != null)
-            this.tile.markDirty();
+            this.tile.setChanged();
     }
 
     @Nonnull

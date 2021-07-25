@@ -13,13 +13,13 @@ import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResultType;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import java.util.Objects;
 
@@ -32,15 +32,15 @@ public class ItemVikingSaw extends ItemMod {
         super(NordicItemGroup.INSTANCE);
     }
 
-    private VikingSawRecipe getRecipe(ItemStack input, World world) {
+    private VikingSawRecipe getRecipe(ItemStack input, Level world) {
 
         return RecipeType.viking_saw.findFirst(world, recipe -> recipe.matches(input));
     }
 
     @Override
-    public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
+    public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
 
-        World world = context.getWorld();
+        Level world = context.getWorld();
         BlockPos pos = context.getPos();
         PlayerEntity player = context.getPlayer();
         BlockState state = world.getBlockState(pos);

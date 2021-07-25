@@ -3,18 +3,18 @@ package com.lordskittles.nordicarcanum.common.particle;
 import com.lordskittles.arcanumapi.client.render.ArcaneRenderer;
 import com.lordskittles.arcanumapi.common.utilities.MathUtilities;
 import net.minecraft.client.particle.*;
-import net.minecraft.client.world.ClientWorld;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class TransformSparkleParticle extends SpriteTexturedParticle {
+public class TransformSparkleParticle extends TextureSheetParticle {
 
     private final double coordX;
     private final double coordY;
     private final double coordZ;
 
-    protected TransformSparkleParticle(ClientWorld world, double x, double y, double z, double motionX, double motionY, double motionZ, float red, float green, float blue, float alpha) {
+    protected TransformSparkleParticle(ClientLevel world, double x, double y, double z, double motionX, double motionY, double motionZ, float red, float green, float blue, float alpha) {
 
         super(world, x, y, z);
         this.motionX = motionX;

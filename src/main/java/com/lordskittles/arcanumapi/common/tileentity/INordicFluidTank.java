@@ -1,8 +1,7 @@
 package com.lordskittles.arcanumapi.common.tileentity;
 
 import com.lordskittles.arcanumapi.core.NBTConstants;
-import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
@@ -11,8 +10,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
-public interface INordicFluidTank extends IFluidTank, INBTSerializable<CompoundNBT> {
+public interface INordicFluidTank extends IFluidTank, INBTSerializable<CompoundTag> {
 
     void setStack(FluidStack stack);
 
@@ -139,11 +137,11 @@ public interface INordicFluidTank extends IFluidTank, INBTSerializable<CompoundN
     }
 
     @Override
-    default CompoundNBT serializeNBT() {
+    default CompoundTag serializeNBT() {
 
-        CompoundNBT nbt = new CompoundNBT();
+        CompoundTag nbt = new CompoundTag();
         if(! isEmpty()) {
-            nbt.put(NBTConstants.STORED, getFluid().writeToNBT(new CompoundNBT()));
+            nbt.put(NBTConstants.STORED, getFluid().writeToNBT(new CompoundTag()));
         }
 
         return nbt;

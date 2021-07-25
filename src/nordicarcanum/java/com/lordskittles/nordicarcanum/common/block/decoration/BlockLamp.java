@@ -4,7 +4,7 @@ import com.lordskittles.arcanumapi.common.block.BlockMod;
 import com.lordskittles.nordicarcanum.client.itemgroups.NordicDecorationItemGroup;
 import com.lordskittles.nordicarcanum.client.itemgroups.NordicItemGroup;
 import com.lordskittles.nordicarcanum.common.block.SidePlacement;
-import net.minecraft.block.AbstractBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
@@ -12,7 +12,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
@@ -24,7 +24,7 @@ public class BlockLamp extends BlockMod {
 
     public BlockLamp(SidePlacement placement, VoxelShape shape) {
 
-        super(AbstractBlock.Properties.create(Material.GLASS)
+        super(BlockBehaviour.Properties.create(Material.GLASS)
                 .hardnessAndResistance(0.3F)
                 .sound(SoundType.GLASS), 15);
 

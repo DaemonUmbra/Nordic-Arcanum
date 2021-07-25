@@ -5,17 +5,17 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.model.Model;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.model.Model;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nonnull;
 
 public class ModelArcaneChest extends Model {
 
-    private final ModelRenderer lid;
-    private final ModelRenderer lock;
-    private final ModelRenderer bottom;
+    private final ModelPart lid;
+    private final ModelPart lock;
+    private final ModelPart bottom;
 
     private float lidAngle;
 

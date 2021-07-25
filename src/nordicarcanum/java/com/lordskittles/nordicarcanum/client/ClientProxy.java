@@ -1,7 +1,6 @@
 package com.lordskittles.nordicarcanum.client;
 
 import com.lordskittles.arcanumapi.client.render.item.ItemModelWrapper;
-import com.lordskittles.nordicarcanum.magic.schools.IMagicSchool;
 import com.lordskittles.nordicarcanum.client.gui.container.*;
 import com.lordskittles.nordicarcanum.client.render.block.model.CraftingClothModel;
 import com.lordskittles.nordicarcanum.client.render.item.*;
@@ -14,23 +13,17 @@ import com.lordskittles.nordicarcanum.common.registry.*;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.lordskittles.nordicarcanum.core.NordicNames;
 import com.lordskittles.nordicarcanum.core.NordicResourceLocations;
+import com.lordskittles.nordicarcanum.magic.schools.IMagicSchool;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.IItemPropertyGetter;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemModelsProperties;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
@@ -53,20 +46,20 @@ public class ClientProxy {
 
         registerGuiFactories();
 
-        RenderTypeLookup.setRenderLayer(Blocks.yew_sapling.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(Blocks.pine_sapling.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(Blocks.juniper_sapling.get(), RenderType.getCutout());
+        ItemBlockRenderTypes.setRenderLayer(Blocks.yew_sapling.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(Blocks.pine_sapling.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(Blocks.juniper_sapling.get(), RenderType.cutout());
 
-        RenderTypeLookup.setRenderLayer(Blocks.yew_door.get(), RenderType.getTranslucent());
-        RenderTypeLookup.setRenderLayer(Fluids.liquid_arcanum.get(), RenderType.getTranslucent());
-        RenderTypeLookup.setRenderLayer(Fluids.liquid_arcanum_flowing.get(), RenderType.getTranslucent());
-        RenderTypeLookup.setRenderLayer(Blocks.arcane_glass.get(), RenderType.getTranslucent());
-        RenderTypeLookup.setRenderLayer(Blocks.arcane_tank.get(), RenderType.getTranslucent());
-        RenderTypeLookup.setRenderLayer(Blocks.alchemy_table.get(), RenderType.getTranslucent());
-        RenderTypeLookup.setRenderLayer(Blocks.staff_workbench.get(), RenderType.getTranslucent());
+        ItemBlockRenderTypes.setRenderLayer(Blocks.yew_door.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(Fluids.liquid_arcanum.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(Fluids.liquid_arcanum_flowing.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(Blocks.arcane_glass.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(Blocks.arcane_tank.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(Blocks.alchemy_table.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(Blocks.staff_workbench.get(), RenderType.translucent());
 
-        RenderTypeLookup.setRenderLayer(Blocks.crafting_cloth.get(), (layer) ->
-                layer == RenderType.getCutout() || layer == RenderType.getTranslucent());
+        ItemBlockRenderTypes.setRenderLayer(Blocks.crafting_cloth.get(), (layer) ->
+                layer == RenderType.cutout() || layer == RenderType.translucent());
 
         ((BlockCraftingCloth) Blocks.crafting_cloth.get()).initColorHandler(Minecraft.getInstance().getBlockColors());
 
@@ -78,7 +71,7 @@ public class ClientProxy {
     @SubscribeEvent
     public static void onModelBake(ModelBakeEvent event) {
 
-        Map<ResourceLocation, IBakedModel> registry = event.getModelRegistry();
+        Map<ResourceLocation, BakedModel> registry = event.getModelRegistry();
 
         ResourceLocation blockLoc = Blocks.crafting_cloth.get().getRegistryName();
         event.getModelRegistry().put(new ModelResourceLocation(blockLoc, ""), new CraftingClothModel());
@@ -103,12 +96,12 @@ public class ClientProxy {
 
     private static void registerGuiFactories() {
 
-        ScreenManager.registerFactory(Containers.arcane_chest.get(), ContainerScreenArcaneChest::new);
-        ScreenManager.registerFactory(Containers.staff_workbench.get(), ContainerScreenStaffWorkbench::new);
-        ScreenManager.registerFactory(Containers.crafting_cloth.get(), ContainerScreenCraftingCloth::new);
-        ScreenManager.registerFactory(Containers.alchemy_table.get(), ContainerScreenAlchemyTable::new);
-        ScreenManager.registerFactory(Containers.nordic_furnace.get(), ContainerScreenNordicFurnace::new);
-        ScreenManager.registerFactory(Containers.attunement_altar.get(), ContainerScreenAttunementAltar::new);
+        MenuScreens.register(Containers.arcane_chest.get(), ContainerScreenArcaneChest::new);
+        MenuScreens.register(Containers.staff_workbench.get(), ContainerScreenStaffWorkbench::new);
+        MenuScreens.register(Containers.crafting_cloth.get(), ContainerScreenCraftingCloth::new);
+        MenuScreens.register(Containers.alchemy_table.get(), ContainerScreenAlchemyTable::new);
+        MenuScreens.register(Containers.nordic_furnace.get(), ContainerScreenNordicFurnace::new);
+        MenuScreens.register(Containers.attunement_altar.get(), ContainerScreenAttunementAltar::new);
     }
 
     private static void registerEntityRenders() {

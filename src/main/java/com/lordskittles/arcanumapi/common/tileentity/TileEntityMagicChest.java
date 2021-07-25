@@ -1,13 +1,15 @@
 package com.lordskittles.arcanumapi.common.tileentity;
 
 import com.lordskittles.arcanumapi.common.network.PacketHandlerBase;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.block.state.BlockState;
 
 public abstract class TileEntityMagicChest<T extends TileEntityMagicChest<T>> extends TileEntityInventoryArcanum<T> {
 
@@ -16,14 +18,14 @@ public abstract class TileEntityMagicChest<T extends TileEntityMagicChest<T>> ex
 
     private final float retainCost;
 
-    public TileEntityMagicChest(TileEntityType<?> tileEntityTypeIn, int size, String containerId, float retainCost, String modid, PacketHandlerBase packetHandler) {
+    public TileEntityMagicChest(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state, int size, String containerId, float retainCost, String modid, PacketHandlerBase packetHandler) {
 
-        super(tileEntityTypeIn, size, containerId, modid, packetHandler);
+        super(tileEntityTypeIn, pos, state, size, containerId, modid, packetHandler);
 
         this.retainCost = retainCost;
     }
 
-    public boolean canRetainInventory(PlayerEntity player) {
+    public boolean canRetainInventory(Player player) {
 
         return getCurrentArcanum(player) > this.retainCost;
     }
@@ -35,10 +37,10 @@ public abstract class TileEntityMagicChest<T extends TileEntityMagicChest<T>> ex
 
     public float getLidAngle(float partialTicks) {
 
-        return MathHelper.lerp(partialTicks, this.prevLidAngle, this.lidAngle);
+        return Mth.lerp(partialTicks, this.prevLidAngle, this.lidAngle);
     }
 
-    public abstract Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity player);
+    public abstract AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player);
 
     @Override
     public void tick() {
@@ -46,7 +48,7 @@ public abstract class TileEntityMagicChest<T extends TileEntityMagicChest<T>> ex
         super.tick();
         this.prevLidAngle = this.lidAngle;
         if(this.numPlayersUsing > 0 && this.lidAngle == 0.0F) {
-            world.playSound(null, pos, SoundEvents.BLOCK_CHEST_OPEN, SoundCategory.BLOCKS, 1.0f, 1.0f);
+            level.playSound(null, worldPosition, SoundEvents.CHEST_OPEN, SoundSource.BLOCKS, 1.0f, 1.0f);
         }
 
         if(this.numPlayersUsing == 0 && this.lidAngle > 0.0F || this.numPlayersUsing > 0 && this.lidAngle < 1.0F) {
@@ -63,7 +65,7 @@ public abstract class TileEntityMagicChest<T extends TileEntityMagicChest<T>> ex
             }
 
             if(this.lidAngle < 0.5F && f1 >= 0.5F) {
-                world.playSound(null, pos, SoundEvents.BLOCK_CHEST_CLOSE, SoundCategory.BLOCKS, 1.0f, 1.0f);
+                level.playSound(null, worldPosition, SoundEvents.CHEST_CLOSE, SoundSource.BLOCKS, 1.0f, 1.0f);
             }
 
             if(this.lidAngle < 0.0F) {

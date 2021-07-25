@@ -1,9 +1,9 @@
 package com.lordskittles.nordicarcanum.common.block.world.trees;
 
-import net.minecraft.block.trees.Tree;
-import net.minecraft.world.gen.feature.BaseTreeFeatureConfig;
+import net.minecraft.world.level.block.grower.AbstractTreeGrower;
+import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 
-public abstract class NordicTree extends Tree {
+public abstract class NordicTree extends AbstractTreeGrower {
 
-    public abstract BaseTreeFeatureConfig getConfig();
+    public abstract TreeConfiguration getConfig();
 }

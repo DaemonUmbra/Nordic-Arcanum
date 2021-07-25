@@ -10,29 +10,29 @@ import com.lordskittles.nordicarcanum.common.registry.TileEntities;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.lordskittles.nordicarcanum.core.NordicInventorySlots;
 import com.lordskittles.nordicarcanum.core.NordicNames;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IRecipeHelperPopulator;
-import net.minecraft.inventory.IRecipeHolder;
-import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.RecipeItemHelper;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.StackedContents;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.RecipeHolder;
+import net.minecraft.world.inventory.StackedContentsCompatible;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ForgeHooks;
 
 import javax.annotation.Nullable;
 import java.util.Map;
 
-public class TileEntityNordicFurnace extends TileEntityInventorySyncable<TileEntityNordicFurnace> implements IRecipeHolder, IRecipeHelperPopulator {
+public class TileEntityNordicFurnace extends TileEntityInventorySyncable<TileEntityNordicFurnace> implements RecipeHolder, StackedContentsCompatible {
 
     protected int burnTime;
     protected int cookTime;
@@ -44,7 +44,7 @@ public class TileEntityNordicFurnace extends TileEntityInventorySyncable<TileEnt
 
     private final Map<ResourceLocation, Integer> recipes = Maps.newHashMap();
 
-    protected final IIntArray furnaceData = new IIntArray() {
+    protected final ContainerData furnaceData = new ContainerData() {
 
         public int get(int index) {
 
@@ -80,37 +80,32 @@ public class TileEntityNordicFurnace extends TileEntityInventorySyncable<TileEnt
 
         }
 
-        public int size() {
+        public int getCount() {
 
             return 4;
         }
     };
 
-    public TileEntityNordicFurnace(TileEntityType<?> type) {
+    public TileEntityNordicFurnace(BlockPos pos, BlockState state) {
 
-        super(type, NordicInventorySlots.NORDIC_FURNACE, NordicNames.NORDIC_FURNACE, NordicArcanum.MODID);
-    }
-
-    public TileEntityNordicFurnace() {
-
-        this(TileEntities.nordic_furnace.get());
+        super(TileEntities.nordic_furnace.get(), pos, state, NordicInventorySlots.NORDIC_FURNACE, NordicNames.NORDIC_FURNACE, NordicArcanum.MODID);
     }
 
     private NordicFurnaceRecipe getRecipeFor(ItemStack left, ItemStack right) {
 
-        return RecipeType.nordic_furnace.findFirst(world, recipe ->
+        return RecipeType.nordic_furnace.findFirst(level, recipe ->
         {
             return recipe.matches(new ItemStack[] { left, right });
         });
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
+    public CompoundTag save(CompoundTag compound) {
 
-        super.write(compound);
+        super.save(compound);
 
         if(! this.checkLootAndWrite(compound)) {
-            ItemStackHelper.saveAllItems(compound, this.contents);
+            ContainerHelper.saveAllItems(compound, this.contents);
         }
         compound.putInt("BurnTime", this.burnTime);
         compound.putInt("CookTime", this.cookTime);
@@ -128,13 +123,13 @@ public class TileEntityNordicFurnace extends TileEntityInventorySyncable<TileEnt
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT compound) {
+    public void load(CompoundTag compound) {
 
-        super.read(state, compound);
+        super.load(compound);
 
-        this.contents = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
+        this.contents = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
         if(! this.checkLootAndRead(compound)) {
-            ItemStackHelper.loadAllItems(compound, this.contents);
+            ContainerHelper.loadAllItems(compound, this.contents);
         }
 
         this.burnTime = compound.getInt("burn_time");
@@ -151,7 +146,7 @@ public class TileEntityNordicFurnace extends TileEntityInventorySyncable<TileEnt
     }
 
     @Override
-    public Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
 
         return new ContainerNordicFurnace(id, playerInventory, this, this.furnaceData);
     }
@@ -177,11 +172,11 @@ public class TileEntityNordicFurnace extends TileEntityInventorySyncable<TileEnt
                     return true;
                 }
                 else
-                    if(! output.isItemEqual(result)) {
+                    if(! output.sameItem(result)) {
                         return false;
                     }
                     else
-                        if(output.getCount() + result.getCount() <= this.getInventoryStackLimit() && output.getCount() + result.getCount() <= output.getMaxStackSize()) {
+                        if(output.getCount() + result.getCount() <= this.getMaxStackSize() && output.getCount() + result.getCount() <= output.getMaxStackSize()) {
                             return true;
                         }
                         else {
@@ -200,7 +195,7 @@ public class TileEntityNordicFurnace extends TileEntityInventorySyncable<TileEnt
             return 0;
         }
         else {
-            return ForgeHooks.getBurnTime(fuel);
+            return ForgeHooks.getBurnTime(fuel, getRecipeUsed().getType());
         }
     }
 
@@ -227,7 +222,7 @@ public class TileEntityNordicFurnace extends TileEntityInventorySyncable<TileEnt
                     output.grow(result.getCount());
                 }
 
-            if(! this.world.isRemote) {
+            if(! this.level.isClientSide) {
                 this.setRecipeUsed(recipe);
             }
 
@@ -246,7 +241,7 @@ public class TileEntityNordicFurnace extends TileEntityInventorySyncable<TileEnt
             -- this.burnTime;
         }
 
-        if(! this.world.isRemote) {
+        if(! this.level.isClientSide) {
             ItemStack fuel = this.items.getStackInSlot(FUEL_SLOT);
             if(this.isBurning() || ! fuel.isEmpty() && ! (this.items.getStackInSlot(0).isEmpty() && this.items.getStackInSlot(1).isEmpty())) {
                 NordicFurnaceRecipe recipe = getRecipeFor(this.items.getStackInSlot(0), this.items.getStackInSlot(1));
@@ -288,22 +283,22 @@ public class TileEntityNordicFurnace extends TileEntityInventorySyncable<TileEnt
             }
             else
                 if(! this.isBurning() && this.cookTime > 0) {
-                    this.cookTime = MathHelper.clamp(this.cookTime - 2, 0, this.cookTimeTotal);
+                    this.cookTime = Mth.clamp(this.cookTime - 2, 0, this.cookTimeTotal);
                 }
 
             if(burning != this.isBurning()) {
                 isDirty = true;
-                this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).with(BlockNordicFurnace.SMELTING, Boolean.valueOf(this.isBurning())), 3);
+                this.level.setBlock(this.getBlockPos(), this.level.getBlockState(this.getBlockPos()).setValue(BlockNordicFurnace.SMELTING, Boolean.valueOf(this.isBurning())), 3);
             }
         }
 
         if(isDirty) {
-            this.markDirty();
+            this.setChanged();
         }
     }
 
     @Override
-    public void fillStackedContents(RecipeItemHelper helper) {
+    public void fillStackedContents(StackedContents helper) {
 
         for(ItemStack stack : this.contents) {
             helper.accountStack(stack);
@@ -311,7 +306,7 @@ public class TileEntityNordicFurnace extends TileEntityInventorySyncable<TileEnt
     }
 
     @Override
-    public void setRecipeUsed(@Nullable IRecipe<?> recipe) {
+    public void setRecipeUsed(@Nullable Recipe<?> recipe) {
 
         if(recipe != null) {
             this.recipes.compute(recipe.getId(), (p_214004_0_, p_214004_1_) ->
@@ -323,7 +318,7 @@ public class TileEntityNordicFurnace extends TileEntityInventorySyncable<TileEnt
 
     @Nullable
     @Override
-    public IRecipe<?> getRecipeUsed() {
+    public Recipe<?> getRecipeUsed() {
 
         return null;
     }

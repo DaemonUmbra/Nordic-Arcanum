@@ -3,14 +3,14 @@ package com.lordskittles.nordicarcanum.common.block.magic;
 import com.lordskittles.nordicarcanum.common.block.IInfusable;
 import com.lordskittles.nordicarcanum.common.block.decoration.BlockPillar;
 import com.lordskittles.nordicarcanum.common.registry.Blocks;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
 public class BlockInfusablePillar extends BlockPillar implements IInfusable {
 
@@ -20,41 +20,41 @@ public class BlockInfusablePillar extends BlockPillar implements IInfusable {
 
         super();
 
-        this.setDefaultState(this.stateContainer.getBaseState().with(AXIS, Direction.Axis.Y).with(ACTIVATED, false));
+        this.registerDefaultState(this.getStateDefinition().any().setValue(AXIS, Direction.Axis.Y).setValue(ACTIVATED, false));
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 
         builder.add(AXIS).add(ACTIVATED);
     }
 
     @Override
-    public boolean isValid(IWorldReader world, BlockPos pos, BlockPos right, BlockState state) {
+    public boolean isValid(LevelReader world, BlockPos pos, BlockPos right, BlockState state) {
 
-        if(state.get(ACTIVATED) && world.getBlockState(pos.up()).getBlock() instanceof BlockCrystalMatrix)
+        if(state.getValue(ACTIVATED) && world.getBlockState(pos.above()).getBlock() instanceof BlockCrystalMatrix)
             return true;
         else
-            return ! state.get(ACTIVATED);
+            return ! state.getValue(ACTIVATED);
     }
 
     @Override
-    public void infuse(World world, BlockPos pos, BlockPos right, BlockState state, Direction direction) {
+    public void infuse(Level world, BlockPos pos, BlockPos right, BlockState state, Direction direction) {
 
-        if(state.get(ACTIVATED) && world.getBlockState(pos.up()).getBlock() instanceof BlockCrystalMatrix) {
-            world.setBlockState(pos.up(), net.minecraft.block.Blocks.AIR.getDefaultState());
-            world.setBlockState(pos, Blocks.attunement_altar.get().getDefaultState());
+        if(state.getValue(ACTIVATED) && world.getBlockState(pos.above()).getBlock() instanceof BlockCrystalMatrix) {
+            world.setBlock(pos.above(), net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 19);
+            world.setBlock(pos, Blocks.attunement_altar.get().defaultBlockState(), 19);
         }
         else {
-            world.setBlockState(pos, state.with(ACTIVATED, true));
+            world.setBlock(pos, state.setValue(ACTIVATED, true), 19);
         }
     }
 
     @Override
-    public BlockPos[] getInfusedPositions(World world, BlockPos pos, BlockPos right, BlockState state, Direction direction) {
+    public BlockPos[] getInfusedPositions(Level world, BlockPos pos, BlockPos right, BlockState state, Direction direction) {
 
-        if(state.get(ACTIVATED)) {
-            return new BlockPos[] { pos, pos.up() };
+        if(state.getValue(ACTIVATED)) {
+            return new BlockPos[] { pos, pos.above() };
         }
 
         return new BlockPos[] { pos };

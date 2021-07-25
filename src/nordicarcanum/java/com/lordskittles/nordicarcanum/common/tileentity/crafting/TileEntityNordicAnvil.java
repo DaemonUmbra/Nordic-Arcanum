@@ -10,41 +10,35 @@ import com.lordskittles.nordicarcanum.common.registry.RecipeType;
 import com.lordskittles.nordicarcanum.common.registry.TileEntities;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.lordskittles.nordicarcanum.core.NordicNBTConstants;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.AirItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.AirItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 
-public class TileEntityNordicAnvil extends TileEntity {
+public class TileEntityNordicAnvil extends BlockEntity {
 
     private ItemStack heldItem = ItemStack.EMPTY;
     private ItemStack heldCast = ItemStack.EMPTY;
     private NordicAnvilRecipe recipe = null;
     private int progress;
 
-    public TileEntityNordicAnvil(TileEntityType<?> tileEntityType) {
+    public TileEntityNordicAnvil(BlockPos pos, BlockState state) {
 
-        super(tileEntityType);
-    }
-
-    public TileEntityNordicAnvil() {
-
-        this(TileEntities.norse_anvil.get());
+        super(TileEntities.norse_anvil.get(), pos, state);
     }
 
     private NordicAnvilRecipe getRecipe(ItemStack input) {
 
-        return RecipeType.nordic_anvil.findFirst(world, recipe -> recipe.matches(input));
+        return RecipeType.nordic_anvil.findFirst(level, recipe -> recipe.matches(input));
     }
 
     public ItemStack setCast(ItemStack stack) {
@@ -130,7 +124,7 @@ public class TileEntityNordicAnvil extends TileEntity {
         return this.heldItem.getCount() >= this.recipe.requiredAmount;
     }
 
-    public void updateProgress(World world) {
+    public void updateProgress(Level world) {
 
         if(! canProgress())
             return;
@@ -147,15 +141,15 @@ public class TileEntityNordicAnvil extends TileEntity {
 
                 binding.setShape(cast.getShape());
 
-                CompoundNBT base = NBTUtilities.getPersistentData(NordicArcanum.MODID, output);
+                CompoundTag base = NBTUtilities.getPersistentData(NordicArcanum.MODID, output);
                 base.putInt(NBTConstants.BINDING_SHAPE_KEY, cast.getShape().getValue());
-                output.write(base);
+                output.save(base);
             }
         }
 
         if(output != ItemStack.EMPTY) {
-            BlockPos pos = getPos().up();
-            world.addEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), output));
+            BlockPos pos = getBlockPos().above();
+            world.addFreshEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), output));
             reset();
         }
     }
@@ -168,48 +162,48 @@ public class TileEntityNordicAnvil extends TileEntity {
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet) {
 
         ItemStack stack = this.heldItem;
-        CompoundNBT nbt = packet.getNbtCompound();
+        CompoundTag nbt = packet.getTag();
         super.onDataPacket(net, packet);
-        read(getBlockState(), nbt);
+        load(nbt);
 
-        if(this.world != null && this.world.isRemote) {
+        if(this.level != null && this.level.isClientSide) {
             if(! this.heldItem.equals(stack)) {
-                this.world.markChunkDirty(getPos(), this.getTileEntity());
+                this.level.blockEntityChanged(getBlockPos());
             }
         }
     }
 
     @Nullable
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
 
-        CompoundNBT nbt = new CompoundNBT();
-        write(nbt);
-        return new SUpdateTileEntityPacket(getPos(), 1, nbt);
+        CompoundTag nbt = new CompoundTag();
+        save(nbt);
+        return new ClientboundBlockEntityDataPacket(getBlockPos(), 1, nbt);
     }
 
     @Override
-    public CompoundNBT getUpdateTag() {
+    public CompoundTag getUpdateTag() {
 
-        CompoundNBT nbt = super.getUpdateTag();
-        write(nbt);
+        CompoundTag nbt = super.getUpdateTag();
+        save(nbt);
         return nbt;
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
+    public CompoundTag save(CompoundTag compound) {
 
-        super.write(compound);
+        super.save(compound);
 
-        CompoundNBT baseCompound = NBTUtilities.getPersistentData(NordicArcanum.MODID, compound);
-        CompoundNBT heldCompound = new CompoundNBT();
-        CompoundNBT castCompound = new CompoundNBT();
+        CompoundTag baseCompound = NBTUtilities.getPersistentData(NordicArcanum.MODID, compound);
+        CompoundTag heldCompound = new CompoundTag();
+        CompoundTag castCompound = new CompoundTag();
 
-        this.heldItem.write(heldCompound);
-        this.heldCast.write(castCompound);
+        this.heldItem.save(heldCompound);
+        this.heldCast.save(castCompound);
 
         baseCompound.put(NordicNBTConstants.ANVIL_HELD_ITEM, heldCompound);
         baseCompound.put(NordicNBTConstants.ANVIL_HELD_CAST, castCompound);
@@ -218,13 +212,13 @@ public class TileEntityNordicAnvil extends TileEntity {
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT compound) {
+    public void load(CompoundTag compound) {
 
-        super.read(state, compound);
+        super.load(compound);
 
-        CompoundNBT baseCompound = NBTUtilities.getPersistentData(NordicArcanum.MODID, compound);
+        CompoundTag baseCompound = NBTUtilities.getPersistentData(NordicArcanum.MODID, compound);
 
-        this.heldItem = ItemStack.read(baseCompound.getCompound(NordicNBTConstants.ANVIL_HELD_ITEM));
-        this.heldCast = ItemStack.read(baseCompound.getCompound(NordicNBTConstants.ANVIL_HELD_CAST));
+        this.heldItem = ItemStack.of(baseCompound.getCompound(NordicNBTConstants.ANVIL_HELD_ITEM));
+        this.heldCast = ItemStack.of(baseCompound.getCompound(NordicNBTConstants.ANVIL_HELD_CAST));
     }
 }

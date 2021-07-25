@@ -5,8 +5,8 @@ import com.lordskittles.nordicarcanum.common.tileentity.magic.TileEntitySigilPod
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelAccessor;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import java.util.List;
 
 public class BlockUtilities {
 
-    public static List<TileEntitySigilPodium> getPodiums(IWorld world, BlockPos start) {
+    public static List<TileEntitySigilPodium> getPodiums(LevelAccessor world, BlockPos start) {
 
         List<TileEntitySigilPodium> podiums = new ArrayList<>();
 

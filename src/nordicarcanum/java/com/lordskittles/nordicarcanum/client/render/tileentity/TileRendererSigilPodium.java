@@ -5,13 +5,13 @@ import com.lordskittles.arcanumapi.client.render.tileentity.TileEntityRendererBa
 import com.lordskittles.nordicarcanum.client.render.tileentity.model.ModelSigilPodium;
 import com.lordskittles.nordicarcanum.common.item.magic.ItemSigil;
 import com.lordskittles.nordicarcanum.common.tileentity.magic.TileEntitySigilPodium;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
 
@@ -19,15 +19,15 @@ public class TileRendererSigilPodium extends TileEntityRendererBase<TileEntitySi
 
     private final ModelSigilPodium PodiumModel = new ModelSigilPodium();
 
-    public TileRendererSigilPodium(TileEntityRendererDispatcher rendererDispatcherIn) {
+    public TileRendererSigilPodium(BlockEntityRenderDispatcher rendererDispatcherIn) {
 
         super(rendererDispatcherIn);
     }
 
     @Override
-    public void render(TileEntitySigilPodium tile, float ticks, MatrixStack stack, @Nonnull IRenderTypeBuffer buffer, int light, int overlay) {
+    public void render(TileEntitySigilPodium tile, float ticks, PoseStack stack, @Nonnull MultiBufferSource buffer, int light, int overlay) {
 
-        World world = tile.getWorld();
+        Level world = tile.getWorld();
 
         stack.push();
         stack.translate(0.5D, 1.5D, 0.5D);

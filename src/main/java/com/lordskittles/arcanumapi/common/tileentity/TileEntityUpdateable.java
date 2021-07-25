@@ -1,33 +1,33 @@
 package com.lordskittles.arcanumapi.common.tileentity;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
 
-public abstract class TileEntityUpdateable<T extends TileEntityUpdateable> extends TileEntity implements ITickableTileEntity {
+public abstract class TileEntityUpdateable<T extends TileEntityUpdateable> extends BlockEntity {
 
-    public TileEntityUpdateable(TileEntityType<?> tileEntityTypeIn) {
+    public TileEntityUpdateable(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state) {
 
-        super(tileEntityTypeIn);
+        super(tileEntityTypeIn, pos, state);
     }
 
     protected int ticksExisted = 0;
 
     @Nonnull
-    public CompoundNBT getReducedUpdateTag() {
+    public CompoundTag getReducedUpdateTag() {
 
         return super.getUpdateTag();
     }
 
-    @Override
     public void tick() {
 
         ticksExisted++;
 
-        if(this.world.isRemote) {
+        if(this.level.isClientSide) {
             onClientUpdate();
         }
         else {

@@ -3,8 +3,8 @@ package com.lordskittles.nordicarcanum.magic.progression;
 import com.google.common.io.Files;
 import com.lordskittles.arcanumapi.core.ArcanumAPI;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.server.MinecraftServer;
@@ -26,13 +26,13 @@ public class ProgressionHelper {
     private static Map<UUID, PlayerProgress> playerProgressServer = new HashMap<>();
 
     @Nonnull
-    public static PlayerProgress getProgress(@Nullable PlayerEntity player, LogicalSide side) {
+    public static PlayerProgress getProgress(@Nullable Player player, LogicalSide side) {
 
         if(side.isClient()) {
             return clientProgress;
         }
-        else if(player instanceof ServerPlayerEntity) {
-            return getProgressServer((ServerPlayerEntity) player);
+        else if(player instanceof ServerPlayer) {
+            return getProgressServer((ServerPlayer) player);
         }
         else {
             return new PlayerProgress();
@@ -40,7 +40,7 @@ public class ProgressionHelper {
     }
 
     @Nonnull
-    private static PlayerProgress getProgressServer(ServerPlayerEntity player) {
+    private static PlayerProgress getProgressServer(ServerPlayer player) {
 
         return getProgress(player.getUniqueID());
     }

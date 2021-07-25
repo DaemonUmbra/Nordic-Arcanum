@@ -1,11 +1,12 @@
 package com.lordskittles.nordicarcanum.magic.schools;
 
-import com.lordskittles.arcanumapi.core.ArcanumAPI;
 import com.lordskittles.arcanumapi.core.NBTConstants;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.*;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.nbt.CompoundTag;
+
+import net.minecraft.network.chat.*;
 
 public interface IMagicSchool extends Comparable<IMagicSchool> {
 
@@ -18,30 +19,30 @@ public interface IMagicSchool extends Comparable<IMagicSchool> {
         return NBTConstants.SCHOOL_KEY;
     }
 
-    static IMagicSchool readFromNBT(CompoundNBT nbt) {
+    static IMagicSchool readFromNBT(CompoundTag nbt) {
 
         return readFromNBT(nbt, getDefaultSaveKey());
     }
 
-    static IMagicSchool readFromNBT(CompoundNBT nbt, String key) {
+    static IMagicSchool readFromNBT(CompoundTag nbt, String key) {
 
         return SchoolType.getSchoolFromId(nbt.getInt(key));
     }
 
-    default StringTextComponent getDiscoveredText() {
+    default TextComponent getDiscoveredText() {
 
-        return new StringTextComponent(getColor() + I18n.format(getUnlocalizedInfo()));
+        return new TextComponent(getColor() + I18n.get(getUnlocalizedInfo()));
     }
 
-    static StringTextComponent getUndiscoveredText() {
+    static TextComponent getUndiscoveredText() {
 
-        return new StringTextComponent(TextFormatting.BLUE + I18n.format(NordicArcanum.MODID + ".misc.noinfo"));
+        return new TextComponent(ChatFormatting.BLUE + I18n.get(NordicArcanum.MODID + ".misc.noinfo"));
     }
 
-    static ITextComponent getDiscoveredChatMessage(MagicSchool school) {
+    static MutableComponent getDiscoveredChatMessage(MagicSchool school) {
 
-        return new TranslationTextComponent(NordicArcanum.MODID + ".school.discovered.chat").setStyle(Style.EMPTY.setFormatting(TextFormatting.WHITE))
-                .appendSibling(new TranslationTextComponent(school.getUnlocalizedInfo()).setStyle(Style.EMPTY.setFormatting(school.getColor())));
+        return new TranslatableComponent(NordicArcanum.MODID + ".school.discovered.chat").setStyle(Style.EMPTY.applyFormat(ChatFormatting.WHITE))
+                .append(new TranslatableComponent(school.getUnlocalizedInfo()).setStyle(Style.EMPTY.applyFormat(school.getColor())));
     }
 
     default String getUnlocalizedInfo() {
@@ -49,17 +50,17 @@ public interface IMagicSchool extends Comparable<IMagicSchool> {
         return NordicArcanum.MODID + "." + getUnlocalizedName() + ".info";
     }
 
-    default TextFormatting getColor() {
+    default ChatFormatting getColor() {
 
         return getSchool().color;
     }
 
-    default void writeToNBT(CompoundNBT nbt) {
+    default void save(CompoundTag nbt) {
 
-        writeToNBT(nbt, getDefaultSaveKey());
+        save(nbt, getDefaultSaveKey());
     }
 
-    default void writeToNBT(CompoundNBT nbt, String key) {
+    default void save(CompoundTag nbt, String key) {
 
         nbt.putInt(key, getSchool().id);
     }

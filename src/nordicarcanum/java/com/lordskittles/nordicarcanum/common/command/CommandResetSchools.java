@@ -5,13 +5,13 @@ import com.lordskittles.nordicarcanum.core.NordicNames;
 import com.lordskittles.nordicarcanum.magic.progression.ProgressionManager;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import net.minecraft.command.CommandSource;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 
 public class CommandResetSchools {
 
-    public static ArgumentBuilder<CommandSource, ?> register() {
+    public static ArgumentBuilder<CommandSourceStack, ?> register() {
 
         return Commands.register(NordicNames.RESET_SCHOOLS_COMMAND, CommandResetSchools.class)
                 .requires(cs -> cs.hasPermissionLevel(4))

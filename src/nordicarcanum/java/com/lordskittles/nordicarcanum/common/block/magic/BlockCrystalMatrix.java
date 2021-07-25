@@ -6,7 +6,7 @@ import com.lordskittles.arcanumapi.common.item.block.ItemBlockBase;
 import com.lordskittles.nordicarcanum.client.itemgroups.NordicItemGroup;
 import com.lordskittles.nordicarcanum.client.render.item.ItemStackCrystalMatrixRender;
 import com.lordskittles.nordicarcanum.common.registry.TileEntities;
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;

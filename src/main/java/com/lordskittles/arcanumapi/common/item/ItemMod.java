@@ -1,7 +1,9 @@
 package com.lordskittles.arcanumapi.common.item;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+
+import net.minecraft.world.item.Item.Properties;
 
 public class ItemMod extends Item {
 
@@ -10,8 +12,8 @@ public class ItemMod extends Item {
         super(properties);
     }
 
-    public ItemMod(ItemGroup group) {
+    public ItemMod(CreativeModeTab group) {
 
-        super(new Properties().group(group));
+        super(new Properties().tab(group));
     }
 }

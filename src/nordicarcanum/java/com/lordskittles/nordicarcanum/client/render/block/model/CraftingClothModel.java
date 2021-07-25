@@ -4,11 +4,11 @@ import com.google.common.collect.Lists;
 import com.lordskittles.arcanumapi.common.utilities.QuadUtilities;
 import com.lordskittles.nordicarcanum.common.tileentity.crafting.TileEntityCraftingCloth;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.renderer.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -25,10 +25,10 @@ import java.util.Random;
 
 public class CraftingClothModel implements IDynamicBakedModel {
 
-    private final IBakedModel defaultModel;
+    private final BakedModel defaultModel;
 
     private BlockState mimicState;
-    private IBakedModel mimicModel;
+    private BakedModel mimicModel;
 
     private final TextureAtlasSprite topSprite;
     private final TextureAtlasSprite sideSprite;

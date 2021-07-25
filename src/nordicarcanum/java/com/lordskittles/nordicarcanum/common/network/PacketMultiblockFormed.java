@@ -4,10 +4,10 @@ import com.lordskittles.arcanumapi.common.network.PacketBase;
 import com.lordskittles.arcanumapi.common.utilities.ClientUtilities;
 import com.lordskittles.arcanumapi.common.utilities.IMultiblock;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -15,7 +15,7 @@ import java.util.function.Supplier;
 public class PacketMultiblockFormed extends PacketBase {
 
     private final BlockPos pos;
-    private final CompoundNBT updateTag;
+    private final CompoundTag updateTag;
     private final boolean isFormed;
 
     public PacketMultiblockFormed(IMultiblock multiblock) {
@@ -25,7 +25,7 @@ public class PacketMultiblockFormed extends PacketBase {
         this.updateTag = multiblock.getUpdateTag();
     }
 
-    private PacketMultiblockFormed(BlockPos pos, CompoundNBT nbt, boolean isFormed) {
+    private PacketMultiblockFormed(BlockPos pos, CompoundTag nbt, boolean isFormed) {
 
         this.pos = pos;
         this.updateTag = nbt;
@@ -36,7 +36,7 @@ public class PacketMultiblockFormed extends PacketBase {
 
         context.get().enqueueWork(() ->
         {
-            TileEntity tile = ClientUtilities.getTileEntity(TileEntity.class, message.pos);
+            BlockEntity tile = ClientUtilities.getTileEntity(BlockEntity.class, message.pos);
             if(tile == null) {
                 NordicArcanum.LOG.info("Update tile packet received for position: {} in world, but no valid tile was found.", message.pos);
             }
@@ -54,7 +54,7 @@ public class PacketMultiblockFormed extends PacketBase {
         context.get().setPacketHandled(true);
     }
 
-    public static void encode(PacketMultiblockFormed packet, PacketBuffer buffer) {
+    public static void encode(PacketMultiblockFormed packet, FriendlyByteBuf buffer) {
 
         buffer.writeBlockPos(packet.pos);
         buffer.writeCompoundTag(packet.updateTag);

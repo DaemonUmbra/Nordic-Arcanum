@@ -3,19 +3,21 @@ package com.lordskittles.nordicarcanum.common.particle;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ParticleType;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.util.Mth;
+import net.minecraft.core.Registry;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Locale;
 
-public class TransformSparkleParticleType extends ParticleType<TransformSparkleParticleType> implements IParticleData {
+import net.minecraft.core.particles.ParticleOptions.Deserializer;
 
-    public static final IDeserializer<TransformSparkleParticleType> DESERIALIZER = createSerializer();
+public class TransformSparkleParticleType extends ParticleType<TransformSparkleParticleType> implements ParticleOptions {
+
+    public static final Deserializer<TransformSparkleParticleType> DESERIALIZER = createSerializer();
 
     private final Codec<TransformSparkleParticleType> CODEC = Codec.unit(this::getType);
 
@@ -30,7 +32,7 @@ public class TransformSparkleParticleType extends ParticleType<TransformSparkleP
         this.red = red;
         this.green = green;
         this.blue = blue;
-        this.alpha = MathHelper.clamp(alpha, 0.01f, 4.0f);
+        this.alpha = Mth.clamp(alpha, 0.01f, 4.0f);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -64,7 +66,7 @@ public class TransformSparkleParticleType extends ParticleType<TransformSparkleP
     }
 
     @Override
-    public void write(PacketBuffer buffer) {
+    public void write(FriendlyByteBuf buffer) {
 
         buffer.writeFloat(this.red);
         buffer.writeFloat(this.green);
@@ -84,9 +86,9 @@ public class TransformSparkleParticleType extends ParticleType<TransformSparkleP
         return CODEC;
     }
 
-    private static final IDeserializer<TransformSparkleParticleType> createSerializer() {
+    private static final Deserializer<TransformSparkleParticleType> createSerializer() {
 
-        return new IDeserializer<TransformSparkleParticleType>() {
+        return new Deserializer<TransformSparkleParticleType>() {
 
             @Override
             public TransformSparkleParticleType deserialize(ParticleType<TransformSparkleParticleType> type, StringReader reader) throws CommandSyntaxException {
@@ -101,7 +103,7 @@ public class TransformSparkleParticleType extends ParticleType<TransformSparkleP
             }
 
             @Override
-            public TransformSparkleParticleType read(ParticleType<TransformSparkleParticleType> type, PacketBuffer buffer) {
+            public TransformSparkleParticleType read(ParticleType<TransformSparkleParticleType> type, FriendlyByteBuf buffer) {
 
                 return new TransformSparkleParticleType(buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat());
             }
