@@ -7,11 +7,13 @@ import net.minecraft.world.item.crafting.RecipeType;
 
 public class SlotFuel extends Slot {
 
-    private RecipeType<?> recipeType;
+    private final RecipeType<?> recipeType;
 
     public SlotFuel(Container inventoryIn, int index, int xPosition, int yPosition, RecipeType<?> recipeType) {
 
         super(inventoryIn, index, xPosition, yPosition);
+
+        this.recipeType = recipeType;
     }
 
     @Override

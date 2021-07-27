@@ -4,26 +4,25 @@ import com.google.common.collect.ImmutableMap;
 import com.lordskittles.arcanumapi.common.world.feature.structure.StructureBase;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.mojang.serialization.Codec;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Rotation;
+import net.minecraft.world.level.LevelHeightAccessor;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.WorldgenRandom;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.util.registry.DynamicRegistries;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.gen.Heightmap;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraft.world.gen.feature.structure.Structure;
-import net.minecraft.world.gen.feature.structure.StructureStart;
-import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.StructureStart;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
 
 import java.util.Map;
-
-import net.minecraft.world.level.levelgen.feature.StructureFeature.StructureStartFactory;
 
 public class StructureAncientTemple extends StructureBase<NoneFeatureConfiguration> {
 
@@ -60,38 +59,38 @@ public class StructureAncientTemple extends StructureBase<NoneFeatureConfigurati
     }
 
     @Override
-    public GenerationStep.Decoration getDecorationStage() {
+    public GenerationStep.Decoration step() {
 
         return GenerationStep.Decoration.SURFACE_STRUCTURES;
     }
 
     @Override
-    protected boolean func_230363_a_(ChunkGenerator generator, BiomeSource provider, long seed, WorldgenRandom randomSeed, int chunkX, int chunkZ, Biome biome, ChunkPos chunkPos, NoneFeatureConfiguration config) {
+    protected boolean isFeatureChunk(ChunkGenerator generator, BiomeSource provider, long seed, WorldgenRandom randomSeed, ChunkPos chunkPos, Biome biome, ChunkPos chunkPos2, NoneFeatureConfiguration config, LevelHeightAccessor accessor) {
 
-        if(chunkX == chunkPos.x && chunkZ == chunkPos.z) {
-            return provider.hasStructure(this);
+        if(chunkPos.x == chunkPos2.x && chunkPos.z == chunkPos2.z) {
+            return provider.canGenerateStructure(this);
         }
 
         return false;
     }
 
-    public static class Start extends StructureStart<NoFeatureConfig> {
+    public static class Start extends StructureStart<NoneFeatureConfiguration> {
 
-        public Start(Structure<NoFeatureConfig> structure, int chunkX, int chunkZ, MutableBoundingBox bounds, int references, long seed) {
+        public Start(StructureFeature<NoneFeatureConfiguration> structure, ChunkPos chunkPos, int references, long seed) {
 
-            super(structure, chunkX, chunkZ, bounds, references, seed);
+            super(structure, chunkPos, references, seed);
         }
 
         @Override
-        public void func_230364_a_(DynamicRegistries registry, ChunkGenerator generator, TemplateManager templateManager, int chunkX, int chunkZ, Biome biome, NoFeatureConfig config) {
+        public void generatePieces(RegistryAccess registry, ChunkGenerator generator, StructureManager structureManager, ChunkPos chunkPos, Biome biome, NoneFeatureConfiguration config, LevelHeightAccessor accessor) {
 
-            int worldX = (chunkX << 4) + 4;
-            int worldZ = (chunkZ << 4) + 7;
-            BlockPos pos = new BlockPos(worldX, generator.getHeight(worldX, worldZ, Heightmap.Type.WORLD_SURFACE_WG), worldZ);
-            Rotation rotation = Rotation.randomRotation(this.rand);
+            int worldX = (chunkPos.x << 4) + 4;
+            int worldZ = (chunkPos.z << 4) + 7;
+            BlockPos pos = new BlockPos(worldX, accessor.getHeight(), worldZ);
+            Rotation rotation = Rotation.getRandom(this.random);
             NordicArcanum.LOG.debug("Temple at: " + pos.toString());
-            this.components.add(new AncientTemplePieces.Piece(templateManager, temple, pos, rotation));
-            this.recalculateStructureSize();
+            this.pieces.add(new AncientTemplePieces.Piece(structureManager, temple, pos, rotation, accessor.getHeight()));
+            this.createBoundingBox();
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.lordskittles.arcanumapi.common.tileentity;
+package com.lordskittles.arcanumapi.common.blockentity;
 
 import com.lordskittles.arcanumapi.core.NBTConstants;
 import net.minecraft.nbt.CompoundTag;

@@ -1,7 +1,7 @@
 package com.lordskittles.arcanumapi.common.inventory.containers;
 
 import com.lordskittles.arcanumapi.client.slot.SlotOutput;
-import com.lordskittles.arcanumapi.common.tileentity.TileEntityInventory;
+import com.lordskittles.arcanumapi.common.blockentity.BlockEntityInventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.Container;
@@ -11,25 +11,25 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 
-public abstract class ContainerBase<T extends TileEntityInventory> extends AbstractContainerMenu implements INordicContainer {
+public abstract class ContainerBase<T extends BlockEntityInventory> extends AbstractContainerMenu implements INordicContainer {
 
-    public final T Tile;
+    public final T blockEntity;
     protected final ContainerLevelAccess canInteract;
 
     protected int nonPlayerSlotCount = 0;
 
-    public ContainerBase(MenuType<?> container, final int nonPlayerSlotCount, final int windowId, final Inventory inventory, final T tile) {
+    public ContainerBase(MenuType<?> container, final int nonPlayerSlotCount, final int windowId, final Inventory inventory, final T blockEntity) {
 
         super(container, windowId);
 
-        this.Tile = tile;
-        this.canInteract = ContainerLevelAccess.create(Tile.getLevel(), Tile.getBlockPos());
+        this.blockEntity = blockEntity;
+        this.canInteract = ContainerLevelAccess.create(this.blockEntity.getLevel(), this.blockEntity.getBlockPos());
         this.nonPlayerSlotCount = nonPlayerSlotCount;
     }
 
     public Container getTileInventory() {
 
-        return Tile;
+        return blockEntity;
     }
 
     @Override

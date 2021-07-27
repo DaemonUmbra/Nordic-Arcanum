@@ -2,13 +2,13 @@ package com.lordskittles.nordicarcanum.common.inventory.containers;
 
 import com.lordskittles.nordicarcanum.common.inventory.ClothResultInventory;
 import com.lordskittles.nordicarcanum.common.inventory.crafting.CraftingClothRecipe;
+import com.lordskittles.nordicarcanum.common.registry.RecipeType;
 import com.lordskittles.nordicarcanum.common.utility.RecipeUtilities;
+import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.inventory.ResultSlot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.util.NonNullList;
 
 import javax.annotation.Nonnull;
 
@@ -21,18 +21,18 @@ public class ClothResultSlot extends ResultSlot {
 
     @Nonnull
     @Override
-    public ItemStack onTake(@Nonnull Player thePlayer, @Nonnull ItemStack stack) {
+    public void onTake(@Nonnull Player thePlayer, @Nonnull ItemStack stack) {
 
-        this.onCrafting(stack);
+//        this.onQuickCraft(stack);
         net.minecraftforge.common.ForgeHooks.setCraftingPlayer(thePlayer);
-        NonNullList<ItemStack> inventoryItems = thePlayer.world.getRecipeManager().getRecipeNonNull(IRecipeType.CRAFTING, this.craftMatrix, thePlayer.world);
+        NonNullList<ItemStack> inventoryItems = thePlayer.level.getRecipeManager().getRemainingItemsFor(RecipeType.CRAFTING, this.craftSlots, thePlayer.level);
         if(! inventoryItems.isEmpty()) {
-            CraftingClothRecipe recipe = RecipeUtilities.getClothRecipeFor(thePlayer.world, this.craftMatrix, this.player);
+            CraftingClothRecipe recipe = RecipeUtilities.getClothRecipeFor(thePlayer.level, this.craftSlots, this.player);
             if(recipe != null) {
                 inventoryItems.clear();
             }
 
-            recipe = RecipeUtilities.getClothRecipeForNoArcanum(thePlayer.world, this.craftMatrix, this.player);
+            recipe = RecipeUtilities.getClothRecipeForNoArcanum(thePlayer.level, this.craftSlots, this.player);
             if(recipe != null) {
                 inventoryItems.clear();
             }
@@ -40,29 +40,25 @@ public class ClothResultSlot extends ResultSlot {
 
         net.minecraftforge.common.ForgeHooks.setCraftingPlayer(null);
         for(int i = 0; i < inventoryItems.size(); ++ i) {
-            ItemStack itemstack = this.craftMatrix.getStackInSlot(i);
+            ItemStack itemstack = this.craftSlots.getItem(i);
             ItemStack inventoryStack = inventoryItems.get(i);
             if(! itemstack.isEmpty()) {
-                this.craftMatrix.decrStackSize(i, 1);
-                itemstack = this.craftMatrix.getStackInSlot(i);
+                this.craftSlots.removeItem(i, 1);
+                itemstack = this.craftSlots.getItem(i);
             }
 
             if(! inventoryStack.isEmpty()) {
                 if(itemstack.isEmpty()) {
-                    this.craftMatrix.setInventorySlotContents(i, inventoryStack);
+                    this.craftSlots.setItem(i, inventoryStack);
                 }
-                else
-                    if(ItemStack.areItemsEqual(itemstack, inventoryStack) && ItemStack.areItemStackTagsEqual(itemstack, inventoryStack)) {
-                        inventoryStack.grow(itemstack.getCount());
-                        this.craftMatrix.setInventorySlotContents(i, inventoryStack);
-                    }
-                    else
-                        if(! this.player.inventory.addItemStackToInventory(inventoryStack)) {
-                            this.player.dropItem(inventoryStack, false);
-                        }
+                else if(ItemStack.isSame(itemstack, inventoryStack) && ItemStack.tagMatches(itemstack, inventoryStack)) {
+                    inventoryStack.grow(itemstack.getCount());
+                    this.craftSlots.setItem(i, inventoryStack);
+                }
+                else if(! this.player.getInventory().add(inventoryStack)) {
+                    this.player.drop(inventoryStack, false);
+                }
             }
         }
-
-        return stack;
     }
 }

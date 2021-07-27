@@ -60,9 +60,9 @@ public abstract class PacketHandlerBase {
         getChannel().send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), message);
     }
 
-    public <MSG> void sendToAllTracking(MSG message, BlockEntity tile) {
+    public <MSG> void sendToAllTracking(MSG message, BlockEntity block) {
 
-        sendToAllTracking(message, tile.getLevel(), tile.getBlockPos());
+        sendToAllTracking(message, block.getLevel(), block.getBlockPos());
     }
 
     public <MSG> void sendToAllTracking(MSG message, Level world, BlockPos pos) {

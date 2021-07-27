@@ -1,56 +1,52 @@
 package com.lordskittles.nordicarcanum.common.inventory.containers;
 
-import com.lordskittles.nordicarcanum.common.registry.Blocks;
 import com.lordskittles.nordicarcanum.common.registry.Containers;
-import com.lordskittles.nordicarcanum.common.tileentity.magic.TileEntityAttunementAltar;
-import net.minecraft.entity.player.PlayerEntity;
+import com.lordskittles.nordicarcanum.common.blockentity.magic.BlockEntityAttunementAltar;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.util.Objects;
 
 public class ContainerAttunementAltar extends AbstractContainerMenu {
 
-    private final TileEntityAttunementAltar Tile;
-    private final ContainerLevelAccess canInteract;
+    private final BlockEntityAttunementAltar entity;
 
-    public ContainerAttunementAltar(final int windowId, final Inventory playerInventory, final TileEntityAttunementAltar tile) {
+    public ContainerAttunementAltar(final int windowId, final Inventory playerInventory, final BlockEntityAttunementAltar entity) {
 
         super(Containers.attunement_altar.get(), windowId);
 
-        this.Tile = tile;
-        this.canInteract = ContainerLevelAccess.of(Tile.getWorld(), Tile.getPos());
+        this.entity = entity;
     }
 
-    public ContainerAttunementAltar(final int windowId, final PlayerInventory playerInventory, final PacketBuffer packetBuffer) {
+    public ContainerAttunementAltar(final int windowId, final Inventory playerInventory, final FriendlyByteBuf packetBuffer) {
 
-        this(windowId, playerInventory, getTileEntity(playerInventory, packetBuffer));
+        this(windowId, playerInventory, getBlockEntity(playerInventory, packetBuffer));
     }
 
-    public TileEntityAttunementAltar getTile() {
+    public BlockEntityAttunementAltar getEntity() {
 
-        return this.Tile;
+        return this.entity;
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity player) {
+    public boolean stillValid(Player player) {
 
-        return isWithinUsableDistance(this.canInteract, player, Blocks.attunement_altar.get());
+        return entity.stillValid(player);
     }
 
-    private static TileEntityAttunementAltar getTileEntity(final PlayerInventory playerInventory, final PacketBuffer packetBuffer) {
+    private static BlockEntityAttunementAltar getBlockEntity(final Inventory playerInventory, final FriendlyByteBuf packetBuffer) {
 
         Objects.requireNonNull(playerInventory, "PlayerInventory cannot be null");
         Objects.requireNonNull(packetBuffer, "Data cannot be null");
 
-        final TileEntity tileAtPos = playerInventory.player.world.getTileEntity(packetBuffer.readBlockPos());
-        if(tileAtPos instanceof TileEntityAttunementAltar) {
-            return (TileEntityAttunementAltar) tileAtPos;
+        final BlockEntity blockEntityAtPos = playerInventory.player.level.getBlockEntity(packetBuffer.readBlockPos());
+        if(blockEntityAtPos instanceof BlockEntityAttunementAltar) {
+            return (BlockEntityAttunementAltar) blockEntityAtPos;
         }
 
-        throw new IllegalStateException("Tile Entity is not correct! " + tileAtPos);
+        throw new IllegalStateException("Tile Entity is not correct! " + blockEntityAtPos);
     }
 }

@@ -3,109 +3,109 @@ package com.lordskittles.nordicarcanum.common.block.world;
 import com.lordskittles.arcanumapi.common.block.IItemGroupHolder;
 import com.lordskittles.nordicarcanum.client.itemgroups.NordicResourcesItemGroup;
 import com.lordskittles.nordicarcanum.common.block.world.trees.NordicTree;
-import net.minecraft.block.*;
-import net.minecraft.block.trees.Tree;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemGroup;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.state.StateContainer.Builder;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.event.ForgeEventFactory;
 
 import java.util.Random;
 import java.util.function.Supplier;
 
-import net.minecraft.world.level.block.BonemealableBlock;
-import net.minecraft.world.level.block.BushBlock;
-
 public class BlockSapling extends BushBlock implements BonemealableBlock, IItemGroupHolder {
 
-    public static final IntegerProperty STAGE = BlockStateProperties.STAGE_0_1;
-    protected static final VoxelShape SHAPE = Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
+    public static final IntegerProperty STAGE = BlockStateProperties.STAGE;
+    protected static final VoxelShape SHAPE = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 
     private final Supplier<NordicTree> tree;
 
     public BlockSapling(Supplier<NordicTree> tree) {
 
-        super(Block.Properties.from(Blocks.DEAD_BUSH));
+        super(Block.Properties.copy(Blocks.DEAD_BUSH));
 
         this.tree = tree;
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
 
         return SHAPE;
     }
 
     @Override
-    public boolean isReplaceable(BlockState state, BlockItemUseContext useContext) {
+    public boolean canBeReplaced(BlockState state, BlockPlaceContext useContext) {
 
         return false;
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
+    public void tick(BlockState state, ServerLevel level, BlockPos pos, Random rand) {
 
-        super.tick(state, world, pos, rand);
-        if(! world.isAreaLoaded(pos, 1)) {
+        super.tick(state, level, pos, rand);
+        if(! level.isAreaLoaded(pos, 1)) {
             return;
         }
 
-        if(world.getLight(pos.up()) >= 9 && rand.nextInt(7) == 0) {
-            this.grow(world, pos, state, rand);
+        if(level.getLightEmission(pos.above()) >= 9 && rand.nextInt(7) == 0) {
+            this.grow(level, pos, state, rand);
         }
     }
 
-    public void grow(ServerWorld world, BlockPos pos, BlockState state, Random rand) {
+    public void grow(ServerLevel level, BlockPos pos, BlockState state, Random rand) {
 
-        if(state.get(STAGE) == 0) {
-            world.setBlockState(pos, state.cycleValue(STAGE), 4);
+        if(state.getValue(STAGE) == 0) {
+            level.setBlock(pos, state.cycle(STAGE), 4);
         }
         else {
-            if(! ForgeEventFactory.saplingGrowTree(world, rand, pos) || ! world.canBlockSeeSky(pos)) {
+            if(! ForgeEventFactory.saplingGrowTree(level, rand, pos) || ! level.canSeeSky(pos)) {
                 return;
             }
 
-            if(this.tree.get().attemptGrowTree(world, world.getChunkProvider().getChunkGenerator(), pos, state, rand)) {
-                world.setBlockState(pos, this.tree.get().getConfig().trunkProvider.getBlockState(rand, pos));
+            if(this.tree.get().growTree(level, level.getChunkSource().getGenerator(), pos, state, rand)) {
+                level.setBlock(pos, this.tree.get().getConfig().trunkProvider.getState(rand, pos), 19);
             }
         }
     }
 
     @Override
-    public void grow(ServerWorld world, Random rand, BlockPos pos, BlockState state) {
+    public void performBonemeal(ServerLevel world, Random rand, BlockPos pos, BlockState state) {
 
         this.grow(world, pos, state, rand);
     }
 
     @Override
-    public boolean canGrow(IBlockReader reader, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean isValidBonemealTarget(BlockGetter reader, BlockPos pos, BlockState state, boolean isClient) {
 
         return true;
     }
 
     @Override
-    public boolean canUseBonemeal(World world, Random rand, BlockPos pos, BlockState state) {
+    public boolean isBonemealSuccess(Level level, Random rand, BlockPos pos, BlockState state) {
 
-        return (double) world.rand.nextFloat() < 0.45D;
+        return (double) rand.nextFloat() < 0.45D;
     }
 
     @Override
-    public void fillStateContainer(Builder<Block, BlockState> builder) {
+    public void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 
         builder.add(STAGE);
     }
 
     @Override
-    public ItemGroup group() {
+    public CreativeModeTab group() {
 
         return NordicResourcesItemGroup.INSTANCE;
     }

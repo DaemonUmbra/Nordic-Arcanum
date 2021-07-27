@@ -1,4 +1,4 @@
-package com.lordskittles.nordicarcanum.common.tileentity.crafting;
+package com.lordskittles.nordicarcanum.common.blockentity.crafting;
 
 import com.lordskittles.arcanumapi.common.utilities.ItemUtilities;
 import com.lordskittles.arcanumapi.common.utilities.NBTUtilities;
@@ -7,7 +7,7 @@ import com.lordskittles.nordicarcanum.common.inventory.crafting.NordicAnvilRecip
 import com.lordskittles.nordicarcanum.common.item.crafting.ItemBindingCast;
 import com.lordskittles.nordicarcanum.common.item.magic.ItemBinding;
 import com.lordskittles.nordicarcanum.common.registry.RecipeType;
-import com.lordskittles.nordicarcanum.common.registry.TileEntities;
+import com.lordskittles.nordicarcanum.common.registry.BlockEntities;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.lordskittles.nordicarcanum.core.NordicNBTConstants;
 import net.minecraft.core.BlockPos;
@@ -24,16 +24,16 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 
-public class TileEntityNordicAnvil extends BlockEntity {
+public class BlockEntityNordicAnvil extends BlockEntity {
 
     private ItemStack heldItem = ItemStack.EMPTY;
     private ItemStack heldCast = ItemStack.EMPTY;
     private NordicAnvilRecipe recipe = null;
     private int progress;
 
-    public TileEntityNordicAnvil(BlockPos pos, BlockState state) {
+    public BlockEntityNordicAnvil(BlockPos pos, BlockState state) {
 
-        super(TileEntities.norse_anvil.get(), pos, state);
+        super(BlockEntities.norse_anvil.get(), pos, state);
     }
 
     private NordicAnvilRecipe getRecipe(ItemStack input) {
@@ -133,7 +133,7 @@ public class TileEntityNordicAnvil extends BlockEntity {
         ItemStack output = ItemStack.EMPTY;
 
         if(this.progress >= this.recipe.hits) {
-            output = ItemUtilities.deepCopy(this.recipe.getRecipeOutput());
+            output = ItemUtilities.deepCopy(this.recipe.getResultItem());
 
             if(output.getItem() instanceof ItemBinding) {
                 ItemBinding binding = (ItemBinding) output.getItem();

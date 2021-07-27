@@ -4,10 +4,11 @@ import com.lordskittles.arcanumapi.client.render.item.ItemModelWrapper;
 import com.lordskittles.arcanumapi.client.render.item.ItemStackTERenderBase;
 import com.lordskittles.nordicarcanum.client.render.tileentity.model.ModelArcaneInfuser;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -19,6 +20,11 @@ public class ItemStackArcaneInfuserRender extends ItemStackTERenderBase {
     private static final ModelArcaneInfuser arcaneInfuser = new ModelArcaneInfuser();
     public static ItemModelWrapper model;
 
+    public ItemStackArcaneInfuserRender(BlockEntityRenderDispatcher dispatcher, EntityModelSet modelSet) {
+
+        super(dispatcher, modelSet);
+    }
+
     @Override
     protected void renderItemSpecific(ItemStack stack, PoseStack matrix, MultiBufferSource buffer, int light, int overlay, ItemTransforms.TransformType transform) {
 
@@ -27,18 +33,18 @@ public class ItemStackArcaneInfuserRender extends ItemStackTERenderBase {
     @Override
     protected void renderBlockSpecific(ItemStack stack, PoseStack matrix, MultiBufferSource buffer, int light, int overlay, ItemTransforms.TransformType transform) {
 
-        float scale = 1f;
-
-        matrix.translate(0, 1D, 0);
-        matrix.rotate(Vector3f.ZP.rotationDegrees(180));
-
-        matrix.scale(scale, scale, scale);
-        arcaneInfuser.render(matrix, buffer, light, overlay);
+//        float scale = 1f;
+//
+//        matrix.translate(0, 1D, 0);
+//        matrix.rotate(Vector3f.ZP.rotationDegrees(180));
+//
+//        matrix.scale(scale, scale, scale);
+//        arcaneInfuser.render(matrix, buffer, light, overlay);
     }
 
     @Nonnull
     @Override
-    protected ItemCameraTransforms.TransformType getTransform(ItemStack stack) {
+    protected ItemTransforms.TransformType getTransform(ItemStack stack) {
 
         return model.getTransform();
     }

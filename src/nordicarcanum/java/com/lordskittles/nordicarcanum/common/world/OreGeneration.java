@@ -3,11 +3,13 @@ package com.lordskittles.nordicarcanum.common.world;
 import com.lordskittles.nordicarcanum.common.registry.Blocks;
 import com.lordskittles.nordicarcanum.core.NordicConfig;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.OreFeatureConfig;
-import net.minecraft.world.gen.placement.Placement;
-import net.minecraft.world.gen.placement.TopSolidRangeConfig;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.VerticalAnchor;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.RangeDecoratorConfiguration;
+import net.minecraft.world.level.levelgen.heightproviders.TrapezoidHeight;
+import net.minecraft.world.level.levelgen.placement.FeatureDecorator;
 import net.minecraftforge.common.world.BiomeGenerationSettingsBuilder;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import org.jetbrains.annotations.NotNull;
@@ -47,11 +49,11 @@ public class OreGeneration {
     private static void addOreFeature(BiomeGenerationSettingsBuilder generation, int size, int top, int bottom, int perChunk, BlockState block, boolean toggle) {
 
         if(toggle) {
-            generation.withFeature(
-                    GenerationStage.Decoration.UNDERGROUND_ORES,
-                    Feature.ORE.withConfiguration(
-                            new OreFeatureConfig(OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, block, size))
-                            .withPlacement(Placement.RANGE.configure(new TopSolidRangeConfig(bottom, 0, top)))
+            generation.addFeature(
+                    GenerationStep.Decoration.UNDERGROUND_ORES,
+                    Feature.ORE.configured(
+                            new OreConfiguration(OreConfiguration.Predicates.STONE_ORE_REPLACEABLES, block, size))
+                            .decorated(FeatureDecorator.RANGE.configured(new RangeDecoratorConfiguration(TrapezoidHeight.of(VerticalAnchor.absolute(bottom), VerticalAnchor.absolute(top)))))
                             .count(perChunk));
         }
     }

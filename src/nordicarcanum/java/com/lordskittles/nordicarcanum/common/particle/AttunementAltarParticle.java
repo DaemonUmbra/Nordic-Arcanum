@@ -15,43 +15,49 @@ public class AttunementAltarParticle extends TextureSheetParticle {
     protected AttunementAltarParticle(ClientLevel world, double x, double y, double z, double motionX, double motionY, double motionZ) {
 
         super(world, x, y, z);
-        this.motionX = motionX;
-        this.motionY = motionY;
-        this.motionZ = motionZ;
+        this.xd = motionX;
+        this.yd = motionY;
+        this.zd = motionZ;
         this.coordX = x;
         this.coordY = y;
         this.coordZ = z;
-        this.prevPosX = x + motionX;
-        this.prevPosY = y + motionY;
-        this.prevPosZ = z + motionZ;
-        this.posX = this.prevPosX;
-        this.posY = this.prevPosY;
-        this.posZ = this.prevPosZ;
-        this.particleScale = 0.1F * (this.rand.nextFloat() * 0.5F + 0.2F);
-        float f = this.rand.nextFloat() * 0.6F + 0.4F;
-        this.particleRed = 0.9F * f;
-        this.particleGreen = 0.9F * f;
-        this.particleBlue = f;
-        this.canCollide = false;
-        this.maxAge = (int) (Math.random() * 10.0D) + 30;
-        this.particleScale = 0.11F * (this.rand.nextFloat() * 0.5F + 0.5F) * 2.0F;
+        this.xo = x + motionX;
+        this.yo = y + motionY;
+        this.zo = z + motionZ;
+        this.x = this.xo;
+        this.y = this.yo;
+        this.z = this.zo;
+        float f = this.random.nextFloat() * 0.6F + 0.4F;
+        this.rCol = 0.9F * f;
+        this.gCol = 0.9F * f;
+        this.bCol = f;
+        this.hasPhysics = false;
+        this.lifetime = (int) (Math.random() * 10.0D) + 30;
+        this.quadSize = 0.11F * (this.random.nextFloat() * 0.5F + 0.5F) * 2.0F;
     }
 
     @Override
-    public IParticleRenderType getRenderType() {
+    public ParticleRenderType getRenderType() {
 
-        return IParticleRenderType.PARTICLE_SHEET_OPAQUE;
+        return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
     }
 
     public void move(double x, double y, double z) {
 
-        this.setBoundingBox(this.getBoundingBox().offset(x, y, z)); this.resetPositionToBB();
+        this.setBoundingBox(this.getBoundingBox().move(x, y, z));
+        this.setLocationFromBoundingbox();
     }
 
-    public int getBrightnessForRender(float partialTick) {
+    public int getLightColor(float partialTick) {
 
-        int i = super.getBrightnessForRender(partialTick); float f = (float) this.age / (float) this.maxAge; f = f * f;
-        f = f * f; int j = i & 255; int k = i >> 16 & 255; k = k + (int) (f * 15.0F * 16.0F); if(k > 240) {
+        int i = super.getLightColor(partialTick);
+        float f = (float) this.age / (float) this.lifetime;
+        f = f * f;
+        f = f * f;
+        int j = i & 255;
+        int k = i >> 16 & 255;
+        k = k + (int) (f * 15.0F * 16.0F);
+        if(k > 240) {
             k = 240;
         }
 
@@ -60,31 +66,39 @@ public class AttunementAltarParticle extends TextureSheetParticle {
 
     public void tick() {
 
-        this.prevPosX = this.posX; this.prevPosY = this.posY; this.prevPosZ = this.posZ; if(this.age++ >= this.maxAge) {
-            this.setExpired();
+        this.xo = this.x;
+        this.yo = this.y;
+        this.zo = this.z;
+        if(this.age++ >= this.lifetime) {
+            this.remove();
         }
         else {
-            float f = (float) this.age / (float) this.maxAge; f = 1.0F - f; float f1 = 1.0F - f; f1 = f1 * f1;
-            f1 = f1 * f1; this.posX = this.coordX + this.motionX * (double) f;
-            this.posY = this.coordY + this.motionY * (double) f - (double) (f1 * 1.2F);
-            this.posZ = this.coordZ + this.motionZ * (double) f;
+            float f = (float) this.age / (float) this.lifetime;
+            f = 1.0F - f;
+            float f1 = 1.0F - f;
+            f1 = f1 * f1;
+            f1 = f1 * f1;
+            this.x = this.coordX + this.xd * (double) f;
+            this.y = this.coordY + this.yd * (double) f - (double) (f1 * 1.2F);
+            this.z = this.coordZ + this.zd * (double) f;
         }
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static class AttunementAltar implements IParticleFactory<AttunementAltarParticleType> {
+    public static class AttunementAltar implements ParticleProvider<AttunementAltarParticleType> {
 
-        private final IAnimatedSprite spriteSet;
+        private final SpriteSet spriteSet;
 
-        public AttunementAltar(IAnimatedSprite spriteSet) {
+        public AttunementAltar(SpriteSet spriteSet) {
 
             this.spriteSet = spriteSet;
         }
 
-        public Particle makeParticle(AttunementAltarParticleType typeIn, ClientWorld worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+        public Particle createParticle(AttunementAltarParticleType typeIn, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
 
-            AttunementAltarParticle particle = new AttunementAltarParticle(worldIn, x, y, z, xSpeed, ySpeed, zSpeed);
-            particle.selectSpriteRandomly(this.spriteSet); return particle;
+            AttunementAltarParticle particle = new AttunementAltarParticle(level, x, y, z, xSpeed, ySpeed, zSpeed);
+            particle.pickSprite(this.spriteSet);
+            return particle;
         }
     }
 }

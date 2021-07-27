@@ -1,10 +1,9 @@
 package com.lordskittles.nordicarcanum.common.utility;
 
-import com.lordskittles.arcanumapi.core.ArcanumNames;
 import com.lordskittles.nordicarcanum.core.NordicNames;
 import com.lordskittles.nordicarcanum.magic.schools.SchoolType;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;

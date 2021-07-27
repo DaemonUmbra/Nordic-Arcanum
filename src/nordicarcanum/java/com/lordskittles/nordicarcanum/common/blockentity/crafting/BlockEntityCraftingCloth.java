@@ -1,11 +1,11 @@
-package com.lordskittles.nordicarcanum.common.tileentity.crafting;
+package com.lordskittles.nordicarcanum.common.blockentity.crafting;
 
 import com.lordskittles.arcanumapi.arcanum.ArcanumServerManager;
 import com.lordskittles.arcanumapi.arcanum.IArcanumTile;
-import com.lordskittles.arcanumapi.common.tileentity.TileEntityInventory;
+import com.lordskittles.arcanumapi.common.blockentity.BlockEntityInventory;
 import com.lordskittles.arcanumapi.common.utilities.NBTUtilities;
 import com.lordskittles.nordicarcanum.common.inventory.containers.ContainerCraftingCloth;
-import com.lordskittles.nordicarcanum.common.registry.TileEntities;
+import com.lordskittles.nordicarcanum.common.registry.BlockEntities;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.lordskittles.nordicarcanum.core.NordicInventorySlots;
 import com.lordskittles.nordicarcanum.core.NordicNames;
@@ -32,7 +32,7 @@ import javax.annotation.Nullable;
 
 import static com.lordskittles.nordicarcanum.core.NordicNBTConstants.FACADE_NBT_KEY;
 
-public class TileEntityCraftingCloth extends TileEntityInventory<TileEntityCraftingCloth> implements IArcanumTile {
+public class BlockEntityCraftingCloth extends BlockEntityInventory<BlockEntityCraftingCloth> implements IArcanumTile {
 
     public static final ModelProperty<BakedModel> FACADE_MODEL = new ModelProperty<>();
     public static final ModelProperty<BlockState> FACADE_STATE = new ModelProperty<>();
@@ -42,9 +42,9 @@ public class TileEntityCraftingCloth extends TileEntityInventory<TileEntityCraft
     private float currentArcanum;
     private float maximumArcanum;
 
-    public TileEntityCraftingCloth(BlockPos pos, BlockState state) {
+    public BlockEntityCraftingCloth(BlockPos pos, BlockState state) {
 
-        super(TileEntities.crafting_cloth.get(), pos, state, NordicInventorySlots.CRAFTING_CLOTH, NordicNames.CRAFTING_CLOTH, NordicArcanum.MODID);
+        super(BlockEntities.crafting_cloth.get(), pos, state, NordicInventorySlots.CRAFTING_CLOTH, NordicNames.CRAFTING_CLOTH, NordicArcanum.MODID);
     }
 
     public void setFacadeState(BlockState facadeState) {

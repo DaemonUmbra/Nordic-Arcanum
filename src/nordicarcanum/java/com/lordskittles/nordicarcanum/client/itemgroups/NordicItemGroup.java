@@ -2,11 +2,11 @@ package com.lordskittles.nordicarcanum.client.itemgroups;
 
 import com.lordskittles.nordicarcanum.common.registry.Items;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 public class NordicItemGroup extends CreativeModeTab {
 
-    public static final NordicItemGroup INSTANCE = new NordicItemGroup(ItemGroup.GROUPS.length, "nordictab");
+    public static final NordicItemGroup INSTANCE = new NordicItemGroup(CreativeModeTab.TABS.length, "nordictab");
 
     private NordicItemGroup(int index, String label) {
 
@@ -14,7 +14,7 @@ public class NordicItemGroup extends CreativeModeTab {
     }
 
     @Override
-    public ItemStack createIcon() {
+    public ItemStack makeIcon() {
 
         return new ItemStack(Items.crafting_cloth_item.get());
     }

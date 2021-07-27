@@ -1,4 +1,4 @@
-package com.lordskittles.arcanumapi.common.tileentity;
+package com.lordskittles.arcanumapi.common.blockentity;
 
 import com.lordskittles.arcanumapi.common.network.DescSynced;
 import net.minecraft.nbt.CompoundTag;
@@ -6,8 +6,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 import javax.annotation.Nonnull;
-
-import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 
 public class SmartSyncTank extends FluidTank {
 
@@ -19,10 +17,10 @@ public class SmartSyncTank extends FluidTank {
     private boolean pending = false;
 
     private int syncTimer = - 1;
-    private final TileEntityFluidInventory owner;
+    private final BlockEntityFluidInventory owner;
     private final int threshold;
 
-    public SmartSyncTank(TileEntityFluidInventory owner, int capacity) {
+    public SmartSyncTank(BlockEntityFluidInventory owner, int capacity) {
 
         super(capacity);
 

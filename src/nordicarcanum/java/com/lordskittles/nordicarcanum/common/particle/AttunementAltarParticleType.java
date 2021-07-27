@@ -66,20 +66,20 @@ public class AttunementAltarParticleType extends ParticleType<AttunementAltarPar
     }
 
     @Override
-    public void write(FriendlyByteBuf buffer) {
+    public void writeToNetwork(FriendlyByteBuf buffer) {
 
         buffer.writeFloat(this.red); buffer.writeFloat(this.green); buffer.writeFloat(this.blue);
         buffer.writeFloat(this.alpha);
     }
 
     @Override
-    public String getParameters() {
+    public String writeToString() {
 
         return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f", Registry.PARTICLE_TYPE.getKey(this.getType()), this.red, this.green, this.blue, this.alpha);
     }
 
     @Override
-    public Codec<AttunementAltarParticleType> func_230522_e_() {
+    public Codec<AttunementAltarParticleType> codec() {
 
         return CODEC;
     }
@@ -89,7 +89,7 @@ public class AttunementAltarParticleType extends ParticleType<AttunementAltarPar
         return new Deserializer<AttunementAltarParticleType>() {
 
             @Override
-            public AttunementAltarParticleType deserialize(ParticleType<AttunementAltarParticleType> type, StringReader reader) throws CommandSyntaxException {
+            public AttunementAltarParticleType fromCommand(ParticleType<AttunementAltarParticleType> type, StringReader reader) throws CommandSyntaxException {
 
                 reader.expect(' '); float red = (float) reader.readDouble(); float green = (float) reader.readDouble();
                 float blue = (float) reader.readDouble(); float alpha = (float) reader.readDouble();
@@ -98,7 +98,7 @@ public class AttunementAltarParticleType extends ParticleType<AttunementAltarPar
             }
 
             @Override
-            public AttunementAltarParticleType read(ParticleType<AttunementAltarParticleType> type, FriendlyByteBuf buffer) {
+            public AttunementAltarParticleType fromNetwork(ParticleType<AttunementAltarParticleType> type, FriendlyByteBuf buffer) {
 
                 return new AttunementAltarParticleType(buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat());
             }

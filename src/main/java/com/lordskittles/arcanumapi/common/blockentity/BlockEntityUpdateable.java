@@ -1,4 +1,4 @@
-package com.lordskittles.arcanumapi.common.tileentity;
+package com.lordskittles.arcanumapi.common.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -8,11 +8,11 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
 
-public abstract class TileEntityUpdateable<T extends TileEntityUpdateable> extends BlockEntity {
+public abstract class BlockEntityUpdateable<T extends BlockEntityUpdateable> extends BlockEntity {
 
-    public TileEntityUpdateable(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state) {
+    public BlockEntityUpdateable(BlockEntityType<?> blockEntityTypeIn, BlockPos pos, BlockState state) {
 
-        super(tileEntityTypeIn, pos, state);
+        super(blockEntityTypeIn, pos, state);
     }
 
     protected int ticksExisted = 0;

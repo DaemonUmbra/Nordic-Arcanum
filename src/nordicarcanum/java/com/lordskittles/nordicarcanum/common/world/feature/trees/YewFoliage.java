@@ -4,22 +4,23 @@ import com.lordskittles.arcanumapi.common.world.feature.trees.FoliagePlacerBase;
 import com.lordskittles.nordicarcanum.common.registry.FoliageType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.gen.feature.FeatureSpread;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.Set;
+import java.util.function.BiConsumer;
 
 public class YewFoliage extends FoliagePlacerBase {
 
-    public static final Codec<YewFoliage> codec = RecordCodecBuilder.create((instance) -> func_236740_a_(instance).apply(instance, YewFoliage::new));
+    public static final Codec<YewFoliage> codec = RecordCodecBuilder.create((instance) -> blobParts(instance).apply(instance, YewFoliage::new));
 
-    public YewFoliage(FeatureSpread spreadA, FeatureSpread spreadB, int height) {
+    public YewFoliage(IntProvider spreadA, IntProvider spreadB, int height) {
 
         super(spreadA, spreadB, height, FoliageType.yew_foliage);
     }
 
     @Override
-    protected void placeLeaves(BlockPos position, Set<BlockPos> changedLeaves) {
+    protected void placeLeaves(BlockPos position, BiConsumer<BlockPos, BlockState> changedLeaves) {
         // Main Leaf Box
         BlockPos pos = new BlockPos(position.getX() - 2, position.getY(), position.getZ() - 2);
         placeLeafBox(pos, new BlockPos(5, 2, 5), changedLeaves);

@@ -8,25 +8,25 @@ import javax.annotation.Nonnull;
 
 public class NordicItemStackHandler extends ItemStackHandler {
 
-    protected final BlockEntity tile;
+    protected final BlockEntity entity;
 
     public NordicItemStackHandler(int size) {
 
         this(null, size);
     }
 
-    public NordicItemStackHandler(BlockEntity tile, int size) {
+    public NordicItemStackHandler(BlockEntity entity, int size) {
 
         super(size);
-        this.tile = tile;
+        this.entity = entity;
     }
 
     @Override
     protected void onContentsChanged(int slot) {
 
         super.onContentsChanged(slot);
-        if(this.tile != null)
-            this.tile.setChanged();
+        if(this.entity != null)
+            this.entity.setChanged();
     }
 
     @Nonnull

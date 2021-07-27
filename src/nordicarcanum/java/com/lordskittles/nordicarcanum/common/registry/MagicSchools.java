@@ -1,6 +1,5 @@
 package com.lordskittles.nordicarcanum.common.registry;
 
-import com.lordskittles.arcanumapi.core.ArcanumAPI;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.lordskittles.nordicarcanum.magic.schools.MagicSchool;
 import com.lordskittles.nordicarcanum.magic.schools.SchoolType;

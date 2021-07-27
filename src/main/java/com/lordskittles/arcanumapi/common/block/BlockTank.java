@@ -1,7 +1,7 @@
 package com.lordskittles.arcanumapi.common.block;
 
 import com.lordskittles.arcanumapi.common.network.PacketHandlerBase;
-import com.lordskittles.arcanumapi.common.tileentity.TileEntityFluidInventory;
+import com.lordskittles.arcanumapi.common.blockentity.BlockEntityFluidInventory;
 import com.lordskittles.arcanumapi.common.utilities.ClientUtilities;
 import com.lordskittles.arcanumapi.common.utilities.FluidUtilities;
 import com.lordskittles.arcanumapi.common.utilities.NBTUtilities;
@@ -41,13 +41,13 @@ import net.minecraftforge.fluids.FluidStack;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public abstract class BlockTank<T extends TileEntityFluidInventory> extends BlockMod implements IItemBlockOverride {
+public abstract class BlockTank<T extends BlockEntityFluidInventory> extends BlockMod implements IItemBlockOverride {
 
-    private final Class<T> tileClass;
+    private final Class<T> blockClass;
     private final String modid;
     private final PacketHandlerBase packetHandler;
 
-    public BlockTank(SoundType sound, CreativeModeTab group, Class<T> tileClass, String modid, PacketHandlerBase packetHandler) {
+    public BlockTank(SoundType sound, CreativeModeTab group, Class<T> blockClass, String modid, PacketHandlerBase packetHandler) {
 
         super(Block.Properties.of(Material.STONE, MaterialColor.STONE)
                 .strength(3.0F, 3.0F)
@@ -55,13 +55,11 @@ public abstract class BlockTank<T extends TileEntityFluidInventory> extends Bloc
                 .harvestLevel(Tiers.STONE.getLevel())
                 .harvestTool(ToolType.PICKAXE));
 
-        this.tileClass = tileClass;
+        this.blockClass = blockClass;
         this.modid = modid;
         this.packetHandler = packetHandler;
         this.group = group;
     }
-
-    public abstract BlockEntity createTileEntity(BlockState state, BlockGetter world);
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter world, List<Component> tooltip, TooltipFlag flag) {
@@ -84,7 +82,7 @@ public abstract class BlockTank<T extends TileEntityFluidInventory> extends Bloc
     public void onRemove(BlockState oldState, Level world, BlockPos pos, BlockState newState, boolean isMoving) {
 
         if(oldState != newState) {
-            TileEntityFluidInventory tank = ClientUtilities.getTileEntity(tileClass, pos);
+            BlockEntityFluidInventory tank = ClientUtilities.getTileEntity(blockClass, pos);
             if(tank != null) {
                 Player player = world.getNearestPlayer(pos.getX(), pos.getY(), pos.getZ(), 15D, null);
                 ItemStack stack = oldState.getBlock().getCloneItemStack(world, pos, oldState);
@@ -116,18 +114,18 @@ public abstract class BlockTank<T extends TileEntityFluidInventory> extends Bloc
     @Override
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
 
-        BlockEntity tile = world.getBlockEntity(pos);
+        BlockEntity entity = world.getBlockEntity(pos);
 
         if(! world.isClientSide) {
-            if(tile instanceof TileEntityFluidInventory) {
-                onTileActivated(world, player, (TileEntityFluidInventory) tile, pos, hand);
+            if(entity instanceof BlockEntityFluidInventory) {
+                onTileActivated(world, player, (BlockEntityFluidInventory) entity, pos, hand);
 
-                if(FluidUtilities.tryFluidInsert(tile, null, player, hand)) {
+                if(FluidUtilities.tryFluidInsert(entity, null, player, hand)) {
                     world.playSound(null, pos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 1.0f, 1.0f);
                     return InteractionResult.SUCCESS;
                 }
                 else
-                    if(FluidUtilities.tryFluidExtract(tile, null, player, hand)) {
+                    if(FluidUtilities.tryFluidExtract(entity, null, player, hand)) {
                         world.playSound(null, pos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 1.0f, 1.0f);
                         return InteractionResult.SUCCESS;
                     }
@@ -137,7 +135,7 @@ public abstract class BlockTank<T extends TileEntityFluidInventory> extends Bloc
         return InteractionResult.SUCCESS;
     }
 
-    protected void onTileActivated(Level world, Player player, TileEntityFluidInventory tile, BlockPos pos, InteractionHand hand) {
+    protected void onTileActivated(Level world, Player player, BlockEntityFluidInventory tile, BlockPos pos, InteractionHand hand) {
 
     }
 
@@ -151,7 +149,7 @@ public abstract class BlockTank<T extends TileEntityFluidInventory> extends Bloc
     public int getLightEmission(BlockState state, BlockGetter world, BlockPos pos) {
 
         int ambientLight = 0;
-        TileEntityFluidInventory tile = (TileEntityFluidInventory) world.getBlockEntity(pos);
+        BlockEntityFluidInventory tile = (BlockEntityFluidInventory) world.getBlockEntity(pos);
         if(tile != null) {
             FluidStack fluid = tile.getFluid();
             if(! fluid.isEmpty()) {

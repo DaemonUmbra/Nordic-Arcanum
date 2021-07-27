@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class ArcanumServerManager {
 
-    public static void useArcanum(ServerPlayer player, float arcanum, BlockEntity tile, PacketHandlerBase packetHandler) throws Exception {
+    public static void useArcanum(ServerPlayer player, float arcanum, BlockEntity block, PacketHandlerBase packetHandler) throws Exception {
 
         if(player.level.isClientSide)
             throw new Exception("Cannot use arcanum on the client...");
@@ -18,7 +18,7 @@ public class ArcanumServerManager {
         float current = MagicUtilities.getCurrentArcanum(player);
         float maximum = MagicUtilities.getMaximumArcanum(player);
 
-        packetHandler.sendToAllTracking(new PacketTileArcanumUpdate(tile.getBlockPos(), current, maximum), tile);
+        packetHandler.sendToAllTracking(new PacketTileArcanumUpdate(block.getBlockPos(), current, maximum), block);
     }
 
     public static void useArcanum(ServerPlayer player, float arcanum, PacketHandlerBase packetHandler) throws Exception {
@@ -33,7 +33,7 @@ public class ArcanumServerManager {
         packetHandler.sendToAllTracking(new PacketPlayerArcanumUpdate(current, maximum), player);
     }
 
-    public static void updateArcanum(ServerPlayer player, BlockEntity tile, PacketHandlerBase packetHandler) throws Exception {
+    public static void updateArcanum(ServerPlayer player, BlockEntity block, PacketHandlerBase packetHandler) throws Exception {
 
         if(player.level.isClientSide)
             throw new Exception("Cannot update arcanum on the client...");
@@ -41,7 +41,7 @@ public class ArcanumServerManager {
         float current = MagicUtilities.getCurrentArcanum(player);
         float maximum = MagicUtilities.getMaximumArcanum(player);
 
-        packetHandler.sendToAllTracking(new PacketTileArcanumUpdate(tile.getBlockPos(), current, maximum), tile);
+        packetHandler.sendToAllTracking(new PacketTileArcanumUpdate(block.getBlockPos(), current, maximum), block);
     }
 
     public static void replenishArcanum(ServerPlayer player, float arcanum, PacketHandlerBase packetHandler) throws Exception {

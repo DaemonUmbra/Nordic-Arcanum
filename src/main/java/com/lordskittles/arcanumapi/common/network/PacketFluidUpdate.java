@@ -1,6 +1,6 @@
 package com.lordskittles.arcanumapi.common.network;
 
-import com.lordskittles.arcanumapi.common.tileentity.TileEntityFluidInventory;
+import com.lordskittles.arcanumapi.common.blockentity.BlockEntityFluidInventory;
 import com.lordskittles.arcanumapi.common.utilities.ClientUtilities;
 import com.lordskittles.arcanumapi.core.ArcanumAPI;
 import net.minecraft.nbt.CompoundTag;
@@ -16,9 +16,9 @@ public class PacketFluidUpdate extends PacketBase {
     private final CompoundTag updateTag;
     private final float scale;
 
-    public PacketFluidUpdate(TileEntityFluidInventory tile) {
+    public PacketFluidUpdate(BlockEntityFluidInventory block) {
 
-        this(tile.getBlockPos(), tile.getUpdateTag(), tile.prevScale);
+        this(block.getBlockPos(), block.getUpdateTag(), block.prevScale);
     }
 
     private PacketFluidUpdate(BlockPos pos, CompoundTag updateTag, float scale) {
@@ -32,12 +32,12 @@ public class PacketFluidUpdate extends PacketBase {
 
         context.get().enqueueWork(() ->
         {
-            TileEntityFluidInventory tile = ClientUtilities.getTileEntity(TileEntityFluidInventory.class, message.pos);
-            if(tile == null) {
-                ArcanumAPI.LOG.info("Update tile packet received for position: {} in world, but no valid tile was found.", message.pos);
+            BlockEntityFluidInventory block = ClientUtilities.getTileEntity(BlockEntityFluidInventory.class, message.pos);
+            if(block == null) {
+                ArcanumAPI.LOG.info("Update block packet received for position: {} in level, but no valid block was found.", message.pos);
             }
             else {
-                tile.handleScaleUpdate(message.updateTag, message.scale);
+                block.handleScaleUpdate(message.updateTag, message.scale);
             }
         });
 

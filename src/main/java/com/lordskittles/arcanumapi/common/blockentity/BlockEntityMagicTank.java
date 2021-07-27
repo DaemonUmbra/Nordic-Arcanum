@@ -1,4 +1,4 @@
-package com.lordskittles.arcanumapi.common.tileentity;
+package com.lordskittles.arcanumapi.common.blockentity;
 
 import com.lordskittles.arcanumapi.common.network.PacketBase;
 import com.lordskittles.arcanumapi.common.network.PacketHandlerBase;
@@ -12,15 +12,15 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-public abstract class TileEntityMagicTank<T extends TileEntityMagicTank> extends TileEntityFluidInventory<TileEntityMagicTank> implements IArcanumUser {
+public abstract class BlockEntityMagicTank<T extends BlockEntityMagicTank> extends BlockEntityFluidInventory<BlockEntityMagicTank> implements IArcanumUser {
 
     private final int capacity;
     private final float retainCost;
     private final PacketHandlerBase packetHandler;
 
-    public TileEntityMagicTank(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state, int capacity, float retainCost, PacketHandlerBase packetHandler) {
+    public BlockEntityMagicTank(BlockEntityType<?> blockEntityTypeIn, BlockPos pos, BlockState state, int capacity, float retainCost, PacketHandlerBase packetHandler) {
 
-        super(tileEntityTypeIn, pos, state);
+        super(blockEntityTypeIn, pos, state);
         this.capacity = capacity;
         this.retainCost = retainCost;
         this.packetHandler = packetHandler;

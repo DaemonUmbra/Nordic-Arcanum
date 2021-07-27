@@ -8,17 +8,17 @@ import com.lordskittles.nordicarcanum.common.registry.Blocks;
 import com.lordskittles.nordicarcanum.common.registry.FoliageType;
 import com.lordskittles.nordicarcanum.common.registry.RecipeType;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.world.gen.foliageplacer.FoliagePlacerType;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerType;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.IForgeRegistry;
 
 @Mod.EventBusSubscriber(modid = NordicArcanum.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -47,7 +47,7 @@ public class RegistryEvents {
                 blockItem = override.getOverride();
             }
 
-            final Item.Properties properties = new Item.Properties().group(group);
+            final Item.Properties properties = new Item.Properties().tab(group);
             blockItem = blockItem == null ? new BlockItem(block, properties) : blockItem;
             blockItem.setRegistryName(block.getRegistryName());
             registry.register(blockItem);
@@ -55,7 +55,7 @@ public class RegistryEvents {
     }
 
     @SubscribeEvent
-    public static void onRegisterRecipeSerializers(RegistryEvent.Register<IRecipeSerializer<?>> event) {
+    public static void onRegisterRecipeSerializers(RegistryEvent.Register<RecipeSerializer<?>> event) {
 
         RecipeType.registerRecipeTypes(event.getRegistry());
 

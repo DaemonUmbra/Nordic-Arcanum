@@ -1,10 +1,10 @@
-package com.lordskittles.nordicarcanum.common.tileentity.magic;
+package com.lordskittles.nordicarcanum.common.blockentity.magic;
 
 import com.lordskittles.arcanumapi.common.utilities.NBTUtilities;
 import com.lordskittles.nordicarcanum.magic.schools.IMagicSchool;
 import com.lordskittles.nordicarcanum.common.item.magic.ItemSigil;
 import com.lordskittles.nordicarcanum.common.registry.Sounds;
-import com.lordskittles.nordicarcanum.common.registry.TileEntities;
+import com.lordskittles.nordicarcanum.common.registry.BlockEntities;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -18,14 +18,14 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 
-public class TileEntitySigilPodium extends BlockEntity /*implements TickableBlockEntity*/ {
+public class BlockEntitySigilPodium extends BlockEntity /*implements TickableBlockEntity*/ {
 
     private ItemStack heldSigil = ItemStack.EMPTY;
     protected int ticksExisted = 0;
 
-    public TileEntitySigilPodium(BlockPos pos, BlockState state) {
+    public BlockEntitySigilPodium(BlockPos pos, BlockState state) {
 
-        super(TileEntities.sigil_podium.get(), pos, state);
+        super(BlockEntities.sigil_podium.get(), pos, state);
     }
 
     public ItemStack getHeldSigil() {

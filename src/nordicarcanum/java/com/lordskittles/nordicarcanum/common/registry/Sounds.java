@@ -7,11 +7,9 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import RegistryObject;
 
 public class Sounds {
 
@@ -31,6 +29,6 @@ public class Sounds {
         double y = pos.getY() + 0.5D;
         double z = pos.getZ() + 0.5D;
 
-        world.playSound(player, x, y, z, sound, category, volume, world.rand.nextFloat() * pitchMultiplier + pitchOffset);
+        world.playSound(player, x, y, z, sound, category, volume, world.getRandom().nextFloat() * pitchMultiplier + pitchOffset);
     }
 }

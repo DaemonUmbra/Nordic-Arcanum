@@ -3,13 +3,13 @@ package com.lordskittles.nordicarcanum.common.item.crafting;
 import com.lordskittles.arcanumapi.common.item.ItemMod;
 import com.lordskittles.nordicarcanum.client.itemgroups.NordicItemGroup;
 import net.minecraft.world.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 public class ItemMortarPestle extends ItemMod {
 
     public ItemMortarPestle() {
 
-        super(new Item.Properties().group(NordicItemGroup.INSTANCE).maxStackSize(1));
+        super(new Item.Properties().tab(NordicItemGroup.INSTANCE).stacksTo(1));
     }
 
     @Override

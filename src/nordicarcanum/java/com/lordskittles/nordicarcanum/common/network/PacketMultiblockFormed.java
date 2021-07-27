@@ -8,7 +8,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.core.BlockPos;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -43,7 +43,7 @@ public class PacketMultiblockFormed extends PacketBase {
             else {
                 if(tile instanceof IMultiblock) {
                     ((IMultiblock) tile).setFormed(message.isFormed);
-                    tile.handleUpdateTag(tile.getBlockState(), message.updateTag);
+                    tile.handleUpdateTag(message.updateTag);
                 }
                 else {
                     NordicArcanum.LOG.info("Update tile packet received for position: {} in world, tile valid, but not a multiblock.", message.pos);
@@ -57,12 +57,12 @@ public class PacketMultiblockFormed extends PacketBase {
     public static void encode(PacketMultiblockFormed packet, FriendlyByteBuf buffer) {
 
         buffer.writeBlockPos(packet.pos);
-        buffer.writeCompoundTag(packet.updateTag);
+        buffer.writeNbt(packet.updateTag);
         buffer.writeBoolean(packet.isFormed);
     }
 
-    public static PacketMultiblockFormed decode(PacketBuffer buffer) {
+    public static PacketMultiblockFormed decode(FriendlyByteBuf buffer) {
 
-        return new PacketMultiblockFormed(buffer.readBlockPos(), buffer.readCompoundTag(), buffer.readBoolean());
+        return new PacketMultiblockFormed(buffer.readBlockPos(), buffer.readNbt(), buffer.readBoolean());
     }
 }

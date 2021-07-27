@@ -2,25 +2,16 @@ package com.lordskittles.nordicarcanum.client.render.item;
 
 import com.lordskittles.arcanumapi.client.render.item.ItemModelWrapper;
 import com.lordskittles.arcanumapi.client.render.item.ItemStackTERenderBase;
-import com.lordskittles.arcanumapi.common.utilities.NBTUtilities;
-import com.lordskittles.arcanumapi.core.NBTConstants;
 import com.lordskittles.nordicarcanum.client.render.item.model.ModelRod1;
 import com.lordskittles.nordicarcanum.client.render.item.model.ModelRod2;
 import com.lordskittles.nordicarcanum.client.render.item.model.ModelRod3;
 import com.lordskittles.nordicarcanum.client.render.item.model.ModelRod4;
-import com.lordskittles.nordicarcanum.common.item.crafting.RodMaterial;
-import com.lordskittles.nordicarcanum.common.item.crafting.RodShape;
-import com.lordskittles.nordicarcanum.common.item.magic.ItemRod;
-import com.lordskittles.nordicarcanum.core.NordicArcanum;
-import com.lordskittles.nordicarcanum.core.NordicResourceLocations;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
-import net.minecraft.client.model.Model;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -36,87 +27,88 @@ public class ItemStackRodRender extends ItemStackTERenderBase {
 
     public static ItemModelWrapper model;
 
-    @Override
-    protected void renderItemSpecific(ItemStack stack, PoseStack matrix, MultiBufferSource buffer, int light, int overlay, ItemTransforms.TransformType transform) {
+    public ItemStackRodRender(BlockEntityRenderDispatcher dispatcher, EntityModelSet modelSet) {
 
-        Model model = null;
-
-        ItemRod rod = (ItemRod) stack.getItem();
-
-        CompoundTag nbt = stack.getTag();
-
-        if(nbt == null) {
-            nbt = new CompoundTag();
-        }
-
-        CompoundTag localNBT = NBTUtilities.getPersistentData(NordicArcanum.MODID, nbt);
-        RodShape shape = RodShape.get(localNBT.getInt(NBTConstants.ROD_SHAPE_KEY));
-
-        RodMaterial material = rod.getMaterial();
-        ResourceLocation textureLoc = NordicResourceLocations.getRodTexture(material, shape.getValue() + 1);
-
-        switch(shape) {
-            case None:
-                textureLoc = NordicResourceLocations.getRodTexture(material, 1);
-            case Straight:
-                model = straight;
-                break;
-            case Twist:
-                model = twist;
-                break;
-            case Bend:
-                model = bend;
-                break;
-            case Pillar:
-                model = pillar;
-                break;
-        }
-
-        float scale = 2f;
-
-        if(this.transform == ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND) {
-            matrix.translate(1.1, 0.6, - 1.25);
-            matrix.rotate(Vector3f.ZP.rotationDegrees(110));
-            matrix.rotate(Vector3f.XP.rotationDegrees(45));
-        }
-        else
-            if(this.transform == ItemCameraTransforms.TransformType.THIRD_PERSON_LEFT_HAND) {
-                matrix.translate(- 1.1, 0.6, - 1.25);
-                matrix.rotate(Vector3f.ZN.rotationDegrees(110));
-                matrix.rotate(Vector3f.XP.rotationDegrees(45));
-            }
-            else
-                if(this.transform == ItemCameraTransforms.TransformType.FIRST_PERSON_RIGHT_HAND) {
-                    matrix.translate(0, - 0.6, 0.5);
-                    matrix.rotate(Vector3f.ZN.rotationDegrees(15));
-                    matrix.rotate(Vector3f.XN.rotationDegrees(15));
-                }
-                else
-                    if(this.transform == ItemCameraTransforms.TransformType.FIRST_PERSON_LEFT_HAND) {
-                        matrix.translate(0, - 0.6, - 0.5);
-                        matrix.rotate(Vector3f.ZN.rotationDegrees(15));
-                        matrix.rotate(Vector3f.XP.rotationDegrees(15));
-                    }
-                    else
-                        if(this.transform == ItemCameraTransforms.TransformType.GUI || this.transform == ItemCameraTransforms.TransformType.GROUND) {
-                            matrix.translate(0, 1.4D, 0);
-                            matrix.rotate(Vector3f.ZP.rotationDegrees(180));
-                        }
-
-        matrix.scale(0.75f, 0.75f, 0.75f);
-
-        matrix.scale(scale, scale, scale);
-        model.render(matrix, buffer.getBuffer(model.getRenderType(textureLoc)), light, overlay, 1, 1, 1, 1);
+        super(dispatcher, modelSet);
     }
 
     @Override
-    protected void renderBlockSpecific(ItemStack stack, MatrixStack matrix, IRenderTypeBuffer buffer, int light, int overlay, ItemCameraTransforms.TransformType transform) {
+    protected void renderItemSpecific(ItemStack stack, PoseStack matrix, MultiBufferSource buffer, int light, int overlay, ItemTransforms.TransformType transform) {
+
+//        Model model = null;
+//
+//        ItemRod rod = (ItemRod) stack.getItem();
+//
+//        CompoundTag nbt = stack.getTag();
+//
+//        if(nbt == null) {
+//            nbt = new CompoundTag();
+//        }
+//
+//        CompoundTag localNBT = NBTUtilities.getPersistentData(NordicArcanum.MODID, nbt);
+//        RodShape shape = RodShape.get(localNBT.getInt(NBTConstants.ROD_SHAPE_KEY));
+//
+//        RodMaterial material = rod.getMaterial();
+//        ResourceLocation textureLoc = NordicResourceLocations.getRodTexture(material, shape.getValue() + 1);
+//
+//        switch(shape) {
+//            case None:
+//                textureLoc = NordicResourceLocations.getRodTexture(material, 1);
+//            case Straight:
+//                model = straight;
+//                break;
+//            case Twist:
+//                model = twist;
+//                break;
+//            case Bend:
+//                model = bend;
+//                break;
+//            case Pillar:
+//                model = pillar;
+//                break;
+//        }
+//
+//        float scale = 2f;
+//
+//        if(this.transform == ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND) {
+//            matrix.translate(1.1, 0.6, - 1.25);
+//            matrix.rotate(Vector3f.ZP.rotationDegrees(110));
+//            matrix.rotate(Vector3f.XP.rotationDegrees(45));
+//        }
+//        else if(this.transform == ItemCameraTransforms.TransformType.THIRD_PERSON_LEFT_HAND) {
+//            matrix.translate(- 1.1, 0.6, - 1.25);
+//            matrix.rotate(Vector3f.ZN.rotationDegrees(110));
+//            matrix.rotate(Vector3f.XP.rotationDegrees(45));
+//        }
+//        else if(this.transform == ItemCameraTransforms.TransformType.FIRST_PERSON_RIGHT_HAND) {
+//            matrix.translate(0, - 0.6, 0.5);
+//            matrix.rotate(Vector3f.ZN.rotationDegrees(15));
+//            matrix.rotate(Vector3f.XN.rotationDegrees(15));
+//        }
+//        else if(this.transform == ItemCameraTransforms.TransformType.FIRST_PERSON_LEFT_HAND) {
+//            matrix.translate(0, - 0.6, - 0.5);
+//            matrix.rotate(Vector3f.ZN.rotationDegrees(15));
+//            matrix.rotate(Vector3f.XP.rotationDegrees(15));
+//        }
+//        else if(this.transform == ItemCameraTransforms.TransformType.GUI || this.transform == ItemCameraTransforms.TransformType.GROUND) {
+//            matrix.translate(0, 1.4D, 0);
+//            matrix.rotate(Vector3f.ZP.rotationDegrees(180));
+//        }
+//
+//        matrix.scale(0.75f, 0.75f, 0.75f);
+//
+//        matrix.scale(scale, scale, scale);
+//        model.render(matrix, buffer.getBuffer(model.getRenderType(textureLoc)), light, overlay, 1, 1, 1, 1);
+    }
+
+    @Override
+    protected void renderBlockSpecific(ItemStack stack, PoseStack matrix, MultiBufferSource buffer, int light, int overlay, ItemTransforms.TransformType transform) {
 
     }
 
     @Nonnull
     @Override
-    protected ItemCameraTransforms.TransformType getTransform(ItemStack stack) {
+    protected ItemTransforms.TransformType getTransform(ItemStack stack) {
 
         return model.getTransform();
     }

@@ -23,14 +23,14 @@ public class ContainerScreenCraftingCloth extends ContainerScreenBase<ContainerC
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(PoseStack stack, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY) {
 
-        super.drawGuiContainerBackgroundLayer(stack, partialTicks, mouseX, mouseY);
-        int left = this.guiLeft;
-        int top = this.guiTop;
+        super.renderBg(stack, partialTicks, mouseX, mouseY);
+        int left = this.leftPos;
+        int top = this.topPos;
 
         // Bar positioned at: 153, 11
-        float arcanumPercent = this.container.getCurrentArcanum() / this.container.getMaximumArcanum();
+        float arcanumPercent = this.menu.getCurrentArcanum() / this.menu.getMaximumArcanum();
         int offset = (int) (61 * arcanumPercent);
         this.blit(stack, left + 105, top + 13, 63, 190, offset, 12);
 

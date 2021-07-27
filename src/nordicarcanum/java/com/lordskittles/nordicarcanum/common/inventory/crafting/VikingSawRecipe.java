@@ -5,20 +5,17 @@ import com.google.gson.JsonObject;
 import com.lordskittles.arcanumapi.common.inventory.crafting.ArcaneRecipeBase;
 import com.lordskittles.nordicarcanum.common.registry.RecipeSerializers;
 import com.lordskittles.nordicarcanum.common.registry.RecipeType;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapedRecipe;
-import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
-
-import com.lordskittles.arcanumapi.common.inventory.crafting.ArcaneRecipeBase.DummyIInventory;
 
 public class VikingSawRecipe extends ArcaneRecipeBase {
 
@@ -45,19 +42,19 @@ public class VikingSawRecipe extends ArcaneRecipeBase {
     }
 
     @Override
-    public ItemStack getCraftingResult(DummyIInventory inv) {
+    public ItemStack assemble(DummyIInventory inv) {
 
         return this.result;
     }
 
     @Override
-    public boolean canFit(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
 
         return true;
     }
 
     @Override
-    public ItemStack getRecipeOutput() {
+    public ItemStack getResultItem() {
 
         return this.result;
     }
@@ -75,7 +72,7 @@ public class VikingSawRecipe extends ArcaneRecipeBase {
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public net.minecraft.world.item.crafting.RecipeType<?> getType() {
 
         return this.type;
     }
@@ -83,11 +80,11 @@ public class VikingSawRecipe extends ArcaneRecipeBase {
     public static class Serializer<T extends VikingSawRecipe> extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<VikingSawRecipe> {
 
         @Override
-        public VikingSawRecipe read(ResourceLocation recipeId, JsonObject json) {
+        public VikingSawRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
 
-            String group = GsonHelper.getString(json, "group", "");
-            JsonElement ingElement = (JsonElement) (JSONUtils.isJsonArray(json, "ingredient") ? JSONUtils.getJsonArray(json, "ingredient") : JSONUtils.getJsonObject(json, "ingredient"));
-            Ingredient ingredient = Ingredient.deserialize(ingElement);
+            String group = GsonHelper.getAsString(json, "group", "");
+            JsonElement ingElement = (JsonElement) (GsonHelper.isArrayNode(json, "ingredient") ? GsonHelper.getAsJsonArray(json, "ingredient") : GsonHelper.getAsJsonObject(json, "ingredient"));
+            Ingredient ingredient = Ingredient.fromJson(ingElement);
 
             if(! json.has("result")) {
                 throw new com.google.gson.JsonSyntaxException("Missing result, expected to find a string or object");
@@ -95,35 +92,35 @@ public class VikingSawRecipe extends ArcaneRecipeBase {
 
             ItemStack outputStack = ItemStack.EMPTY;
             if(json.get("result").isJsonObject()) {
-                outputStack = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "result"));
+                outputStack = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
             }
             else {
-                String result = JSONUtils.getString(json, "result");
+                String result = GsonHelper.getAsString(json, "result");
                 ResourceLocation resultLocation = new ResourceLocation(result);
                 outputStack = new ItemStack(ForgeRegistries.ITEMS.getValue(resultLocation));
             }
 
-            int hits = JSONUtils.getInt(json, "required_cuts");
+            int hits = GsonHelper.getAsInt(json, "required_cuts");
             return new VikingSawRecipe(recipeId, group, ingredient, outputStack, hits);
         }
 
         @Nullable
         @Override
-        public VikingSawRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+        public VikingSawRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
 
-            String group = buffer.readString(32767);
-            Ingredient ingredient = Ingredient.read(buffer);
-            ItemStack result = buffer.readItemStack();
+            String group = buffer.readUtf(32767);
+            Ingredient ingredient = Ingredient.fromNetwork(buffer);
+            ItemStack result = buffer.readItem();
             int hits = buffer.readVarInt();
             return new VikingSawRecipe(recipeId, group, ingredient, result, hits);
         }
 
         @Override
-        public void write(PacketBuffer buffer, VikingSawRecipe recipe) {
+        public void toNetwork(FriendlyByteBuf buffer, VikingSawRecipe recipe) {
 
-            buffer.writeString(recipe.getGroup());
-            recipe.ingredient.write(buffer);
-            buffer.writeItemStack(recipe.result);
+            buffer.writeUtf(recipe.getGroup());
+            recipe.ingredient.toNetwork(buffer);
+            buffer.writeItemStack(recipe.result, true);
             buffer.writeVarInt(recipe.cuts);
         }
     }

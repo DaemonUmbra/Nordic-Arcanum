@@ -14,13 +14,13 @@ public class GUIHandler {
 
         switch(id) {
             case ChangeSpell:
-                minecraft.displayGuiScreen(new ScreenChangeSchool(player));
+                minecraft.setScreen(new ScreenChangeSchool(player));
                 break;
             case SpellDisplay:
-                minecraft.displayGuiScreen(new ScreenSpellDisplay(player));
+                minecraft.setScreen(new ScreenSpellDisplay(player));
                 break;
             case ArcanumBar:
-                minecraft.displayGuiScreen(new ScreenArcanumBar(player));
+                minecraft.setScreen(new ScreenArcanumBar(player));
                 break;
         }
     }

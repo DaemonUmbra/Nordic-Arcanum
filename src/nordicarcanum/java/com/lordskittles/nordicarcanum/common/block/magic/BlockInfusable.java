@@ -6,14 +6,13 @@ import com.lordskittles.nordicarcanum.common.block.crafting.BlockAlchemyTable;
 import com.lordskittles.nordicarcanum.common.block.crafting.BlockStaffWorkbench;
 import com.lordskittles.nordicarcanum.common.block.decoration.BlockDecoration;
 import com.lordskittles.nordicarcanum.common.registry.Blocks;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.LevelReader;
 
 public class BlockInfusable extends BlockDecoration implements IInfusable {
 
@@ -71,6 +70,7 @@ public class BlockInfusable extends BlockDecoration implements IInfusable {
 
     @Override
     public BlockPos[] getInfusedPositions(Level world, BlockPos pos, BlockPos right, BlockState state, Direction direction) {
+
         switch(type) {
             case STAFF_WORKBENCH:
                 return new BlockPos[] { pos, pos.above(), right, right.above() };

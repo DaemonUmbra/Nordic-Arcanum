@@ -1,4 +1,4 @@
-package com.lordskittles.arcanumapi.common.tileentity;
+package com.lordskittles.arcanumapi.common.blockentity;
 
 import com.lordskittles.arcanumapi.common.network.PacketHandlerBase;
 import net.minecraft.core.BlockPos;
@@ -11,16 +11,16 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
 
-public abstract class TileEntityMagicChest<T extends TileEntityMagicChest<T>> extends TileEntityInventoryArcanum<T> {
+public abstract class BlockEntityMagicChest<T extends BlockEntityMagicChest<T>> extends BlockEntityInventoryArcanum<T> {
 
     protected float lidAngle;
     protected float prevLidAngle;
 
     private final float retainCost;
 
-    public TileEntityMagicChest(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state, int size, String containerId, float retainCost, String modid, PacketHandlerBase packetHandler) {
+    public BlockEntityMagicChest(BlockEntityType<?> blockEntityTypeIn, BlockPos pos, BlockState state, int size, String containerId, float retainCost, String modid, PacketHandlerBase packetHandler) {
 
-        super(tileEntityTypeIn, pos, state, size, containerId, modid, packetHandler);
+        super(blockEntityTypeIn, pos, state, size, containerId, modid, packetHandler);
 
         this.retainCost = retainCost;
     }

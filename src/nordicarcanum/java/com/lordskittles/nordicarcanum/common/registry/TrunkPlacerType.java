@@ -20,6 +20,6 @@ public class TrunkPlacerType<P extends TrunkPlacer> extends net.minecraft.world.
 
     private static <P extends TrunkPlacer> TrunkPlacerType<P> register(String name, Codec<P> codec) {
 
-        return Registry.register(Registry.TRUNK_REPLACER, name, new TrunkPlacerType<>(codec));
+        return Registry.register(Registry.TRUNK_PLACER_TYPES, name, new TrunkPlacerType<>(codec));
     }
 }

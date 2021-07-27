@@ -4,11 +4,9 @@ import com.lordskittles.nordicarcanum.common.inventory.crafting.*;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.lordskittles.nordicarcanum.core.NordicNames;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import RegistryObject;
 
 public class RecipeSerializers {
 

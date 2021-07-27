@@ -1,7 +1,7 @@
 package com.lordskittles.nordicarcanum.core;
 
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.item.Item;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 
@@ -16,11 +16,11 @@ public class NordicTags {
 
     public static boolean IsBlockInTag(BlockState state, String tag) {
 
-        return BlockTags.getCollection().get(NordicArcanum.RL(tag)).contains(state.getBlock());
+        return BlockTags.getAllTags().getTag(NordicArcanum.RL(tag)).contains(state.getBlock());
     }
 
     public static boolean IsItemInTag(Item item, String tag) {
 
-        return ItemTags.getCollection().get(NordicArcanum.RL(tag)).contains(item);
+        return ItemTags.getAllTags().getTag(NordicArcanum.RL(tag)).contains(item);
     }
 }

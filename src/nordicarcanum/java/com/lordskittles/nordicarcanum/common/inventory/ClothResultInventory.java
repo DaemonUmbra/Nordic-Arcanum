@@ -1,7 +1,7 @@
 package com.lordskittles.nordicarcanum.common.inventory;
 
 import com.lordskittles.nordicarcanum.common.inventory.crafting.CraftingClothRecipe;
-import com.lordskittles.nordicarcanum.common.tileentity.crafting.TileEntityCraftingCloth;
+import com.lordskittles.nordicarcanum.common.blockentity.crafting.BlockEntityCraftingCloth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ResultContainer;
 
@@ -9,9 +9,9 @@ import javax.annotation.Nonnull;
 
 public class ClothResultInventory extends ResultContainer {
 
-    private final TileEntityCraftingCloth tile;
+    private final BlockEntityCraftingCloth tile;
 
-    public ClothResultInventory(TileEntityCraftingCloth tile) {
+    public ClothResultInventory(BlockEntityCraftingCloth tile) {
 
         super();
 
@@ -19,15 +19,15 @@ public class ClothResultInventory extends ResultContainer {
     }
 
     @Override
-    public void onCrafting(@Nonnull Player player) {
+    public void awardUsedRecipes(@Nonnull Player player) {
 
         if(this.getRecipeUsed() instanceof CraftingClothRecipe) {
-            if(! this.tile.getWorld().isRemote) {
+            if(! this.tile.getLevel().isClientSide) {
                 CraftingClothRecipe clothRecipe = (CraftingClothRecipe) this.getRecipeUsed();
                 this.tile.useArcanum(player, clothRecipe.getArcanum());
             }
         }
 
-        super.onCrafting(player);
+        super.awardUsedRecipes(player);
     }
 }

@@ -6,26 +6,26 @@ import com.lordskittles.nordicarcanum.magic.progression.ProgressionManager;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 
 public class CommandResetSchools {
 
     public static ArgumentBuilder<CommandSourceStack, ?> register() {
 
         return Commands.register(NordicNames.RESET_SCHOOLS_COMMAND, CommandResetSchools.class)
-                .requires(cs -> cs.hasPermissionLevel(4))
+                .requires(cs -> cs.hasPermission(4))
                 .executes(CommandResetSchools::execute);
     }
 
-    private static int execute(CommandContext<CommandSource> context) {
+    private static int execute(CommandContext<CommandSourceStack> context) {
 
-        CommandSource source = context.getSource();
-        Entity entity = source.getEntity();
+        CommandSourceStack sourceStack = context.getSource();
+        Entity entity = sourceStack.getEntity();
 
-        if(entity instanceof PlayerEntity) {
-            ProgressionManager.resetSchools((PlayerEntity) entity);
-            source.sendFeedback(Commands.getCommandFeedback(NordicNames.RESET_SCHOOLS_COMMAND), true);
+        if(entity instanceof Player) {
+            ProgressionManager.resetSchools((Player) entity);
+            sourceStack.sendSuccess(Commands.getCommandFeedback(NordicNames.RESET_SCHOOLS_COMMAND), true);
         }
 
         return 0;

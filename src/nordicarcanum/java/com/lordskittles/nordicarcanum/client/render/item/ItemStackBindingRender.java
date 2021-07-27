@@ -14,13 +14,14 @@ import com.lordskittles.nordicarcanum.common.item.magic.ItemBinding;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.lordskittles.nordicarcanum.core.NordicResourceLocations;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.model.Model;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -35,6 +36,11 @@ public class ItemStackBindingRender extends ItemStackTERenderBase {
     private final ModelBindingCage cage = new ModelBindingCage();
 
     public static ItemModelWrapper model;
+
+    public ItemStackBindingRender(BlockEntityRenderDispatcher dispatcher, EntityModelSet modelSet) {
+
+        super(dispatcher, modelSet);
+    }
 
     @Override
     protected void renderItemSpecific(ItemStack stack, PoseStack matrix, MultiBufferSource buffer, int light, int overlay, ItemTransforms.TransformType transform) {
@@ -75,20 +81,20 @@ public class ItemStackBindingRender extends ItemStackTERenderBase {
         float scale = 2f;
 
         matrix.translate(- 0.15, 2.6D, 0);
-        matrix.rotate(Vector3f.ZP.rotationDegrees(180));
+//        matrix.rotate(Vector3f.ZP.rotationDegrees(180));
 
         matrix.scale(scale, scale, scale);
-        model.render(matrix, buffer.getBuffer(model.getRenderType(textureLoc)), light, overlay, 1, 1, 1, 1);
+//        model.render(matrix, buffer.getBuffer(model.getRenderType(textureLoc)), light, overlay, 1, 1, 1, 1);
     }
 
     @Override
-    protected void renderBlockSpecific(ItemStack stack, MatrixStack matrix, IRenderTypeBuffer buffer, int light, int overlay, ItemCameraTransforms.TransformType transform) {
+    protected void renderBlockSpecific(ItemStack stack, PoseStack matrix, MultiBufferSource buffer, int light, int overlay, ItemTransforms.TransformType transform) {
 
     }
 
     @Nonnull
     @Override
-    protected ItemCameraTransforms.TransformType getTransform(ItemStack stack) {
+    protected ItemTransforms.TransformType getTransform(ItemStack stack) {
 
         return model.getTransform();
     }

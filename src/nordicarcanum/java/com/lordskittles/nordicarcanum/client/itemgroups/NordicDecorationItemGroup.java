@@ -1,13 +1,12 @@
 package com.lordskittles.nordicarcanum.client.itemgroups;
 
 import com.lordskittles.nordicarcanum.common.registry.Blocks;
-import com.lordskittles.nordicarcanum.common.registry.Items;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 public class NordicDecorationItemGroup extends CreativeModeTab {
 
-    public static final NordicDecorationItemGroup INSTANCE = new NordicDecorationItemGroup(ItemGroup.GROUPS.length, "nordicdecorationtab");
+    public static final NordicDecorationItemGroup INSTANCE = new NordicDecorationItemGroup(CreativeModeTab.TABS.length, "nordicdecorationtab");
 
     private NordicDecorationItemGroup(int index, String label) {
 
@@ -15,7 +14,7 @@ public class NordicDecorationItemGroup extends CreativeModeTab {
     }
 
     @Override
-    public ItemStack createIcon() {
+    public ItemStack makeIcon() {
 
         return new ItemStack(Blocks.feldspar_brick.get());
     }

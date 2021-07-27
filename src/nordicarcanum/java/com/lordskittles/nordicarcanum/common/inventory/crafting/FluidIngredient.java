@@ -4,15 +4,15 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.Tag;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
@@ -67,8 +67,8 @@ public class FluidIngredient extends Ingredient {
     private Collection<Fluid> getFluidList() {
 
         if(fluids == null && tagId != null) {
-            Tag<Fluid> tag = FluidTags.getCollection().get(tagId);
-            fluids = tag == null ? Collections.emptyList() : ImmutableList.copyOf(tag.getAllElements());
+            Tag<Fluid> tag = FluidTags.getAllTags().getTag(tagId);
+            fluids = tag == null ? Collections.emptyList() : ImmutableList.copyOf(tag.getValues());
         }
         return fluids;
     }
@@ -80,7 +80,7 @@ public class FluidIngredient extends Ingredient {
     }
 
     @Override
-    public boolean hasNoMatchingItems() {
+    public boolean isEmpty() {
 
         return getFluidList().isEmpty();
     }
@@ -92,7 +92,7 @@ public class FluidIngredient extends Ingredient {
     }
 
     @Override
-    public ItemStack[] getMatchingStacks() {
+    public ItemStack[] getItems() {
 
         if(cachedStacks == null) {
             cachedStacks = getFluidList().stream()
@@ -114,7 +114,7 @@ public class FluidIngredient extends Ingredient {
     }
 
     @Override
-    public JsonElement serialize() {
+    public JsonElement toJson() {
 
         JsonObject json = new JsonObject();
         json.addProperty("type", Serializer.ID.toString());
@@ -150,7 +150,7 @@ public class FluidIngredient extends Ingredient {
         public static final ResourceLocation ID = new ResourceLocation("nordicarcanum:fluid");
 
         @Override
-        public FluidIngredient parse(PacketBuffer buffer) {
+        public FluidIngredient parse(FriendlyByteBuf buffer) {
 
             int n = buffer.readVarInt();
             int amount = buffer.readVarInt();
@@ -162,7 +162,7 @@ public class FluidIngredient extends Ingredient {
         }
 
         @Override
-        public void write(PacketBuffer buffer, FluidIngredient ingredient) {
+        public void write(FriendlyByteBuf buffer, FluidIngredient ingredient) {
 
             buffer.writeVarInt(ingredient.getFluidList().size());
             buffer.writeVarInt(ingredient.amount);
@@ -174,17 +174,17 @@ public class FluidIngredient extends Ingredient {
         @Override
         public FluidIngredient parse(JsonObject json) {
 
-            int amount = JSONUtils.getInt(json, "amount", 1000);
+            int amount = GsonHelper.getAsInt(json, "amount", 1000);
             if(json.has("tag")) {
-                ResourceLocation rl = new ResourceLocation(JSONUtils.getString(json, "tag"));
-                if(FluidTags.getCollection().get(rl) == null) {
+                ResourceLocation rl = new ResourceLocation(GsonHelper.getAsString(json, "tag"));
+                if(FluidTags.getAllTags().getTag(rl) == null) {
                     throw new JsonSyntaxException("Unknown fluid tag '" + rl + "'");
                 }
                 return new FluidIngredient(rl, amount);
             }
             else
                 if(json.has("fluid")) {
-                    ResourceLocation fluidName = new ResourceLocation(JSONUtils.getString(json, "fluid"));
+                    ResourceLocation fluidName = new ResourceLocation(GsonHelper.getAsString(json, "fluid"));
                     Fluid fluid = ForgeRegistries.FLUIDS.getValue(fluidName);
                     if(fluid == null || fluid == Fluids.EMPTY) {
                         throw new JsonSyntaxException("Unknown fluid '" + fluidName + "'");

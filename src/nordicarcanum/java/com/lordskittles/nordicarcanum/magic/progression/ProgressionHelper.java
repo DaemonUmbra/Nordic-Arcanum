@@ -1,16 +1,15 @@
 package com.lordskittles.nordicarcanum.magic.progression;
 
 import com.google.common.io.Files;
-import com.lordskittles.arcanumapi.core.ArcanumAPI;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtIo;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.storage.FolderName;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.storage.LevelResource;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.LogicalSidedProvider;
+import net.minecraftforge.fmllegacy.LogicalSidedProvider;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -42,7 +41,7 @@ public class ProgressionHelper {
     @Nonnull
     private static PlayerProgress getProgressServer(ServerPlayer player) {
 
-        return getProgress(player.getUniqueID());
+        return getProgress(player.getUUID());
     }
 
     @Nonnull
@@ -106,11 +105,11 @@ public class ProgressionHelper {
 
     private static void loadUnsafe(UUID uuid, File playerFile) throws Exception {
 
-        CompoundNBT nbt = CompressedStreamTools.read(playerFile);
+        CompoundTag nbt = NbtIo.read(playerFile);
         loadUnsafeFromNBT(uuid, nbt);
     }
 
-    private static void loadUnsafeFromNBT(UUID uuid, @Nullable CompoundNBT nbt) {
+    private static void loadUnsafeFromNBT(UUID uuid, @Nullable CompoundTag nbt) {
 
         PlayerProgress progress = new PlayerProgress();
         if(nbt != null && ! nbt.isEmpty()) {
@@ -120,10 +119,10 @@ public class ProgressionHelper {
         playerProgressServer.put(uuid, progress);
     }
 
-    public static void savePlayerProgress(PlayerEntity player) {
+    public static void savePlayerProgress(Player player) {
 
-        if(player instanceof ServerPlayerEntity) {
-            savePlayerProgress(player.getUniqueID(), false);
+        if(player instanceof ServerPlayer) {
+            savePlayerProgress(player.getUUID(), false);
         }
     }
 
@@ -146,7 +145,7 @@ public class ProgressionHelper {
         File file = new File(getPlayerDirectory(), uuid.toString() + ".arcanum");
         if(! file.exists()) {
             try {
-                CompressedStreamTools.write(new CompoundNBT(), file);
+                NbtIo.write(new CompoundTag(), file);
             }
             catch(IOException ignored) {}
         }
@@ -159,7 +158,7 @@ public class ProgressionHelper {
         File file = new File(getPlayerDirectory(), uuid.toString() + ".arcanumbackup");
         if(! file.exists()) {
             try {
-                CompressedStreamTools.write(new CompoundNBT(), file);
+                NbtIo.write(new CompoundTag(), file);
             }
             catch(IOException ignored) {} //Will be created later anyway... just as fail-safe.
         }
@@ -172,7 +171,7 @@ public class ProgressionHelper {
         if(server == null)
             return null;
 
-        File dir = new File(server.func_240776_a_(new FolderName(NordicArcanum.MODID)).toUri());
+        File dir = new File(server.getWorldPath(new LevelResource(NordicArcanum.MODID)).toUri());
         if(! dir.exists()) {
             dir.mkdirs();
         }

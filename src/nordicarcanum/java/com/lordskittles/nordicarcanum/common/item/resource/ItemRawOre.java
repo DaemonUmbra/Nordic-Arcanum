@@ -8,6 +8,6 @@ public class ItemRawOre extends ItemMod {
 
     public ItemRawOre() {
 
-        super(new Item.Properties().group(NordicResourcesItemGroup.INSTANCE));
+        super(new Item.Properties().tab(NordicResourcesItemGroup.INSTANCE));
     }
 }

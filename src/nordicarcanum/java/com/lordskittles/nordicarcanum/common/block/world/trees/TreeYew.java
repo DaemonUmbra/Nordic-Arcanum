@@ -4,29 +4,28 @@ import com.lordskittles.nordicarcanum.common.registry.Blocks;
 import com.lordskittles.nordicarcanum.common.registry.Features;
 import com.lordskittles.nordicarcanum.common.world.feature.trees.YewFoliage;
 import com.lordskittles.nordicarcanum.common.world.feature.trees.YewTrunk;
-import net.minecraft.block.trees.Tree;
-import net.minecraft.world.level.levelgen.feature.stateproviders.SimpleStateProvider;
+import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
-import net.minecraft.world.gen.feature.FeatureSpread;
-import net.minecraft.world.gen.feature.TwoLayerFeature;
+import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
+import net.minecraft.world.level.levelgen.feature.stateproviders.SimpleStateProvider;
 
 import java.util.Random;
 
 public class TreeYew extends NordicTree {
 
-    public static final TreeConfiguration CONFIG = (new TreeConfiguration.TreeConfigurationBuilder(new SimpleStateProvider(Blocks.yew_log.get().getDefaultState()),
-            new SimpleBlockStateProvider(Blocks.yew_leaves.get().getDefaultState()), new YewFoliage(FeatureSpread.create(2, 0), FeatureSpread.create(0, 0), 3),
-            new YewTrunk(4, 2, 0), new TwoLayerFeature(1, 0, 1))).setIgnoreVines().build();
+    public static final TreeConfiguration CONFIG = (new TreeConfiguration.TreeConfigurationBuilder(new SimpleStateProvider(Blocks.yew_log.get().defaultBlockState()),
+            new YewTrunk(4, 2, 0), new SimpleStateProvider(Blocks.yew_leaves.get().defaultBlockState()), new SimpleStateProvider(Blocks.yew_sapling.get().defaultBlockState()),
+            new YewFoliage(UniformInt.of(2, 0), UniformInt.of(0, 0), 3), new TwoLayersFeatureSize(1, 0, 1))).ignoreVines().build();
 
     @Override
-    protected ConfiguredFeature<BaseTreeFeatureConfig, ?> getTreeFeature(Random rand, boolean bool) {
+    protected ConfiguredFeature<TreeConfiguration, ?> getConfiguredFeature(Random rand, boolean bool) {
 
-        return Features.yew_tree.get().withConfiguration(CONFIG);
+        return Features.yew_tree.get().configured(CONFIG);
     }
 
     @Override
-    public BaseTreeFeatureConfig getConfig() {
+    public TreeConfiguration getConfig() {
 
         return CONFIG;
     }

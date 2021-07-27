@@ -3,24 +3,24 @@ package com.lordskittles.nordicarcanum.common.item.magic;
 import com.lordskittles.arcanumapi.common.item.ItemMod;
 import com.lordskittles.arcanumapi.common.utilities.BlockUtilities;
 import com.lordskittles.arcanumapi.common.utilities.MathUtilities;
-import com.lordskittles.nordicarcanum.client.itemgroups.NordicItemGroup;
 import com.lordskittles.nordicarcanum.client.itemgroups.NordicResourcesItemGroup;
 import com.lordskittles.nordicarcanum.common.block.IInfusable;
 import com.lordskittles.nordicarcanum.common.registry.Blocks;
 import com.lordskittles.nordicarcanum.common.registry.Particles;
 import com.lordskittles.nordicarcanum.common.registry.Sounds;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
+import com.mojang.math.Vector3d;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.*;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Random;
 
@@ -28,24 +28,24 @@ public class ItemInfusedArcanePowder extends ItemMod {
 
     public ItemInfusedArcanePowder() {
 
-        super(new Item.Properties().group(NordicResourcesItemGroup.INSTANCE).maxStackSize(4));
+        super(new Item.Properties().tab(NordicResourcesItemGroup.INSTANCE).stacksTo(4));
     }
 
     @Override
-    public boolean hasEffect(ItemStack stack) {
+    public boolean isFoil(ItemStack stack) {
 
         return true;
     }
 
     @Override
-    public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
+    public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
 
-        BlockPos pos = context.getPos();
-        Direction direction = context.getPlacementHorizontalFacing().rotateY().getOpposite();
+        BlockPos pos = context.getClickedPos();
+        Direction direction = context.getHorizontalDirection().getClockWise().getOpposite();
         BlockPos right = BlockUtilities.getRightPos(direction, pos);
 
-        World world = context.getWorld();
-        PlayerEntity player = context.getPlayer();
+        Level world = context.getLevel();
+        Player player = context.getPlayer();
         BlockState state = world.getBlockState(pos);
 
         if(state.getBlock() instanceof IInfusable) {
@@ -55,25 +55,25 @@ public class ItemInfusedArcanePowder extends ItemMod {
                 adjustItemStack(stack, player);
 
                 infusable.infuse(world, pos, right, state, direction);
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
         }
-        else if(state == net.minecraft.block.Blocks.GLASS.getDefaultState()) {
+        else if(state == net.minecraft.world.level.block.Blocks.GLASS.defaultBlockState()) {
             playInfusionEffect(world, player, new BlockPos[] { pos }, context);
             adjustItemStack(stack, player);
 
-            world.setBlockState(pos, Blocks.arcane_glass.get().getDefaultState());
+            world.setBlock(pos, Blocks.arcane_glass.get().defaultBlockState(), 19);
 
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
 
-        return ActionResultType.PASS;
+        return InteractionResult.PASS;
     }
 
-    private void playInfusionEffect(World world, PlayerEntity player, BlockPos[] pos, ItemUseContext context) {
+    private void playInfusionEffect(Level level, Player player, BlockPos[] pos, UseOnContext context) {
 
-        Vector3d playerPos = MathUtilities.posToHandPos(player, context.getHand());
-        Random rand = world.rand;
+        Vec3 playerPos = MathUtilities.posToHandPos(player, context.getHand());
+        Random rand = level.getRandom();
 
         int count = 50;
         for(int i = 0; i < count / pos.length; i++) {
@@ -82,11 +82,11 @@ public class ItemInfusedArcanePowder extends ItemMod {
 
             for(BlockPos x : pos) {
 
-                Vector3d blockPos = new Vector3d(x.getX(), x.getY(), x.getZ());
+                Vec3 blockPos = new Vec3(x.getX(), x.getY(), x.getZ());
                 blockPos = blockPos.add(0.5D, 0.5D, 0.5D);
                 blockPos = blockPos.subtract(playerPos);
 
-                world.addParticle(
+                level.addParticle(
                         Particles.transform_sparkle_particle.get(),
                         playerPos.x,
                         playerPos.y,
@@ -96,10 +96,10 @@ public class ItemInfusedArcanePowder extends ItemMod {
                         blockPos.z / 11.0D + rand.nextGaussian() * 0.025D);
             }
         }
-        Sounds.play(Sounds.infusion.get(), world, SoundCategory.PLAYERS, pos[0], player, 1F, 0.1F, 0.9F);
+        Sounds.play(Sounds.infusion.get(), level, SoundSource.PLAYERS, pos[0], player, 1F, 0.1F, 0.9F);
     }
 
-    private void adjustItemStack(ItemStack stack, PlayerEntity player) {
+    private void adjustItemStack(ItemStack stack, Player player) {
 
         if(player.isCreative())
             return;
@@ -109,6 +109,6 @@ public class ItemInfusedArcanePowder extends ItemMod {
             newStack = new ItemStack(stack.getItem(), stack.getCount() - 1);
         }
 
-        player.setItemStackToSlot(EquipmentSlotType.MAINHAND, newStack);
+        player.setItemSlot(EquipmentSlot.MAINHAND, newStack);
     }
 }

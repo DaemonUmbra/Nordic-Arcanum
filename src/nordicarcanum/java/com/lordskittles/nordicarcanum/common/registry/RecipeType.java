@@ -5,7 +5,6 @@ import com.lordskittles.nordicarcanum.common.inventory.crafting.*;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.lordskittles.nordicarcanum.core.NordicNames;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.Registry;
@@ -19,9 +18,7 @@ import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import ArcaneRecipeBase;
-
-public class RecipeType<T extends ArcaneRecipeBase> implements RecipeType<T> {
+public class RecipeType<T extends ArcaneRecipeBase> implements net.minecraft.world.item.crafting.RecipeType<T> {
 
     private static final List<RecipeType<? extends ArcaneRecipeBase>> TYPES = new ArrayList<>();
 
@@ -66,7 +63,7 @@ public class RecipeType<T extends ArcaneRecipeBase> implements RecipeType<T> {
 
         if(cachedRecipes.isEmpty()) {
             RecipeManager recipeManager = world.getRecipeManager();
-            List<T> recipes = recipeManager.getRecipes(this, ArcaneRecipeBase.DummyIInventory.getInstance(), world);
+            List<T> recipes = recipeManager.getRecipesFor(this, ArcaneRecipeBase.DummyIInventory.getInstance(), world);
             recipes.forEach(recipe -> cachedRecipes.put(recipe.getId(), recipe));
         }
 

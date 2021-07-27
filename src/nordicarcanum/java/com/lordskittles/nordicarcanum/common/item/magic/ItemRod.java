@@ -8,15 +8,15 @@ import com.lordskittles.nordicarcanum.client.render.item.ItemStackRodRender;
 import com.lordskittles.nordicarcanum.common.item.crafting.RodMaterial;
 import com.lordskittles.nordicarcanum.common.item.crafting.RodShape;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.ChatFormatting;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -30,7 +30,7 @@ public class ItemRod extends ItemMod {
 
     public ItemRod(RodMaterial material) {
 
-        super(new Item.Properties().group(NordicItemGroup.INSTANCE).setISTER(() -> ItemStackRodRender::new));
+        super(new Item.Properties().tab(NordicItemGroup.INSTANCE));//.setISTER(() -> ItemStackRodRender::new));
 
         this.material = material;
     }
@@ -52,18 +52,16 @@ public class ItemRod extends ItemMod {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 
-        tooltip.add(new StringTextComponent(TextFormatting.BLUE + I18n.format(NordicArcanum.MODID + ".rod." + shape.title)));
+        tooltip.add(new TranslatableComponent(NordicArcanum.MODID + ".rod." + shape.title).setStyle(Style.EMPTY.applyFormat(ChatFormatting.BLUE)));
     }
 
     @Override
-    public boolean updateItemStackNBT(CompoundNBT nbt) {
+    public void verifyTagAfterLoad(CompoundTag nbt) {
 
-        CompoundNBT base = NBTUtilities.getPersistentData(NordicArcanum.MODID, nbt);
+        CompoundTag base = NBTUtilities.getPersistentData(NordicArcanum.MODID, nbt);
 
         this.shape = RodShape.get(base.getInt(NBTConstants.ROD_SHAPE_KEY));
-
-        return true;
     }
 }

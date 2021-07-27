@@ -1,4 +1,4 @@
-package com.lordskittles.arcanumapi.common.tileentity;
+package com.lordskittles.arcanumapi.common.blockentity;
 
 import com.lordskittles.arcanumapi.common.inventory.containers.ContainerBase;
 import com.lordskittles.arcanumapi.common.inventory.containers.ContainerStorageBase;
@@ -14,39 +14,39 @@ import net.minecraft.world.phys.AABB;
 
 import javax.annotation.Nullable;
 
-public class TileEntityInventorySyncable<T extends TileEntityInventorySyncable<T>> extends TileEntityInventory<T> {
+public class BlockEntityInventorySyncable<T extends BlockEntityInventorySyncable<T>> extends BlockEntityInventory<T> {
 
     private int ticksSinceSync;
 
-    public TileEntityInventorySyncable(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state, int size, String containerId, String modid) {
+    public BlockEntityInventorySyncable(BlockEntityType<?> blockEntityTypeIn, BlockPos pos, BlockState state, int size, String containerId, String modid) {
 
-        super(tileEntityTypeIn, pos, state, size, containerId, modid);
+        super(blockEntityTypeIn, pos, state, size, containerId, modid);
     }
 
-    private static int calculatePlayersUsingSync(Level world, TileEntityInventorySyncable tile, int ticksSinceSync, int x, int y, int z, int numPlayersUsing) {
+    private static int calculatePlayersUsingSync(Level world, BlockEntityInventorySyncable block, int ticksSinceSync, int x, int y, int z, int numPlayersUsing) {
 
         if(numPlayersUsing != 0 && (ticksSinceSync + x + y + z) % 200 == 0) {
-            numPlayersUsing = calculatePlayersUsing(world, tile, x, y, z);
+            numPlayersUsing = calculatePlayersUsing(world, block, x, y, z);
         }
 
         return numPlayersUsing;
     }
 
-    private static int calculatePlayersUsing(Level world, TileEntityInventorySyncable tile, int x, int y, int z) {
+    private static int calculatePlayersUsing(Level world, BlockEntityInventorySyncable entity, int x, int y, int z) {
 
         int i = 0;
 
         for(Player player : world.getEntitiesOfClass(Player.class, new AABB((double) ((float) x - 5.0F), (double) ((float) y - 5.0F), (double) ((float) z - 5.0F), (double) ((float) (x + 1) + 5.0F), (double) ((float) (y + 1) + 5.0F), (double) ((float) (z + 1) + 5.0F)))) {
             if(player.containerMenu instanceof ContainerBase) {
                 Container inventory = ((ContainerBase) player.containerMenu).getTileInventory();
-                if(inventory == tile) {
+                if(inventory == entity) {
                     ++ i;
                 }
             }
             else
                 if(player.containerMenu instanceof ContainerStorageBase) {
                     Container inventory = ((ContainerStorageBase) player.containerMenu).getTileInventory();
-                    if(inventory == tile) {
+                    if(inventory == entity) {
                         ++ i;
                     }
                 }

@@ -10,10 +10,20 @@ import com.lordskittles.nordicarcanum.common.registry.Structures;
 import com.lordskittles.nordicarcanum.core.NordicConfig;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
+import net.minecraft.world.level.levelgen.feature.TreeFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.HeightmapConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.levelgen.placement.ChanceDecoratorConfiguration;
 import net.minecraft.world.level.levelgen.placement.ConfiguredDecorator;
+import net.minecraft.world.level.levelgen.placement.FeatureDecorator;
+import net.minecraft.world.level.levelgen.placement.FrequencyWithExtraChanceDecoratorConfiguration;
 import net.minecraftforge.common.world.BiomeGenerationSettingsBuilder;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 
@@ -69,28 +79,28 @@ public class FeatureGeneration {
         }
     }
 
-    private static <C extends NoneFeatureConfiguration> void addStructureToBiome(BiomeGenerationSettingsBuilder generation, StructureFeature<NoneFeatureConfiguration, ? extends StructureFeature<C>> feature, boolean toggle) {
+    private static <C extends NoneFeatureConfiguration> void addStructureToBiome(BiomeGenerationSettingsBuilder generation, ConfiguredStructureFeature<NoneFeatureConfiguration, ? extends StructureFeature<C>> feature, boolean toggle) {
 
         if(toggle) {
-            generation.withStructure(feature);
+            generation.addStructureStart(feature);
         }
     }
 
     private static void addLakeToBiome(BiomeGenerationSettingsBuilder generation, BlockState state, ConfiguredDecorator placement, boolean toggle) {
 
         if(toggle) {
-            generation.withFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Feature.LAKE.withConfiguration(new BlockStateFeatureConfig(state)).withPlacement(placement));
+            generation.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, Feature.LAKE.configured(new BlockStateConfiguration(state)).decorated(placement));
         }
     }
 
     @SuppressWarnings("rawtypes")
-    private static void addTreeToBiome(BiomeGenerationSettingsBuilder generation, @Nonnull TreeFeature tree, BaseTreeFeatureConfig config, int count, float extraChance, int extraCount, boolean toggle) {
+    private static void addTreeToBiome(BiomeGenerationSettingsBuilder generation, @Nonnull TreeFeature tree, TreeConfiguration config, int count, float extraChance, int extraCount, boolean toggle) {
 
         if(toggle) {
-            generation.withFeature(GenerationStage.Decoration.VEGETAL_DECORATION,
-                    tree.withConfiguration(config)
-                            .withPlacement(Placement.COUNT_EXTRA.configure(new AtSurfaceWithExtraConfig(count, extraChance, extraCount)))
-                            .withPlacement(Placement.HEIGHTMAP_WORLD_SURFACE.configure(NoPlacementConfig.NO_PLACEMENT_CONFIG)));
+            generation.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION,
+                    tree.configured(config)
+                            .decorated(FeatureDecorator.COUNT_EXTRA.configured(new FrequencyWithExtraChanceDecoratorConfiguration(count, extraChance, extraCount)))
+                            .decorated(FeatureDecorator.HEIGHTMAP.configured(new HeightmapConfiguration(Heightmap.Types.WORLD_SURFACE))));
         }
     }
 }

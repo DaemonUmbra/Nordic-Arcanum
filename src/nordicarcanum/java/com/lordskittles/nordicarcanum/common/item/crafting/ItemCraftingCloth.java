@@ -3,69 +3,69 @@ package com.lordskittles.nordicarcanum.common.item.crafting;
 import com.lordskittles.arcanumapi.common.item.ItemMod;
 import com.lordskittles.nordicarcanum.client.itemgroups.NordicItemGroup;
 import com.lordskittles.nordicarcanum.common.registry.Blocks;
-import com.lordskittles.nordicarcanum.common.tileentity.crafting.TileEntityCraftingCloth;
+import com.lordskittles.nordicarcanum.common.blockentity.crafting.BlockEntityCraftingCloth;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
-import net.minecraft.block.*;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 import java.util.List;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class ItemCraftingCloth extends ItemMod {
 
     public ItemCraftingCloth() {
 
-        super(new Properties().group(NordicItemGroup.INSTANCE).maxStackSize(1));
+        super(new Properties().tab(NordicItemGroup.INSTANCE).stacksTo(1));
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 
-        tooltip.add(new TranslationTextComponent(NordicArcanum.MODID + ".crafting_cloth_instructions").mergeStyle(TextFormatting.BLUE));
+        tooltip.add(new TranslatableComponent(NordicArcanum.MODID + ".crafting_cloth_instructions").setStyle(Style.EMPTY.applyFormat(ChatFormatting.BLUE)));
 
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
     }
 
     @Override
-    public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
+    public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
 
-        BlockPos pos = context.getPos();
-        World world = context.getWorld();
+        BlockPos pos = context.getClickedPos();
+        Level world = context.getLevel();
         BlockState currentState = world.getBlockState(pos);
-        PlayerEntity player = context.getPlayer();
-        TileEntity tile = world.getTileEntity(pos);
+        Player player = context.getPlayer();
+        BlockEntity block = world.getBlockEntity(pos);
 
         if(isValidBlock(currentState)) {
-            if(tile == null) {
-                world.setBlockState(pos, Blocks.crafting_cloth.get().getDefaultState());
-                tile = world.getTileEntity(pos);
-                if(tile instanceof TileEntityCraftingCloth) {
-                    TileEntityCraftingCloth cloth = (TileEntityCraftingCloth) tile;
+            if(block == null) {
+                world.setBlock(pos, Blocks.crafting_cloth.get().defaultBlockState(), 19);
+                block = world.getBlockEntity(pos);
+                if(block instanceof BlockEntityCraftingCloth) {
+                    BlockEntityCraftingCloth cloth = (BlockEntityCraftingCloth) block;
                     cloth.setFacadeState(currentState);
                 }
 
-                player.setHeldItem(context.getHand(), ItemStack.EMPTY);
+                player.setItemInHand(context.getHand(), ItemStack.EMPTY);
             }
         }
-        return ActionResultType.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     private boolean isValidBlock(BlockState currentState) {
 
         return ! (currentState.getBlock() instanceof BushBlock) &&
-               ! (currentState.getBlock() instanceof IGrowable) && ! (currentState.getBlock() instanceof GrassBlock) &&
+               ! (currentState.getBlock() instanceof BonemealableBlock) && ! (currentState.getBlock() instanceof GrassBlock) &&
                ! (currentState.getBlock() instanceof FenceBlock) && ! (currentState.getBlock() instanceof DoorBlock);
     }
 }

@@ -1,6 +1,6 @@
 package com.lordskittles.arcanumapi.common.inventory.containers;
 
-import com.lordskittles.arcanumapi.common.tileentity.TileEntityInventory;
+import com.lordskittles.arcanumapi.common.blockentity.BlockEntityInventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.Container;
@@ -9,26 +9,26 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 
-public abstract class ContainerStorageBase<T extends TileEntityInventory> extends AbstractContainerMenu implements INordicContainer {
+public abstract class ContainerStorageBase<T extends BlockEntityInventory> extends AbstractContainerMenu implements INordicContainer {
 
-    public final T Tile;
+    public final T blockEntity;
     protected final ContainerLevelAccess canInteract;
 
     protected int nonPlayerSlotCount = 0;
 
-    public ContainerStorageBase(MenuType<?> container, int nonPlayerSlotCount, final int windowId, final Inventory playerInventory, final T tile) {
+    public ContainerStorageBase(MenuType<?> container, int nonPlayerSlotCount, final int windowId, final Inventory playerInventory, final T blockEntity) {
 
         super(container, windowId);
 
-        this.Tile = tile;
-        this.Tile.startOpen(playerInventory.player);
-        this.canInteract = ContainerLevelAccess.create(tile.getLevel(), tile.getBlockPos());
+        this.blockEntity = blockEntity;
+        this.blockEntity.startOpen(playerInventory.player);
+        this.canInteract = ContainerLevelAccess.create(blockEntity.getLevel(), blockEntity.getBlockPos());
         this.nonPlayerSlotCount = nonPlayerSlotCount;
     }
 
     public Container getTileInventory() {
 
-        return Tile;
+        return blockEntity;
     }
 
     protected int generateStorageSlots(int startIndex, int rows, int columns, int startX, int startY, int spacing) {
@@ -38,7 +38,7 @@ public abstract class ContainerStorageBase<T extends TileEntityInventory> extend
         for(int row = 0; row < rows; row++) {
             for(int col = 0; col < columns; col++) {
                 index = startIndex + ((row * columns) + col);
-                this.addSlot(new Slot(Tile, index, startX + (col * spacing), startY + (row * spacing)));
+                this.addSlot(new Slot(blockEntity, index, startX + (col * spacing), startY + (row * spacing)));
             }
         }
 
@@ -79,6 +79,6 @@ public abstract class ContainerStorageBase<T extends TileEntityInventory> extend
 
     public void removed(Player playerIn) {
 
-        this.Tile.stopOpen(playerIn);
+        this.blockEntity.stopOpen(playerIn);
     }
 }

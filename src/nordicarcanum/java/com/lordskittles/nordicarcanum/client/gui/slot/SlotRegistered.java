@@ -18,13 +18,13 @@ public class SlotRegistered extends Slot {
     }
 
     @Override
-    public boolean isItemValid(ItemStack stack) {
+    public boolean mayPlace(ItemStack stack) {
 
         return NordicRegistry.isItemValid(stack.getItem(), type);
     }
 
     @Override
-    public int getSlotStackLimit() {
+    public int getMaxStackSize() {
 
         return 1;
     }

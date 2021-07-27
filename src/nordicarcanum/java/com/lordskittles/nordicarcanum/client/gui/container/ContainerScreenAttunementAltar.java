@@ -7,31 +7,31 @@ import com.lordskittles.arcanumapi.client.gui.utilities.Tab;
 import com.lordskittles.arcanumapi.client.gui.utilities.TabGroup;
 import com.lordskittles.arcanumapi.common.math.UVInt;
 import com.lordskittles.arcanumapi.common.math.Vector2Int;
-import com.lordskittles.nordicarcanum.magic.schools.MagicSchool;
-import com.lordskittles.nordicarcanum.magic.spells.Spell;
+import com.lordskittles.nordicarcanum.common.blockentity.magic.BlockEntityAttunementAltar;
+import com.lordskittles.nordicarcanum.common.blockentity.magic.BlockEntitySigilPodium;
 import com.lordskittles.nordicarcanum.common.inventory.containers.ContainerAttunementAltar;
-import com.lordskittles.nordicarcanum.common.tileentity.magic.TileEntityAttunementAltar;
-import com.lordskittles.nordicarcanum.common.tileentity.magic.TileEntitySigilPodium;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.lordskittles.nordicarcanum.core.NordicNames;
 import com.lordskittles.nordicarcanum.core.NordicResourceLocations;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.lordskittles.nordicarcanum.magic.schools.MagicSchool;
+import com.lordskittles.nordicarcanum.magic.spells.Spell;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.components.events.ContainerEventHandler;
 import net.minecraft.client.renderer.Rect2i;
-import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.network.chat.Component;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.entity.player.Inventory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ContainerScreenAttunementAltar extends ContainerScreenBase<ContainerAttunementAltar> implements ContainerEventHandler {
 
-    public TileEntityAttunementAltar Tile;
+    public BlockEntityAttunementAltar Tile;
 
     private boolean multiblockValid = false;
     private List<Button> buttons = new ArrayList<>();
@@ -51,7 +51,7 @@ public class ContainerScreenAttunementAltar extends ContainerScreenBase<Containe
 
         setTextureRect(0, 0, 212, 225);
 
-        this.Tile = container.getTile();
+        this.Tile = container.getEntity();
         this.multiblockValid = this.Tile.isMultiblockFormed;
     }
 
@@ -110,7 +110,7 @@ public class ContainerScreenAttunementAltar extends ContainerScreenBase<Containe
                     NordicResourceLocations.BUTTON_TEXTURES,
                     this.minecraft,
                     this::blit,
-                    (location, minecraft) -> minecraft.getTextureManager().bindTexture(location)
+                    (location, minecraft) -> minecraft.getTextureManager().bindForSetup(location)
             );
 
             buttons.add(button);
@@ -124,9 +124,9 @@ public class ContainerScreenAttunementAltar extends ContainerScreenBase<Containe
     private List<MagicSchool> getSchools() {
 
         List<MagicSchool> schools = new ArrayList<>();
-        List<TileEntitySigilPodium> podiums = this.Tile.getPodiums();
+        List<BlockEntitySigilPodium> podiums = this.Tile.getPodiums();
 
-        for(TileEntitySigilPodium podium : podiums) {
+        for(BlockEntitySigilPodium podium : podiums) {
             if(podium != null) {
                 if(podium.getSchool() != null) {
                     schools.add((MagicSchool) podium.getSchool());
@@ -138,35 +138,35 @@ public class ContainerScreenAttunementAltar extends ContainerScreenBase<Containe
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY) {
 
-        RenderSystem.color4f(this.red, this.green, this.blue, this.alpha);
+        RenderSystem.clearColor(this.red, this.green, this.blue, this.alpha);
 
-        int left = this.guiLeft;
-        int top = this.guiTop;
+        int left = this.leftPos;
+        int top = this.topPos;
 
-        drawInnerGui(matrixStack);
+        drawInnerGui(stack);
 
         if(! this.Tile.isMultiblockFormed) {
-            this.minecraft.getTextureManager().bindTexture(this.texture);
-            this.blit(matrixStack, left + (this.xSize / 2) - 48, top + this.ySize / 2 - 10, 1, 235, 102, 20);
-            TranslationTextComponent text = new TranslationTextComponent("attunement_altar.invalid");
+            this.minecraft.getTextureManager().bindForSetup(this.texture);
+            this.blit(stack, left + (this.getXSize() / 2) - 48, top + this.getYSize() / 2 - 10, 1, 235, 102, 20);
+            TranslatableComponent text = new TranslatableComponent("attunement_altar.invalid");
 
             // TODO: Replace the getstring with the correct formatted string
-            this.font.drawString(matrixStack, text.getString(), left + (this.xSize / 2) - 44, top + (this.ySize / 2) - 4.5f, TextFormatting.WHITE.getColor());
+//            this.drawString(stack, text.getString(), left + (this.getXSize() / 2) - 44, top + (this.getYSize() / 2) - 4.5f, ChatFormatting.WHITE.getColor());
         }
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY) {
+    protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
 
-        RenderSystem.color4f(this.red, this.green, this.blue, this.alpha);
-        this.minecraft.getTextureManager().bindTexture(this.texture);
+        RenderSystem.clearColor(this.red, this.green, this.blue, this.alpha);
+        this.minecraft.getTextureManager().bindForSetup(this.texture);
 
-        this.blit(matrixStack, 0, 0, 0, 0, this.xSize, this.ySize);
+        this.blit(matrixStack, 0, 0, 0, 0, this.getXSize(), this.getYSize());
         this.group.draw(matrixStack);
 
-        super.drawGuiContainerForegroundLayer(matrixStack, mouseX, mouseY);
+        super.renderLabels(matrixStack, mouseX, mouseY);
     }
 
     @Override
@@ -186,17 +186,17 @@ public class ContainerScreenAttunementAltar extends ContainerScreenBase<Containe
     @Override
     public boolean mouseClicked(double posX, double posY, int mouseButton) {
 
-        if(this.group.handleClick(posX, posY, this.guiLeft, this.guiTop)) {
+        if(this.group.handleClick(posX, posY, this.leftPos, this.topPos)) {
             rebuildButtonList();
         }
 
         return super.mouseClicked(posX, posY, mouseButton);
     }
 
-    protected void drawInnerGui(MatrixStack matrixStack) {
+    protected void drawInnerGui(PoseStack matrixStack) {
 
-        int boxStartX = (this.width - this.xSize) / 2;
-        int boxStartY = (this.height - this.ySize) / 2;
+        int boxStartX = (this.width - this.getXSize()) / 2;
+        int boxStartY = (this.height - this.getYSize()) / 2;
         preRenderInner(matrixStack, boxStartX, boxStartY);
 
         if(this.Tile.isMultiblockFormed) {
@@ -208,50 +208,50 @@ public class ContainerScreenAttunementAltar extends ContainerScreenBase<Containe
         postRenderInner(matrixStack);
     }
 
-    private void preRenderInner(MatrixStack matrixStack, int boxStartX, int boxStartY) {
+    private void preRenderInner(PoseStack matrixStack, int boxStartX, int boxStartY) {
 
-        RenderSystem.pushMatrix();
-        RenderSystem.translatef((float) (boxStartX + bgRect.getX()), (float) (boxStartY + bgRect.getY()), 0.0F);
-
-        RenderSystem.pushMatrix();
-        RenderSystem.enableDepthTest();
-        RenderSystem.translatef(0.0F, 0.0F, 950.0F);
-        RenderSystem.colorMask(false, false, false, false);
-        fill(matrixStack, 4680, 2260, - 4680, - 2260, - 16777216);
-        RenderSystem.colorMask(true, true, true, true);
-        RenderSystem.translatef(0.0F, 0.0F, - 950.0F);
-        RenderSystem.depthFunc(518);
-        fill(matrixStack, bgRect.getWidth(), bgRect.getHeight(), 0, 0, - 16777216);
-        RenderSystem.depthFunc(515);
-
-        RenderSystem.scalef(1.2f, 1.2f, 0);
-
-        this.minecraft.getTextureManager().bindTexture(this.backgroundTexture);
-        this.blit(matrixStack, 0, 0, bgRect.getX(), bgRect.getY(), bgRect.getWidth(), bgRect.getHeight());
-
-        RenderSystem.scalef(1f, 1f, 0);
-
-        this.minecraft.getTextureManager().bindTexture(this.texture);
-
-        RenderSystem.translatef(position.x, position.y, 0);
-        RenderSystem.scalef(scale, scale, 0F);
+//        RenderSystem.pushMatrix();
+//        RenderSystem.translatef((float) (boxStartX + bgRect.getX()), (float) (boxStartY + bgRect.getY()), 0.0F);
+//
+//        RenderSystem.pushMatrix();
+//        RenderSystem.enableDepthTest();
+//        RenderSystem.translatef(0.0F, 0.0F, 950.0F);
+//        RenderSystem.colorMask(false, false, false, false);
+//        fill(matrixStack, 4680, 2260, - 4680, - 2260, - 16777216);
+//        RenderSystem.colorMask(true, true, true, true);
+//        RenderSystem.translatef(0.0F, 0.0F, - 950.0F);
+//        RenderSystem.depthFunc(518);
+//        fill(matrixStack, bgRect.getWidth(), bgRect.getHeight(), 0, 0, - 16777216);
+//        RenderSystem.depthFunc(515);
+//
+//        RenderSystem.scalef(1.2f, 1.2f, 0);
+//
+//        this.minecraft.getTextureManager().bindTexture(this.backgroundTexture);
+//        this.blit(matrixStack, 0, 0, bgRect.getX(), bgRect.getY(), bgRect.getWidth(), bgRect.getHeight());
+//
+//        RenderSystem.scalef(1f, 1f, 0);
+//
+//        this.minecraft.getTextureManager().bindTexture(this.texture);
+//
+//        RenderSystem.translatef(position.x, position.y, 0);
+//        RenderSystem.scalef(scale, scale, 0F);
     }
 
-    private void postRenderInner(MatrixStack matrixStack) {
+    private void postRenderInner(PoseStack matrixStack) {
 
-        RenderSystem.scalef(- scale, - scale, 0F);
-        RenderSystem.translatef(- 108, - 108, 0);
-        RenderSystem.depthFunc(518);
-        RenderSystem.translatef(0.0F, 0.0F, - 950.0F);
-        RenderSystem.colorMask(false, false, false, false);
-        fill(matrixStack, 4680, 2260, - 4680, - 2260, - 16777216);
-        RenderSystem.colorMask(true, true, true, true);
-        RenderSystem.translatef(0.0F, 0.0F, 950.0F);
-        RenderSystem.depthFunc(515);
-        RenderSystem.popMatrix();
-
-        RenderSystem.popMatrix();
-        RenderSystem.depthFunc(515);
-        RenderSystem.disableDepthTest();
+//        RenderSystem.scalef(- scale, - scale, 0F);
+//        RenderSystem.translatef(- 108, - 108, 0);
+//        RenderSystem.depthFunc(518);
+//        RenderSystem.translatef(0.0F, 0.0F, - 950.0F);
+//        RenderSystem.colorMask(false, false, false, false);
+//        fill(matrixStack, 4680, 2260, - 4680, - 2260, - 16777216);
+//        RenderSystem.colorMask(true, true, true, true);
+//        RenderSystem.translatef(0.0F, 0.0F, 950.0F);
+//        RenderSystem.depthFunc(515);
+//        RenderSystem.popMatrix();
+//
+//        RenderSystem.popMatrix();
+//        RenderSystem.depthFunc(515);
+//        RenderSystem.disableDepthTest();
     }
 }

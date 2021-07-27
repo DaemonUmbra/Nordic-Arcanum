@@ -1,14 +1,14 @@
-package com.lordskittles.nordicarcanum.common.tileentity.crafting;
+package com.lordskittles.nordicarcanum.common.blockentity.crafting;
 
 import com.lordskittles.arcanumapi.common.network.PacketBase;
-import com.lordskittles.arcanumapi.common.tileentity.SmartSyncTank;
-import com.lordskittles.arcanumapi.common.tileentity.TileEntityFluidInventory;
+import com.lordskittles.arcanumapi.common.blockentity.SmartSyncTank;
+import com.lordskittles.arcanumapi.common.blockentity.BlockEntityFluidInventory;
 import com.lordskittles.arcanumapi.common.utilities.InventoryUtilities;
 import com.lordskittles.arcanumapi.common.utilities.ItemUtilities;
 import com.lordskittles.arcanumapi.common.utilities.NBTUtilities;
 import com.lordskittles.nordicarcanum.common.inventory.crafting.ArcaneInfuserRecipe;
 import com.lordskittles.nordicarcanum.common.registry.RecipeType;
-import com.lordskittles.nordicarcanum.common.registry.TileEntities;
+import com.lordskittles.nordicarcanum.common.registry.BlockEntities;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.lordskittles.nordicarcanum.core.NordicFluidValues;
 import com.lordskittles.nordicarcanum.core.NordicTags;
@@ -29,7 +29,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
-public class TileEntityArcaneInfuser extends TileEntityFluidInventory<TileEntityArcaneInfuser> implements Container {
+public class BlockEntityArcaneInfuser extends BlockEntityFluidInventory<BlockEntityArcaneInfuser> implements Container {
 
     private ArcaneInfuserRecipe recipe = null;
 
@@ -39,9 +39,9 @@ public class TileEntityArcaneInfuser extends TileEntityFluidInventory<TileEntity
     protected IItemHandlerModifiable items = InventoryUtilities.createHandler(this);
     protected LazyOptional<IItemHandlerModifiable> itemHandler = LazyOptional.of(() -> items);
 
-    public TileEntityArcaneInfuser(BlockPos pos, BlockState state) {
+    public BlockEntityArcaneInfuser(BlockPos pos, BlockState state) {
 
-        super(TileEntities.arcane_infuser.get(), pos, state);
+        super(BlockEntities.arcane_infuser.get(), pos, state);
     }
 
     private ArcaneInfuserRecipe getRecipe(ItemStack input, FluidStack fluidInput) {
@@ -128,7 +128,7 @@ public class TileEntityArcaneInfuser extends TileEntityFluidInventory<TileEntity
         ItemStack output = ItemStack.EMPTY;
 
         if(this.progress >= this.recipe.time) {
-            output = this.recipe.getRecipeOutput();
+            output = this.recipe.getResultItem();
         }
 
         if(output != ItemStack.EMPTY) {

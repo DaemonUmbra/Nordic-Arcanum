@@ -1,4 +1,4 @@
-package com.lordskittles.arcanumapi.common.tileentity;
+package com.lordskittles.arcanumapi.common.blockentity;
 
 import com.lordskittles.arcanumapi.common.utilities.InventoryUtilities;
 import com.lordskittles.arcanumapi.common.utilities.NBTUtilities;
@@ -17,7 +17,6 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.util.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.network.chat.Component;
@@ -39,7 +38,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Nameable;
 
-public abstract class TileEntityInventory<T extends TileEntityInventory<T>> extends TileEntityUpdateable<T> implements Container, MenuProvider, Nameable {
+public abstract class BlockEntityInventory<T extends BlockEntityInventory<T>> extends BlockEntityUpdateable<T> implements Container, MenuProvider, Nameable {
 
     protected int numPlayersUsing;
 
@@ -55,7 +54,7 @@ public abstract class TileEntityInventory<T extends TileEntityInventory<T>> exte
     private final Component title;
     private final String modid;
 
-    public TileEntityInventory(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state, int size, String containerId, String modid) {
+    public BlockEntityInventory(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state, int size, String containerId, String modid) {
 
         super(tileEntityTypeIn, pos, state);
 
@@ -65,7 +64,7 @@ public abstract class TileEntityInventory<T extends TileEntityInventory<T>> exte
         this.modid = modid;
     }
 
-    public static void swapContents(TileEntityInventory tile, TileEntityInventory other) {
+    public static void swapContents(BlockEntityInventory tile, BlockEntityInventory other) {
 
         NonNullList<ItemStack> list = tile.getItems();
         tile.setItems(other.getItems());
@@ -77,8 +76,8 @@ public abstract class TileEntityInventory<T extends TileEntityInventory<T>> exte
         BlockState state = reader.getBlockState(pos);
         if(state.hasBlockEntity()) {
             BlockEntity tile = reader.getBlockEntity(pos);
-            if(tile instanceof TileEntityInventory) {
-                return ((TileEntityInventory) tile).numPlayersUsing;
+            if(tile instanceof BlockEntityInventory) {
+                return ((BlockEntityInventory) tile).numPlayersUsing;
             }
         }
 

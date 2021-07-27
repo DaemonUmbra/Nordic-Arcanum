@@ -21,14 +21,14 @@ public class FluidUtilities {
         stack.save(fluid.writeToNBT(nbt));
     }
 
-    public static boolean tryFluidInsert(BlockEntity tile, Direction face, Player player, InteractionHand hand) {
+    public static boolean tryFluidInsert(BlockEntity block, Direction face, Player player, InteractionHand hand) {
 
-        return doFluidInteraction(tile, face, player, hand, true);
+        return doFluidInteraction(block, face, player, hand, true);
     }
 
-    public static boolean tryFluidExtract(BlockEntity tile, Direction face, Player player, InteractionHand hand) {
+    public static boolean tryFluidExtract(BlockEntity block, Direction face, Player player, InteractionHand hand) {
 
-        return doFluidInteraction(tile, face, player, hand, false);
+        return doFluidInteraction(block, face, player, hand, false);
     }
 
     public static boolean tryFluidInsert(IFluidHandler handler, ItemStack source, NonNullList<ItemStack> returnedItems) {

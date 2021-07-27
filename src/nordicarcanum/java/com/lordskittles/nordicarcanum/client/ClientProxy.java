@@ -16,11 +16,17 @@ import com.lordskittles.nordicarcanum.core.NordicResourceLocations;
 import com.lordskittles.nordicarcanum.magic.schools.IMagicSchool;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -76,14 +82,14 @@ public class ClientProxy {
         ResourceLocation blockLoc = Blocks.crafting_cloth.get().getRegistryName();
         event.getModelRegistry().put(new ModelResourceLocation(blockLoc, ""), new CraftingClothModel());
 
-        registerItemStackModel(registry, NordicNames.ARCANE_CHEST, model -> ItemStackArcaneChestRender.model = model);
-        registerItemStackModel(registry, NordicNames.IMPOSSIBLE_CHEST, model -> ItemStackImpossibleChestRender.model = model);
-        registerItemStackModel(registry, NordicNames.SIGIL_PODIUM, model -> ItemStackSigilPodiumRender.model = model);
-        registerItemStackModel(registry, NordicNames.ATTUNEMENT_ALTAR, model -> ItemStackAttunementAltarRender.model = model);
-        registerItemStackModel(registry, NordicNames.CRYSTAL_MATRIX, model -> ItemStackCrystalMatrixRender.model = model);
-        registerItemStackModel(registry, NordicNames.NORDIC_ANVIL, model -> ItemStackNordicAnvilRender.model = model);
-        registerItemStackModel(registry, NordicNames.ARCANE_INFUSER, model -> ItemStackArcaneInfuserRender.model = model);
-        registerItemStackModel(registry, NordicNames.ARCANE_TANK, model -> ItemStackArcaneTankRender.model = model);
+//        registerItemStackModel(registry, NordicNames.ARCANE_CHEST, model -> ItemStackArcaneChestRender.model = model);
+//        registerItemStackModel(registry, NordicNames.IMPOSSIBLE_CHEST, model -> ItemStackImpossibleChestRender.model = model);
+//        registerItemStackModel(registry, NordicNames.SIGIL_PODIUM, model -> ItemStackSigilPodiumRender.model = model);
+//        registerItemStackModel(registry, NordicNames.ATTUNEMENT_ALTAR, model -> ItemStackAttunementAltarRender.model = model);
+//        registerItemStackModel(registry, NordicNames.CRYSTAL_MATRIX, model -> ItemStackCrystalMatrixRender.model = model);
+//        registerItemStackModel(registry, NordicNames.NORDIC_ANVIL, model -> ItemStackNordicAnvilRender.model = model);
+//        registerItemStackModel(registry, NordicNames.ARCANE_INFUSER, model -> ItemStackArcaneInfuserRender.model = model);
+//        registerItemStackModel(registry, NordicNames.ARCANE_TANK, model -> ItemStackArcaneTankRender.model = model);
 
         for(BindingMaterial bindingMaterial : BindingMaterial.values()) {
             registerBinding(registry, bindingMaterial.name);
@@ -110,21 +116,21 @@ public class ClientProxy {
 
     private static void registerTERenders() {
 
-        ClientRegistry.bindTileEntityRenderer(TileEntities.sigil_podium.get(), TileRendererSigilPodium::new);
-        ClientRegistry.bindTileEntityRenderer(TileEntities.arcane_chest.get(), TileRendererArcaneChest::new);
-        ClientRegistry.bindTileEntityRenderer(TileEntities.attunement_altar.get(), TileRendererAttunementAltar::new);
-        ClientRegistry.bindTileEntityRenderer(TileEntities.crystal_matrix.get(), TileRendererCrystalMatrix::new);
-        ClientRegistry.bindTileEntityRenderer(TileEntities.norse_anvil.get(), TileRendererNordicAnvil::new);
-        ClientRegistry.bindTileEntityRenderer(TileEntities.arcane_infuser.get(), TileRendererArcaneInfuser::new);
-        ClientRegistry.bindTileEntityRenderer(TileEntities.arcane_tank.get(), TileRendererArcaneTank::new);
+//        ClientRegistry.bindTileEntityRenderer(BlockEntities.sigil_podium.get(), TileRendererSigilPodium::new);
+//        ClientRegistry.bindTileEntityRenderer(BlockEntities.arcane_chest.get(), TileRendererArcaneChest::new);
+//        ClientRegistry.bindTileEntityRenderer(BlockEntities.attunement_altar.get(), TileRendererAttunementAltar::new);
+//        ClientRegistry.bindTileEntityRenderer(BlockEntities.crystal_matrix.get(), TileRendererCrystalMatrix::new);
+//        ClientRegistry.bindTileEntityRenderer(BlockEntities.norse_anvil.get(), TileRendererNordicAnvil::new);
+//        ClientRegistry.bindTileEntityRenderer(BlockEntities.arcane_infuser.get(), TileRendererArcaneInfuser::new);
+//        ClientRegistry.bindTileEntityRenderer(BlockEntities.arcane_tank.get(), TileRendererArcaneTank::new);
     }
 
     private static void registerItemOverrides() {
 
-        ItemModelsProperties.registerProperty(Items.school_sigil.get(), NordicResourceLocations.SIGIL_OVERRIDE, new IItemPropertyGetter() {
+        ItemProperties.register(Items.school_sigil.get(), NordicResourceLocations.SIGIL_OVERRIDE, new ItemPropertyFunction() {
 
             @Override
-            public float call(ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
+            public float call(ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity, int something) {
 
                 Item item = stack.getItem();
                 if(item instanceof ItemSigil) {
@@ -153,17 +159,17 @@ public class ClientProxy {
         });
     }
 
-    public static void registerBinding(Map<ResourceLocation, IBakedModel> registry, String name) {
+    public static void registerBinding(Map<ResourceLocation, BakedModel> registry, String name) {
 
         registerItemStackModel(registry, name + NordicNames.BINDING_SUFFIX, model -> ItemStackBindingRender.model = model);
     }
 
-    public static void registerRod(Map<ResourceLocation, IBakedModel> registry, String name) {
+    public static void registerRod(Map<ResourceLocation, BakedModel> registry, String name) {
 
         registerItemStackModel(registry, name + NordicNames.ROD_SUFFIX, model -> ItemStackRodRender.model = model);
     }
 
-    private static void registerItemStackModel(Map<ResourceLocation, IBakedModel> modelRegistry, String name, Function<ItemModelWrapper, IBakedModel> modelSet) {
+    private static void registerItemStackModel(Map<ResourceLocation, BakedModel> modelRegistry, String name, Function<ItemModelWrapper, BakedModel> modelSet) {
 
         ModelResourceLocation location = MRL(NordicArcanum::RL, name);
         modelRegistry.put(location, modelSet.apply(new ItemModelWrapper(modelRegistry.get(location))));

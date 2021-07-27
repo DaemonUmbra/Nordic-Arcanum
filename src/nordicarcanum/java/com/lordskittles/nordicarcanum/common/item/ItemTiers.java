@@ -1,25 +1,25 @@
 package com.lordskittles.nordicarcanum.common.item;
 
 import com.lordskittles.nordicarcanum.common.registry.Items;
+import net.minecraft.util.LazyLoadedValue;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.LazyValue;
 
 import java.util.function.Supplier;
 
 public enum ItemTiers implements Tier {
     NORSE(2, 750, 6.0F, 2.5F, 10, () -> {
-        return Ingredient.fromItems(Items.norse_ingot.get());
+        return Ingredient.of(Items.norse_ingot.get());
     }),
     THULITE(2, 1000, 7.0F, 3.0F, 10, () -> {
-        return Ingredient.fromTag(ItemTags.makeWrapperTag("thulite"));
+        return Ingredient.of(ItemTags.bind("thulite"));
     }),
     CARNELIAN(2, 1000, 7.0F, 3.0F, 10, () -> {
-        return Ingredient.fromTag(ItemTags.makeWrapperTag("carnelian"));
+        return Ingredient.of(ItemTags.bind("carnelian"));
     }),
     GARNET(2, 1000, 7.0F, 3.0F, 10, () -> {
-        return Ingredient.fromTag(ItemTags.makeWrapperTag("garnet"));
+        return Ingredient.of(ItemTags.bind("garnet"));
     });
 
     private final int harvestLevel;
@@ -27,7 +27,7 @@ public enum ItemTiers implements Tier {
     private final float efficiency;
     private final float attackDamage;
     private final int enchantability;
-    private final LazyValue<Ingredient> repairMaterial;
+    private final LazyLoadedValue<Ingredient> repairMaterial;
 
     private ItemTiers(int harvestLevelIn, int maxUsesIn, float efficiencyIn, float attackDamageIn, int enchantabilityIn, Supplier<Ingredient> repairMaterialIn) {
 
@@ -36,42 +36,42 @@ public enum ItemTiers implements Tier {
         this.efficiency = efficiencyIn;
         this.attackDamage = attackDamageIn;
         this.enchantability = enchantabilityIn;
-        this.repairMaterial = new LazyValue<>(repairMaterialIn);
+        this.repairMaterial = new LazyLoadedValue<>(repairMaterialIn);
     }
 
     @Override
-    public int getMaxUses() {
+    public int getUses() {
 
         return this.maxUses;
     }
 
     @Override
-    public float getEfficiency() {
+    public float getSpeed() {
 
         return this.efficiency;
     }
 
     @Override
-    public float getAttackDamage() {
+    public float getAttackDamageBonus() {
 
         return this.attackDamage;
     }
 
     @Override
-    public int getHarvestLevel() {
+    public int getLevel() {
 
         return this.harvestLevel;
     }
 
     @Override
-    public int getEnchantability() {
+    public int getEnchantmentValue() {
 
         return this.enchantability;
     }
 
     @Override
-    public Ingredient getRepairMaterial() {
+    public Ingredient getRepairIngredient() {
 
-        return this.repairMaterial.getValue();
+        return this.repairMaterial.get();
     }
 }

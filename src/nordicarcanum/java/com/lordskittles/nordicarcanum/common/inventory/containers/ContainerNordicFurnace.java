@@ -3,94 +3,95 @@ package com.lordskittles.nordicarcanum.common.inventory.containers;
 import com.lordskittles.arcanumapi.client.slot.SlotFuel;
 import com.lordskittles.arcanumapi.common.inventory.containers.ContainerBase;
 import com.lordskittles.nordicarcanum.common.registry.Containers;
-import com.lordskittles.nordicarcanum.common.tileentity.crafting.TileEntityNordicFurnace;
+import com.lordskittles.nordicarcanum.common.registry.RecipeType;
+import com.lordskittles.nordicarcanum.common.blockentity.crafting.BlockEntityNordicFurnace;
 import com.lordskittles.nordicarcanum.core.NordicInventorySlots;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.util.IntArray;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Objects;
 
-public class ContainerNordicFurnace extends ContainerBase<TileEntityNordicFurnace> {
+public class ContainerNordicFurnace extends ContainerBase<BlockEntityNordicFurnace> {
 
     private final ContainerData furnaceData;
 
-    public ContainerNordicFurnace(final int windowId, final Inventory playerInventory, final TileEntityNordicFurnace tile, final ContainerData furnaceData) {
+    public ContainerNordicFurnace(final int windowId, final Inventory playerInventory, final BlockEntityNordicFurnace tile, final ContainerData furnaceData) {
 
         super(Containers.nordic_furnace.get(), NordicInventorySlots.NORDIC_FURNACE, windowId, playerInventory, tile);
 
         this.furnaceData = furnaceData;
 
-        createInputSlot(Tile, 0, 11, 19);
-        createInputSlot(Tile, 1, 37, 19);
-        createFuelSlot(Tile, 2, 24, 59);
-        createOutputSlot(Tile, 3, 121, 22);
+        createInputSlot(blockEntity, 0, 11, 19);
+        createInputSlot(blockEntity, 1, 37, 19);
+        createFuelSlot(blockEntity, 2, 24, 59);
+        createOutputSlot(blockEntity, 3, 121, 22);
 
         generateMainPlayerInventory(playerInventory, 8, 84);
         generatePlayerInventoryHotbar(playerInventory, 8, 142);
 
-        this.trackIntArray(furnaceData);
+        this.addDataSlots(furnaceData);
     }
 
-    public ContainerNordicFurnace(final int windowId, final PlayerInventory playerInventory, final PacketBuffer packetBuffer) {
+    public ContainerNordicFurnace(final int windowId, final Inventory playerInventory, final FriendlyByteBuf packetBuffer) {
 
-        this(windowId, playerInventory, getTileEntity(playerInventory, packetBuffer), new IntArray(4));
+        this(windowId, playerInventory, getTileEntity(playerInventory, packetBuffer), new SimpleContainerData(4));
     }
 
-    private void createInputSlot(IInventory inventory, int index, int x, int y) {
+    private void createInputSlot(Container inventory, int index, int x, int y) {
 
         this.addSlot(new Slot(inventory, index, x, y));
     }
 
-    private void createFuelSlot(IInventory inventory, int index, int x, int y) {
+    private void createFuelSlot(Container inventory, int index, int x, int y) {
 
-        this.addSlot(new SlotFuel(inventory, index, x, y));
+        this.addSlot(new SlotFuel(inventory, index, x, y, RecipeType.nordic_furnace));
     }
 
-    private static TileEntityNordicFurnace getTileEntity(final PlayerInventory playerInventory, final PacketBuffer packetBuffer) {
+    private static BlockEntityNordicFurnace getTileEntity(final Inventory playerInventory, final FriendlyByteBuf packetBuffer) {
 
         Objects.requireNonNull(playerInventory, "PlayerInventory cannot be null");
         Objects.requireNonNull(packetBuffer, "Data cannot be null");
 
-        final TileEntity tileAtPos = playerInventory.player.world.getTileEntity(packetBuffer.readBlockPos());
-        if(tileAtPos instanceof TileEntityNordicFurnace) {
-            return (TileEntityNordicFurnace) tileAtPos;
+        final BlockEntity blockEntityAtPos = playerInventory.player.level.getBlockEntity(packetBuffer.readBlockPos());
+        if(blockEntityAtPos instanceof BlockEntityNordicFurnace) {
+            return (BlockEntityNordicFurnace) blockEntityAtPos;
         }
 
-        throw new IllegalStateException("Tile Entity is not correct! " + tileAtPos);
+        throw new IllegalStateException("Tile Entity is not correct! " + blockEntityAtPos);
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity player, int index) {
+    public ItemStack quickMoveStack(Player player, int index) {
 
         ItemStack stack = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
-        if(slot != null && slot.getHasStack()) {
-            ItemStack itemStack = slot.getStack();
+        Slot slot = this.slots.get(index);
+        if(slot != null && slot.hasItem()) {
+            ItemStack itemStack = slot.getItem();
             stack = itemStack.copy();
             if(index < this.nonPlayerSlotCount) {
-                if(! this.mergeItemStack(itemStack, this.nonPlayerSlotCount, this.inventorySlots.size(), true)) {
+                if(! this.moveItemStackTo(itemStack, this.nonPlayerSlotCount, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             }
             else
-                if(! this.mergeItemStack(itemStack, 0, this.nonPlayerSlotCount, false)) {
+                if(! this.moveItemStackTo(itemStack, 0, this.nonPlayerSlotCount, false)) {
                     return ItemStack.EMPTY;
                 }
 
             if(itemStack.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             }
             else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
         }
 

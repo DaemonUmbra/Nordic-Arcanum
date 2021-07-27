@@ -55,16 +55,16 @@ public abstract class Spell extends ForgeRegistryEntry<Spell> {
         return this.arcanumCost * modifier;
     }
 
-    public void cast(Level world, ServerPlayer player, BlockPos pos, float cost) {
+    public void cast(Level level, ServerPlayer player, BlockPos pos, float cost) {
 
         if(MagicUtilities.canUseArcanum(player, cost))
             return;
 
-        if(! process(world, player, pos))
+        if(! process(level, player, pos))
             return;
 
         MagicUtilities.useArcanum(player, cost);
     }
 
-    public abstract boolean process(Level world, ServerPlayer player, BlockPos pos);
+    public abstract boolean process(Level level, ServerPlayer player, BlockPos pos);
 }

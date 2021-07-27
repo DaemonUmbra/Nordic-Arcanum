@@ -10,8 +10,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fmlclient.registry.ClientRegistry;
 import org.lwjgl.glfw.GLFW;
 
 @Mod.EventBusSubscriber(modid = NordicArcanum.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
@@ -32,8 +32,8 @@ public class Keys {
         Minecraft minecraft = Minecraft.getInstance();
         Player player = minecraft.player;
 
-        if(Minecraft.getInstance().world != null) {
-            if(change_school.isKeyDown()) {
+        if(Minecraft.getInstance().level != null) {
+            if(change_school.isDown()) {
                 GUIHandler.open(GUIType.ChangeSpell, player);
             }
         }

@@ -1,8 +1,8 @@
 package com.lordskittles.arcanumapi.common.utilities;
 
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 

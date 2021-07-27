@@ -24,7 +24,7 @@ license="MIT"
 [[dependencies.nordicarcanum]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16.3]"
+    versionRange="[1.17.1]"
     side="BOTH"
 
 [[dependencies.nordicarcanum]]

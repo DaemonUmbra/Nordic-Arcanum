@@ -2,7 +2,7 @@ package com.lordskittles.arcanumapi.common.block;
 
 import com.lordskittles.arcanumapi.common.block.voxelshapes.VoxelsMagicChest;
 import com.lordskittles.arcanumapi.common.network.PacketHandlerBase;
-import com.lordskittles.arcanumapi.common.tileentity.TileEntityMagicChest;
+import com.lordskittles.arcanumapi.common.blockentity.BlockEntityMagicChest;
 import com.lordskittles.arcanumapi.common.utilities.ClientUtilities;
 import com.lordskittles.arcanumapi.common.utilities.NBTUtilities;
 import com.lordskittles.arcanumapi.arcanum.ArcanumServerManager;
@@ -26,7 +26,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.util.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -49,15 +48,15 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 
-public abstract class BlockMagicChest<T extends TileEntityMagicChest> extends BlockMod {
+public abstract class BlockMagicChest<T extends BlockEntityMagicChest> extends BlockMod {
 
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     private final int slotCount;
 
-    private final Class<T> tileClass;
+    private final Class<T> blockClass;
     private final String modid;
 
-    public BlockMagicChest(Class<T> tileClass, CreativeModeTab group, String modid, int slotCount) {
+    public BlockMagicChest(Class<T> blockClass, CreativeModeTab group, String modid, int slotCount) {
 
         super(Block.Properties.of(Material.WOOD, MaterialColor.COLOR_BLACK)
                 .strength(2.5f, 2.5f)
@@ -66,7 +65,7 @@ public abstract class BlockMagicChest<T extends TileEntityMagicChest> extends Bl
                 .harvestTool(ToolType.PICKAXE));
 
         this.slotCount = slotCount;
-        this.tileClass = tileClass;
+        this.blockClass = blockClass;
         this.modid = modid;
         this.group = group;
     }
@@ -121,9 +120,9 @@ public abstract class BlockMagicChest<T extends TileEntityMagicChest> extends Bl
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
 
         if(! world.isClientSide) {
-            BlockEntity tile = world.getBlockEntity(pos);
-            if(tileClass.isInstance(tile)) {
-                NetworkHooks.openGui((ServerPlayer) player, tileClass.cast(tile), pos);
+            BlockEntity entity = world.getBlockEntity(pos);
+            if(blockClass.isInstance(entity)) {
+                NetworkHooks.openGui((ServerPlayer) player, blockClass.cast(entity), pos);
             }
         }
 
@@ -133,9 +132,9 @@ public abstract class BlockMagicChest<T extends TileEntityMagicChest> extends Bl
     @Override
     public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
 
-        BlockEntity tile = world.getBlockEntity(pos);
-        if(tileClass.isInstance(tile)) {
-            T chest = tileClass.cast(tile);
+        BlockEntity entity = world.getBlockEntity(pos);
+        if(blockClass.isInstance(entity)) {
+            T chest = blockClass.cast(entity);
             CompoundTag nbt = NBTUtilities.getPersistentData(modid, stack);
 
             NonNullList list = NonNullList.withSize(chest.getContainerSize(), ItemStack.EMPTY);
@@ -153,7 +152,7 @@ public abstract class BlockMagicChest<T extends TileEntityMagicChest> extends Bl
     public void onRemove(BlockState oldState, Level world, BlockPos pos, BlockState newState, boolean isMoving) {
 
         if(oldState != newState) {
-            TileEntityMagicChest chest = ClientUtilities.getTileEntity(tileClass, pos);
+            BlockEntityMagicChest chest = ClientUtilities.getTileEntity(blockClass, pos);
             if(chest != null) {
                 ItemStack stack = oldState.getBlock().getCloneItemStack(world, pos, oldState);
                 Player player = world.getNearestPlayer(pos.getX(), pos.getY(), pos.getZ(), 15D, null);
@@ -178,7 +177,7 @@ public abstract class BlockMagicChest<T extends TileEntityMagicChest> extends Bl
                     if(! player.isCreative()) {
                         Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack);
                     }
-                    Containers.dropContents(world, pos, tileClass.cast(chest).getItems());
+                    Containers.dropContents(world, pos, blockClass.cast(chest).getItems());
                 }
             }
         }
@@ -201,6 +200,4 @@ public abstract class BlockMagicChest<T extends TileEntityMagicChest> extends Bl
 
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
-
-    public abstract BlockEntity createBlockEntity(BlockState state, BlockGetter world);
 }

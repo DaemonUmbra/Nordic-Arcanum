@@ -4,22 +4,23 @@ import com.lordskittles.arcanumapi.common.world.feature.trees.FoliagePlacerBase;
 import com.lordskittles.nordicarcanum.common.registry.FoliageType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.gen.feature.FeatureSpread;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.Set;
+import java.util.function.BiConsumer;
 
 public class JuniperFoliage extends FoliagePlacerBase {
 
-    public static final Codec<JuniperFoliage> codec = RecordCodecBuilder.create((instance) -> func_236740_a_(instance).apply(instance, JuniperFoliage::new));
+    public static final Codec<JuniperFoliage> codec = RecordCodecBuilder.create((instance) -> blobParts(instance).apply(instance, JuniperFoliage::new));
 
-    public JuniperFoliage(FeatureSpread spreadA, FeatureSpread spreadB, int height) {
+    public JuniperFoliage(IntProvider spreadA, IntProvider spreadB, int height) {
 
         super(spreadA, spreadB, height, FoliageType.juniper_foliage);
     }
 
     @Override
-    protected void placeLeaves(BlockPos position, Set<BlockPos> changedLeaves) {
+    protected void placeLeaves(BlockPos position, BiConsumer<BlockPos, BlockState> changedLeaves) {
         // Bottom Leaf Layer
         BlockPos pos = position;
         placeLeafBox(pos, new BlockPos(3, 1, 5), changedLeaves);

@@ -1,4 +1,4 @@
-package com.lordskittles.arcanumapi.common.tileentity;
+package com.lordskittles.arcanumapi.common.blockentity;
 
 import com.lordskittles.arcanumapi.common.network.PacketHandlerBase;
 import com.lordskittles.arcanumapi.common.utilities.MagicUtilities;
@@ -10,11 +10,11 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-public abstract class TileEntityInventoryArcanum<T extends TileEntityInventoryArcanum<T>> extends TileEntityInventorySyncable<T> implements IArcanumUser {
+public abstract class BlockEntityInventoryArcanum<T extends BlockEntityInventoryArcanum<T>> extends BlockEntityInventorySyncable<T> implements IArcanumUser {
 
     private final PacketHandlerBase packetHandler;
 
-    public TileEntityInventoryArcanum(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state, int size, String containerId, String modid, PacketHandlerBase packetHandler) {
+    public BlockEntityInventoryArcanum(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state, int size, String containerId, String modid, PacketHandlerBase packetHandler) {
 
         super(tileEntityTypeIn, pos, state, size, containerId, modid);
         this.packetHandler = packetHandler;

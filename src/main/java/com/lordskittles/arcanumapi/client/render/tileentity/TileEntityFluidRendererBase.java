@@ -5,7 +5,7 @@ import com.lordskittles.arcanumapi.client.render.ArcaneRenderer;
 import com.lordskittles.arcanumapi.client.render.ArcaneRenderer.DVector3;
 import com.lordskittles.arcanumapi.client.render.ArcaneRenderer.Model3D;
 import com.lordskittles.arcanumapi.client.render.FluidRenderMap;
-import com.lordskittles.arcanumapi.common.tileentity.TileEntityFluidInventory;
+import com.lordskittles.arcanumapi.common.blockentity.BlockEntityFluidInventory;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -16,7 +16,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
 
-public abstract class TileEntityFluidRendererBase<T extends TileEntityFluidInventory> extends TileEntityRendererBase<T> {
+public abstract class TileEntityFluidRendererBase<T extends BlockEntityFluidInventory> extends TileEntityRendererBase<T> {
 
     protected static final FluidRenderMap<Int2ObjectMap<Model3D>> cachedFluids = new FluidRenderMap<>();
     protected static final int stages = 1400;

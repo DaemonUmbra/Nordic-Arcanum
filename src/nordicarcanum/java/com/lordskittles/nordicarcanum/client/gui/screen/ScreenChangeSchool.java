@@ -15,8 +15,8 @@ public class ScreenChangeSchool extends ScreenBase {
     @Override
     public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
 
-        if(keyCode == Keys.change_school.getKey().getKeyCode()) {
-            this.closeScreen();
+        if(keyCode == Keys.change_school.getKey().getValue()) {
+            this.onClose();
 
             return true;
         }

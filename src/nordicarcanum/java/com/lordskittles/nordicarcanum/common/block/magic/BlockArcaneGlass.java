@@ -2,15 +2,16 @@ package com.lordskittles.nordicarcanum.common.block.magic;
 
 import com.lordskittles.arcanumapi.common.block.BlockMod;
 import com.lordskittles.nordicarcanum.client.itemgroups.NordicDecorationItemGroup;
-import com.lordskittles.nordicarcanum.client.itemgroups.NordicItemGroup;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -18,43 +19,28 @@ public class BlockArcaneGlass extends BlockMod {
 
     public BlockArcaneGlass() {
 
-        super(Block.Properties.create(Material.GLASS)
-                .notSolid()
-                .hardnessAndResistance(1.0f)
-                .sound(SoundType.GLASS));
+        super(Block.Properties.of(Material.GLASS)
+                .noOcclusion()
+                .strength(1.0f)
+                .sound(SoundType.GLASS).isValidSpawn((state, blockGetter, pos, entity) -> { return false; }));
 
         this.group = NordicDecorationItemGroup.INSTANCE;
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public float getAmbientOcclusionLightValue(BlockState state, IBlockReader world, BlockPos pos) {
+    public VoxelShape getVisualShape(BlockState blockState, BlockGetter blockGetter, BlockPos pos, CollisionContext context) {
+        return Shapes.empty();
+    }
 
+    public float getShadeBrightness(BlockState p_48731_, BlockGetter p_48732_, BlockPos p_48733_) {
         return 1.0F;
     }
 
-    public boolean propagatesSkylightDown(BlockState state, IBlockReader world, BlockPos pos) {
-
+    public boolean propagatesSkylightDown(BlockState p_48740_, BlockGetter p_48741_, BlockPos p_48742_) {
         return true;
     }
 
-    public boolean causesSuffocation(BlockState state, IBlockReader world, BlockPos pos) {
-
-        return false;
-    }
-
-    public boolean isNormalCube(BlockState state, IBlockReader world, BlockPos pos) {
-
-        return false;
-    }
-
-    public boolean canEntitySpawn(BlockState state, IBlockReader world, BlockPos pos, EntityType<?> type) {
-
-        return false;
-    }
-
     @OnlyIn(Dist.CLIENT)
-    public boolean isSideInvisible(BlockState state, BlockState adjacentBlockState, Direction side) {
-
-        return adjacentBlockState.getBlock() == this ? true : super.isSideInvisible(state, adjacentBlockState, side);
+    public boolean skipRendering(BlockState state1, BlockState state2, Direction direction) {
+        return state2.is(this) || super.skipRendering(state1, state2, direction);
     }
 }

@@ -4,9 +4,8 @@ import com.lordskittles.arcanumapi.common.inventory.containers.ContainerBase;
 import com.lordskittles.nordicarcanum.common.inventory.ClothInventory;
 import com.lordskittles.nordicarcanum.common.inventory.ClothResultInventory;
 import com.lordskittles.nordicarcanum.common.inventory.crafting.CraftingClothRecipe;
-import com.lordskittles.nordicarcanum.common.registry.Blocks;
 import com.lordskittles.nordicarcanum.common.registry.Containers;
-import com.lordskittles.nordicarcanum.common.tileentity.crafting.TileEntityCraftingCloth;
+import com.lordskittles.nordicarcanum.common.blockentity.crafting.BlockEntityCraftingCloth;
 import com.lordskittles.nordicarcanum.common.utility.RecipeUtilities;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
@@ -25,15 +24,15 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import java.util.Objects;
 import java.util.Optional;
 
-public class ContainerCraftingCloth extends ContainerBase<TileEntityCraftingCloth> {
+public class ContainerCraftingCloth extends ContainerBase<BlockEntityCraftingCloth> {
 
-    private final TileEntityCraftingCloth Tile;
+    private final BlockEntityCraftingCloth Tile;
     private final ClothInventory craftMatrix = new ClothInventory(this);
     private final ClothResultInventory craftResult;
     private final ContainerLevelAccess canInteract;
     private final Player player;
 
-    public ContainerCraftingCloth(int windowID, Inventory playerInventory, TileEntityCraftingCloth tile) {
+    public ContainerCraftingCloth(int windowID, Inventory playerInventory, BlockEntityCraftingCloth tile) {
 
         super(Containers.crafting_cloth.get(), 9, windowID, playerInventory, tile);
 
@@ -67,14 +66,14 @@ public class ContainerCraftingCloth extends ContainerBase<TileEntityCraftingClot
         this(windowId, playerInventory, getTileEntity(playerInventory, packetBuffer));
     }
 
-    private static TileEntityCraftingCloth getTileEntity(final Inventory playerInventory, final FriendlyByteBuf packetBuffer) {
+    private static BlockEntityCraftingCloth getTileEntity(final Inventory playerInventory, final FriendlyByteBuf packetBuffer) {
 
         Objects.requireNonNull(playerInventory, "PlayerInventory cannot be null");
         Objects.requireNonNull(packetBuffer, "Data cannot be null");
 
         final BlockEntity tileAtPos = playerInventory.player.level.getBlockEntity(packetBuffer.readBlockPos());
-        if(tileAtPos instanceof TileEntityCraftingCloth) {
-            return (TileEntityCraftingCloth) tileAtPos;
+        if(tileAtPos instanceof BlockEntityCraftingCloth) {
+            return (BlockEntityCraftingCloth) tileAtPos;
         }
 
         throw new IllegalStateException("Tile Entity is not correct! " + tileAtPos);
@@ -96,7 +95,7 @@ public class ContainerCraftingCloth extends ContainerBase<TileEntityCraftingClot
                 CraftingClothRecipe recipe = RecipeUtilities.getClothRecipeFor(world, craftingInventory, player);
                 if(recipe != null) {
                     if(craftingResult.setRecipeUsed(world, serverplayerentity, recipe)) {
-                        itemstack = recipe.getCraftingResult(null);
+                        itemstack = recipe.assemble(null);
                     }
                 }
             }

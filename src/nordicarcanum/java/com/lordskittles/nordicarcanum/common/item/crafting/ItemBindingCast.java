@@ -10,7 +10,7 @@ public class ItemBindingCast extends ItemMod {
 
     public ItemBindingCast(BindingShape shape) {
 
-        super(new Item.Properties().group(NordicItemGroup.INSTANCE).maxStackSize(1));
+        super(new Item.Properties().tab(NordicItemGroup.INSTANCE).stacksTo(1));
 
         this.shape = shape;
     }

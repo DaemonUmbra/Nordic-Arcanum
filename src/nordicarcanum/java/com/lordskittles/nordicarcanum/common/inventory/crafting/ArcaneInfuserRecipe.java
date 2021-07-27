@@ -7,21 +7,18 @@ import com.lordskittles.arcanumapi.common.inventory.crafting.ArcaneRecipeBase;
 import com.lordskittles.arcanumapi.common.utilities.JsonUtilities;
 import com.lordskittles.nordicarcanum.common.registry.RecipeSerializers;
 import com.lordskittles.nordicarcanum.common.registry.RecipeType;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapedRecipe;
-import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
-
-import com.lordskittles.arcanumapi.common.inventory.crafting.ArcaneRecipeBase.DummyIInventory;
 
 public class ArcaneInfuserRecipe extends ArcaneRecipeBase {
 
@@ -49,19 +46,19 @@ public class ArcaneInfuserRecipe extends ArcaneRecipeBase {
     }
 
     @Override
-    public ItemStack getCraftingResult(DummyIInventory inv) {
+    public ItemStack assemble(DummyIInventory inv) {
 
         return this.result;
     }
 
     @Override
-    public boolean canFit(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
 
         return true;
     }
 
     @Override
-    public ItemStack getRecipeOutput() {
+    public ItemStack getResultItem() {
 
         return this.result;
     }
@@ -79,7 +76,7 @@ public class ArcaneInfuserRecipe extends ArcaneRecipeBase {
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public net.minecraft.world.item.crafting.RecipeType<?> getType() {
 
         return this.type;
     }
@@ -87,17 +84,17 @@ public class ArcaneInfuserRecipe extends ArcaneRecipeBase {
     public static class Serializer<T extends ArcaneInfuserRecipe> extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<ArcaneInfuserRecipe> {
 
         @Override
-        public ArcaneInfuserRecipe read(ResourceLocation recipeId, JsonObject json) {
+        public ArcaneInfuserRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
 
-            String group = GsonHelper.getString(json, "group", "");
-            JsonElement ingElement = (JsonElement) (JSONUtils.isJsonArray(json, "ingredient") ? JSONUtils.getJsonArray(json, "ingredient") : JSONUtils.getJsonObject(json, "ingredient"));
-            Ingredient ingredient = Ingredient.deserialize(ingElement);
+            String group = GsonHelper.getAsString(json, "group", "");
+            JsonElement ingElement = (JsonElement) (GsonHelper.isArrayNode(json, "ingredient") ? GsonHelper.getAsJsonArray(json, "ingredient") : GsonHelper.getAsJsonObject(json, "ingredient"));
+            Ingredient ingredient = Ingredient.fromJson(ingElement);
 
             Ingredient fluidIng;
 
             try {
-                JsonElement fluidIngElement = (JsonElement) (JSONUtils.isJsonArray(json, "fluid_ingredient") ? JSONUtils.getJsonArray(json, "fluid_ingredient") : JSONUtils.getJsonObject(json, "fluid_ingredient"));
-                fluidIng = FluidIngredient.deserialize(fluidIngElement);
+                JsonElement fluidIngElement = (JsonElement) (GsonHelper.isArrayNode(json, "fluid_ingredient") ? GsonHelper.getAsJsonArray(json, "fluid_ingredient") : GsonHelper.getAsJsonObject(json, "fluid_ingredient"));
+                fluidIng = FluidIngredient.fromJson(fluidIngElement);
             }
             catch(JsonParseException exception) {
                 FluidStack stack = JsonUtilities.fluidStackFromJson(json.get("fluid_ingredient").getAsJsonObject());
@@ -110,37 +107,37 @@ public class ArcaneInfuserRecipe extends ArcaneRecipeBase {
 
             ItemStack outputStack = ItemStack.EMPTY;
             if(json.get("result").isJsonObject()) {
-                outputStack = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "result"));
+                outputStack = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
             }
             else {
-                String result = JSONUtils.getString(json, "result");
+                String result = GsonHelper.getAsString(json, "result");
                 ResourceLocation resultLocation = new ResourceLocation(result);
                 outputStack = new ItemStack(ForgeRegistries.ITEMS.getValue(resultLocation));
             }
 
-            int time = JSONUtils.getInt(json, "time");
+            int time = GsonHelper.getAsInt(json, "time");
             return new ArcaneInfuserRecipe(recipeId, group, ingredient, (FluidIngredient) fluidIng, outputStack, time);
         }
 
         @Nullable
         @Override
-        public ArcaneInfuserRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+        public ArcaneInfuserRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
 
-            String group = buffer.readString(32767);
-            Ingredient ingredient = Ingredient.read(buffer);
-            Ingredient fluidIng = Ingredient.read(buffer);
-            ItemStack result = buffer.readItemStack();
+            String group = buffer.readUtf(32767);
+            Ingredient ingredient = Ingredient.fromNetwork(buffer);
+            Ingredient fluidIng = Ingredient.fromNetwork(buffer);
+            ItemStack result = buffer.readItem();
             int time = buffer.readVarInt();
             return new ArcaneInfuserRecipe(recipeId, group, ingredient, (FluidIngredient) fluidIng, result, time);
         }
 
         @Override
-        public void write(PacketBuffer buffer, ArcaneInfuserRecipe recipe) {
+        public void toNetwork(FriendlyByteBuf buffer, ArcaneInfuserRecipe recipe) {
 
-            buffer.writeString(recipe.getGroup());
-            recipe.ingredient.write(buffer);
-            recipe.fluidIngredient.write(buffer);
-            buffer.writeItemStack(recipe.result);
+            buffer.writeUtf(recipe.getGroup());
+            recipe.ingredient.toNetwork(buffer);
+            recipe.fluidIngredient.toNetwork(buffer);
+            buffer.writeItemStack(recipe.result, true);
             buffer.writeVarInt(recipe.time);
         }
     }

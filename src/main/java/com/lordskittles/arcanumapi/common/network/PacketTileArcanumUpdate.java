@@ -29,7 +29,7 @@ public class PacketTileArcanumUpdate extends PacketBase {
         {
             BlockEntity tile = ClientUtilities.getTileEntity(BlockEntity.class, message.pos);
             if(tile == null) {
-                ArcanumAPI.LOG.info("Update arcanum packet received for position: {} in world, but no valid tile was found.", message.pos);
+                ArcanumAPI.LOG.info("Update arcanum packet received for position: {} in level, but no valid tile was found.", message.pos);
             }
             else {
                 if(tile instanceof IArcanumTile) {

@@ -4,68 +4,51 @@ import com.lordskittles.arcanumapi.common.block.BlockMod;
 import com.lordskittles.arcanumapi.common.block.IItemBlockOverride;
 import com.lordskittles.arcanumapi.common.item.block.ItemBlockBase;
 import com.lordskittles.nordicarcanum.client.itemgroups.NordicItemGroup;
-import com.lordskittles.nordicarcanum.client.render.item.ItemStackNordicAnvilRender;
 import com.lordskittles.nordicarcanum.common.block.voxelshapes.VoxelsNorseAnvil;
+import com.lordskittles.nordicarcanum.common.blockentity.crafting.BlockEntityNordicAnvil;
 import com.lordskittles.nordicarcanum.common.item.crafting.ItemBindingCast;
 import com.lordskittles.nordicarcanum.common.registry.Sounds;
-import com.lordskittles.nordicarcanum.common.registry.TileEntities;
-import com.lordskittles.nordicarcanum.common.tileentity.crafting.TileEntityNordicAnvil;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.*;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.*;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.ToolType;
-
-import javax.annotation.Nullable;
 
 public class BlockNorseAnvil extends BlockMod implements IItemBlockOverride {
 
     public BlockNorseAnvil() {
 
-        super(Block.Properties.create(Material.ANVIL, MaterialColor.IRON)
-                .hardnessAndResistance(5.0F, 1200.0F)
+        super(Block.Properties.of(Material.HEAVY_METAL, MaterialColor.METAL)
+                .strength(5.0F, 1200.0F)
                 .sound(SoundType.ANVIL)
-                .harvestLevel(ItemTier.STONE.getHarvestLevel())
+                .harvestLevel(Tiers.STONE.getLevel())
                 .harvestTool(ToolType.PICKAXE));
 
         this.group = NordicItemGroup.INSTANCE;
     }
 
     @Override
-    public boolean hasTileEntity(BlockState state) {
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
 
-        return true;
-    }
+        ItemStack handStack = player.getItemBySlot(EquipmentSlot.MAINHAND);
 
-    @Nullable
-    @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-
-        return TileEntities.norse_anvil.get().create();
-    }
-
-    @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
-
-        ItemStack handStack = player.getItemStackFromSlot(EquipmentSlotType.MAINHAND);
-
-        TileEntity tile = world.getTileEntity(pos);
-        if(tile instanceof TileEntityNordicAnvil) {
-            TileEntityNordicAnvil anvil = (TileEntityNordicAnvil) tile;
+        BlockEntity entity = level.getBlockEntity(pos);
+        if(entity instanceof BlockEntityNordicAnvil) {
+            BlockEntityNordicAnvil anvil = (BlockEntityNordicAnvil) entity;
             boolean playSound = false;
 
             if(! (handStack.getItem() instanceof AirItem)) {
@@ -78,25 +61,25 @@ public class BlockNorseAnvil extends BlockMod implements IItemBlockOverride {
                     heldStack = anvil.setHeldItem(handStack);
                 }
 
-                player.setItemStackToSlot(EquipmentSlotType.MAINHAND, heldStack);
+                player.setItemSlot(EquipmentSlot.MAINHAND, heldStack);
                 playSound = true;
             }
             else
-                if(handStack.getItem() instanceof AirItem && player.isSneaking()) {
-                    player.setItemStackToSlot(EquipmentSlotType.MAINHAND, anvil.removeItems());
+                if(handStack.getItem() instanceof AirItem && player.isShiftKeyDown()) {
+                    player.setItemSlot(EquipmentSlot.MAINHAND, anvil.removeItems());
                     playSound = true;
                 }
 
             if(playSound) {
-                Sounds.play(SoundEvents.BLOCK_ANVIL_HIT, world, pos, 0.5F);
+                Sounds.play(SoundEvents.ANVIL_HIT, level, pos, 0.5F);
             }
         }
 
-        return ActionResultType.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
 
         return VoxelsNorseAnvil.NORTH_SOUTH.get();
     }
@@ -104,6 +87,6 @@ public class BlockNorseAnvil extends BlockMod implements IItemBlockOverride {
     @Override
     public BlockItem getOverride() {
 
-        return new ItemBlockBase(this, new Item.Properties().group(group()).setISTER(() -> ItemStackNordicAnvilRender::new));
+        return new ItemBlockBase(this, new Item.Properties().tab(group()));//.setISTER(() -> ItemStackNordicAnvilRender::new));
     }
 }

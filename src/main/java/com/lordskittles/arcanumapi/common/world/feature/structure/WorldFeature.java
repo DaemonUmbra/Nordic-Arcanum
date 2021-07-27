@@ -157,9 +157,9 @@ public abstract class WorldFeature<T extends FeatureConfiguration> extends Featu
             }
 
             this.world.setBlock(pos, state, 2);
-            BlockEntity tile = this.world.getBlockEntity(pos);
-            if(tile instanceof ChestBlockEntity) {
-                ((ChestBlockEntity) tile).setLootTable(lootTable, random.nextLong());
+            BlockEntity block = this.world.getBlockEntity(pos);
+            if(block instanceof ChestBlockEntity) {
+                ((ChestBlockEntity) block).setLootTable(lootTable, random.nextLong());
             }
 
             return true;

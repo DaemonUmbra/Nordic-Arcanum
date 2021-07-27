@@ -4,9 +4,9 @@ import com.lordskittles.nordicarcanum.common.registry.Commands;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
-import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
+import net.minecraftforge.fmlserverevents.FMLServerStartedEvent;
+import net.minecraftforge.fmlserverevents.FMLServerStartingEvent;
+import net.minecraftforge.fmlserverevents.FMLServerStoppedEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +42,6 @@ public class ServerEvents {
     @SubscribeEvent
     public static void onServerStarting(FMLServerStartingEvent event) {
 
-        event.getServer().getCommandManager().getDispatcher().register(Commands.register());
+        event.getServer().getCommands().getDispatcher().register(Commands.register());
     }
 }

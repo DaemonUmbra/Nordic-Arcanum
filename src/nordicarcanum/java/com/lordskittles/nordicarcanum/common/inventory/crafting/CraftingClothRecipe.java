@@ -10,17 +10,16 @@ import com.lordskittles.nordicarcanum.common.registry.RecipeSerializers;
 import com.lordskittles.nordicarcanum.common.registry.RecipeType;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.lordskittles.nordicarcanum.core.NordicNames;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.CraftingContainer;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
@@ -29,8 +28,6 @@ import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-
-import com.lordskittles.arcanumapi.common.inventory.crafting.ArcaneRecipeBase.DummyIInventory;
 
 public class CraftingClothRecipe extends ArcaneRecipeBase {
 
@@ -84,19 +81,19 @@ public class CraftingClothRecipe extends ArcaneRecipeBase {
     }
 
     @Override
-    public ItemStack getCraftingResult(DummyIInventory inv) {
+    public ItemStack assemble(DummyIInventory inv) {
 
-        return this.getRecipeOutput().copy();
+        return this.getResultItem().copy();
     }
 
     @Override
-    public boolean canFit(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
 
         return width >= this.width && height >= this.height;
     }
 
     @Override
-    public ItemStack getRecipeOutput() {
+    public ItemStack getResultItem() {
 
         return this.result;
     }
@@ -114,7 +111,7 @@ public class CraftingClothRecipe extends ArcaneRecipeBase {
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public net.minecraft.world.item.crafting.RecipeType<?> getType() {
 
         return this.type;
     }
@@ -159,7 +156,7 @@ public class CraftingClothRecipe extends ArcaneRecipeBase {
                     }
                 }
 
-                if(! ingredient.test(craftingInventory.getStackInSlot(x + y * craftingInventory.getWidth()))) {
+                if(! ingredient.test(craftingInventory.getItem(x + y * craftingInventory.getWidth()))) {
                     return false;
                 }
             }
@@ -237,7 +234,7 @@ public class CraftingClothRecipe extends ArcaneRecipeBase {
             }
             else {
                 for(int i = 0; i < astring.length; ++ i) {
-                    String s = JSONUtils.getString(jsonArr.get(i), "pattern[" + i + "]");
+                    String s = GsonHelper.convertToString(jsonArr.get(i), "pattern[" + i + "]");
                     if(s.length() > MAX_WIDTH) {
                         throw new JsonSyntaxException("Invalid pattern: too many columns, " + MAX_WIDTH + " is maximum");
                     }
@@ -293,7 +290,7 @@ public class CraftingClothRecipe extends ArcaneRecipeBase {
                 throw new JsonSyntaxException("Invalid key entry: ' ' is a reserved symbol.");
             }
 
-            map.put(entry.getKey(), Ingredient.deserialize(entry.getValue()));
+            map.put(entry.getKey(), Ingredient.fromJson(entry.getValue()));
         }
 
         map.put(" ", Ingredient.EMPTY);
@@ -302,7 +299,7 @@ public class CraftingClothRecipe extends ArcaneRecipeBase {
 
     public static ItemStack deserializeItem(JsonObject json) {
 
-        String itemLoc = JSONUtils.getString(json, "item");
+        String itemLoc = GsonHelper.getAsString(json, "item");
         Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemLoc));
 
         if(json.has("data")) {
@@ -313,56 +310,56 @@ public class CraftingClothRecipe extends ArcaneRecipeBase {
         }
     }
 
-    public static class Serializer<T extends CraftingClothRecipe> extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<CraftingClothRecipe> {
+    public static class Serializer<T extends CraftingClothRecipe> extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<CraftingClothRecipe> {
 
         private static final ResourceLocation NAME = NordicArcanum.RL(NordicNames.CRAFTING_CLOTH);
 
         @Override
-        public CraftingClothRecipe read(ResourceLocation recipeId, JsonObject json) {
+        public CraftingClothRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
 
-            String group = JSONUtils.getString(json, "group", "");
-            Map<String, Ingredient> map = CraftingClothRecipe.deserializeKey(JSONUtils.getJsonObject(json, "key"));
-            String[] pattern = CraftingClothRecipe.shrink(CraftingClothRecipe.patternFromJson(JSONUtils.getJsonArray(json, "pattern")));
+            String group = GsonHelper.getAsString(json, "group", "");
+            Map<String, Ingredient> map = CraftingClothRecipe.deserializeKey(GsonHelper.getAsJsonObject(json, "key"));
+            String[] pattern = CraftingClothRecipe.shrink(CraftingClothRecipe.patternFromJson(GsonHelper.getAsJsonArray(json, "pattern")));
 
             int rowLength = pattern[0].length();
             int colLength = pattern.length;
             NonNullList<Ingredient> ingredients = CraftingClothRecipe.deserializeIngredients(pattern, map, rowLength, colLength);
-            ItemStack result = CraftingClothRecipe.deserializeItem(JSONUtils.getJsonObject(json, "result"));
-            float arcanum = JSONUtils.getFloat(json, "arcanum");
+            ItemStack result = CraftingClothRecipe.deserializeItem(GsonHelper.getAsJsonObject(json, "result"));
+            float arcanum = GsonHelper.getAsFloat(json, "arcanum");
 
             return new CraftingClothRecipe(recipeId, group, rowLength, colLength, arcanum, ingredients, result);
         }
 
         @Nullable
         @Override
-        public CraftingClothRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+        public CraftingClothRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
 
             int width = buffer.readVarInt();
             int height = buffer.readVarInt();
-            String group = buffer.readString(32767);
+            String group = buffer.readUtf(32767);
 
             NonNullList<Ingredient> ingredients = NonNullList.withSize(width * height, Ingredient.EMPTY);
             for(int index = 0; index < ingredients.size(); index++) {
-                ingredients.set(index, Ingredient.read(buffer));
+                ingredients.set(index, Ingredient.fromNetwork(buffer));
             }
 
-            ItemStack result = buffer.readItemStack();
+            ItemStack result = buffer.readItem();
             float arcanum = buffer.readFloat();
             return new CraftingClothRecipe(recipeId, group, width, height, arcanum, ingredients, result);
         }
 
         @Override
-        public void write(PacketBuffer buffer, CraftingClothRecipe recipe) {
+        public void toNetwork(FriendlyByteBuf buffer, CraftingClothRecipe recipe) {
 
             buffer.writeVarInt(recipe.width);
             buffer.writeVarInt(recipe.height);
-            buffer.writeString(recipe.group);
+            buffer.writeUtf(recipe.group);
 
             for(Ingredient ingredient : recipe.ingredients) {
-                ingredient.write(buffer);
+                ingredient.toNetwork(buffer);
             }
 
-            buffer.writeItemStack(recipe.result);
+            buffer.writeItemStack(recipe.result, true);
             buffer.writeFloat(recipe.arcanum);
         }
     }

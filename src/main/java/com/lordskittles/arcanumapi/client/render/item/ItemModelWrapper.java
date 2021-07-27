@@ -93,9 +93,9 @@ public class ItemModelWrapper implements BakedModel {
 
     @Nonnull
     @Override
-    public IModelData getModelData(@Nonnull BlockAndTintGetter world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData tileData) {
+    public IModelData getModelData(@Nonnull BlockAndTintGetter world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData blockData) {
 
-        return internal.getModelData(world, pos, state, tileData);
+        return internal.getModelData(world, pos, state, blockData);
     }
 
     @Override

@@ -1,12 +1,12 @@
-package com.lordskittles.nordicarcanum.common.tileentity.crafting;
+package com.lordskittles.nordicarcanum.common.blockentity.crafting;
 
 import com.google.common.collect.Maps;
-import com.lordskittles.arcanumapi.common.tileentity.TileEntityInventorySyncable;
+import com.lordskittles.arcanumapi.common.blockentity.BlockEntityInventorySyncable;
 import com.lordskittles.nordicarcanum.common.block.crafting.BlockNordicFurnace;
 import com.lordskittles.nordicarcanum.common.inventory.containers.ContainerNordicFurnace;
 import com.lordskittles.nordicarcanum.common.inventory.crafting.NordicFurnaceRecipe;
 import com.lordskittles.nordicarcanum.common.registry.RecipeType;
-import com.lordskittles.nordicarcanum.common.registry.TileEntities;
+import com.lordskittles.nordicarcanum.common.registry.BlockEntities;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.lordskittles.nordicarcanum.core.NordicInventorySlots;
 import com.lordskittles.nordicarcanum.core.NordicNames;
@@ -32,7 +32,7 @@ import net.minecraftforge.common.ForgeHooks;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-public class TileEntityNordicFurnace extends TileEntityInventorySyncable<TileEntityNordicFurnace> implements RecipeHolder, StackedContentsCompatible {
+public class BlockEntityNordicFurnace extends BlockEntityInventorySyncable<BlockEntityNordicFurnace> implements RecipeHolder, StackedContentsCompatible {
 
     protected int burnTime;
     protected int cookTime;
@@ -50,13 +50,13 @@ public class TileEntityNordicFurnace extends TileEntityInventorySyncable<TileEnt
 
             switch(index) {
                 case 0:
-                    return TileEntityNordicFurnace.this.burnTime;
+                    return BlockEntityNordicFurnace.this.burnTime;
                 case 1:
-                    return TileEntityNordicFurnace.this.recipesUsed;
+                    return BlockEntityNordicFurnace.this.recipesUsed;
                 case 2:
-                    return TileEntityNordicFurnace.this.cookTime;
+                    return BlockEntityNordicFurnace.this.cookTime;
                 case 3:
-                    return TileEntityNordicFurnace.this.cookTimeTotal;
+                    return BlockEntityNordicFurnace.this.cookTimeTotal;
                 default:
                     return 0;
             }
@@ -66,16 +66,16 @@ public class TileEntityNordicFurnace extends TileEntityInventorySyncable<TileEnt
 
             switch(index) {
                 case 0:
-                    TileEntityNordicFurnace.this.burnTime = value;
+                    BlockEntityNordicFurnace.this.burnTime = value;
                     break;
                 case 1:
-                    TileEntityNordicFurnace.this.recipesUsed = value;
+                    BlockEntityNordicFurnace.this.recipesUsed = value;
                     break;
                 case 2:
-                    TileEntityNordicFurnace.this.cookTime = value;
+                    BlockEntityNordicFurnace.this.cookTime = value;
                     break;
                 case 3:
-                    TileEntityNordicFurnace.this.cookTimeTotal = value;
+                    BlockEntityNordicFurnace.this.cookTimeTotal = value;
             }
 
         }
@@ -86,9 +86,9 @@ public class TileEntityNordicFurnace extends TileEntityInventorySyncable<TileEnt
         }
     };
 
-    public TileEntityNordicFurnace(BlockPos pos, BlockState state) {
+    public BlockEntityNordicFurnace(BlockPos pos, BlockState state) {
 
-        super(TileEntities.nordic_furnace.get(), pos, state, NordicInventorySlots.NORDIC_FURNACE, NordicNames.NORDIC_FURNACE, NordicArcanum.MODID);
+        super(BlockEntities.nordic_furnace.get(), pos, state, NordicInventorySlots.NORDIC_FURNACE, NordicNames.NORDIC_FURNACE, NordicArcanum.MODID);
     }
 
     private NordicFurnaceRecipe getRecipeFor(ItemStack left, ItemStack right) {
@@ -162,7 +162,7 @@ public class TileEntityNordicFurnace extends TileEntityInventorySyncable<TileEnt
             return false;
 
         if(recipe.matches(new ItemStack[] { this.items.getStackInSlot(0), this.items.getStackInSlot(1) })) {
-            ItemStack result = recipe.getRecipeOutput();
+            ItemStack result = recipe.getResultItem();
             if(result.isEmpty()) {
                 return false;
             }
@@ -211,7 +211,7 @@ public class TileEntityNordicFurnace extends TileEntityInventorySyncable<TileEnt
         if(recipe != null && this.canSmelt(recipe)) {
             ItemStack left = this.items.getStackInSlot(0);
             ItemStack right = this.items.getStackInSlot(1);
-            ItemStack result = recipe.getRecipeOutput();
+            ItemStack result = recipe.getResultItem();
             ItemStack output = this.items.getStackInSlot(OUTPUT_SLOT);
 
             if(output.isEmpty()) {

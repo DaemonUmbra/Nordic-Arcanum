@@ -2,8 +2,7 @@ package com.lordskittles.nordicarcanum.common.block.crafting;
 
 import com.lordskittles.arcanumapi.common.block.BlockMod;
 import com.lordskittles.nordicarcanum.common.registry.Items;
-import com.lordskittles.nordicarcanum.common.registry.TileEntities;
-import com.lordskittles.nordicarcanum.common.tileentity.crafting.TileEntityCraftingCloth;
+import com.lordskittles.nordicarcanum.common.blockentity.crafting.BlockEntityCraftingCloth;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -87,8 +86,8 @@ public class BlockCraftingCloth extends BlockMod {
     private BlockState getFacadeBlock(BlockGetter blockAccess, BlockPos pos) {
 
         BlockEntity te = blockAccess.getBlockEntity(pos);
-        if(te instanceof TileEntityCraftingCloth) {
-            return ((TileEntityCraftingCloth) te).getFacadeState();
+        if(te instanceof BlockEntityCraftingCloth) {
+            return ((BlockEntityCraftingCloth) te).getFacadeState();
         }
         return null;
     }
@@ -98,39 +97,21 @@ public class BlockCraftingCloth extends BlockMod {
         return (facadeState == null || facadeState == net.minecraft.world.level.block.Blocks.AIR.defaultBlockState());
     }
 
-//	@Override
-//	public boolean isNormalCube(BlockState state, IBlockReader world, BlockPos pos)
-//	{
-//		BlockState facadeBlock = getFacadeBlock(world, pos);
-//		if (facadeBlock == null)
-//		{
-//			return super.isNormalCube(state, world, pos);
-//		}
-//		try
-//		{
-//			return facadeBlock.getBlock().isNormalCube(facadeBlock, world, pos);
-//		}
-//		catch (Exception exception)
-//		{
-//			return super.isNormalCube(state, world, pos);
-//		}
-//	}
-
     @Override
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
 
         if(! world.isClientSide) {
             BlockEntity tile = world.getBlockEntity(pos);
 
-            if(tile instanceof TileEntityCraftingCloth) {
+            if(tile instanceof BlockEntityCraftingCloth) {
                 if(player.isShiftKeyDown()) {
-                    BlockState orginalState = ((TileEntityCraftingCloth) tile).getFacadeState();
+                    BlockState orginalState = ((BlockEntityCraftingCloth) tile).getFacadeState();
 
                     player.getInventory().add(new ItemStack(Items.crafting_cloth_item.get()));
                     world.setBlock(pos, orginalState, 19);
                 }
                 else {
-                    NetworkHooks.openGui((ServerPlayer) player, (TileEntityCraftingCloth) tile, pos);
+                    NetworkHooks.openGui((ServerPlayer) player, (BlockEntityCraftingCloth) tile, pos);
                 }
             }
 

@@ -66,7 +66,7 @@ public class TransformSparkleParticleType extends ParticleType<TransformSparkleP
     }
 
     @Override
-    public void write(FriendlyByteBuf buffer) {
+    public void writeToNetwork(FriendlyByteBuf buffer) {
 
         buffer.writeFloat(this.red);
         buffer.writeFloat(this.green);
@@ -75,13 +75,13 @@ public class TransformSparkleParticleType extends ParticleType<TransformSparkleP
     }
 
     @Override
-    public String getParameters() {
+    public String writeToString() {
 
         return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f", Registry.PARTICLE_TYPE.getKey(this.getType()), this.red, this.green, this.blue, this.alpha);
     }
 
     @Override
-    public Codec<TransformSparkleParticleType> func_230522_e_() {
+    public Codec<TransformSparkleParticleType> codec() {
 
         return CODEC;
     }
@@ -91,7 +91,7 @@ public class TransformSparkleParticleType extends ParticleType<TransformSparkleP
         return new Deserializer<TransformSparkleParticleType>() {
 
             @Override
-            public TransformSparkleParticleType deserialize(ParticleType<TransformSparkleParticleType> type, StringReader reader) throws CommandSyntaxException {
+            public TransformSparkleParticleType fromCommand(ParticleType<TransformSparkleParticleType> type, StringReader reader) throws CommandSyntaxException {
 
                 reader.expect(' ');
                 float red = (float) reader.readDouble();
@@ -103,7 +103,7 @@ public class TransformSparkleParticleType extends ParticleType<TransformSparkleP
             }
 
             @Override
-            public TransformSparkleParticleType read(ParticleType<TransformSparkleParticleType> type, FriendlyByteBuf buffer) {
+            public TransformSparkleParticleType fromNetwork(ParticleType<TransformSparkleParticleType> type, FriendlyByteBuf buffer) {
 
                 return new TransformSparkleParticleType(buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat());
             }

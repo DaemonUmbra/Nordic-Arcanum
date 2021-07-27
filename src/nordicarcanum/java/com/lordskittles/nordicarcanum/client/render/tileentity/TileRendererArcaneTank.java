@@ -3,13 +3,12 @@ package com.lordskittles.nordicarcanum.client.render.tileentity;
 import com.lordskittles.arcanumapi.client.render.ArcaneRenderer;
 import com.lordskittles.arcanumapi.client.render.tileentity.TileEntityFluidRendererBase;
 import com.lordskittles.nordicarcanum.client.render.tileentity.model.ModelArcaneTank;
-import com.lordskittles.nordicarcanum.common.tileentity.magic.TileEntityArcaneTank;
+import com.lordskittles.nordicarcanum.common.blockentity.magic.BlockEntityArcaneTank;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
-import net.minecraft.util.math.vector.Vector3f;
 
-public class TileRendererArcaneTank extends TileEntityFluidRendererBase<TileEntityArcaneTank> {
+public class TileRendererArcaneTank extends TileEntityFluidRendererBase<BlockEntityArcaneTank> {
 
     private final ModelArcaneTank ArcaneTank = new ModelArcaneTank();
 
@@ -19,15 +18,15 @@ public class TileRendererArcaneTank extends TileEntityFluidRendererBase<TileEnti
     }
 
     @Override
-    public void render(TileEntityArcaneTank tileEntity, float ticks, PoseStack stack, MultiBufferSource buffer, int light, int overlay) {
+    public void render(BlockEntityArcaneTank tileEntity, float ticks, PoseStack stack, MultiBufferSource buffer, int light, int overlay) {
 
-        stack.push();
-        stack.translate(0.5D, 1.5D, 0.5D);
-        stack.rotate(Vector3f.XN.rotationDegrees(180));
-        ArcaneTank.render(stack, buffer, light, overlay);
-        stack.pop();
-
-        renderFluid(tileEntity, stack, buffer, light);
+//        stack.push();
+//        stack.translate(0.5D, 1.5D, 0.5D);
+//        stack.rotate(Vector3f.XN.rotationDegrees(180));
+//        ArcaneTank.render(stack, buffer, light, overlay);
+//        stack.pop();
+//
+//        renderFluid(tileEntity, stack, buffer, light);
     }
 
     @Override

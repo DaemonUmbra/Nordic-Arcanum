@@ -1,4 +1,4 @@
-package com.lordskittles.arcanumapi.common.tileentity;
+package com.lordskittles.arcanumapi.common.blockentity;
 
 import com.lordskittles.arcanumapi.common.inventory.NordicItemStackHandler;
 import com.lordskittles.arcanumapi.common.network.PacketBase;
@@ -26,7 +26,7 @@ import net.minecraftforge.items.IItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public abstract class TileEntityFluidInventory<T extends TileEntityFluidInventory> extends TileEntityUpdateable<T> {
+public abstract class BlockEntityFluidInventory<T extends BlockEntityFluidInventory> extends BlockEntityUpdateable<T> {
 
     public float prevScale;
     protected final SmartSyncTank tank = new SmartSyncTank(this, getCapacity());
@@ -37,7 +37,7 @@ public abstract class TileEntityFluidInventory<T extends TileEntityFluidInventor
 
     private boolean needsPacket = false;
 
-    public TileEntityFluidInventory(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state) {
+    public BlockEntityFluidInventory(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state) {
 
         super(tileEntityTypeIn, pos, state);
     }

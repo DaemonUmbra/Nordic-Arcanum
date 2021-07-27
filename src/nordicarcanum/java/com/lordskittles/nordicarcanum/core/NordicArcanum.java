@@ -52,7 +52,7 @@ public class NordicArcanum {
         RecipeSerializers.RECIPE_SERIALIZER.register(modEventBus);
 
         Containers.CONTAINERS.register(modEventBus);
-        TileEntities.TILE_ENTITIES.register(modEventBus);
+        BlockEntities.BLOCK_ENTITIES.register(modEventBus);
         Entities.ENTITIES.register(modEventBus);
 
         Decorators.DECORATORS.register(modEventBus);

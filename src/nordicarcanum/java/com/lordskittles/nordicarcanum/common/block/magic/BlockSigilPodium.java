@@ -7,33 +7,33 @@ import com.lordskittles.nordicarcanum.client.itemgroups.NordicItemGroup;
 import com.lordskittles.nordicarcanum.client.render.item.ItemStackSigilPodiumRender;
 import com.lordskittles.nordicarcanum.common.block.IInfusable;
 import com.lordskittles.nordicarcanum.common.block.voxelshapes.VoxelsSigilPodium;
+import com.lordskittles.nordicarcanum.common.blockentity.magic.BlockEntitySigilPodium;
 import com.lordskittles.nordicarcanum.common.item.magic.ItemSigil;
-import com.lordskittles.nordicarcanum.common.registry.TileEntities;
-import com.lordskittles.nordicarcanum.common.tileentity.magic.TileEntitySigilPodium;
+import com.lordskittles.nordicarcanum.common.registry.BlockEntities;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tiers;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTier;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nullable;
@@ -44,49 +44,36 @@ public class BlockSigilPodium extends BlockMod implements IItemBlockOverride, II
 
     public BlockSigilPodium() {
 
-        super(Block.Properties.create(Material.ROCK, MaterialColor.GRAY)
-                .hardnessAndResistance(1.5f, 6.0f)
+        super(Block.Properties.of(Material.STONE, MaterialColor.COLOR_GRAY)
+                .strength(1.5f, 6.0f)
                 .sound(SoundType.STONE)
-                .harvestLevel(ItemTier.STONE.getHarvestLevel())
+                .harvestLevel(Tiers.STONE.getLevel())
                 .harvestTool(ToolType.PICKAXE), 4);
 
-        this.setDefaultState(this.stateContainer.getBaseState().with(ISCORE, false));
+        this.registerDefaultState(this.getStateDefinition().any().setValue(ISCORE, false));
         this.group = NordicItemGroup.INSTANCE;
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 
         builder.add(ISCORE);
     }
 
-    @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-
-        return TileEntities.sigil_podium.get().create();
-    }
-
-    @Override
-    public boolean hasTileEntity(BlockState state) {
-
-        return true;
-    }
-
-    @Override
-    public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
 
         return VoxelsSigilPodium.SHAPE.get();
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
 
-        TileEntity tile = world.getTileEntity(pos);
-        ItemStack stack = player.getItemStackFromSlot(EquipmentSlotType.MAINHAND);
-        if(tile instanceof TileEntitySigilPodium) {
+        BlockEntity entity = level.getBlockEntity(pos);
+        ItemStack stack = player.getItemBySlot(EquipmentSlot.MAINHAND);
+        if(entity instanceof BlockEntitySigilPodium) {
             boolean updateSlot = false;
-            TileEntitySigilPodium podium = (TileEntitySigilPodium) tile;
+            BlockEntitySigilPodium podium = (BlockEntitySigilPodium) entity;
             ItemStack heldStack = ItemStack.EMPTY;
 
             if(stack != ItemStack.EMPTY) {
@@ -96,40 +83,40 @@ public class BlockSigilPodium extends BlockMod implements IItemBlockOverride, II
                 }
             }
             else {
-                if(player.isSneaking()) {
+                if(player.isShiftKeyDown()) {
                     heldStack = podium.removeSigil();
                     updateSlot = true;
                 }
             }
 
             if(updateSlot) {
-                player.setItemStackToSlot(EquipmentSlotType.MAINHAND, heldStack);
+                player.setItemSlot(EquipmentSlot.MAINHAND, heldStack);
             }
         }
 
-        return ActionResultType.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     @Override
     public BlockItem getOverride() {
 
-        return new ItemBlockBase(this, new Item.Properties().group(group()).setISTER(() -> ItemStackSigilPodiumRender::new));
+        return new ItemBlockBase(this, new Item.Properties().tab(group()));//.setISTER(() -> ItemStackSigilPodiumRender::new));
     }
 
     @Override
-    public boolean isValid(IWorldReader world, BlockPos pos, BlockPos right, BlockState state) {
+    public boolean isValid(LevelReader level, BlockPos pos, BlockPos right, BlockState state) {
 
-        return !state.get(ISCORE);
+        return ! state.getValue(ISCORE);
     }
 
     @Override
-    public void infuse(World world, BlockPos pos, BlockPos right, BlockState state, Direction direction) {
+    public void infuse(Level level, BlockPos pos, BlockPos right, BlockState state, Direction direction) {
 
-        world.setBlockState(pos, state.with(BlockSigilPodium.ISCORE, true));
+        level.setBlock(pos, state.setValue(BlockSigilPodium.ISCORE, true), 19);
     }
 
     @Override
-    public BlockPos[] getInfusedPositions(World world, BlockPos pos, BlockPos right, BlockState state, Direction direction) {
+    public BlockPos[] getInfusedPositions(Level world, BlockPos pos, BlockPos right, BlockState state, Direction direction) {
 
         return new BlockPos[] { pos };
     }

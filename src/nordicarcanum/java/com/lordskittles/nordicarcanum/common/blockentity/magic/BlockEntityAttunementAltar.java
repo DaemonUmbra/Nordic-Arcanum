@@ -1,11 +1,11 @@
-package com.lordskittles.nordicarcanum.common.tileentity.magic;
+package com.lordskittles.nordicarcanum.common.blockentity.magic;
 
 import com.lordskittles.arcanumapi.common.utilities.DynamicMultiblockDetector;
 import com.lordskittles.arcanumapi.common.utilities.IMultiblock;
 import com.lordskittles.nordicarcanum.common.block.magic.BlockSigilPodium;
 import com.lordskittles.nordicarcanum.common.inventory.containers.ContainerAttunementAltar;
 import com.lordskittles.nordicarcanum.common.network.PacketMultiblockFormed;
-import com.lordskittles.nordicarcanum.common.registry.TileEntities;
+import com.lordskittles.nordicarcanum.common.registry.BlockEntities;
 import com.lordskittles.nordicarcanum.common.structure.StructureResources;
 import com.lordskittles.nordicarcanum.common.utility.BlockUtilities;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
@@ -27,25 +27,34 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class TileEntityAttunementAltar extends BlockEntity implements MenuProvider, IMultiblock<GameStage> {
+public class BlockEntityAttunementAltar extends BlockEntity implements MenuProvider, IMultiblock<GameStage> {
 
-    public DynamicMultiblockDetector<TileEntityAttunementAltar, GameStage> detector;
+    public DynamicMultiblockDetector<BlockEntityAttunementAltar, GameStage> detector;
 
     public boolean isMultiblockFormed = false;
 
     private Component title;
 
-    public TileEntityAttunementAltar(BlockPos pos, BlockState state) {
+    public BlockEntityAttunementAltar(BlockPos pos, BlockState state) {
 
-        super(TileEntities.attunement_altar.get(), pos, state);
+        super(BlockEntities.attunement_altar.get(), pos, state);
 
         this.title = new TranslatableComponent("container." + NordicNames.ATTUNEMENT_ALTAR);
         detector = new DynamicMultiblockDetector<>(this);
     }
 
-    public List<TileEntitySigilPodium> getPodiums() {
+    public List<BlockEntitySigilPodium> getPodiums() {
 
         return BlockUtilities.getPodiums(this.level, this.getPos());
+    }
+
+    public boolean stillValid(Player player) {
+
+        if(this.level.getBlockEntity(this.worldPosition) != this) {
+            return false;
+        }
+
+        return ! (player.distanceToSqr((double) this.worldPosition.getX() + 0.5D, (double) this.worldPosition.getY() + 0.5D, (double) this.worldPosition.getZ() + 0.5D) > 64.0D);
     }
 
     @Override
