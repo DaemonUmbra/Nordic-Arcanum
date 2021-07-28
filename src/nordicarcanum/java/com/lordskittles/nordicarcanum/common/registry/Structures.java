@@ -46,14 +46,6 @@ public class Structures {
     public static ConfiguredStructureFeature<NoneFeatureConfiguration, ? extends StructureFeature<NoneFeatureConfiguration>> temple_feature;
     public static ConfiguredStructureFeature<NoneFeatureConfiguration, ? extends StructureFeature<NoneFeatureConfiguration>> shrine_feature;
 
-    @SubscribeEvent
-    public static void registerStructurePieces(RegistryEvent.Register<Feature<?>> event) {
-
-        Registry.register(Registry.STRUCTURE_PIECE, NordicArcanum.RL(NordicNames.ANCIENT_NORSE + NordicNames.STRUCTURE_PIECE_SUFFIX), pillar_piece);
-        Registry.register(Registry.STRUCTURE_PIECE, NordicArcanum.RL(NordicNames.ANCIENT_TEMPLE + NordicNames.STRUCTURE_PIECE_SUFFIX), temple_piece);
-        Registry.register(Registry.STRUCTURE_PIECE, NordicArcanum.RL(NordicNames.SHRINE + NordicNames.STRUCTURE_PIECE_SUFFIX), shrine_piece);
-    }
-
     public static void registerFeatures() {
 
         norse_pillar_feature = register(NordicNames.ANCIENT_NORSE + NordicNames.STRUCTURE_SUFFIX + "_feature", norse_pillar.get().configured(NoneFeatureConfiguration.INSTANCE));
@@ -63,7 +55,7 @@ public class Structures {
 
     private static <T extends StructureBase<?>> RegistryObject<T> registerStructure(String name, T structure) {
 
-        StructureFeature.STRUCTURES_REGISTRY.put(NordicArcanum.MODID + ":" + name, structure);
+//        StructureFeature.STRUCTURES_REGISTRY.put(NordicArcanum.MODID + ":" + name, structure);
         StructureFeature.STRUCTURES_REGISTRY.put(GenerationStep.Decoration.SURFACE_STRUCTURES.name(), structure);
 
         StructureFeature.NOISE_AFFECTING_FEATURES = ImmutableList.<StructureFeature<?>>builder().addAll(StructureFeature.NOISE_AFFECTING_FEATURES).add(structure).build();

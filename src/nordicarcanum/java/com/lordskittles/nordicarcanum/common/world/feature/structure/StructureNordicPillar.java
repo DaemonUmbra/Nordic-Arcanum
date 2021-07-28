@@ -86,6 +86,7 @@ public class StructureNordicPillar extends StructureBase<NoneFeatureConfiguratio
             int worldZ = (chunkPos.z << 4) + 7;
             BlockPos pos = new BlockPos(worldX, accessor.getHeight(), worldZ);
             Rotation rotation = Rotation.getRandom(this.random);
+            NordicArcanum.LOG.debug("Pillar at: " + pos.toString());
             this.pieces.add(new NordicPillarPieces.Piece(structureManager, pillar, pos, rotation, accessor.getHeight()));
             this.createBoundingBox();
         }
