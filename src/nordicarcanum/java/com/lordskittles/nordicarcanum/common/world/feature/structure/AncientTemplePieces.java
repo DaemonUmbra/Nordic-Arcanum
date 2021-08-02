@@ -24,7 +24,7 @@ public class AncientTemplePieces {
 
         public Piece(ServerLevel world, CompoundTag nbt) {
 
-            super(Structures.temple_piece, nbt, world, (level) -> { return makeSettings(Rotation.valueOf(nbt.getString("Rot"))); });
+            super(Structures.temple_piece, nbt, world, (level) -> { return makeSettings(Rotation.valueOf(nbt.getString("Rotation"))); });
 
             this.structure_block_replacement = net.minecraft.world.level.block.Blocks.AIR.defaultBlockState();
         }

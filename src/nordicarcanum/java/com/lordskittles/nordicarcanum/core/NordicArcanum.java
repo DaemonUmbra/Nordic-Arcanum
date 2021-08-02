@@ -56,7 +56,6 @@ public class NordicArcanum {
         Entities.ENTITIES.register(modEventBus);
 
         Decorators.DECORATORS.register(modEventBus);
-        Structures.STRUCTURES.register(modEventBus);
         Features.FEATURES.register(modEventBus);
 
         Particles.PARTICLES.register(modEventBus);

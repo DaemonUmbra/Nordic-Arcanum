@@ -7,12 +7,14 @@ import com.lordskittles.nordicarcanum.common.inventory.crafting.FluidIngredient;
 import com.lordskittles.nordicarcanum.common.registry.Blocks;
 import com.lordskittles.nordicarcanum.common.registry.FoliageType;
 import com.lordskittles.nordicarcanum.common.registry.RecipeType;
+import com.lordskittles.nordicarcanum.common.registry.Structures;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerType;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.RegistryEvent;
@@ -66,5 +68,11 @@ public class RegistryEvents {
     public static void onRegisterFoliagePlacers(RegistryEvent.Register<FoliagePlacerType<?>> event) {
 
         FoliageType.registerFoliageTypes(event.getRegistry());
+    }
+
+    @SubscribeEvent
+    public static void onRegisterStructures(final RegistryEvent.Register<StructureFeature<?>> event) {
+
+        Structures.registerFeatures();
     }
 }

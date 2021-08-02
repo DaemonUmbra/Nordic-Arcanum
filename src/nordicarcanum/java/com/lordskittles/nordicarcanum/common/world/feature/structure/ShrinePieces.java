@@ -45,7 +45,7 @@ public class ShrinePieces {
 
         public Piece(ServerLevel world, CompoundTag nbt) {
 
-            super(Structures.shrine_piece, nbt, world, (level) -> { return makeSettings(Rotation.valueOf("Rot")); });
+            super(Structures.shrine_piece, nbt, world, (level) -> { return makeSettings(Rotation.valueOf("Rotation")); });
 
             this.structure_block_replacement = Blocks.feldspar_pillar.get().defaultBlockState();
         }

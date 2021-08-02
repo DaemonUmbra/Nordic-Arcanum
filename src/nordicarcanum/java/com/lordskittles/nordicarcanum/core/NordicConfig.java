@@ -43,12 +43,14 @@ public class NordicConfig {
 
     // region General
     public static ForgeConfigSpec.BooleanValue logPackets;
+    public static ForgeConfigSpec.BooleanValue extendedLogging;
 
     private static void initGeneral() {
 
         startGroup("General");
         {
             logPackets = BUILDER.comment("Should packets be logged to the console?").define("logPackets", true);
+            extendedLogging = BUILDER.comment("Should we use extended logging?").define("extendedLogging", false);
         }
         endGroup();
     }

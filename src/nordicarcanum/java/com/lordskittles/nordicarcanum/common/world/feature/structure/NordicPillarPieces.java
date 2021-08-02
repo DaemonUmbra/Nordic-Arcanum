@@ -28,9 +28,7 @@ public class NordicPillarPieces {
 
         public Piece(ServerLevel level, CompoundTag nbt) {
 
-            super(Structures.pillar_piece, nbt, level, (_level) -> {
-                return makeSettings(Rotation.valueOf(nbt.getString("Rot")));
-            });
+            super(Structures.pillar_piece, nbt, level, (_level) -> { return makeSettings(Rotation.valueOf(nbt.getString("Rotation"))); });
 
             this.structure_block_replacement = Blocks.deepslate_pillar.get().defaultBlockState().setValue(BlockPillar.AXIS, Direction.Axis.Y).setValue(BlockInfusablePillar.ACTIVATED, true);
         }
