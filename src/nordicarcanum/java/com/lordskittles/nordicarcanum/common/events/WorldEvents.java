@@ -3,6 +3,7 @@ package com.lordskittles.nordicarcanum.common.events;
 import com.lordskittles.arcanumapi.common.world.feature.structure.StructureBase;
 import com.lordskittles.nordicarcanum.common.registry.Structures;
 import com.lordskittles.nordicarcanum.common.world.FeatureGeneration;
+import com.lordskittles.nordicarcanum.common.world.OreGeneration;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
@@ -25,7 +26,7 @@ public class WorldEvents {
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void biomeLoadEvent(final BiomeLoadingEvent event) {
 
-//        OreGeneration.generateOre(event);
+        OreGeneration.generateOre(event);
 //        FeatureGeneration.generateLakes(event);
         FeatureGeneration.generateStructures(event);
 //        FeatureGeneration.generateTrees(event);
