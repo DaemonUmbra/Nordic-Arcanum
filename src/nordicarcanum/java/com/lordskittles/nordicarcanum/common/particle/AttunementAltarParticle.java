@@ -85,11 +85,11 @@ public class AttunementAltarParticle extends TextureSheetParticle {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static class AttunementAltar implements ParticleProvider<AttunementAltarParticleType> {
+    public static class Provider implements ParticleProvider<AttunementAltarParticleType> {
 
         private final SpriteSet spriteSet;
 
-        public AttunementAltar(SpriteSet spriteSet) {
+        public Provider(SpriteSet spriteSet) {
 
             this.spriteSet = spriteSet;
         }

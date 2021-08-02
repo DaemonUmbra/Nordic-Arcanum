@@ -32,12 +32,12 @@ public class Particles {
     @SubscribeEvent
     public static void registerParticleFactory(ParticleFactoryRegisterEvent event) {
 
-        Minecraft.getInstance().particleEngine.register(ar_particle.get(), AttunementAltarParticle.AttunementAltar::new);
-        Minecraft.getInstance().particleEngine.register(fe_particle.get(), AttunementAltarParticle.AttunementAltar::new);
-        Minecraft.getInstance().particleEngine.register(hagal_particle.get(), AttunementAltarParticle.AttunementAltar::new);
-        Minecraft.getInstance().particleEngine.register(kaun_particle.get(), AttunementAltarParticle.AttunementAltar::new);
-        Minecraft.getInstance().particleEngine.register(ur_particle.get(), AttunementAltarParticle.AttunementAltar::new);
-        Minecraft.getInstance().particleEngine.register(yr_particle.get(), AttunementAltarParticle.AttunementAltar::new);
-        Minecraft.getInstance().particleEngine.register(transform_sparkle_particle.get(), TransformSparkleParticle.TransformSparkle::new);
+        Minecraft.getInstance().particleEngine.register(ar_particle.get(), AttunementAltarParticle.Provider::new);
+        Minecraft.getInstance().particleEngine.register(fe_particle.get(), AttunementAltarParticle.Provider::new);
+        Minecraft.getInstance().particleEngine.register(hagal_particle.get(), AttunementAltarParticle.Provider::new);
+        Minecraft.getInstance().particleEngine.register(kaun_particle.get(), AttunementAltarParticle.Provider::new);
+        Minecraft.getInstance().particleEngine.register(ur_particle.get(), AttunementAltarParticle.Provider::new);
+        Minecraft.getInstance().particleEngine.register(yr_particle.get(), AttunementAltarParticle.Provider::new);
+        Minecraft.getInstance().particleEngine.register(transform_sparkle_particle.get(), TransformSparkleParticle.Provider::new);
     }
 }

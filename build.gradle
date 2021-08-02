@@ -13,16 +13,24 @@ buildscript {
 
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'maven-publish'
-
-apply from: 'https://raw.githubusercontent.com/SizableShrimp/Forge-Class-Remapper/main/classremapper.gradle'
+apply plugin: 'idea'
 
 defaultTasks 'fullBuild'
 
+idea {
+    module {
+        // For some reason this is necessary for IDEA 2014 workspaces to recognize assets
+        inheritOutputDirs = true
+        //Exclude directories from being managed
+        for (String excludeDirName in ["run", "out", "logs", "gradle"]) {
+            File excludeDir = new File(projectDir, excludeDirName)
+            excludeDirs.add(excludeDir)
+        }
+    }
+}
+
 sourceSets {
     main {
-        java {
-            srcDir 'src/main/java'
-        }
         resources {
             include '**/**'
             // copy everything else, but blender files.
@@ -36,19 +44,12 @@ sourceSets {
     nordicarcanum {
 		setupSourceSet(sourceSets.nordicarcanum, 'nordicarcanum')
     }
-    test {
-        compileClasspath += sourceSets.main.output + sourceSets.nordicarcanum.output
-        runtimeClasspath += sourceSets.main.output + sourceSets.nordicarcanum.output
-    }
     //Data gen modules for the different modules
     datagenmain { setupDataGenSourceSet(sourceSets.datagenmain, null, 'main') }
     datagennordicarcanum { setupDataGenSourceSet(sourceSets.datagennordicarcanum, sourceSets.nordicarcanum, 'nordicarcanum') }
 }
 
 def setupSourceSet(SourceSet sourceSet, String name) {
-    sourceSet.java {
-        srcDir 'src/' + name + '/java'
-    }
     sourceSet.resources {
         //Add the generated module resources
         srcDirs += 'src/datagen/generated/' + name
@@ -96,11 +97,18 @@ minecraft {
 
             property 'forge.logging.console.level', 'debug'
 
+            if (project.hasProperty('mc_uuid')) {
+                //Your uuid without any dashes in the middle
+                args '--uuid', project.getProperty('mc_uuid')
+            }
             if (project.hasProperty('mc_username')) {
+                //Your username/display name, this is the name that shows up in chat
+                // Note: This is not your email, even if you have a Mojang account
                 args '--username', project.getProperty('mc_username')
             }
-            if (project.hasProperty('mc_password')) {
-                args '--password', project.getProperty('mc_password')
+            if (project.hasProperty('mc_accessToken')) {
+                //Your access token, you can find it in your '.minecraft/launcher_accounts.json' file
+                args '--accessToken', project.getProperty('mc_accessToken')
             }
 
             mods {
@@ -158,16 +166,6 @@ minecraft {
 }
 
 repositories {
-    //maven {
-    //    // location of the maven that hosts JEI files
-    //    name = "Progwml6 maven"
-    //    url = "https://dvs1.progwml6.com/files/maven/"
-    //}
-    //maven {
-    //    // location of a maven mirror for JEI files, as a fallback
-    //    name = "ModMaven"
-    //    url = "https://modmaven.k-4u.nl"
-    //}
 }
 
 dependencies {
@@ -178,12 +176,6 @@ dependencies {
     //compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}:api")
     // at runtime, use the full JEI jar
     //runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}")
-}
-
-// Example for how to get properties into the manifest for reading by the runtime..
-jar {
-    from sourceSets.main.output
-    from sourceSets.nordicarcanum.output
 }
 
 task apiJar(type: Jar) {
@@ -205,9 +197,9 @@ jar.finalizedBy('reobfJar')
 configurations {
     //Make sure all our sub source set stuff extends the proper base methods so that
     // they can see all the dependencies we have in dependencies including forge
-    def compileExtenders = [arcanumcoreCompile, nordicarcanumCompile, testCompile, datagenmainCompile, datagenarcanumcoreCompile]
-    def compileOnlyExtenders = [arcanumcoreCompileOnly, nordicarcanumCompileOnly, datagenmainCompileOnly, datagenarcanumcoreCompileOnly]
-    def runtimeOnlyExtenders = [arcanumcoreRuntimeOnly, nordicarcanumRuntimeOnly, datagenmainRuntimeOnly, datagenarcanumcoreRuntimeOnly]
+    def compileExtenders = [arcanumapiCompile, nordicarcanumCompile, datagenmainCompile, datagenarcanumcoreCompile]
+    def compileOnlyExtenders = [arcanumapiCompileOnly, nordicarcanumCompileOnly, datagenmainCompileOnly, datagenarcanumcoreCompileOnly]
+    def runtimeOnlyExtenders = [arcanumapiRuntimeOnly, nordicarcanumRuntimeOnly, datagenmainRuntimeOnly, datagenarcanumcoreRuntimeOnly]
     for (def compileExtender : compileExtenders) {
         compileExtender.extendsFrom(compile)
         compileExtender.extendsFrom(minecraft)

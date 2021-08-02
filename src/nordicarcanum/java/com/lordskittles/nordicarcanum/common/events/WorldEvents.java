@@ -16,9 +16,9 @@ public class WorldEvents {
 
         Structures.registerFeatures();
 
-        OreGeneration.generateOre(event);
+//        OreGeneration.generateOre(event);
 //        FeatureGeneration.generateLakes(event);
-        FeatureGeneration.generateStructures(event);
+//        FeatureGeneration.generateStructures(event);
 //        FeatureGeneration.generateTrees(event);
     }
 }

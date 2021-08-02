@@ -42,11 +42,11 @@ public class BlockInfusablePillar extends BlockPillar implements IInfusable {
     public void infuse(Level world, BlockPos pos, BlockPos right, BlockState state, Direction direction) {
 
         if(state.getValue(ACTIVATED) && world.getBlockState(pos.above()).getBlock() instanceof BlockCrystalMatrix) {
-            world.setBlock(pos.above(), net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 19);
-            world.setBlock(pos, Blocks.attunement_altar.get().defaultBlockState(), 19);
+            world.setBlock(pos.above(), net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 3);
+            world.setBlock(pos, Blocks.attunement_altar.get().defaultBlockState(), 3);
         }
         else {
-            world.setBlock(pos, state.setValue(ACTIVATED, true), 19);
+            world.setBlock(pos, state.setValue(ACTIVATED, true), 3);
         }
     }
 

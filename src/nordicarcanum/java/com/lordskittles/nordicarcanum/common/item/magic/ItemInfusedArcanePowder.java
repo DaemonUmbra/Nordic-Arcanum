@@ -92,7 +92,7 @@ public class ItemInfusedArcanePowder extends ItemMod {
                         playerPos.y,
                         playerPos.z,
                         blockPos.x / 11.0D + rand.nextGaussian() * 0.025D,
-                        blockPos.y / 11.0D + rand.nextGaussian() * 0.025D + (floaty ? 0.05D : 0.15D),
+                        blockPos.y / 15.0D + rand.nextGaussian() * 0.025D + (floaty ? 0.05D : 0.1D),
                         blockPos.z / 11.0D + rand.nextGaussian() * 0.025D);
             }
         }
