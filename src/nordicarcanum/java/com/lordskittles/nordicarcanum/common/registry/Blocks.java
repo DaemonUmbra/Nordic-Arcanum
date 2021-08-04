@@ -1,5 +1,6 @@
 package com.lordskittles.nordicarcanum.common.registry;
 
+import com.lordskittles.arcanumapi.common.block.BlockFluid;
 import com.lordskittles.nordicarcanum.client.itemgroups.NordicItemGroup;
 import com.lordskittles.nordicarcanum.client.itemgroups.NordicResourcesItemGroup;
 import com.lordskittles.nordicarcanum.common.block.SidePlacement;
@@ -15,12 +16,10 @@ import com.lordskittles.nordicarcanum.common.block.world.trees.TreePine;
 import com.lordskittles.nordicarcanum.common.block.world.trees.TreeYew;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.lordskittles.nordicarcanum.core.NordicNames;
-import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 import net.minecraftforge.common.ToolType;
@@ -190,6 +189,6 @@ public class Blocks {
     public static final RegistryObject<Block> bifrost = BLOCKS.register(NordicNames.BIFROST, () -> new BlockDecoration(Block.Properties.of(Material.STONE, MaterialColor.ICE).sound(SoundType.STONE).strength(40F, 1000F).requiresCorrectToolForDrops().harvestLevel(Tiers.DIAMOND.getLevel()).harvestTool(ToolType.PICKAXE), NordicResourcesItemGroup.INSTANCE));
     public static final RegistryObject<Block> ruined_bifrost = BLOCKS.register(NordicNames.RUINED_BIFROST, () -> new BlockDecoration(Block.Properties.of(Material.STONE, MaterialColor.ICE).sound(SoundType.STONE).strength(40F, 1000F).requiresCorrectToolForDrops().harvestLevel(Tiers.DIAMOND.getLevel()).harvestTool(ToolType.PICKAXE), NordicResourcesItemGroup.INSTANCE));
 
-    public static final RegistryObject<LiquidBlock> liquid_arcanum = BLOCKS.register(NordicNames.LIQUID_ARCANUM, () -> new LiquidBlock(() -> (FlowingFluid) Fluids.liquid_arcanum.get(), getFluidProperties()));
+    public static final RegistryObject<LiquidBlock> liquid_arcanum = BLOCKS.register(NordicNames.LIQUID_ARCANUM, () -> new BlockFluid(Fluids.liquid_arcanum_flowing::get, getFluidProperties()));
 
 }

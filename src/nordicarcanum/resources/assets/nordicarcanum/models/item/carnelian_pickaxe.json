@@ -1,7 +1,0 @@
-{
-	"parent": "item/handheld",
-	"textures": 
-	{
-		"layer0": "nordicarcanum:items/tools/carnelian_pickaxe"
-	}
-}

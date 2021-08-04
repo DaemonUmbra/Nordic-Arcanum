@@ -16,7 +16,7 @@ public class TreeYew extends NordicTree {
 
     public static final TreeConfiguration CONFIG = (new TreeConfiguration.TreeConfigurationBuilder(new SimpleStateProvider(Blocks.yew_log.get().defaultBlockState()),
             new YewTrunk(4, 2, 0), new SimpleStateProvider(Blocks.yew_leaves.get().defaultBlockState()), new SimpleStateProvider(Blocks.yew_sapling.get().defaultBlockState()),
-            new YewFoliage(UniformInt.of(2, 0), UniformInt.of(0, 0), 3), new TwoLayersFeatureSize(1, 0, 1))).ignoreVines().build();
+            new YewFoliage(UniformInt.of(0, 2), UniformInt.of(0, 2), 3), new TwoLayersFeatureSize(1, 0, 1))).ignoreVines().build();
 
     @Override
     protected ConfiguredFeature<TreeConfiguration, ?> getConfiguredFeature(Random rand, boolean bool) {

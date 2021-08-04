@@ -27,9 +27,9 @@ public class WorldEvents {
     public static void biomeLoadEvent(final BiomeLoadingEvent event) {
 
         OreGeneration.generateOre(event);
-//        FeatureGeneration.generateLakes(event);
+        FeatureGeneration.generateLakes(event);
         FeatureGeneration.generateStructures(event);
-//        FeatureGeneration.generateTrees(event);
+        FeatureGeneration.generateTrees(event);
     }
 
     @SubscribeEvent

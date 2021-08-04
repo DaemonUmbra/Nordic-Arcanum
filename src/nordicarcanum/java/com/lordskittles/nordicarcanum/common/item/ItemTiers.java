@@ -11,15 +11,6 @@ import java.util.function.Supplier;
 public enum ItemTiers implements Tier {
     NORSE(2, 750, 6.0F, 2.5F, 10, () -> {
         return Ingredient.of(Items.norse_ingot.get());
-    }),
-    THULITE(2, 1000, 7.0F, 3.0F, 10, () -> {
-        return Ingredient.of(ItemTags.bind("thulite"));
-    }),
-    CARNELIAN(2, 1000, 7.0F, 3.0F, 10, () -> {
-        return Ingredient.of(ItemTags.bind("carnelian"));
-    }),
-    GARNET(2, 1000, 7.0F, 3.0F, 10, () -> {
-        return Ingredient.of(ItemTags.bind("garnet"));
     });
 
     private final int harvestLevel;
