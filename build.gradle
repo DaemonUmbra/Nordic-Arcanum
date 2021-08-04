@@ -15,7 +15,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'maven-publish'
 apply plugin: 'idea'
 
-defaultTasks 'fullBuild'
+defaultTasks 'build'
 
 idea {
     module {
@@ -178,14 +178,34 @@ dependencies {
     //runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}")
 }
 
+def getManifestAttributes(String title, String mod_version) {
+    return [
+            "Specification-Title"     : title,
+            "Specification-Vendor"    : "Nordic Arcanum",
+            "Specification-Version"   : mod_version,
+            "Implementation-Title"    : title,
+            "Implementation-Version"  : mod_version,
+            "Implementation-Vendor"   : "Nordic Arcanum",
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+    ]
+}
+
 task apiJar(type: Jar) {
-    archiveName = "arcanumapi-${api_version}.jar"
+    duplicatesStrategy(DuplicatesStrategy.FAIL)
+    archiveClassifier.set("arcanumapi")
+    archiveFileName.set("arcanumapi-${api_version}.jar")
     from sourceSets.main.output
+    manifest.attributes(getManifestAttributes("Arcanum API", api_version))
+    afterEvaluate { finalizedBy reobfApiJar }
 }
 
 task nordicarcanumJar(type: Jar) {
-    archiveName = "nordicarcanum-${na_version}.jar"
+    duplicatesStrategy(DuplicatesStrategy.FAIL)
+    archiveClassifier.set("nordicarcanum")
+    archiveFileName.set("nordicarcanum-${na_version}.jar")
     from sourceSets.nordicarcanum.output
+    manifest.attributes(getManifestAttributes("Nordic Arcanum", na_version))
+    afterEvaluate { finalizedBy reobfNordicarcanumJar }
 }
 
 // Example configuration to allow publishing using the maven-publish task
@@ -193,6 +213,18 @@ task nordicarcanumJar(type: Jar) {
 jar.finalizedBy('reobfJar') 
 // However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
 //publish.dependsOn('reobfJar')
+
+artifacts {
+    archives apiJar
+    archives jar
+    archives nordicarcanumJar
+}
+
+reobf {
+    apiJar { classpath.from(sourceSets.main.compileClasspath) }
+    jar { classpath.from(sourceSets.main.compileClasspath) }
+    nordicarcanumJar { classpath.from(sourceSets.nordicarcanum.compileClasspath) }
+}
 
 configurations {
     //Make sure all our sub source set stuff extends the proper base methods so that
@@ -212,11 +244,6 @@ configurations {
         runtimeOnlyExtender.extendsFrom(runtimeOnly)
         runtimeOnlyExtender.extendsFrom(minecraft)
     }
-}
-
-task fullBuild(type: Delete) {
-    delete jar
-    dependsOn "build"
 }
 
 publishing {
