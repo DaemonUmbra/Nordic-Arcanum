@@ -99,8 +99,8 @@ public abstract class ContainerScreenBase<T extends AbstractContainerMenu> exten
     @Override
     protected void renderBg(PoseStack matrixStack, float partialTicks, int mouseX, int mouseY) {
 
-        RenderSystem.clearColor(this.red, this.green, this.blue, this.alpha);
-        this.minecraft.getTextureManager().bindForSetup(this.texture);
+        RenderSystem.setShaderColor(this.red, this.green, this.blue, this.alpha);
+        RenderSystem.setShaderTexture(0, this.texture);
 
         int x = (this.width - this.imageWidth) / 2;
         int y = (this.height - this.imageHeight) / 2;

@@ -78,9 +78,9 @@ public class ItemSigil extends ItemMod {
                 setSchool(stack, newSchool);
                 ProgressionManager.learnSchool(newSchool, player);
 
-                if(player instanceof ServerPlayer) {
-                    Advancements.sigil_found.trigger((ServerPlayer) player);
-                }
+//                if(player instanceof ServerPlayer) {
+//                    Advancements.sigil_found.trigger((ServerPlayer) player);
+//                }
 
                 player.displayClientMessage(IMagicSchool.getDiscoveredChatMessage(newSchool), true);
             }

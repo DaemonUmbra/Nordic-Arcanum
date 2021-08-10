@@ -16,10 +16,10 @@ public abstract class BlockEntityTickable<T extends BlockEntityTickable> extends
         this.block = block;
     }
 
-    @Override
-    public void tick() {
+    @SuppressWarnings("rawtypes")
+    public static void tick(Level level, BlockPos pos, BlockState state, BlockEntityTickable tickable) {
 
-        tick(this.level, this.block);
+        tickable.tick(level, (BlockEntityTickable) level.getBlockEntity(pos));
     }
 
     protected abstract void tick(Level world, T block);

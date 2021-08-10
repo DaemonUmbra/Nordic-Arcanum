@@ -1,6 +1,7 @@
 package com.lordskittles.nordicarcanum.common.block.crafting;
 
 import com.lordskittles.arcanumapi.common.block.BlockMod;
+import com.lordskittles.arcanumapi.common.utilities.BlockEntityHelper;
 import com.lordskittles.nordicarcanum.client.itemgroups.NordicItemGroup;
 import com.lordskittles.nordicarcanum.common.blockentity.crafting.BlockEntityNordicFurnace;
 import net.minecraft.core.BlockPos;
@@ -15,7 +16,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -24,10 +28,11 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.fmllegacy.network.NetworkHooks;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
-public class BlockNordicFurnace extends BlockMod {
+public class BlockNordicFurnace extends BlockMod implements EntityBlock {
 
     public static final BooleanProperty SMELTING = BooleanProperty.create("smelting");
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
@@ -59,7 +64,7 @@ public class BlockNordicFurnace extends BlockMod {
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
 
-        return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getClockWise().getOpposite());
+        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
 
     @Override
@@ -95,5 +100,19 @@ public class BlockNordicFurnace extends BlockMod {
             double d7 = direction$axis == Direction.Axis.Z ? (double)direction.getStepZ() * 0.52D : d4;
             level.addParticle(ParticleTypes.FLAME, d0 + d5, d1 + d6, d2 + d7, 0.0D, 0.0D, 0.0D);
         }
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+
+        return new BlockEntityNordicFurnace(pos, state);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entityType) {
+
+        return level.isClientSide ? null : BlockEntityHelper.createTickerHelper(entityType, BlockEntityNordicFurnace::furnaceTick);
     }
 }

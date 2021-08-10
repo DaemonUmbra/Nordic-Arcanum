@@ -2,6 +2,7 @@ package com.lordskittles.arcanumapi.common.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -23,15 +24,15 @@ public abstract class BlockEntityUpdateable<T extends BlockEntityUpdateable> ext
         return super.getUpdateTag();
     }
 
-    public void tick() {
+    public static void tick(Level level, BlockPos pos, BlockState state, BlockEntityUpdateable entity) {
 
-        ticksExisted++;
+        entity.ticksExisted++;
 
-        if(this.level.isClientSide) {
-            onClientUpdate();
+        if(level.isClientSide) {
+            entity.onClientUpdate();
         }
         else {
-            onServerUpdate();
+            entity.onServerUpdate();
         }
     }
 

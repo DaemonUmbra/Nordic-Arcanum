@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
@@ -42,34 +43,33 @@ public abstract class BlockEntityMagicChest<T extends BlockEntityMagicChest<T>> 
 
     public abstract AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player);
 
-    @Override
-    public void tick() {
+    public static void tick(Level level, BlockPos pos, BlockState state, BlockEntityMagicChest inventory) {
 
-        super.tick();
-        this.prevLidAngle = this.lidAngle;
-        if(this.numPlayersUsing > 0 && this.lidAngle == 0.0F) {
-            level.playSound(null, worldPosition, SoundEvents.CHEST_OPEN, SoundSource.BLOCKS, 1.0f, 1.0f);
+        BlockEntityMagicChest.tick(level, pos, state, inventory);
+        inventory.prevLidAngle = inventory.lidAngle;
+        if(inventory.numPlayersUsing > 0 && inventory.lidAngle == 0.0F) {
+            level.playSound(null, pos, SoundEvents.CHEST_OPEN, SoundSource.BLOCKS, 1.0f, 1.0f);
         }
 
-        if(this.numPlayersUsing == 0 && this.lidAngle > 0.0F || this.numPlayersUsing > 0 && this.lidAngle < 1.0F) {
-            float f1 = this.lidAngle;
-            if(this.numPlayersUsing > 0) {
-                this.lidAngle += 0.1F;
+        if(inventory.numPlayersUsing == 0 && inventory.lidAngle > 0.0F || inventory.numPlayersUsing > 0 && inventory.lidAngle < 1.0F) {
+            float f1 = inventory.lidAngle;
+            if(inventory.numPlayersUsing > 0) {
+                inventory.lidAngle += 0.1F;
             }
             else {
-                this.lidAngle -= 0.1F;
+                inventory.lidAngle -= 0.1F;
             }
 
-            if(this.lidAngle > 1.0F) {
-                this.lidAngle = 1.0F;
+            if(inventory.lidAngle > 1.0F) {
+                inventory.lidAngle = 1.0F;
             }
 
-            if(this.lidAngle < 0.5F && f1 >= 0.5F) {
-                level.playSound(null, worldPosition, SoundEvents.CHEST_CLOSE, SoundSource.BLOCKS, 1.0f, 1.0f);
+            if(inventory.lidAngle < 0.5F && f1 >= 0.5F) {
+                level.playSound(null, pos, SoundEvents.CHEST_CLOSE, SoundSource.BLOCKS, 1.0f, 1.0f);
             }
 
-            if(this.lidAngle < 0.0F) {
-                this.lidAngle = 0.0F;
+            if(inventory.lidAngle < 0.0F) {
+                inventory.lidAngle = 0.0F;
             }
         }
     }

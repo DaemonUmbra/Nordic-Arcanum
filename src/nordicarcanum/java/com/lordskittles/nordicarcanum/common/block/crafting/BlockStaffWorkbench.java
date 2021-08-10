@@ -105,12 +105,6 @@ public class BlockStaffWorkbench extends BlockMod {
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
-
-        return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getClockWise().getOpposite());
-    }
-
-    @Override
     public void playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
 
         Direction direction = state.getValue(FACING);

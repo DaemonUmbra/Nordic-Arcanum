@@ -60,7 +60,7 @@ public class NordicArcanum {
 
         Particles.PARTICLES.register(modEventBus);
 
-        Advancements.register();
+//        Advancements.register();
 
         ServerEvents.registerListener(ProgressionIOThread.startup());
 

@@ -2,11 +2,12 @@ package com.lordskittles.nordicarcanum.common.blockentity.crafting;
 
 import com.google.common.collect.Maps;
 import com.lordskittles.arcanumapi.common.blockentity.BlockEntityInventorySyncable;
+import com.lordskittles.arcanumapi.common.blockentity.BlockEntityTickable;
 import com.lordskittles.nordicarcanum.common.block.crafting.BlockNordicFurnace;
 import com.lordskittles.nordicarcanum.common.inventory.containers.ContainerNordicFurnace;
 import com.lordskittles.nordicarcanum.common.inventory.crafting.NordicFurnaceRecipe;
-import com.lordskittles.nordicarcanum.common.registry.RecipeType;
 import com.lordskittles.nordicarcanum.common.registry.BlockEntities;
+import com.lordskittles.nordicarcanum.common.registry.RecipeType;
 import com.lordskittles.nordicarcanum.core.NordicArcanum;
 import com.lordskittles.nordicarcanum.core.NordicInventorySlots;
 import com.lordskittles.nordicarcanum.core.NordicNames;
@@ -26,6 +27,7 @@ import net.minecraft.world.inventory.StackedContentsCompatible;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ForgeHooks;
 
@@ -91,12 +93,9 @@ public class BlockEntityNordicFurnace extends BlockEntityInventorySyncable<Block
         super(BlockEntities.nordic_furnace.get(), pos, state, NordicInventorySlots.NORDIC_FURNACE, NordicNames.NORDIC_FURNACE, NordicArcanum.MODID);
     }
 
-    private NordicFurnaceRecipe getRecipeFor(ItemStack left, ItemStack right) {
+    private static NordicFurnaceRecipe getRecipeFor(ItemStack left, ItemStack right, Level level) {
 
-        return RecipeType.nordic_furnace.findFirst(level, recipe ->
-        {
-            return recipe.matches(new ItemStack[] { left, right });
-        });
+        return RecipeType.nordic_furnace.findFirst(level, recipe -> recipe.matches(new ItemStack[] { left, right }));
     }
 
     @Override
@@ -171,17 +170,15 @@ public class BlockEntityNordicFurnace extends BlockEntityInventorySyncable<Block
                 if(output.isEmpty()) {
                     return true;
                 }
-                else
-                    if(! output.sameItem(result)) {
-                        return false;
-                    }
-                    else
-                        if(output.getCount() + result.getCount() <= this.getMaxStackSize() && output.getCount() + result.getCount() <= output.getMaxStackSize()) {
-                            return true;
-                        }
-                        else {
-                            return output.getCount() + result.getCount() <= result.getMaxStackSize();
-                        }
+                else if(! output.sameItem(result)) {
+                    return false;
+                }
+                else if(output.getCount() + result.getCount() <= this.getMaxStackSize() && output.getCount() + result.getCount() <= output.getMaxStackSize()) {
+                    return true;
+                }
+                else {
+                    return output.getCount() + result.getCount() <= result.getMaxStackSize();
+                }
             }
         }
         else {
@@ -195,13 +192,13 @@ public class BlockEntityNordicFurnace extends BlockEntityInventorySyncable<Block
             return 0;
         }
         else {
-            return ForgeHooks.getBurnTime(fuel, getRecipeUsed().getType());
+            return ForgeHooks.getBurnTime(fuel, null);
         }
     }
 
     private int getCookTime(ItemStack left, ItemStack right) {
 
-        NordicFurnaceRecipe recipe = getRecipeFor(left, right);
+        NordicFurnaceRecipe recipe = getRecipeFor(left, right, level);
 
         return recipe != null ? recipe.getCookTime() : 200;
     }
@@ -217,10 +214,9 @@ public class BlockEntityNordicFurnace extends BlockEntityInventorySyncable<Block
             if(output.isEmpty()) {
                 this.items.setStackInSlot(OUTPUT_SLOT, result.copy());
             }
-            else
-                if(output.getItem() == result.getItem()) {
-                    output.grow(result.getCount());
-                }
+            else if(output.getItem() == result.getItem()) {
+                output.grow(result.getCount());
+            }
 
             if(! this.level.isClientSide) {
                 this.setRecipeUsed(recipe);
@@ -231,69 +227,66 @@ public class BlockEntityNordicFurnace extends BlockEntityInventorySyncable<Block
         }
     }
 
-    @Override
-    public void tick() {
+    public static void furnaceTick(Level level, BlockPos pos, BlockState state, BlockEntityNordicFurnace furnace) {
 
-        super.tick();
-        boolean burning = this.isBurning();
+        BlockEntityTickable.tick(level, pos, state, furnace);
+        boolean burning = furnace.isBurning();
         boolean isDirty = false;
         if(burning) {
-            -- this.burnTime;
+            -- furnace.burnTime;
         }
 
-        if(! this.level.isClientSide) {
-            ItemStack fuel = this.items.getStackInSlot(FUEL_SLOT);
-            if(this.isBurning() || ! fuel.isEmpty() && ! (this.items.getStackInSlot(0).isEmpty() && this.items.getStackInSlot(1).isEmpty())) {
-                NordicFurnaceRecipe recipe = getRecipeFor(this.items.getStackInSlot(0), this.items.getStackInSlot(1));
-                if(! this.isBurning() && this.canSmelt(recipe)) {
-                    this.burnTime = this.getBurnTime(fuel);
-                    this.recipesUsed = this.burnTime;
-                    if(this.isBurning()) {
+        if(! furnace.level.isClientSide) {
+            ItemStack fuel = furnace.items.getStackInSlot(FUEL_SLOT);
+            if(furnace.isBurning() || ! fuel.isEmpty() && ! (furnace.items.getStackInSlot(0).isEmpty() && furnace.items.getStackInSlot(1).isEmpty())) {
+                NordicFurnaceRecipe recipe = getRecipeFor(furnace.items.getStackInSlot(0), furnace.items.getStackInSlot(1), level);
+                if(! furnace.isBurning() && furnace.canSmelt(recipe)) {
+                    furnace.burnTime = furnace.getBurnTime(fuel);
+                    furnace.recipesUsed = furnace.burnTime;
+                    if(furnace.isBurning()) {
                         isDirty = true;
                         if(fuel.hasContainerItem()) {
-                            this.items.setStackInSlot(FUEL_SLOT, fuel.getContainerItem());
+                            furnace.items.setStackInSlot(FUEL_SLOT, fuel.getContainerItem());
                         }
-                        else
-                            if(! fuel.isEmpty()) {
-                                Item fuelItem = fuel.getItem();
-                                fuel.shrink(1);
-                                if(fuel.isEmpty()) {
-                                    this.items.setStackInSlot(FUEL_SLOT, fuel.getContainerItem());
-                                }
+                        else if(! fuel.isEmpty()) {
+                            Item fuelItem = fuel.getItem();
+                            fuel.shrink(1);
+                            if(fuel.isEmpty()) {
+                                furnace.items.setStackInSlot(FUEL_SLOT, fuel.getContainerItem());
                             }
+                        }
                     }
                 }
 
-                if(this.isBurning() && this.canSmelt(recipe)) {
-                    if(this.cookTimeTotal == 0) {
-                        this.cookTimeTotal = this.getCookTime(this.items.getStackInSlot(0), this.items.getStackInSlot(1));
+                if(furnace.isBurning() && furnace.canSmelt(recipe)) {
+                    if(furnace.cookTimeTotal == 0) {
+                        furnace.cookTimeTotal = furnace.getCookTime(furnace.items.getStackInSlot(0), furnace.items.getStackInSlot(1));
                     }
 
-                    ++ this.cookTime;
-                    if(this.cookTime >= this.cookTimeTotal) {
-                        this.cookTime = 0;
-                        this.cookTimeTotal = this.getCookTime(this.items.getStackInSlot(0), this.items.getStackInSlot(1));
-                        this.smelt(recipe);
+                    ++ furnace.cookTime;
+                    if(furnace.cookTime >= furnace.cookTimeTotal) {
+                        furnace.cookTime = 0;
+                        furnace.cookTimeTotal = furnace.getCookTime(furnace.items.getStackInSlot(0), furnace.items.getStackInSlot(1));
+                        furnace.smelt(recipe);
                         isDirty = true;
                     }
                 }
                 else {
-                    this.cookTime = 0;
+                    furnace.cookTime = 0;
                 }
             }
-            else
-                if(! this.isBurning() && this.cookTime > 0) {
-                    this.cookTime = Mth.clamp(this.cookTime - 2, 0, this.cookTimeTotal);
-                }
+            else if(! furnace.isBurning() && furnace.cookTime > 0) {
+                furnace.cookTime = Mth.clamp(furnace.cookTime - 2, 0, furnace.cookTimeTotal);
+            }
 
-            if(burning != this.isBurning()) {
+            if(burning != furnace.isBurning()) {
                 isDirty = true;
-                this.level.setBlock(this.getBlockPos(), this.level.getBlockState(this.getBlockPos()).setValue(BlockNordicFurnace.SMELTING, Boolean.valueOf(this.isBurning())), 3);
+                furnace.level.setBlock(furnace.getBlockPos(), furnace.level.getBlockState(furnace.getBlockPos()).setValue(BlockNordicFurnace.SMELTING, Boolean.valueOf(furnace.isBurning())), 3);
             }
         }
 
         if(isDirty) {
-            this.setChanged();
+            furnace.setChanged();
         }
     }
 
@@ -309,10 +302,7 @@ public class BlockEntityNordicFurnace extends BlockEntityInventorySyncable<Block
     public void setRecipeUsed(@Nullable Recipe<?> recipe) {
 
         if(recipe != null) {
-            this.recipes.compute(recipe.getId(), (p_214004_0_, p_214004_1_) ->
-            {
-                return 1 + (p_214004_1_ == null ? 0 : p_214004_1_);
-            });
+            this.recipes.compute(recipe.getId(), (p_214004_0_, p_214004_1_) -> 1 + (p_214004_1_ == null ? 0 : p_214004_1_));
         }
     }
 

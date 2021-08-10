@@ -38,23 +38,23 @@ public class EntityEvents {
         }
     }
 
-    @SubscribeEvent
-    public static void onItemPickup(PlayerEvent.ItemPickupEvent event) {
-
-        if(event.getPlayer() instanceof ServerPlayer) {
-            if(event.getStack().getItem() == Items.arcane_powder.get()) {
-                Advancements.arcane_powder_obtain.trigger((ServerPlayer) event.getPlayer());
-            }
-        }
-    }
-
-    @SubscribeEvent
-    public static void onItemCrafted(PlayerEvent.ItemCraftedEvent event) {
-
-        if(event.getPlayer() instanceof ServerPlayer) {
-            if(event.getCrafting().getItem() == Items.crafting_cloth_item.get()) {
-                Advancements.crafting_cloth_crafted.trigger((ServerPlayer) event.getPlayer());
-            }
-        }
-    }
+//    @SubscribeEvent
+//    public static void onItemPickup(PlayerEvent.ItemPickupEvent event) {
+//
+//        if(event.getPlayer() instanceof ServerPlayer) {
+//            if(event.getStack().getItem() == Items.arcane_powder.get()) {
+//                Advancements.arcane_powder_obtain.trigger((ServerPlayer) event.getPlayer());
+//            }
+//        }
+//    }
+//
+//    @SubscribeEvent
+//    public static void onItemCrafted(PlayerEvent.ItemCraftedEvent event) {
+//
+//        if(event.getPlayer() instanceof ServerPlayer) {
+//            if(event.getCrafting().getItem() == Items.crafting_cloth_item.get()) {
+//                Advancements.crafting_cloth_crafted.trigger((ServerPlayer) event.getPlayer());
+//            }
+//        }
+//    }
 }
