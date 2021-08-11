@@ -1,6 +1,3 @@
-import groovy.json.JsonOutput
-import groovy.json.JsonSlurper
-
 buildscript {
     repositories {
         maven { url = 'https://maven.minecraftforge.net/' }
@@ -17,48 +14,40 @@ apply plugin: 'idea'
 
 defaultTasks 'build'
 
-idea {
-    module {
-        // For some reason this is necessary for IDEA 2014 workspaces to recognize assets
-        inheritOutputDirs = true
-        //Exclude directories from being managed
-        for (String excludeDirName in ["run", "out", "logs", "gradle"]) {
-            File excludeDir = new File(projectDir, excludeDirName)
-            excludeDirs.add(excludeDir)
+sourceSets {
+    api {
+        resources {
+            // API has no generated stuff as all content should be in the main mod
         }
     }
-}
-
-sourceSets {
     main {
         resources {
-            include '**/**'
-            // copy everything else, but blender files.
-            exclude '**/*.blend'
-            //Add the generated main module resources
-            srcDirs += 'src/generated/main'
-            //But exclude the cache of the generated data from what gets built
-            exclude '.cache'
-        }
-    }
-    nordicarcanum {
-        resources {
-            include '**/**'
-            // copy everything else, but blender files.
-            exclude '**/*.blend'
             //Add the generated nordicarcanum module resources
-            srcDirs += 'src/generated/nordicarcanum'
-            //But exclude the cache of the generated data from what gets built
+            srcDir 'src/generated'
+            // copy everything but blender files.
+            exclude '**/*.blend'
+            //...and the cache file
             exclude '.cache'
         }
-
-        compileClasspath += sourceSets.main.output
     }
 }
 
-version = "${minecraft_version}-${arcanum_api_version}"
+configurations {
+    // API
+    // The API (currently) needs to know about Minecraft and this is the cleanest way we can do it
+    apiImplementation.extendsFrom(minecraft)
+
+    // MAIN
+    // These mostly reduce spam as there is nothing the API needs that won't be needed by the full mod as well
+    // Just register things as a API dependency of any of these types and the main mod will see it too
+    compileOnly.extendsFrom(apiCompileOnly)
+    runtimeOnly.extendsFrom(apiRuntimeOnly)
+    implementation.extendsFrom(apiImplementation)
+}
+
+version = "${minecraft_version}-${nordicarcanum_version}"
 group = 'nordicarcanum' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'NordicArcanumAll'
+archivesBaseName = 'NordicArcanum'
 
 // Mojang ships Java 16 to end users in 1.17+ instead of Java 8 in 1.16 or lower, so your mod should target Java 16.
 java.toolchain.languageVersion = JavaLanguageVersion.of(16)
@@ -66,8 +55,8 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(16)
 minecraft {
     mappings channel: "${mappings_channel}", version: "${minecraft_version}"
 
-    accessTransformers(file('src/main/resources/META-INF/accesstransformer.cfg'),
-            file('src/nordicarcanum/resources/META-INF/accesstransformer.cfg'))
+    // AccessTransformer is in API so it is usable by any mod that implements the API
+    accessTransformer file('src/api/resources/META-INF/accesstransformer.cfg')
 
     runs {
         client {
@@ -92,11 +81,10 @@ minecraft {
             }
 
             mods {
-                arcanumapi {
-                    source(sourceSets.main)
-                }
                 nordicarcanum {
-                    source(sourceSets.nordicarcanum)
+                    // main needs to be first for FML to find mods.toml
+                    source(sourceSets.main)
+                    source(sourceSets.api)
                 }
             }
         }
@@ -109,11 +97,9 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                arcanumapi {
-                    source(sourceSets.main)
-                }
                 nordicarcanum {
-                    source(sourceSets.nordicarcanum)
+                    source(sourceSets.main)
+                    source(sourceSets.api)
                 }
             }
         }
@@ -127,18 +113,16 @@ minecraft {
 
             property 'forge.logging.console.level', 'debug'
 
-            args '--all', '--output', file('src/generated/'),
-                    '--mod', "${arcanum_api_id}",
-                    '--existing', sourceSets.main.resources.srcDirs[0],
-                    '--mod', "${nordicarcanum_id}",
-                    '--existing', sourceSets.nordicarcanum.resources.srcDirs[0]
+            args '--all',
+                '--output', file('src/generated/'),
+                '--mod', "${nordicarcanum_id}",
+                // Files that cannot be generated (i.e. textures and sounds) should be put in s/m/r
+                '--existing', 'src/main/resources'
 
             mods {
-                arcanumapi {
-                    source(sourceSets.main)
-                }
                 nordicarcanum {
-                    source(sourceSets.nordicarcanum)
+                    source(sourceSets.main)
+                    source(sourceSets.api)
                 }
             }
         }
@@ -146,89 +130,65 @@ minecraft {
 }
 
 repositories {
+
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    compileOnly "org.jetbrains:annotations:${jb_annotations}"
+    apiCompileOnly "org.jetbrains:annotations:${jb_annotations}"
 
     //compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}:api")
     // at runtime, use the full JEI jar
     //runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}")
-}
 
-def getManifestAttributes(String title, String mod_version) {
-    return [
-            "Specification-Title"     : title,
-            "Specification-Vendor"    : "${mod_vender}",
-            "Specification-Version"   : mod_version,
-            "Implementation-Title"    : title,
-            "Implementation-Version"  : mod_version,
-            "Implementation-Vendor"   : "${mod_vender}",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-    ]
+    // This allows the main mod to use API code
+    implementation sourceSets.api.output
 }
 
 task apiJar(type: Jar) {
-    duplicatesStrategy(DuplicatesStrategy.FAIL)
-    archiveClassifier.set("${nordicarcanum_id}")
-    archiveFileName.set("${arcanum_api_id}-${arcanum_api_version}.jar")
-    from sourceSets.main.output
-    manifest.attributes(getManifestAttributes("${arcanum_api_name}", "${arcanum_api_version}"))
-    afterEvaluate { finalizedBy reobfApiJar }
+    archiveClassifier.set('api')
+    from sourceSets.api.output
+    manifest {
+        attributes([
+            "Specification-Title"  : arcanum_api_id,
+            "Specification-Vendor" : "${mod_vender}",
+            "Specification-Version": arcanum_api_version,
+        ])
+    }
 }
 
-task nordicarcanumJar(type: Jar) {
-    duplicatesStrategy(DuplicatesStrategy.FAIL)
-    archiveClassifier.set("${nordicarcanum_id}")
-    archiveFileName.set("${nordicarcanum_id}-${nordicarcanum_version}.jar")
-    from sourceSets.nordicarcanum.output
-    manifest.attributes(getManifestAttributes("${nordicarcanum_name}", "${nordicarcanum_version}"))
-    afterEvaluate { finalizedBy reobfNordicarcanumJar }
+jar {
+    //We don't need to mention main's outputs here because the java plugin includes them by default
+    from sourceSets.api.output
+    manifest {
+        from apiJar.manifest // Copy from apiJar's manifest
+        attributes([ //and include these additions
+            "Implementation-Title"    : nordicarcanum_id,
+            "Implementation-Version"  : nordicarcanum_version,
+            "Implementation-Vendor"   : "${mod_vender}",
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
 }
 
 // Example configuration to allow publishing using the maven-publish task
 // This is the preferred method to reobfuscate your jar file
-jar.finalizedBy('reobfJar') 
+apiJar.finalizedBy('reobfJar')
+jar.finalizedBy('reobfJar')
+tasks.build.dependsOn('jar', 'apiJar')
 // However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
 //publish.dependsOn('reobfJar')
 
 artifacts {
     archives apiJar
     archives jar
-    archives nordicarcanumJar
-}
-
-reobf {
-    apiJar { classpath.from(sourceSets.main.compileClasspath) }
-    jar { classpath.from(sourceSets.main.compileClasspath) }
-    nordicarcanumJar { classpath.from(sourceSets.nordicarcanum.compileClasspath) }
-}
-
-configurations {
-    //Make sure all our sub source set stuff extends the proper base methods so that
-    // they can see all the dependencies we have in dependencies including forge
-    def compileExtenders = [arcanumapiCompile, nordicarcanumCompile]
-    def compileOnlyExtenders = [arcanumapiCompileOnly, nordicarcanumCompileOnly]
-    def runtimeOnlyExtenders = [arcanumapiRuntimeOnly, nordicarcanumRuntimeOnly]
-    for (def compileExtender : compileExtenders) {
-        compileExtender.extendsFrom(compile)
-        compileExtender.extendsFrom(minecraft)
-    }
-    for (def compileOnlyExtender : compileOnlyExtenders) {
-        compileOnlyExtender.extendsFrom(compileOnly)
-        compileOnlyExtender.extendsFrom(minecraft)
-    }
-    for (def runtimeOnlyExtender : runtimeOnlyExtenders) {
-        runtimeOnlyExtender.extendsFrom(runtimeOnly)
-        runtimeOnlyExtender.extendsFrom(minecraft)
-    }
 }
 
 publishing {
     publications {
         mavenJava(MavenPublication) {
+            artifact apiJar
             artifact jar
         }
     }
