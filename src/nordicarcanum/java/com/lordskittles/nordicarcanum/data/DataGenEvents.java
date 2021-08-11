@@ -17,7 +17,7 @@ public class DataGenEvents {
         if(_event.includeClient()) {
 
             generator.addProvider(new LanguageProvider(generator));
-            generator.addProvider(new BlockStateProvider(generator, _event.getExistingFileHelper()));
+//            generator.addProvider(new BlockStateProvider(generator, _event.getExistingFileHelper()));
         }
     }
 }

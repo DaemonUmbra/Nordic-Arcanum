@@ -36,7 +36,7 @@ sourceSets {
             // copy everything else, but blender files.
             exclude '**/*.blend'
             //Add the generated main module resources
-            srcDirs += 'src/datagen/generated/arcanumapi'
+            srcDirs += 'src/generated/main'
             //But exclude the cache of the generated data from what gets built
             exclude '.cache'
         }
@@ -44,33 +44,16 @@ sourceSets {
     nordicarcanum {
 		setupSourceSet(sourceSets.nordicarcanum, 'nordicarcanum')
     }
-    //Data gen modules for the different modules
-    datagenmain { setupDataGenSourceSet(sourceSets.datagenmain, null, 'main') }
-    datagennordicarcanum { setupDataGenSourceSet(sourceSets.datagennordicarcanum, sourceSets.nordicarcanum, 'nordicarcanum') }
 }
 
 def setupSourceSet(SourceSet sourceSet, String name) {
     sourceSet.resources {
         //Add the generated module resources
-        srcDirs += 'src/datagen/generated/' + name
+        srcDirs += 'src/generated/' + name
         //But exclude the cache of the generated data from what gets built
         exclude '.cache'
     }
     sourceSet.compileClasspath += sourceSets.main.output
-}
-
-//This method sets up a source set in datagen/$name and adds the api, main mekanism module and an optional
-// base module to the dependencies of the data generators source set that we are setting up
-def setupDataGenSourceSet(SourceSet datagenSourceSet, SourceSet baseSourceSet, String name) {
-    datagenSourceSet.java.srcDirs = ['src/datagen/' + name + '/java']
-    datagenSourceSet.resources.srcDirs = ['src/datagen/' + name + '/resources']
-    datagenSourceSet.compileClasspath += project.sourceSets.main.output
-    if (baseSourceSet != null) {
-        //Only case it is null is when we are doing datagenmain so other cases also add access to the stuff
-        // in datagenmain so we can add helper classes
-        datagenSourceSet.compileClasspath += project.sourceSets.datagenmain.output
-        datagenSourceSet.compileClasspath += baseSourceSet.output
-    }
 }
 
 version = "${minecraft_version}-${arcanum_api_version}"
@@ -127,7 +110,7 @@ minecraft {
 
             mods {
                 arcanumapi {
-                    sources(sourceSets.main)
+                    source(sourceSets.main)
                 }
                 nordicarcanum {
                     source(sourceSets.nordicarcanum)
@@ -144,7 +127,7 @@ minecraft {
 
             property 'forge.logging.console.level', 'debug'
 
-            args '--all', '--output', file('src/datagen/generated/'),
+            args '--all', '--output', file('src/generated/'),
                     '--mod', "${arcanum_api_id}",
                     '--existing', sourceSets.main.resources.srcDirs[0],
                     '--mod', "${nordicarcanum_id}",
@@ -152,10 +135,10 @@ minecraft {
 
             mods {
                 arcanumapi {
-                    sources(sourceSets.main, sourceSets.datagenmain)
+                    source(sourceSets.main)
                 }
                 nordicarcanum {
-                    sources(sourceSets.nordicarcanum, sourceSets.datagennordicarcanum)
+                    source(sourceSets.nordicarcanum)
                 }
             }
         }
