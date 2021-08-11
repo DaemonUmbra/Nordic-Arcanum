@@ -42,18 +42,18 @@ sourceSets {
         }
     }
     nordicarcanum {
-		setupSourceSet(sourceSets.nordicarcanum, 'nordicarcanum')
-    }
-}
+        resources {
+            include '**/**'
+            // copy everything else, but blender files.
+            exclude '**/*.blend'
+            //Add the generated nordicarcanum module resources
+            srcDirs += 'src/generated/nordicarcanum'
+            //But exclude the cache of the generated data from what gets built
+            exclude '.cache'
+        }
 
-def setupSourceSet(SourceSet sourceSet, String name) {
-    sourceSet.resources {
-        //Add the generated module resources
-        srcDirs += 'src/generated/' + name
-        //But exclude the cache of the generated data from what gets built
-        exclude '.cache'
+        compileClasspath += sourceSets.main.output
     }
-    sourceSet.compileClasspath += sourceSets.main.output
 }
 
 version = "${minecraft_version}-${arcanum_api_version}"
@@ -209,9 +209,9 @@ reobf {
 configurations {
     //Make sure all our sub source set stuff extends the proper base methods so that
     // they can see all the dependencies we have in dependencies including forge
-    def compileExtenders = [arcanumapiCompile, nordicarcanumCompile, datagenmainCompile, datagenarcanumcoreCompile]
-    def compileOnlyExtenders = [arcanumapiCompileOnly, nordicarcanumCompileOnly, datagenmainCompileOnly, datagenarcanumcoreCompileOnly]
-    def runtimeOnlyExtenders = [arcanumapiRuntimeOnly, nordicarcanumRuntimeOnly, datagenmainRuntimeOnly, datagenarcanumcoreRuntimeOnly]
+    def compileExtenders = [arcanumapiCompile, nordicarcanumCompile]
+    def compileOnlyExtenders = [arcanumapiCompileOnly, nordicarcanumCompileOnly]
+    def runtimeOnlyExtenders = [arcanumapiRuntimeOnly, nordicarcanumRuntimeOnly]
     for (def compileExtender : compileExtenders) {
         compileExtender.extendsFrom(compile)
         compileExtender.extendsFrom(minecraft)
